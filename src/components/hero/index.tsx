@@ -18,7 +18,7 @@ const HeroSection = () => {
   }, [currentSlide]);
 
   return (
-    <section className="relative min-h-screen">
+    <section className="relative min-h-auto">
       <Image
         src={HERO_SLIDES[currentSlide].image}
         alt={HERO_SLIDES[currentSlide].title}
@@ -28,7 +28,7 @@ const HeroSection = () => {
         className="object-cover"
       />
       <div className="absolute inset-0 bg-black/20" />
-      <div className="relative z-10 mx-auto flex min-h-[300px] w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">
+      <div className="relative z-10 mx-auto flex min-h-auto w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">
         <div className="flex flex-1 items-center md:items-start">
           <div className="max-w-[520px] pt-[150px] text-[#fff9f5] sm:pt-0">
             {" "}
