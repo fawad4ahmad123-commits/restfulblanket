@@ -1,10 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, PenLine, Star, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { REVIEWS } from "../constants";
-
 
 function StarRating({ count }: { count: number }) {
   return (

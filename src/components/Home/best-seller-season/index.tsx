@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import SliderControls from "../../generic/slider-control";
 import SliderCard from "../../generic/card-slider";
 import { products } from "../../constant";
 import { CATEGORIES } from "../constants";
@@ -41,15 +40,15 @@ const BestSellers = () => {
     );
 
   return (
-    <section className="bg-[#fff9f5] py-16">
+    <section className="bg-[#FAF4EE] py-16">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
             <em>Best Sellers</em>
-            <span className="font-sans font-normal">of the season</span>
+            <span className="font-sans font-normal">{" "}of the season</span>
           </h2>
 
-          <div className="overflow-x-auto scrollbar-hide">
+          <div className="overflow-x-auto scrollbar-hide ">
             <div className="inline-flex gap-2 rounded-full border border-[#3b281f]/20 p-1 min-w-max">
               {CATEGORIES.map((cat) => (
                 <button
@@ -85,6 +84,7 @@ const BestSellers = () => {
               >
                 <SliderCard
                   image={item.image}
+                  hoverImage={item.hoverImage}
                   title={item.title}
                   price={item.price}
                   originalPrice={item.originalPrice}

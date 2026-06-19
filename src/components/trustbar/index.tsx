@@ -7,11 +7,11 @@ import {
 
 export function TrustBar() {
   return (
-    <div className="absolute top-[104px] left-0 right-0 z-20">
-      <div className="mx-auto  border-y border-white/10 bg-white/5 backdrop-blur-sm">
+    <div className="absolute top-[100px] left-0 right-0 z-20">
+      <div className="mx-auto  border-y border-[#f6eee7] bg-white/5 backdrop-blur-sm">
         <div className="grid grid-cols-2 md:grid-cols-4">
-          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-white/10 ">
-            <Shield className="h-5 w-5 text-white" />
+          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-[#f6eee7] ">
+            <Shield className="h-5 w-5 text-[#e6cfbb]"/>
 
             <div>
               <p className="text-xs text-white">
@@ -23,7 +23,7 @@ export function TrustBar() {
             </div>
           </div>
 
-          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-white/10">
+          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-[#f6eee7]">
             <Truck className="h-5 w-5 text-white" />
 
             <div>
@@ -36,7 +36,7 @@ export function TrustBar() {
             </div>
           </div>
 
-          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-white/10">
+          <div className="flex h-[62px] items-center justify-center gap-3 border-r border-[#f6eee7]">
             <p className="h-5 w-5 text-white" >CE</p>
 
             <div>

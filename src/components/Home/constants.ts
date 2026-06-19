@@ -43,14 +43,7 @@ export const products: Product[] = [
   },
 ];
 
-
-export const CATEGORIES = [
-  "All",
-  "Adult",
-  "Kids",
-  "Duvets",
-  "Accessories",
-];
+export const CATEGORIES = ["All", "Adult", "Kids", "Duvets", "Accessories"];
 
 export const REVIEWS = [
   {
@@ -95,37 +88,104 @@ export const REVIEWS = [
   },
 ];
 
-export const EXPERTS = [
+export const EXPERTS: any = [
   {
-    id: 1,
+    image: "/experts/1.png",
+    role: "SLEEP THERAPIST",
     name: "Dr. Sarah Mitchell",
-    role: "Lead Consultant",
-    image: "/images/expert-1.jpg",
-    category: "Sleep Therapist",
+    position: "Lead Consultant",
     tags: ["Weighted Therapy", "Anxiety Relief", "Pediatrics"],
   },
   {
-    id: 2,
+    image: "/experts/1.png",
+    role: "ERGOTHERAPIST",
     name: "Lars Eriksen",
-    role: "Senior Consultant",
-    image: "/images/expert-2.jpg",
-    category: "Ergotherapist",
+    position: "Senior Consultant",
     tags: ["Sensory Integration", "Chronic Stress", "Adults"],
   },
   {
-    id: 3,
+    image: "/experts/1.png",
+    role: "SLEEP RESEARCHER",
     name: "Dr. Anna Lindgren",
-    role: "Research Advisor",
-    image: "/images/expert-3.jpg",
-    category: "Sleep Researcher",
+    position: "Research Advisor",
     tags: ["Neuroscience", "Deep Sleep", "Research"],
   },
   {
-    id: 4,
+    image: "/experts/1.png",
+    role: "SLEEP THERAPIST",
     name: "Dr. Sarah Mitchell",
-    role: "Lead Consultant",
-    image: "/images/expert-4.jpg",
-    category: "Sleep Therapist",
+    position: "Lead Consultant",
     tags: ["Weighted Therapy", "Anxiety Relief", "Pediatrics"],
+  },
+];
+
+export const BLOGS = [
+  {
+    image: "/blog/1.png",
+    author: "Ronald Richards",
+    authorImage: "https://i.pravatar.cc/100?img=1",
+    title: "How Weighted Blankets Improve Sleep Quality",
+    excerpt:
+      "Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.",
+    date: "6/13/2026",
+    views: "10k Viewers",
+  },
+  {
+    image: "/blog/1.png",
+    author: "Ronald Richards",
+    authorImage: "https://i.pravatar.cc/100?img=2",
+    title: "How Weighted Blankets Improve Sleep Quality",
+    excerpt:
+      "Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.",
+    date: "6/13/2026",
+    views: "10k Viewers",
+  },
+  {
+    image: "/blog/1.png",
+    author: "Ronald Richards",
+    authorImage: "https://i.pravatar.cc/100?img=3",
+    title: "How Weighted Blankets Improve Sleep Quality",
+    excerpt:
+      "Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.",
+    date: "6/13/2026",
+    views: "10k Viewers",
+  },
+  {
+    image: "/blog/1.png",
+    author: "Ronald Richards",
+    authorImage: "https://i.pravatar.cc/100?img=4",
+    title: "How Weighted Blankets Improve Sleep Quality",
+    excerpt:
+      "Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.",
+    date: "6/13/2026",
+    views: "10k Viewers",
+  },
+];
+
+export const FAQS = [
+  {
+    question: "How do I choose the right weight?",
+    answer:
+      "We recommend selecting a blanket that is approximately 10–12% of your body weight. Use our weight guide above — if you're between sizes, we suggest going with the lighter option for your first blanket. You can always exchange within the 30-night trial.",
+  },
+  {
+    question: "Is the Nord Classic suitable for hot sleepers?",
+    answer:
+      "Yes! The Nord Classic uses breathable natural materials that regulate temperature throughout the night, making it a great option for hot sleepers. Many customers report sleeping cooler with the weighted blanket than with a standard duvet.",
+  },
+  {
+    question: "Can I use the weighted blanket with a duvet cover?",
+    answer:
+      "Absolutely. Our blankets are designed to fit standard duvet covers. We also offer our own range of covers made from the same breathable materials, sized specifically for each blanket weight.",
+  },
+  {
+    question: "How do I clean the blanket?",
+    answer:
+      "All Nord Classic blankets are machine washable on a gentle cycle up to 30°C. We recommend using a large-capacity machine (at least 8 kg) for even cleaning. Tumble dry on low or lay flat to air dry.",
+  },
+  {
+    question: "What is your return policy?",
+    answer:
+      "We offer a 30-night trial on all blankets. If you're not completely satisfied, contact our team and we'll arrange a free collection and full refund — no questions asked.",
   },
 ];

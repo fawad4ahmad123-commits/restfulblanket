@@ -8,14 +8,13 @@ import Info from "./info";
 import ReviewForm from "./review-form";
 
 const Coments = () => {
-  const [showForm, setShowForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<"left" | "right">("left");
   const [animating, setAnimating] = useState(false);
 
   return (
-    <section className="bg-[#F5F0EB] py-16 px-6">
+    <section className="bg-[#fdf9f6] px-6 py-16">
       <div className="mx-auto max-w-[1200px]">
         <Info
           showModal={showModal}
@@ -28,24 +27,30 @@ const Coments = () => {
           setAnimating={setAnimating}
           totalReviews={REVIEWS.length}
         />
+
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <LeftReview
-            review={REVIEWS[current]}
-            current={current}
-            animating={animating}
-            direction={direction}
-          />
-          {showModal ? (
-            <ReviewForm />
-          ) : (
-            <RightReviews
-              reviews={REVIEWS}
+          <div className="order-2 lg:order-1">
+            <LeftReview
+              review={REVIEWS[current]}
               current={current}
               animating={animating}
               direction={direction}
-              onWriteReview={() => setShowForm(true)}
             />
-          )}
+          </div>
+
+          <div className="order-1 lg:order-2">
+            {showModal ? (
+              <ReviewForm onClose={() => setShowModal(false)} />
+            ) : (
+              <RightReviews
+                reviews={REVIEWS}
+                current={current}
+                animating={animating}
+                direction={direction}
+                onWriteReview={() => setShowModal(true)}
+              />
+            )}
+          </div>
         </div>
       </div>
     </section>

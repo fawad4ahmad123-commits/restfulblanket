@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
+import MainLayout from "../core/Mainlayouts";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        {children}
+        <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

@@ -1,18 +1,29 @@
-'use client';
+"use client";
+import { useState } from "react";
+import { Star, X } from "lucide-react";
 
-import { useState } from 'react';
-import { Star } from 'lucide-react';
+interface ReviewFormProps {
+  onClose: () => void;
+}
 
-const ReviewForm = () => {
+const ReviewForm = ({ onClose }: ReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [agreed, setAgreed] = useState(false);
 
   return (
     <div className="w-full rounded-2xl bg-[#F5F0EB] p-8 shadow-sm">
-      <h3 className="mb-6 font-serif text-2xl text-[#392A22]">
-        Write a Review
-      </h3>
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="font-serif text-2xl text-[#392A22]">Write a Review</h3>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-full p-2 transition hover:bg-[#392A22]/10"
+        >
+          <X className="h-5 w-5 text-[#392A22]" />
+        </button>
+      </div>
 
       <div className="mb-4">
         <label className="mb-2 block text-sm font-medium text-[#392A22]">
@@ -31,8 +42,8 @@ const ReviewForm = () => {
               <Star
                 className={`h-6 w-6 ${
                   i < (hovered || rating)
-                    ? 'fill-[#392A22] text-[#392A22]'
-                    : 'fill-transparent text-[#392A22]/30'
+                    ? "fill-[#392A22] text-[#392A22]"
+                    : "fill-transparent text-[#392A22]/30"
                 }`}
               />
             </button>
@@ -55,9 +66,7 @@ const ReviewForm = () => {
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-[#392A22]">
           Review Title
-          <span className="ml-1 font-normal text-[#392A22]/50">
-            (Optional)
-          </span>
+          <span className="ml-1 font-normal text-[#392A22]/50">(Optional)</span>
         </label>
 
         <input
