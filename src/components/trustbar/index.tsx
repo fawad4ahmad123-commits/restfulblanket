@@ -7,7 +7,7 @@ export function TrustBar() {
       <div className="mx-auto border-y border-[#f6eee7] bg-white/5 backdrop-blur-sm">
         <div className="grid grid-cols-2 md:grid-cols-4">
           <div className="flex h-[72px] md:h-[62px] items-center justify-center gap-3 border-r border-[#f6eee7]">
-            <Shield className="h-7 w-7 md:h-5 md:w-5 text-[#e6cfbb]" />
+            <Shield className="h-7 w-7 md:h-5 md:w-5 text-white" />
 
             <div>
               <p className="text-lg md:text-xs text-white">90 nætter</p>
