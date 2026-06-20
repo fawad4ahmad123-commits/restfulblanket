@@ -18,7 +18,6 @@ const ProductInfoAccordion = ({ sections }: ProductInfoAccordionProps) => {
     <Accordion
       type="single"
       collapsible
-      defaultValue={sections[0]?.id}
       className="rounded-2xl border border-[#E3DCCD] px-4"
     >
       {sections.map((section) => (
@@ -37,9 +36,6 @@ const ProductInfoAccordion = ({ sections }: ProductInfoAccordionProps) => {
             </span>
           </AccordionTrigger>
           <AccordionContent className="pb-6">
-            <WhyRestfulBlanketContent />
-          </AccordionContent>
-          {/* <AccordionContent className="pb-6">
             {section.id === sections[0]?.id ? (
               <WhyRestfulBlanketContent />
             ) : (
@@ -47,7 +43,7 @@ const ProductInfoAccordion = ({ sections }: ProductInfoAccordionProps) => {
                 {section.body}
               </div>
             )}
-          </AccordionContent> */}
+          </AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>
