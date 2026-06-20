@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { navigation } from "../constant";
+import { cn } from "@/lib/utils";
 
-const Navigation = () => {
+const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
   const pathname = usePathname();
 
   return (
@@ -17,6 +18,19 @@ const Navigation = () => {
         const isActive = pathname === item.href;
         const hasChildren = item.children?.length > 0;
 
+        const baseLinkClass = cn(
+          "whitespace-nowrap text-sm transition-colors",
+          isHome
+            ? cn(
+                "hover:text-white/70",
+                isActive ? "text-white" : "text-white/90",
+              )
+            : cn(
+                "hover:text-[#392A22]/70",
+                isActive ? "text-[#392A22]" : "text-[#392A22]/90",
+              ),
+        );
+
         if (!hasChildren) {
           return (
             <Link
@@ -24,9 +38,7 @@ const Navigation = () => {
               href={item.href}
               aria-label={`Go to ${item.title}`}
               title={item.title}
-              className={`whitespace-nowrap text-sm transition-colors hover:text-white/70 ${
-                isActive ? "text-white" : "text-white/90"
-              }`}
+              className={baseLinkClass}
             >
               {item.title}
             </Link>
@@ -40,9 +52,7 @@ const Navigation = () => {
               aria-label={`${item.title} menu`}
               aria-haspopup="menu"
               title={item.title}
-              className={`flex items-center gap-1 whitespace-nowrap text-sm transition-colors hover:text-white/70 ${
-                isActive ? "text-white" : "text-white/90"
-              }`}
+              className={cn("flex items-center gap-1", baseLinkClass)}
             >
               {item.title}
               <ChevronDown
@@ -54,7 +64,12 @@ const Navigation = () => {
             <div
               role="menu"
               aria-label={`${item.title} submenu`}
-              className="invisible absolute left-0 top-full z-[9999] mt-3 min-w-[240px] rounded-xl border border-white/10 bg-[#392A22] p-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100"
+              className={cn(
+                "invisible absolute left-0 top-full z-[9999] mt-3 min-w-[240px] rounded-xl border p-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100",
+                isHome
+                  ? "border-white/10 bg-[#392A22]"
+                  : "border-[#392A22]/10 bg-white shadow-lg",
+              )}
             >
               {item.children.map((child: any) => (
                 <Link
@@ -63,7 +78,12 @@ const Navigation = () => {
                   role="menuitem"
                   aria-label={`Go to ${child.title}`}
                   title={child.title}
-                  className="block whitespace-nowrap rounded-lg px-3 py-2 text-sm text-[#E9DDD4] transition-colors hover:bg-white/10"
+                  className={cn(
+                    "block whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors",
+                    isHome
+                      ? "text-[#E9DDD4] hover:bg-white/10"
+                      : "text-[#392A22] hover:bg-[#392A22]/10",
+                  )}
                 >
                   {child.title}
                 </Link>

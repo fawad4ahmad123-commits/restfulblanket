@@ -164,6 +164,28 @@ export const products: Product[] = [
     weight: "11 kg",
     dimensions: "200 × 220 cm",
   },
+  {
+    image: "/product/bestselller.png",
+    hoverImage: "/product/detail.png",
+    title: "Nord Kids Weighted Blanket",
+    price: "€189",
+    originalPrice: "€219",
+    rating: 4.9,
+    reviewCount: 742,
+    weight: "4 kg",
+    dimensions: "100 × 150 cm",
+  },
+  {
+    image: "/product/bestselller.png",
+    hoverImage: "/product/detail.png",
+    title: "Nord Luxury Sleep Blanket",
+    price: "€299",
+    originalPrice: "€349",
+    rating: 5.0,
+    reviewCount: 1568,
+    weight: "11 kg",
+    dimensions: "200 × 220 cm",
+  },
 ];
 
 export const shopLinks = [

@@ -3,7 +3,7 @@ import BottomBanner from "../hero/bottom-banner";
 import CraftsmanshipSection from "./about-blanket";
 import BestSellers from "./best-seller-season";
 import BlogsSection from "./blog/blog-section";
-import ReviewsSection from "./comments";
+import Coments from "./comments";
 import CommonQuestions from "./common-question";
 import ExpertsSection from "./expert-review/expert-session";
 import ProductCategories from "./product-categories";
@@ -18,7 +18,7 @@ const Landing = () => {
       <BestSellers />
       <CraftsmanshipSection />
       <ExpertsSection />
-      <ReviewsSection />
+      <Coments />
       <RestfulBlanketVideo />
       <CommonQuestions />
       <BlogsSection />

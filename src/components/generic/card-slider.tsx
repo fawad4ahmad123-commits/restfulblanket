@@ -1,9 +1,9 @@
 "use client";
-
 import { useState } from "react";
 import Image from "next/image";
 import { Heart, Eye, ShoppingBag } from "lucide-react";
 import { SliderCard as SliderCardProps } from "./types";
+import { useRouter } from "next/navigation";
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -24,7 +24,7 @@ const SliderCard = ({
   onAddToCart,
 }: ExtendedSliderCardProps) => {
   const [wished, setWished] = useState(false);
-
+  const router = useRouter();
   const stars = Math.round(rating);
 
   return (
@@ -86,6 +86,7 @@ const SliderCard = ({
             aria-label={`Quick view ${title}`}
             title={`Quick view ${title}`}
             className="flex items-center gap-2 rounded-full bg-[#FAF4EE] px-5 py-2.5 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+            onClick={() => router.push("/product")}
           >
             <Eye aria-hidden="true" size={14} />
             Quick View

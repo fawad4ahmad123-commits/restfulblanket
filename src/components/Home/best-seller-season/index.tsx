@@ -6,8 +6,9 @@ import { ArrowRight } from "lucide-react";
 import SliderCard from "../../generic/card-slider";
 import { products } from "../../constant";
 import { CATEGORIES } from "../constants";
+import SliderControls from "../../generic/slider-control";
 
-const BestSellers = () => {
+const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
   const [start, setStart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(4);
@@ -29,7 +30,6 @@ const BestSellers = () => {
     };
 
     updateVisibleCount();
-
     window.addEventListener("resize", updateVisibleCount);
 
     return () => window.removeEventListener("resize", updateVisibleCount);
@@ -65,47 +65,59 @@ const BestSellers = () => {
 
   return (
     <section
-      className="bg-[#FAF4EE] py-16"
+      className={isProduct ? "bg-[#FFF9F5] py-16" : "bg-[#FAF4EE] py-16"}
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <h2
-            id="best-sellers-heading"
-            className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
-          >
-            <em>Best Sellers</em>
-            <span className="font-sans font-normal"> of the season</span>
-          </h2>
+          {isProduct ? (
+            <h2
+              id="best-sellers-heading"
+              className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
+            >
+              <em>You may also </em>
+              <span className="font-sans font-normal">like.</span>
+            </h2>
+          ) : (
+            <h2
+              id="best-sellers-heading"
+              className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
+            >
+              <em>Best Sellers</em>
+              <span className="font-sans font-normal"> of the season</span>
+            </h2>
+          )}
 
-          <div
-            className="overflow-x-auto scrollbar-hide"
-            role="tablist"
-            aria-label="Product categories"
-          >
-            <div className="inline-flex min-w-max gap-2 rounded-full border border-[#3b281f]/20 p-1">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  aria-label={`Filter products by ${cat}`}
-                  aria-pressed={activeCategory === cat}
-                  title={`Filter products by ${cat}`}
-                  onClick={() => {
-                    setActiveCategory(cat);
-                    setStart(0);
-                  }}
-                  className={`whitespace-nowrap rounded-full px-4 py-2 text-xs transition ${
-                    activeCategory === cat
-                      ? "bg-[#3b281f] text-white"
-                      : "text-[#3b281f]"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+          {isProduct ? (
+            <SliderControls prev={prev} next={next} />
+          ) : (
+            <div
+              className="overflow-x-auto scrollbar-hide"
+              role="tablist"
+              aria-label="Product categories"
+            >
+              <div className="inline-flex min-w-max gap-2 rounded-full border border-[#3b281f]/20 p-1">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    aria-pressed={activeCategory === cat}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setStart(0);
+                    }}
+                    className={`whitespace-nowrap rounded-full px-4 py-2 text-xs transition ${
+                      activeCategory === cat
+                        ? "bg-[#3b281f] text-white"
+                        : "text-[#3b281f]"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="lg:hidden">
@@ -140,7 +152,7 @@ const BestSellers = () => {
 
         <div className="hidden overflow-hidden lg:block">
           <div
-            className="flex gap-4 transition-transform duration-500"
+            className="flex gap-4 transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(calc(-${start * (100 / visibleCount)}%))`,
             }}
@@ -168,19 +180,19 @@ const BestSellers = () => {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <Link
-            href="/products"
-            aria-label="View all products"
-            title="View all products"
-            className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
-          >
-            VIEW ALL PRODUCTS
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
-              <ArrowRight aria-hidden="true" size={14} />
-            </span>
-          </Link>
-        </div>
+        {!isProduct && (
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/products"
+              className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
+            >
+              VIEW ALL PRODUCTS
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
+                <ArrowRight size={14} />
+              </span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
