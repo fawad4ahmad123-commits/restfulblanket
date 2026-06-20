@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogIn, Logs, User } from "lucide-react";
-import React from "react";
+import { User } from "lucide-react";
 
 const Heading = () => {
   return (
@@ -8,16 +7,19 @@ const Heading = () => {
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-serif text-[36px] md:text-[48px] leading-tight text-[#392A22]">
           Meet our
-          <span className="italic font-normal">{" "}sleep experts.</span>
+          <span className="italic font-normal"> sleep experts.</span>
         </h2>
 
         <div className="flex items-center gap-3">
           <Button
+            type="button"
             variant="outline"
-            className="rounded-full border-[#392A22]/20 bg-[#e5d8cb] px-4 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white gap-2"
+            aria-label="View all experts"
+            title="View all experts"
+            className="h-12 gap-2 rounded-full border-[#392A22]/20 bg-[#e5d8cb] px-5 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white"
           >
-            <User className="h-3.5 w-3.5" />
-           View all experts
+            <User aria-hidden="true" className="h-3.5 w-3.5" />
+            View all experts
           </Button>
         </div>
       </div>
