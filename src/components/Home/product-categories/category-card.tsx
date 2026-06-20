@@ -16,7 +16,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
       <div className="relative h-[420px] sm:h-[500px]">
         <Image
           src={image}
-          alt={title}
+          alt={`${title}${subtitle ? ` - ${subtitle}` : ""}`}
           fill
           className="object-cover transition duration-700 group-hover:scale-105"
         />
@@ -39,13 +39,20 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
           <h3 className="text-2xl font-medium text-white">{title}</h3>
         </div>
 
-        <button className="absolute bottom-6 right-6 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-105">
+        <button
+          type="button"
+          aria-label={`View ${title}`}
+          title={`View ${title}`}
+          className="absolute bottom-6 right-6 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+        >
           <ArrowUpRight
+            aria-hidden="true"
             size={22}
             className="absolute transition-all duration-300 group-hover:scale-0 group-hover:opacity-0"
           />
 
           <ArrowRight
+            aria-hidden="true"
             size={22}
             className="absolute scale-0 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
           />

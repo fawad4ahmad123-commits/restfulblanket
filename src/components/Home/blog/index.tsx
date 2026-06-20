@@ -26,7 +26,7 @@ const BlogCard = ({
         <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#f7f2ee] px-3 py-2 shadow-md">
           <Image
             src={authorImage}
-            alt={author}
+            alt={`${author} profile photo`}
             width={34}
             height={34}
             className="rounded-full"
@@ -47,19 +47,30 @@ const BlogCard = ({
 
         <div className="mt-5 border-t border-[#d9cec5] pt-4">
           <div className="flex items-center gap-6 text-sm text-[#85776d]">
-            <div className="flex items-center gap-2">
-              <CalendarDays size={16} />
+            <div
+              className="flex items-center gap-2"
+              aria-label={`Published on ${date}`}
+            >
+              <CalendarDays aria-hidden="true" size={16} />
               {date}
             </div>
 
-            <div className="flex items-center gap-2">
-              <Eye size={16} />
+            <div
+              className="flex items-center gap-2"
+              aria-label={`${views} views`}
+            >
+              <Eye aria-hidden="true" size={16} />
               {views}
             </div>
           </div>
         </div>
 
-        <button className="mt-6 w-full rounded-full bg-[#e6dbd0] py-4 text-sm font-medium text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white">
+        <button
+          type="button"
+          aria-label={`Read more about ${title}`}
+          title={`Read more about ${title}`}
+          className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:bg-[#e6dbd0] md:text-[#3b281f]"
+        >
           Read More
         </button>
       </div>

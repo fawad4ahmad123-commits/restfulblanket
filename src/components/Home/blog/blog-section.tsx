@@ -4,16 +4,28 @@ import BlogCard from ".";
 
 const BlogsSection = () => {
   return (
-    <section className="bg-[#fdf9f6] py-20">
+    <section className="bg-[#fdf9f6] py-20" aria-labelledby="blogs-heading">
       <div className="mx-auto max-w-[1400px] px-5">
-        <h2 className="mb-14 text-center font-serif text-4xl text-[#3b281f] md:text-6xl">
+        <h2
+          id="blogs-heading"
+          className="mb-14 text-center font-serif text-4xl text-[#3b281f] md:text-6xl"
+        >
           Thoughts on{" "}
           <span className="italic font-normal">Restful Living.</span>
         </h2>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div
+          className="flex gap-6 overflow-x-auto pb-4 xl:grid xl:grid-cols-4 xl:overflow-visible"
+          role="region"
+          aria-label="Blog articles"
+        >
           {BLOGS.map((blog, index) => (
-            <BlogCard key={index} {...blog} />
+            <div
+              key={`${blog.title}-${index}`}
+              className="w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-auto"
+            >
+              <BlogCard {...blog} />
+            </div>
           ))}
         </div>
 
@@ -22,8 +34,13 @@ const BlogsSection = () => {
             View All Blogs
           </span>
 
-          <button className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white">
-            <ArrowRight size={18} />
+          <button
+            type="button"
+            aria-label="View all blog articles"
+            title="View all blog articles"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white"
+          >
+            <ArrowRight aria-hidden="true" size={18} />
           </button>
         </div>
       </div>

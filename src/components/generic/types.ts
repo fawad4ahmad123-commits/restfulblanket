@@ -25,3 +25,8 @@ export interface SliderCard {
   type?: "product" | "category";
   onAddToCart?: () => void;
 }
+
+export interface SliderControls {
+  prev: () => void;
+  next: () => void;
+}

@@ -28,7 +28,7 @@ const SliderCard = ({
   const stars = Math.round(rating);
 
   return (
-    <div className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300 ">
+    <div className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300">
       <div className="relative overflow-hidden rounded-[24px]">
         <div className="relative h-[340px] md:h-[420px]">
           <Image
@@ -43,7 +43,7 @@ const SliderCard = ({
           {hoverImage && (
             <Image
               src={hoverImage}
-              alt={`${title} hover`}
+              alt={`${title} alternate view`}
               fill
               className="object-cover opacity-0 transition-all duration-500 group-hover:opacity-100"
             />
@@ -57,32 +57,51 @@ const SliderCard = ({
         )}
 
         <button
+          type="button"
+          aria-label={
+            wished
+              ? `Remove ${title} from wishlist`
+              : `Add ${title} to wishlist`
+          }
+          title={
+            wished
+              ? `Remove ${title} from wishlist`
+              : `Add ${title} to wishlist`
+          }
           onClick={() => setWished((w) => !w)}
           className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
           <Heart
+            aria-hidden="true"
             size={16}
             className={
-              wished
-                ? "fill-[#35281e] text-[#35281e]"
-                : "text-[#35281e]"
+              wished ? "fill-[#35281e] text-[#35281e]" : "text-[#35281e]"
             }
           />
         </button>
 
         <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
-          <button className="flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-medium text-[#3b281f]">
-            <Eye size={14} />
+          <button
+            type="button"
+            aria-label={`Quick view ${title}`}
+            title={`Quick view ${title}`}
+            className="flex items-center gap-2 rounded-full bg-[#FAF4EE] px-5 py-2.5 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+          >
+            <Eye aria-hidden="true" size={14} />
             Quick View
           </button>
         </div>
       </div>
 
       <div className="px-5 pb-5 pt-5">
-        <div className="mb-3 flex items-center gap-1">
+        <div
+          className="mb-3 flex items-center gap-1"
+          aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
+        >
           {Array.from({ length: 5 }).map((_, i) => (
             <svg
               key={i}
+              aria-hidden="true"
               className={`h-4 w-4 ${
                 i < stars ? "text-[#A38575]" : "text-gray-300"
               }`}
@@ -123,10 +142,13 @@ const SliderCard = ({
         </div>
 
         <button
+          type="button"
+          aria-label={`Add ${title} to cart`}
+          title={`Add ${title} to cart`}
           onClick={onAddToCart}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#3b281f] py-3 text-sm font-medium text-white transition hover:opacity-90"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
-          <ShoppingBag className="h-4 w-4" />
+          <ShoppingBag aria-hidden="true" className="h-4 w-4" />
           Add To Cart
         </button>
       </div>

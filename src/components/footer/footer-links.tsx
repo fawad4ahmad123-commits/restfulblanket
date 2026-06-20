@@ -12,6 +12,8 @@ const FooterLinks = ({ title, links }: { title: string; links: string[] }) => {
           <Link
             key={link}
             href="#"
+            aria-label={`${link} - ${title}`}
+            title={link}
             className="block text-sm text-[#fff9f5]/80 transition hover:text-white"
           >
             {link}
@@ -21,4 +23,5 @@ const FooterLinks = ({ title, links }: { title: string; links: string[] }) => {
     </div>
   );
 };
+
 export default FooterLinks;

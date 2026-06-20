@@ -7,26 +7,48 @@ import { Button } from "@/components/ui/button";
 
 const ExpertsSection = () => {
   return (
-    <section className="bg-[#FAF4EE] py-20">
+    <section
+      className="bg-[#FAF4EE] py-20"
+      aria-labelledby="experts-heading"
+    >
       <div className="mx-auto max-w-[1400px] px-5">
         <Heading />
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+        <div
+          className="flex gap-5 overflow-x-auto pb-4 md:pb-0 xl:grid xl:grid-cols-4 xl:overflow-visible"
+          role="region"
+          aria-label="Expert profiles"
+        >
           {EXPERTS.map((expert: any, index: number) => (
-            <ExpertCard key={index} expert={expert} />
+            <div
+              key={`${expert.name}-${index}`}
+              className="w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-auto"
+            >
+              <ExpertCard expert={expert} />
+            </div>
           ))}
         </div>
       </div>
-      <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-        <Button className="rounded-full bg-[#e5d8cb] py-4 px-4 text-sm text-[#3b281f]">
+
+      <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <Button
+          type="button"
+          aria-label="Not sure which blanket suits your needs"
+          className="rounded-full bg-[#e5d8cb] px-4 py-4 text-sm text-[#3b281f]"
+        >
           Not sure which blanket suits your needs?
         </Button>
+
         <Link
           href="/products"
+          aria-label="Book a free consultation"
+          title="Book a free consultation"
           className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
         >
           Book a free consultation
+
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
-            <ArrowRight size={14} />
+            <ArrowRight aria-hidden="true" size={14} />
           </span>
         </Link>
       </div>

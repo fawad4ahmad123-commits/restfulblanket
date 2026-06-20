@@ -19,3 +19,18 @@ export interface BlogCard {
   date: string;
   views: string;
 }
+
+export interface CategoryCard {
+  image: string;
+  title: string;
+  subtitle?: string;
+  index?: string;
+}
+
+export interface ExpertCard {
+  image: string;
+  role: string;
+  name: string;
+  position: string;
+  tags: string[];
+}

@@ -50,42 +50,6 @@ const LeftReview = ({
         </div>
       </div>
     </div>
-    // <div className="overflow-hidden rounded-2xl bg-white p-8 shadow-sm">
-    //   <div
-    //     key={current}
-    //     className={`${
-    //       animating
-    //         ? direction === "left"
-    //           ? "animate-[slideOutLeft_0.35s_ease_forwards]"
-    //           : "animate-[slideOutRight_0.35s_ease_forwards]"
-    //         : direction === "left"
-    //         ? "animate-[slideInRight_0.35s_ease_forwards]"
-    //         : "animate-[slideInLeft_0.35s_ease_forwards]"
-    //     }`}
-    //   >
-    //     <StarRating count={review.rating} />
-
-    //     <blockquote className="mt-5 font-serif text-[22px] italic leading-relaxed text-[#392A22]">
-    //       "{review.review}"
-    //     </blockquote>
-
-    //     <div className="mt-8 flex items-center gap-3">
-    //       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#392A22]/10 text-sm font-semibold text-[#392A22]">
-    //         {review.name.charAt(0)}
-    //       </div>
-
-    //       <div>
-    //         <div className="text-sm font-medium text-[#392A22]">
-    //           {review.name}
-    //         </div>
-
-    //         <div className="text-xs uppercase tracking-widest text-[#392A22]/50">
-    //           {review.location}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 export default LeftReview;

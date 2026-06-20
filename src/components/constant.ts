@@ -184,10 +184,10 @@ export const supportLinks = [
 ];
 
 export const socialLinks = [
-  { icon: FaInstagram, href: "#" },
-  { icon: FaFacebookF, href: "#" },
-  { icon: FaPinterestP, href: "#" },
-  { icon: FaLinkedinIn, href: "#" },
+  { icon: FaInstagram, href: "#", name: "Instagram" },
+  { icon: FaFacebookF, href: "#", name: "Facebook" },
+  { icon: FaPinterestP, href: "#", name: "Pinterest" },
+  { icon: FaLinkedinIn, href: "#", name: "LinkedIn" },
 ];
 
 export const HERO_SLIDES = [

@@ -7,10 +7,16 @@ const MobileViewMenuToggle = ({ wishlistCount }: { wishlistCount: number }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <Menu className="size-5" />
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Open navigation menu"
+          title="Open navigation menu"
+        >
+          <Menu aria-hidden="true" className="size-5" />
         </Button>
       </SheetTrigger>
+
       <SheetContent side="right" className="w-[280px]">
         <div className="mt-10 flex flex-col gap-5">
           <MobileView wishlistCount={wishlistCount} />
