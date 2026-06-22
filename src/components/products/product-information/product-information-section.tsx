@@ -19,22 +19,33 @@ const ProductInformationSection = ({
         {info.heading} <span className="italic">{info.headingItalic}</span>
       </h2>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <ProductFaqAccordion
-          items={info.faqs}
-          defaultOpenId={info.faqs[0]?.id}
-        />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
+        {info.faqs.length > 0 && (
+          <ProductFaqAccordion
+            items={info.faqs}
+            defaultOpenId={info.faqs[0]?.id}
+          />
+        )}
 
         <div className="flex flex-col gap-6">
-          <ProductDetailsTable title={info.detailsTitle} rows={info.details} />
-          <ProductAttributes
-            title={info.attributesTitle}
-            temperatureLabel={info.temperatureLabel}
-            options={info.temperatureOptions}
-          />
+          {info.details.length > 0 && (
+            <ProductDetailsTable
+              title={info.detailsTitle}
+              rows={info.details}
+            />
+          )}
+
+          {info.temperatureOptions.length > 0 && (
+            <ProductAttributes
+              title={info.attributesTitle}
+              temperatureLabel={info.temperatureLabel}
+              options={info.temperatureOptions}
+            />
+          )}
         </div>
       </div>
     </section>
   );
 };
+
 export default ProductInformationSection;

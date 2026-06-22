@@ -55,7 +55,6 @@ const ProductPage = () => {
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_minmax(0,1fr)]">
-          {/* LEFT IMAGE */}
           <div className="lg:sticky lg:top-6 lg:self-start">
             <ProductGallery
               images={product.images}
@@ -63,7 +62,6 @@ const ProductPage = () => {
               productName={product.name}
             />
           </div>
-          {/* RIGHT DETAILS */}
           <div
             ref={detailsRef}
             className="min-w-0 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto scrollbar-hide"
@@ -72,17 +70,12 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-
-      <section className="">
+      <section>
         <Coments />
       </section>
-
       <ProductInformationSection info={pearlClassicInfo} />
-
       <TestimonialVideoSlider />
-
       <RestfulBlanketVideo />
-
       <BestSellers isProduct />
     </main>
   );
