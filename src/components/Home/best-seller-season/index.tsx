@@ -1,18 +1,21 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SliderCard from "../../generic/card-slider";
-import { products } from "../../constant";
 import { CATEGORIES } from "../constants";
 import SliderControls from "../../generic/slider-control";
+import { WooCommerce } from "@/src/lib/woocommerce";
+import { PLACEHOLDER_IMAGE } from "../../constant";
 
 const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
   const [start, setStart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(4);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [productData, setProductData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,10 +33,36 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
     };
 
     updateVisibleCount();
+
     window.addEventListener("resize", updateVisibleCount);
 
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await WooCommerce.get(
+        "products?status=publish&orderby=popularity&per_page=20",
+      );
+
+      setProductData(response.data);
+    } catch (error) {
+      console.error("WooCommerce Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const filteredProducts =
+    activeCategory === "All"
+      ? productData
+      : productData.filter((product) =>
+          product.categories?.some((cat: any) => cat.name === activeCategory),
+        );
 
   const next = () => {
     if (!isDesktop) {
@@ -45,7 +74,7 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
     }
 
     setStart((prev) =>
-      prev + 1 >= products.length - (visibleCount - 1) ? 0 : prev + 1,
+      prev + 1 >= filteredProducts.length - (visibleCount - 1) ? 0 : prev + 1,
     );
   };
 
@@ -59,9 +88,19 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
     }
 
     setStart((prev) =>
-      prev === 0 ? products.length - visibleCount : prev - 1,
+      prev === 0
+        ? Math.max(filteredProducts.length - visibleCount, 0)
+        : prev - 1,
     );
   };
+
+  if (loading) {
+    return (
+      <section className="py-16">
+        <div className="text-center">Loading products...</div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -119,37 +158,46 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
             </div>
           )}
         </div>
-
         <div className="lg:hidden">
           <div
             ref={sliderRef}
             className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
-            role="region"
-            aria-label="Best selling products"
           >
-            {products.map((item, i) => (
-              <div
-                key={`${item.title}-${i}`}
-                className="w-[85%] shrink-0 sm:w-[60%] md:w-[48%]"
-              >
-                <SliderCard
-                  image={item.image}
-                  hoverImage={item.hoverImage}
-                  title={item.title}
-                  price={item.price}
-                  originalPrice={item.originalPrice}
-                  rating={item.rating}
-                  reviewCount={item.reviewCount}
-                  weight={item.weight}
-                  dimensions={item.dimensions}
-                  badge="BEST SELLER"
-                  type="product"
-                />
-              </div>
-            ))}
+            {filteredProducts.map((item) => {
+              const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
+              const hoverImage = item.images?.[1]?.src || mainImage;
+              const {
+                id,
+                name,
+                sale_price,
+                price,
+                regular_price,
+                average_rating,
+                rating_count,
+                featured,
+              } = item;
+              return (
+                <div
+                  key={item.id}
+                  className="w-[85%] shrink-0 sm:w-[60%] md:w-[48%]"
+                >
+                  <SliderCard
+                    id={id}
+                    image={mainImage}
+                    hoverImage={hoverImage}
+                    title={name}
+                    price={sale_price || price}
+                    originalPrice={regular_price}
+                    rating={Number(average_rating)}
+                    reviewCount={rating_count}
+                    badge={featured ? "BEST SELLER" : ""}
+                    type="product"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
-
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -157,26 +205,27 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
               transform: `translateX(calc(-${start * (100 / visibleCount)}%))`,
             }}
           >
-            {products.map((item, i) => (
-              <div
-                key={`${item.title}-${i}`}
-                className="w-[calc(25%-12px)] flex-shrink-0"
-              >
-                <SliderCard
-                  image={item.image}
-                  hoverImage={item.hoverImage}
-                  title={item.title}
-                  price={item.price}
-                  originalPrice={item.originalPrice}
-                  rating={item.rating}
-                  reviewCount={item.reviewCount}
-                  weight={item.weight}
-                  dimensions={item.dimensions}
-                  badge="BEST SELLER"
-                  type="product"
-                />
-              </div>
-            ))}
+            {filteredProducts.map((item) => {
+              const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
+              const hoverImage = item.images?.[1]?.src || mainImage;
+
+              return (
+                <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
+                  <SliderCard
+                    id={item.id}
+                    image={mainImage}
+                    hoverImage={hoverImage}
+                    title={item.name}
+                    price={item.sale_price || item.price}
+                    originalPrice={item.regular_price}
+                    rating={Number(item.average_rating)}
+                    reviewCount={item.rating_count}
+                    badge={item.featured ? "BEST SELLER" : ""}
+                    type="product"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 

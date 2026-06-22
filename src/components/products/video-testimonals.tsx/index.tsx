@@ -11,7 +11,6 @@ export default function TestimonialVideoSlider() {
 
   const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({});
   const cardRefs = useRef<Record<number, HTMLDivElement | null>>({});
-  const playPromises = useRef<Record<number, Promise<void> | undefined>>({});
 
   const scrollNext = () => {
     sliderRef.current?.scrollBy({
@@ -27,46 +26,26 @@ export default function TestimonialVideoSlider() {
     });
   };
 
-  const safePause = async (id: number) => {
-    const video = videoRefs.current[id];
-    if (!video) return;
-
-    // wait for any in-flight play() to settle before pausing
-    if (playPromises.current[id]) {
-      try {
-        await playPromises.current[id];
-      } catch {
-        // ignore — play was already interrupted/aborted
-      }
-    }
-
-    if (!video.paused) {
-      video.pause();
-    }
-  };
-
   const toggleVideo = async (id: number) => {
     const currentVideo = videoRefs.current[id];
+
     if (!currentVideo) return;
 
     if (activeVideo === id) {
-      await safePause(id);
+      currentVideo.pause();
       setActiveVideo(null);
       return;
     }
 
-    // pause all other videos safely (waits for their play() to settle first)
-    await Promise.all(
-      Object.keys(videoRefs.current)
-        .map(Number)
-        .filter((vid) => vid !== id)
-        .map((vid) => safePause(vid))
-    );
+    Object.entries(videoRefs.current).forEach(([videoId, video]) => {
+      if (Number(videoId) !== id && video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
 
     try {
-      const playPromise = currentVideo.play();
-      playPromises.current[id] = playPromise;
-      await playPromise;
+      await currentVideo.play();
 
       setActiveVideo(id);
 
@@ -76,12 +55,7 @@ export default function TestimonialVideoSlider() {
         block: "nearest",
       });
     } catch (error) {
-      // AbortError happens when play() is interrupted by pause() — expected, ignore it
-      if ((error as DOMException)?.name !== "AbortError") {
-        console.error(error);
-      }
-    } finally {
-      playPromises.current[id] = undefined;
+      console.error("Video play failed:", error);
     }
   };
 
@@ -95,15 +69,21 @@ export default function TestimonialVideoSlider() {
 
           <div className="flex gap-3">
             <button
+              type="button"
+              aria-label="Previous testimonial"
+              title="Previous testimonial"
               onClick={scrollPrev}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8D1CB] bg-white transition hover:bg-[#3A2A21] hover:text-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D8D1CB] bg-white transition hover:bg-[#3A2A21] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A2A21]"
             >
               <ArrowLeft size={18} />
             </button>
 
             <button
+              type="button"
+              aria-label="Next testimonial"
+              title="Next testimonial"
               onClick={scrollNext}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#3A2A21] text-white transition hover:opacity-80"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#3A2A21] text-white transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A2A21]"
             >
               <ArrowRight size={18} />
             </button>
@@ -112,7 +92,9 @@ export default function TestimonialVideoSlider() {
 
         <div
           ref={sliderRef}
-          className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
+          role="region"
+          aria-label="Customer testimonial videos"
+          className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-hide"
         >
           {testimonials.map((item) => {
             const isActive = activeVideo === item.id;
@@ -137,6 +119,7 @@ export default function TestimonialVideoSlider() {
                   ref={(el) => {
                     videoRefs.current[item.id] = el;
                   }}
+                  aria-label={`Testimonial video from ${item.name}`}
                   poster={item.poster}
                   playsInline
                   muted
@@ -146,6 +129,9 @@ export default function TestimonialVideoSlider() {
                     if (activeVideo === item.id) {
                       setActiveVideo(null);
                     }
+                  }}
+                  onError={(e) => {
+                    console.error("Video error:", e);
                   }}
                   className="h-[520px] w-full object-cover"
                 >
@@ -165,8 +151,20 @@ export default function TestimonialVideoSlider() {
                     </div>
 
                     <button
+                      type="button"
                       onClick={() => toggleVideo(item.id)}
-                      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md"
+                      aria-label={
+                        isActive
+                          ? `Pause testimonial video from ${item.name}`
+                          : `Play testimonial video from ${item.name}`
+                      }
+                      aria-pressed={isActive}
+                      title={
+                        isActive
+                          ? `Pause testimonial video from ${item.name}`
+                          : `Play testimonial video from ${item.name}`
+                      }
+                      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     >
                       {isActive ? (
                         <Pause size={18} className="text-white" />

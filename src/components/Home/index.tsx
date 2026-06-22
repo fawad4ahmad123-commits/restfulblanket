@@ -15,7 +15,7 @@ const Landing = () => {
       <HeroSection />
       <BottomBanner />
       <ProductCategories />
-      <BestSellers />
+      <BestSellers isProduct={false} />
       <CraftsmanshipSection />
       <ExpertsSection />
       <Coments />

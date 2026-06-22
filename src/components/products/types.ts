@@ -83,3 +83,21 @@ export interface ProductInformation {
   temperatureLabel: string;
   temperatureOptions: TemperatureAttribute[];
 }
+
+export interface WooCommerceProduct {
+  name: string;
+  images: { id: number; src: string; name?: string; alt?: string }[];
+  price: string;
+  regular_price: string;
+  sale_price: string;
+  price_html: string;
+  short_description: string;
+  description: string;
+  sku: string;
+  stock_status: string;
+  stock_quantity: number;
+  on_sale: boolean;
+  attributes:any[]
+  [key: string]: any;
+}
+

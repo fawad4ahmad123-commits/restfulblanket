@@ -30,7 +30,7 @@ const SizeGuideButton = ({ open, onClose }: SizeGuideButtonProps) => {
         <button
           onClick={onClose}
           aria-label="Close size guide"
-          className="absolute right-6 top-6 rounded-full text-[#3A2A21]"
+          className="absolute right-6 top-6 rounded-full text-[#3A2A21] cursor-pointer"
         >
           <X size={22} />
         </button>

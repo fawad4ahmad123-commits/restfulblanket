@@ -15,7 +15,7 @@ const SliderCard = ({
   title,
   price,
   badge,
-  index,
+  id,
   originalPrice,
   rating = 4.9,
   reviewCount = 1284,
@@ -30,7 +30,7 @@ const SliderCard = ({
   return (
     <div
       className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300"
-      onClick={() => router.push("/product")}
+      onClick={() => router.push(`/product?id=${id}`)}
     >
       <div className="relative overflow-hidden rounded-[24px]">
         <div className="relative h-[340px] md:h-[420px]">
@@ -53,9 +53,9 @@ const SliderCard = ({
           )}
         </div>
 
-        {(badge || index) && (
+        {(badge || id) && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
-            {badge || index}
+            {badge || id}
           </div>
         )}
 
@@ -89,7 +89,7 @@ const SliderCard = ({
             aria-label={`Quick view ${title}`}
             title={`Quick view ${title}`}
             className="flex items-center gap-2 rounded-full bg-[#FAF4EE] px-5 py-2.5 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
-            onClick={() => router.push("/product")}
+            onClick={() => router.push(`/product?id=${id}`)}
           >
             <Eye aria-hidden="true" size={14} />
             Quick View
@@ -121,7 +121,7 @@ const SliderCard = ({
           </span>
         </div>
 
-        <h3 className="mb-2 text-lg font-medium leading-snug text-[ #35281E]">
+        <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[ #35281E]">
           {title}
         </h3>
 

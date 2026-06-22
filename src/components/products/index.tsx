@@ -8,14 +8,14 @@ import ProductInfoAccordion from "./product-info-accordion";
 import AddToCartBar from "./add-to-cart-bar";
 import Breadcrumbs from "./bread-crumbs";
 import RatingStars from "./rating-star";
-import PriceDisplay from "./price-desplay";
+import PriceDisplay from "./price-display";
 import { Product } from "./types";
 
 interface ProductInfoPanelProps {
   product: Product;
 }
 
-const ProductInfoPanel = ({ product }: ProductInfoPanelProps) => {
+const ProductInfoPanel = ({ product }: any) => {
   const [selectedColorId, setSelectedColorId] = useState(product.colors[0].id);
   const [selectedWeightId, setSelectedWeightId] = useState(
     product.weights[1]?.id ?? product.weights[0].id,
@@ -34,13 +34,13 @@ const ProductInfoPanel = ({ product }: ProductInfoPanelProps) => {
       quantity,
     });
   };
-
+console.log("t2 product ",{product })
   return (
     <div className="flex flex-col gap-5">
       <Breadcrumbs items={product.breadcrumbs} />
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold text-[#3F3A36]">
+        <h1 className="font-serif text-[40px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
           {product.name}
         </h1>
         <RatingStars
@@ -71,7 +71,10 @@ const ProductInfoPanel = ({ product }: ProductInfoPanelProps) => {
         selectedId={selectedWeightId}
         onSelect={setSelectedWeightId}
         trailingSlot={
-          <button className="text-xs font-medium text-[#3F3A36] underline-offset-2 hover:underline" onClick={()=>open}>
+          <button
+            className="text-xs font-medium text-[#3F3A36] underline-offset-2 hover:underline cursor-pointer"
+            onClick={() => open}
+          >
             Weight guide
           </button>
         }
@@ -96,4 +99,5 @@ const ProductInfoPanel = ({ product }: ProductInfoPanelProps) => {
     </div>
   );
 };
+
 export default ProductInfoPanel;

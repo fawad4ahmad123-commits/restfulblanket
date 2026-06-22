@@ -16,7 +16,7 @@ export interface SliderCard {
   price?: string;
   subtitle?: string;
   badge?: string;
-  index?: string;
+  id: number;
   originalPrice?: string;
   rating?: number;
   reviewCount?: number;
