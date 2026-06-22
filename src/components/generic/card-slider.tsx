@@ -28,7 +28,10 @@ const SliderCard = ({
   const stars = Math.round(rating);
 
   return (
-    <div className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300">
+    <div
+      className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300"
+      onClick={() => router.push("/product")}
+    >
       <div className="relative overflow-hidden rounded-[24px]">
         <div className="relative h-[340px] md:h-[420px]">
           <Image
@@ -113,17 +116,17 @@ const SliderCard = ({
             </svg>
           ))}
 
-          <span className="ml-2 text-xs text-[#3b281f]/60">
+          <span className="ml-2 text-xs text-[ #392A22]/60">
             {rating} · {reviewCount.toLocaleString()}
           </span>
         </div>
 
-        <h3 className="mb-2 text-lg font-medium leading-snug text-[#3b281f]">
+        <h3 className="mb-2 text-lg font-medium leading-snug text-[ #35281E]">
           {title}
         </h3>
 
         {(weight || dimensions) && (
-          <p className="mb-4 text-xs text-[#3b281f]/50">
+          <p className="mb-4 text-xs text-[ #35281E]/50">
             {[weight, dimensions].filter(Boolean).join(" · ")}
           </p>
         )}
@@ -136,7 +139,7 @@ const SliderCard = ({
           )}
 
           {originalPrice && (
-            <span className="text-sm text-[#3b281f]/40 line-through">
+            <span className="text-sm text-[ #E9DDD4] line-through">
               {originalPrice}
             </span>
           )}

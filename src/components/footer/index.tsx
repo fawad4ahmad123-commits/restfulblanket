@@ -57,7 +57,7 @@ const Footer = () => {
               </button>
             </div>
 
-            <p className="mt-5 max-w-[420px] text-sm leading-7 text-[rgba(245,241,234,0.6)] lg:mx-0">
+            <p className="mt-5 max-w-[420px] text-sm leading-7 text-[ #F5F1EA] lg:mx-0">
               No noise. Only first looks at collections, mill visits, and field
               notes from our regenerative partners.
             </p>
@@ -73,7 +73,7 @@ const Footer = () => {
         <div className="mt-12 border-t border-[#fff9f5]/10 md:mt-20" />
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <p className="text-xs text-[#fff9f5]/35">
+          <p className="text-xs text-[ #F5F1EA]/35">
             © 2026 RestfulBlanket AB · Hand-finished in Småland, Sweden
           </p>
 
@@ -91,7 +91,7 @@ const Footer = () => {
             ))}
           </div>
 
-          <div className="flex flex-wrap justify-start gap-4 text-xs text-[#fff9f5]/35 lg:justify-end">
+          <div className="flex flex-wrap justify-start gap-4 text-xs text-[ #F5F1EA]/35 lg:justify-end">
             <Link href="#" aria-label="Privacy Policy" title="Privacy Policy">
               Privacy
             </Link>

@@ -7,10 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const ExpertsSection = () => {
   return (
-    <section
-      className="bg-[#FAF4EE] py-20"
-      aria-labelledby="experts-heading"
-    >
+    <section className="bg-[#FAF4EE] py-20" aria-labelledby="experts-heading">
       <div className="mx-auto max-w-[1400px] px-5">
         <Heading />
 
@@ -46,7 +43,6 @@ const ExpertsSection = () => {
           className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
         >
           Book a free consultation
-
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
             <ArrowRight aria-hidden="true" size={14} />
           </span>

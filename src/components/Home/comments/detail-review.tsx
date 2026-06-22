@@ -12,11 +12,7 @@ function StarRating({ count }: { count: number }) {
   );
 }
 
-const LeftReview = ({
-  current,
-  animating,
-  direction,
-}: LeftReviewProps) => {
+const LeftReview = ({ current, animating, direction }: LeftReviewProps) => {
   return (
     <div className="overflow-hidden rounded-2xl bg-[#fff9f5] p-8 shadow-sm">
       <div

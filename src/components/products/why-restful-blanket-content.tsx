@@ -1,7 +1,6 @@
 import {
   ShieldCheck,
   Truck,
-  PackageCheck,
   BadgeCheck,
   Award,
   RotateCcw,
@@ -81,7 +80,7 @@ export function WhyRestfulBlanketContent() {
       </div>
 
       <div className="flex flex-wrap items-center gap-4 border-t border-[#E3DCCD] pt-4">
-        <p className="text-sm text-[#6F6860]">
+        <p className="text-sm text-[#6F6860] max-w-[310px]">
           Recognized & verified social economy enterprise
         </p>
 
@@ -90,22 +89,22 @@ export function WhyRestfulBlanketContent() {
           aria-label="Certifications"
         >
           <img
-            src="/certifications/good-market.svg"
+            src="/certifications/goodmarket.png"
             alt="Good Market Approved"
             className="h-12 w-auto"
           />
           <img
-            src="/certifications/people-planet-first.svg"
+            src="/certifications/peopleandplanetfirst.png"
             alt="People Planet First"
             className="h-12 w-auto"
           />
           <img
-            src="/certifications/social-enterprise.svg"
+            src="/certifications/socialeentreprenoereridanmark.png"
             alt="Social Entrepreneur Denmark"
             className="h-12 w-auto"
           />
           <img
-            src="/certifications/ethical-business.svg"
+            src="/certifications/goodshoppingguide.png"
             alt="Ethical Business Certification"
             className="h-12 w-auto"
           />

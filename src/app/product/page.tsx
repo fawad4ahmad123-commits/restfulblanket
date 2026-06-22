@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 import BestSellers from "@/src/components/Home/best-seller-season";
 import Coments from "@/src/components/Home/comments";
 import RestfulBlanketVideo from "@/src/components/Home/video-descripton";
@@ -13,10 +17,45 @@ import TestimonialVideoSlider from "@/src/components/products/video-testimonals.
 const ProductPage = () => {
   const product = naturalCozyBlanket;
 
+  const detailsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.innerWidth < 1024) return;
+
+    const details = detailsRef.current;
+
+    if (!details) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      const rect = details.getBoundingClientRect();
+
+      if (rect.top > 50) return;
+
+      const atTop = details.scrollTop <= 0;
+
+      const atBottom =
+        details.scrollTop + details.clientHeight >= details.scrollHeight - 1;
+
+      if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) {
+        e.preventDefault();
+        details.scrollTop += e.deltaY;
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, {
+      passive: false,
+    });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_minmax(0,1fr)]">
+          {/* LEFT IMAGE */}
           <div className="lg:sticky lg:top-6 lg:self-start">
             <ProductGallery
               images={product.images}
@@ -24,19 +63,29 @@ const ProductPage = () => {
               productName={product.name}
             />
           </div>
-          <div className="min-w-0">
+          {/* RIGHT DETAILS */}
+          <div
+            ref={detailsRef}
+            className="min-w-0 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto scrollbar-hide"
+          >
             <ProductInfoPanel product={product} />
           </div>
         </div>
       </div>
-      <section className="mt-24">
+
+      <section className="">
         <Coments />
       </section>
+
       <ProductInformationSection info={pearlClassicInfo} />
+
       <TestimonialVideoSlider />
+
       <RestfulBlanketVideo />
+
       <BestSellers isProduct />
     </main>
   );
 };
+
 export default ProductPage;
