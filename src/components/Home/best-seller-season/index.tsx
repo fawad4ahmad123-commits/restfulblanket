@@ -232,7 +232,7 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
         {!isProduct && (
           <div className="mt-8 flex justify-center">
             <Link
-              href="/products"
+              href="/product"
               className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
             >
               VIEW ALL PRODUCTS
