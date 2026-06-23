@@ -13,7 +13,7 @@ const BestSellers = ({
   products = [],
 }: {
   isProduct?: boolean;
-  products?: any[];
+  products: any[];
 }) => {
   const [start, setStart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");

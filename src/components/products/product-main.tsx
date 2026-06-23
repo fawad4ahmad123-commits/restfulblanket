@@ -17,7 +17,7 @@ import { WooCommerce } from "@/src/lib/woocommerce";
 import { useSearchParams } from "next/navigation";
 import { WooCommerceProduct } from "@/src/components/products/types";
 
-const ProductContent = () => {
+const ProductContent = ({ likeProducts }: { likeProducts: any[] }) => {
   const detailsRef = useRef<HTMLDivElement>(null);
   const [productData, setProductData] = useState<WooCommerceProduct | null>(
     null,
@@ -149,7 +149,7 @@ const ProductContent = () => {
       <ProductInformationSection info={pearlClassicInfo} />
       <TestimonialVideoSlider />
       <RestfulBlanketVideo />
-      <BestSellers isProduct />
+      <BestSellers isProduct products={likeProducts} />
     </main>
   );
 };
