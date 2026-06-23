@@ -1,22 +1,33 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SliderCard from "../../generic/card-slider";
 import { CATEGORIES } from "../constants";
 import SliderControls from "../../generic/slider-control";
-import { WooCommerce } from "@/src/lib/woocommerce";
 import { PLACEHOLDER_IMAGE } from "../../constant";
 
-const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
+interface BestSellersProps {
+  isProduct?: boolean;
+  products: any;
+}
+
+const BestSellers = ({ isProduct, products }: BestSellersProps) => {
   const [start, setStart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(4);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [productData, setProductData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  // Handle both shapes:
+  // products = [...]
+  // OR
+  // products = { products: [...] }
+  const productData = Array.isArray(products)
+    ? products
+    : products?.products || [];
 
   useEffect(() => {
     const updateVisibleCount = () => {
@@ -39,28 +50,10 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
     return () => window.removeEventListener("resize", updateVisibleCount);
   }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await WooCommerce.get(
-        "products?status=publish&orderby=popularity&per_page=20",
-      );
-
-      setProductData(response.data);
-    } catch (error) {
-      console.error("WooCommerce Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const filteredProducts =
     activeCategory === "All"
       ? productData
-      : productData.filter((product) =>
+      : productData.filter((product: any) =>
           product.categories?.some((cat: any) => cat.name === activeCategory),
         );
 
@@ -93,14 +86,6 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
         : prev - 1,
     );
   };
-
-  if (loading) {
-    return (
-      <section className="py-16">
-        <div className="text-center">Loading products...</div>
-      </section>
-    );
-  }
 
   return (
     <section
@@ -158,39 +143,33 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
             </div>
           )}
         </div>
+
+        {/* Mobile */}
         <div className="lg:hidden">
           <div
             ref={sliderRef}
             className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
           >
-            {filteredProducts.map((item) => {
+            {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
+
               const hoverImage = item.images?.[1]?.src || mainImage;
-              const {
-                id,
-                name,
-                sale_price,
-                price,
-                regular_price,
-                average_rating,
-                rating_count,
-                featured,
-              } = item;
+
               return (
                 <div
                   key={item.id}
                   className="w-[85%] shrink-0 sm:w-[60%] md:w-[48%]"
                 >
                   <SliderCard
-                    id={id}
+                    id={item.id}
                     image={mainImage}
                     hoverImage={hoverImage}
-                    title={name}
-                    price={sale_price || price}
-                    originalPrice={regular_price}
-                    rating={Number(average_rating)}
-                    reviewCount={rating_count}
-                    badge={featured ? "BEST SELLER" : ""}
+                    title={item.name}
+                    price={item.sale_price || item.price}
+                    originalPrice={item.regular_price}
+                    rating={Number(item.average_rating)}
+                    reviewCount={item.rating_count}
+                    badge={item.featured ? "BEST SELLER" : ""}
                     type="product"
                   />
                 </div>
@@ -198,6 +177,8 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
             })}
           </div>
         </div>
+
+        {/* Desktop */}
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -205,8 +186,9 @@ const BestSellers = ({ isProduct }: { isProduct?: boolean }) => {
               transform: `translateX(calc(-${start * (100 / visibleCount)}%))`,
             }}
           >
-            {filteredProducts.map((item) => {
+            {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
+
               const hoverImage = item.images?.[1]?.src || mainImage;
 
               return (

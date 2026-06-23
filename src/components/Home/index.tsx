@@ -9,13 +9,14 @@ import ExpertsSection from "./expert-review/expert-session";
 import ProductCategories from "./product-categories";
 import RestfulBlanketVideo from "./video-descripton";
 
-const Landing = () => {
+const Landing = ({ products }: any) => {
+  console.log("t1 product api", { products });
   return (
     <div>
       <HeroSection />
       <BottomBanner />
       <ProductCategories />
-      <BestSellers isProduct={false} />
+      <BestSellers isProduct={false} products={products} />
       <CraftsmanshipSection />
       <ExpertsSection />
       <Coments />

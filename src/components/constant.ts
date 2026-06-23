@@ -7,6 +7,8 @@ import {
 import { Product } from "./Home/types";
 
 export const PLACEHOLDER_IMAGE = "/placeholder-image.png"
+
+
 export const navigation = [
   {
     title: "Tyngdedyner",
