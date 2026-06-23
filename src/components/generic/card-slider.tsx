@@ -11,6 +11,7 @@ interface ExtendedSliderCardProps extends SliderCardProps {
 
 const SliderCard = ({
   image,
+  slug,
   hoverImage,
   title,
   price,
@@ -30,7 +31,7 @@ const SliderCard = ({
   return (
     <div
       className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300"
-      onClick={() => router.push(`/product?id=${title}`)}
+      onClick={() => router.push(`/product/${slug}`)}
     >
       <div className="relative overflow-hidden rounded-[24px]">
         <div className="relative h-[340px] md:h-[420px]">
@@ -53,9 +54,9 @@ const SliderCard = ({
           )}
         </div>
 
-        {(badge || id) && (
+        {(badge || "Best Seller") && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
-            {badge || id}
+            {badge ||"Best Seller"}
           </div>
         )}
 
@@ -82,14 +83,16 @@ const SliderCard = ({
             }
           />
         </button>
-
-        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
+        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
           <button
             type="button"
             aria-label={`Quick view ${title}`}
             title={`Quick view ${title}`}
-            className="flex items-center gap-2 rounded-full bg-[#FAF4EE] px-5 py-2.5 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
-            onClick={() => router.push(`/product?id=${title}`)}
+            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/product/${slug}`);
+            }}
           >
             <Eye aria-hidden="true" size={14} />
             Quick View

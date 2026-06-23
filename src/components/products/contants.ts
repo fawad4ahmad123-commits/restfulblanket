@@ -9,7 +9,7 @@ export const naturalCozyBlanket: Product = {
   reviewCount: 1284,
   price: 249,
   compareAtPrice: 289,
-  currency: "€",
+  currency: "kr",
   features: [
     { id: "f1", text: "CE class 1 + OEKO-TEX class 1" },
     { id: "f2", text: "Rapeseed filling – natural and quiet" },
@@ -173,3 +173,12 @@ export const testimonials = [
     poster: "https://picsum.photos/id/1018/600/900",
   },
 ];
+
+
+export const sections = [
+    {
+      id: "why-restful",
+      title: "Why Restfulblanket?",
+      body: "Trusted quality. Made for your well-being. Every blanket is tested for safety and crafted from natural, breathable materials so you fall asleep faster and stay asleep longer.",
+    },
+  ];

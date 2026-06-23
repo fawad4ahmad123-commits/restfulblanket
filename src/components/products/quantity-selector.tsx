@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AppTooltip from "../tooltip";
 
 interface QuantitySelectorProps {
   quantity: number;
@@ -33,17 +34,24 @@ export function QuantitySelector({
       <span className="w-6 text-center text-sm font-medium text-[#3F3A36]">
         {quantity}
       </span>
-      <Button
-        type="button"
-        size="icon"
-        variant="ghost"
-        aria-label="Increase quantity"
-        disabled={quantity >= max}
-        onClick={() => onChange(Math.min(max, quantity + 1))}
-        className="h-10 w-10 rounded-full hover:bg-[#F4EFE6]"
+      <AppTooltip
+        content={`Only ${max} item${max > 1 ? "s" : ""} available in stock`}
+        disabled={quantity < max}
       >
-        <Plus className="h-3.5 w-3.5 text-[#3F3A36]" />
-      </Button>
+        <span>
+          <Button
+            type="button"
+            size="icon"
+            variant="ghost"
+            aria-label="Increase quantity"
+            disabled={quantity >= max}
+            onClick={() => onChange(Math.min(max, quantity + 1))}
+            className="h-10 w-10 rounded-full hover:bg-[#F4EFE6]"
+          >
+            <Plus className="h-3.5 w-3.5 text-[#3F3A36]" />
+          </Button>
+        </span>
+      </AppTooltip>
     </div>
   );
 }

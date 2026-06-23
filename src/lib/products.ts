@@ -38,9 +38,9 @@ export async function getCategories() {
   return res.json();
 }
 
-export async function getProductByName({ name }: { name: string }) {
+export async function getProductBySlug(slug: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?search=${encodeURIComponent(name)}`,
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?slug=${slug}`,
     {
       headers: {
         Authorization:
@@ -55,6 +55,12 @@ export async function getProductByName({ name }: { name: string }) {
     },
   );
 
+  if (!res.ok) {
+    console.error("Failed to fetch product", slug, res.status);
+    return null;
+  }
+
   const products = await res.json();
-  return products[0];
+  const product = Array.isArray(products) ? products[0] : products;
+  return product ?? null;
 }

@@ -10,6 +10,7 @@ import { ProductInfoSection } from "./types";
 import { WhyRestfulBlanketContent } from "./why-restful-blanket-content";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { sections } from "./contants";
 
 interface ProductInfoAccordionProps {
   sections: ProductInfoSection[];
@@ -21,7 +22,7 @@ const trustItems = {
   subtitle: "Sikkerhed",
   monochrome: true,
 };
-const ProductInfoAccordion = ({ sections }: ProductInfoAccordionProps) => {
+const ProductInfoAccordion = () => {
   return (
     <Accordion
       type="single"

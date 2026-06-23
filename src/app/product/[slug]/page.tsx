@@ -1,19 +1,19 @@
 import { Suspense } from "react";
 import ProductContent from "@/src/components/products/product-main";
-import { getBestSellers, getProductByName } from "@/src/lib/products";
+import { getBestSellers, getProductBySlug } from "@/src/lib/products";
 
 export default async function ProductPage({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<{ id?: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await searchParams;
+  const { slug } = await params;
 
   const [likeProducts, product] = await Promise.all([
     getBestSellers(),
-    getProductByName({ name: id || "" }),
+    getProductBySlug(slug),
   ]);
-
+  
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ProductContent likeProducts={likeProducts} productResponse={product} />

@@ -10,7 +10,6 @@ import ProductCategories from "./product-categories";
 import RestfulBlanketVideo from "./video-descripton";
 
 const Landing = ({ products, response_categories }: any) => {
-  console.log("t1 product api", { products });
   return (
     <div>
       <HeroSection />

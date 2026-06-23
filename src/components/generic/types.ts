@@ -13,6 +13,7 @@ export interface SliderCard {
   image: string;
   hoverImage?: string;
   title: string;
+  slug: string;
   price?: string;
   subtitle?: string;
   badge?: string;

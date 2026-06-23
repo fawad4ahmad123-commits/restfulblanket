@@ -157,6 +157,7 @@ const BestSellers = ({
                 >
                   <SliderCard
                     id={item.id}
+                    slug={item.slug}
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}
@@ -190,6 +191,7 @@ const BestSellers = ({
                 <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
                   <SliderCard
                     id={item.id}
+                    slug={item.slug}
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}

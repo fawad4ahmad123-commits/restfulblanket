@@ -7,9 +7,7 @@ interface ProductInformationSectionProps {
   info: ProductInformation;
 }
 
-const ProductInformationSection = ({
-  info,
-}: ProductInformationSectionProps) => {
+const ProductInformationSection = ({ info }: any) => {
   return (
     <section
       id="product-information"

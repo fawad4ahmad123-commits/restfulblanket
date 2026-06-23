@@ -1,34 +1,26 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import BestSellers from "@/src/components/Home/best-seller-season";
 import Coments from "@/src/components/Home/comments";
 import RestfulBlanketVideo from "@/src/components/Home/video-descripton";
 import ProductInfoPanel from "@/src/components/products";
-import {
-  naturalCozyBlanket,
-  pearlClassicInfo,
-} from "@/src/components/products/contants";
 import ProductGallery from "@/src/components/products/product-gallery";
 import ProductInformationSection from "@/src/components/products/product-information/product-information-section";
 import TestimonialVideoSlider from "@/src/components/products/video-testimonals.tsx";
-import { WooCommerce } from "@/src/lib/woocommerce";
-import { useSearchParams } from "next/navigation";
+import { pearlClassicInfo } from "@/src/components/products/contants";
 import { WooCommerceProduct } from "@/src/components/products/types";
-import { formatProduct } from "@/src/utilty/single-product-formatter";
-import { PLACEHOLDER_IMAGE } from "../constant";
-import { formatProductInformation } from "@/src/utilty/info-accordianc-formater";
+
 
 const ProductContent = ({
   likeProducts,
   productResponse,
 }: {
   likeProducts: any[];
-  productResponse: any[];
+  productResponse: WooCommerceProduct;
 }) => {
   const detailsRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (window.innerWidth < 1024) return;
 
@@ -61,20 +53,43 @@ const ProductContent = ({
     };
   }, []);
 
-  const product = productResponse ? formatProduct(productResponse) : null;
-  const product_information = formatProductInformation(productResponse);
-  console.log("t3", { product, productResponse });
+  if (!productResponse) {
+    return (
+      <main className="flex min-h-screen items-center justify-center">
+        Product not found
+      </main>
+    );
+  }
+
+  const product = {
+    name: productResponse.name || "",
+    images:
+      productResponse.images?.map((img: any) => img.src).filter(Boolean),
+    price: productResponse.price,
+    regularPrice: productResponse.regular_price,
+    salePrice: productResponse.sale_price,
+    priceHtml: productResponse.price_html,
+    shortDescription: productResponse.short_description,
+    description: productResponse.description,
+    sku: productResponse.sku,
+    stockStatus: productResponse.stock_status,
+    stockQuantity: productResponse.stock_quantity,
+    onSale: productResponse.on_sale,
+    badge: productResponse.on_sale ? "Sale" : "",
+  };
+
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_minmax(0,1fr)]">
           <div className="lg:sticky lg:top-6 lg:self-start">
             <ProductGallery
-              images={product?.images}
-              badge={product?.badge}
-              productName={product?.name}
+              images={product.images}
+              badge={product.badge}
+              productName={product.name}
             />
           </div>
+
           <div
             ref={detailsRef}
             className="min-w-0 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto scrollbar-hide p-3"
@@ -83,12 +98,17 @@ const ProductContent = ({
           </div>
         </div>
       </div>
+
       <section>
         <Coments />
       </section>
-      <ProductInformationSection info={product_information} />
+
+      <ProductInformationSection info={pearlClassicInfo} />
+
       <TestimonialVideoSlider />
+
       <RestfulBlanketVideo />
+
       <BestSellers isProduct products={likeProducts} />
     </main>
   );

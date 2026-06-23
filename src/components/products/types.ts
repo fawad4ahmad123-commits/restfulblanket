@@ -1,6 +1,7 @@
 export interface ProductColor {
   id: string;
   label: string;
+  value?:string;
   hex: string;
   hexSecondary?: string;
 }
@@ -51,6 +52,7 @@ export interface AddToCart {
   onQuantityChange: (quantity: number) => void;
   price: number;
   currency: string;
+  stockQuantity: number;
   onAddToCart: () => void;
 }
 
@@ -97,7 +99,6 @@ export interface WooCommerceProduct {
   stock_status: string;
   stock_quantity: number;
   on_sale: boolean;
-  attributes:any[]
+  attributes: any[];
   [key: string]: any;
 }
-

@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import FeatureList from "./feature-list";
@@ -9,93 +10,106 @@ import AddToCartBar from "./add-to-cart-bar";
 import Breadcrumbs from "./bread-crumbs";
 import RatingStars from "./rating-star";
 import PriceDisplay from "./price-display";
-import { Product } from "./types";
-
-interface ProductInfoPanelProps {
-  product: Product;
-}
 
 const ProductInfoPanel = ({ product }: any) => {
-  const [selectedColorId, setSelectedColorId] = useState(product.colors[0].id);
+  const colors = product?.colors ?? [];
+  const weights = product?.weights ?? [];
+  const sizes = product?.sizes ?? [];
+  const features = product?.features ?? [];
+  const stockQuantity = product.stockQuantity;
+
+  const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? "");
+
   const [selectedWeightId, setSelectedWeightId] = useState(
-    product.weights[1]?.id ?? product.weights[0].id,
+    weights[1]?.id ?? weights[0]?.id ?? "",
   );
+
   const [selectedSizeId, setSelectedSizeId] = useState(
-    product.sizes[1]?.id ?? product.sizes[0].id,
+    sizes[1]?.id ?? sizes[0]?.id ?? "",
   );
+
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
     console.log("Add to cart", {
-      productId: product.id,
+      productId: product?.id,
       colorId: selectedColorId,
       weightId: selectedWeightId,
       sizeId: selectedSizeId,
       quantity,
     });
   };
-console.log("t2 product ",{product })
+
+  if (!product) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-5">
-      <Breadcrumbs items={product.breadcrumbs} />
+      <Breadcrumbs items={product?.breadcrumbs ?? []} />
 
       <div className="space-y-2">
         <h1 className="font-serif text-[40px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
-          {product.name}
+          {product?.name}
         </h1>
+
         <RatingStars
-          rating={product.rating}
-          reviewCount={product.reviewCount}
+          rating={product?.rating ?? 0}
+          reviewCount={product?.reviewCount ?? 0}
         />
       </div>
 
       <PriceDisplay
-        price={product.price}
-        compareAtPrice={product.compareAtPrice}
-        currency={product.currency}
+        price={product?.price ?? 0}
+        compareAtPrice={product?.compareAtPrice ?? 0}
+        currency={product?.currency ?? "kr"}
       />
 
-      <FeatureList features={product.features} />
+      {features.length > 0 && <FeatureList features={features} />}
 
       <Separator className="bg-[#E3DCCD]" />
 
-      <ColorSelector
-        colors={product.colors}
-        selectedColorId={selectedColorId}
-        onSelect={setSelectedColorId}
-      />
+      {colors.length > 0 && (
+        <ColorSelector
+          colors={colors}
+          selectedColorId={selectedColorId}
+          onSelect={setSelectedColorId}
+        />
+      )}
 
-      <OptionPillGroup
-        label="Weight"
-        options={product.weights}
-        selectedId={selectedWeightId}
-        onSelect={setSelectedWeightId}
-        trailingSlot={
-          <button
-            className="text-xs font-medium text-[#3F3A36] underline-offset-2 hover:underline cursor-pointer"
-            onClick={() => open}
-          >
-            Weight guide
-          </button>
-        }
-      />
+      {weights.length > 0 && (
+        <OptionPillGroup
+          label="Weight"
+          options={weights}
+          selectedId={selectedWeightId}
+          onSelect={setSelectedWeightId}
+          trailingSlot={
+            <button className="cursor-pointer text-xs font-medium text-[#3F3A36] underline-offset-2 hover:underline">
+              Weight guide
+            </button>
+          }
+        />
+      )}
 
-      <OptionPillGroup
-        label="Size"
-        options={product.sizes}
-        selectedId={selectedSizeId}
-        onSelect={setSelectedSizeId}
-      />
+      {sizes.length > 0 && (
+        <OptionPillGroup
+          label="Size"
+          options={sizes}
+          selectedId={selectedSizeId}
+          onSelect={setSelectedSizeId}
+        />
+      )}
 
       <AddToCartBar
         quantity={quantity}
         onQuantityChange={setQuantity}
-        price={product.price}
-        currency={product.currency}
+        price={product?.price ?? 0}
+        currency={product?.currency ?? "kr"}
         onAddToCart={handleAddToCart}
+        stockQuantity={stockQuantity}
       />
 
-      <ProductInfoAccordion sections={product.infoSections} />
+      <ProductInfoAccordion />
     </div>
   );
 };
