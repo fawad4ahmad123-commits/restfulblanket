@@ -8,12 +8,13 @@ import { CATEGORIES } from "../constants";
 import SliderControls from "../../generic/slider-control";
 import { PLACEHOLDER_IMAGE } from "../../constant";
 
-interface BestSellersProps {
+const BestSellers = ({
+  isProduct,
+  products = [],
+}: {
   isProduct?: boolean;
-  products: any;
-}
-
-const BestSellers = ({ isProduct, products }: BestSellersProps) => {
+  products?: any[];
+}) => {
   const [start, setStart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(4);
@@ -21,13 +22,7 @@ const BestSellers = ({ isProduct, products }: BestSellersProps) => {
 
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Handle both shapes:
-  // products = [...]
-  // OR
-  // products = { products: [...] }
-  const productData = Array.isArray(products)
-    ? products
-    : products?.products || [];
+  const productData = products;
 
   useEffect(() => {
     const updateVisibleCount = () => {
@@ -53,7 +48,7 @@ const BestSellers = ({ isProduct, products }: BestSellersProps) => {
   const filteredProducts =
     activeCategory === "All"
       ? productData
-      : productData.filter((product: any) =>
+      : productData.filter((product) =>
           product.categories?.some((cat: any) => cat.name === activeCategory),
         );
 
