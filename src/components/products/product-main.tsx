@@ -17,34 +17,14 @@ import { WooCommerce } from "@/src/lib/woocommerce";
 import { useSearchParams } from "next/navigation";
 import { WooCommerceProduct } from "@/src/components/products/types";
 
-const ProductContent = ({ likeProducts }: { likeProducts: any[] }) => {
+const ProductContent = ({
+  likeProducts,
+  productResponse,
+}: {
+  likeProducts: any[];
+  productResponse: any[];
+}) => {
   const detailsRef = useRef<HTMLDivElement>(null);
-  const [productData, setProductData] = useState<WooCommerceProduct | null>(
-    null,
-  );
-  const [loading, setLoading] = useState(true);
-  const paramId = useSearchParams();
-  const id = paramId.get("id");
-
-  useEffect(() => {
-    if (!id) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchProduct = async () => {
-      try {
-        const response = await WooCommerce.get(`products/${id}`);
-        setProductData(response.data);
-      } catch (error) {
-        console.error("WooCommerce Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
 
   useEffect(() => {
     if (window.innerWidth < 1024) return;
@@ -91,14 +71,14 @@ const ProductContent = ({ likeProducts }: { likeProducts: any[] }) => {
     stock_status,
     stock_quantity,
     on_sale,
-  } = productData ?? {};
+  } = (productResponse as any) ?? {};
 
   const mappedImages =
     apiImages && apiImages.length > 0
       ? apiImages.map((img: any) => img.src)
       : naturalCozyBlanket.images;
 
-  const product = productData
+  const product = productResponse
     ? {
         ...naturalCozyBlanket,
         name: name ?? "",
@@ -117,13 +97,6 @@ const ProductContent = ({ likeProducts }: { likeProducts: any[] }) => {
       }
     : naturalCozyBlanket;
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
-        <div className="mx-auto max-w-7xl">Loading product…</div>
-      </main>
-    );
-  }
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
