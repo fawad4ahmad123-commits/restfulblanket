@@ -1,9 +1,8 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
-import SliderControls from "../../generic/slider-control";
 import CategoryCard from "./category-card";
-import { WooCommerce } from "@/src/lib/woocommerce";
+import SliderControls from "../../generic/slider-control";
+import { PLACEHOLDER_IMAGE } from "../../constant";
 
 interface ProductCategory {
   id: number;
@@ -19,13 +18,11 @@ interface ProductCategory {
   count: number;
 }
 
-const ProductCategories = () => {
+const ProductCategories = ({ response_categories }: any) => {
   const [start, setStart] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const categories = response_categories ?? [];
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -68,33 +65,6 @@ const ProductCategories = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await WooCommerce.get(`products/categories`);
-        // Only keep categories that have an image, since CategoryCard requires one
-        const data: ProductCategory[] = (response.data || []).filter(
-          (cat: ProductCategory) => !!cat.image?.src,
-        );
-        setCategories(data);
-      } catch (error) {
-        console.error("WooCommerce Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
-        <div className="mx-auto max-w-7xl">Loading categories…</div>
-      </main>
-    );
-  }
-
   if (!categories.length) {
     return null;
   }
@@ -123,13 +93,13 @@ const ProductCategories = () => {
             role="region"
             aria-label="Product categories slider"
           >
-            {categories.map((item, i) => (
+            {categories.map((item: any, i: number) => (
               <div
                 key={item.id}
                 className="w-[85%] shrink-0 snap-center sm:w-[70%] md:w-[48%]"
               >
                 <CategoryCard
-                  image={item.image!.src}
+                  image={item.image?.src || PLACEHOLDER_IMAGE}
                   title={item.name}
                   subtitle={item.parent ? undefined : `${item.count} produkter`}
                   index={`0${i + 1}`}
@@ -140,15 +110,17 @@ const ProductCategories = () => {
         </div>
 
         <div className="hidden gap-5 lg:grid lg:grid-cols-4">
-          {categories.slice(start, start + visibleCards).map((item, i) => (
-            <CategoryCard
-              key={item.id}
-              image={item.image!.src}
-              title={item.name}
-              subtitle={item.parent ? undefined : `${item.count} produkter`}
-              index={`0${start + i + 1}`}
-            />
-          ))}
+          {categories
+            .slice(start, start + visibleCards)
+            .map((item: any, i: number) => (
+              <CategoryCard
+                key={item.id}
+                image={item.image?.src || PLACEHOLDER_IMAGE}
+                title={item.name}
+                subtitle={item.parent ? undefined : `${item.count} produkter`}
+                index={`0${start + i + 1}`}
+              />
+            ))}
         </div>
       </div>
     </section>
