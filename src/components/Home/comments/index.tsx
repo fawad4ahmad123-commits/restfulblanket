@@ -63,7 +63,7 @@ const Coments = ({ id }: { id: string }) => {
             )}
           </div>
 
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 flex h-full flex-col justify-end">
             {showModal ? (
               <ReviewForm
                 onClose={() => setShowModal(false)}

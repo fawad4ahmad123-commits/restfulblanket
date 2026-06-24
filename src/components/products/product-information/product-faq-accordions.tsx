@@ -17,7 +17,7 @@ const ProductFaqAccordion = ({
   if (!items.length) return null;
 
   return (
-    <div className="divide-y divide-[#E3DCCD] overflow-hidden rounded-xl border border-[#E3DCCD] bg-[#F7F2EA]">
+    <div className="divide-y divide-[#E9DDD4] overflow-hidden rounded-xl border border-[#E9DDD4] bg-[ #E9DDD4]">
       {items.map((item) => {
         const isOpen = openId === item.id;
         return (

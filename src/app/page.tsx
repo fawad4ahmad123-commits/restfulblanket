@@ -6,5 +6,6 @@ export default async function Home() {
     getBestSellers(),
     getCategories(),
   ]);
+  console.log('t2 test', { products, categories });
   return <Landing products={products} response_categories={categories} />;
 }

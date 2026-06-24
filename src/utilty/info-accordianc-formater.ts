@@ -1,80 +1,40 @@
 export const formatProductInformation = (product: any) => {
   const safeProduct = product || {};
 
-  const infoText =
-    safeProduct?.attributes?.find(
-      (attr: any) =>
-        attr?.name?.toLowerCase() === 'info' ||
-        attr?.slug?.toLowerCase() === 'info',
-    )?.options?.[0] || '';
+  const description = safeProduct?.description || '';
 
-  const extractSection = (
-    text: string,
-    start: string,
-    end?: string,
-  ): string => {
-    if (!text) return '';
+  const stripHtml = (html: string) =>
+    html
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/p>/gi, '\n')
+      .replace(/<[^>]*>/g, '')
+      .replace(/\n\s*\n/g, '\n')
+      .trim();
 
-    const startIndex = text.indexOf(start);
+  const matches = [
+    ...description.matchAll(
+      /<p>\s*<strong[^>]*>(.*?)<\/strong>\s*<\/p>\s*([\s\S]*?)(?=<p>\s*<strong|$)/gi,
+    ),
+  ];
 
-    if (startIndex === -1) return '';
+  const faqs = matches
+    .map((match, index) => {
+      const title = stripHtml(match[1]);
+      const body = stripHtml(match[2]);
 
-    const contentStart = startIndex + start.length;
-
-    if (!end) {
-      return text.substring(contentStart).trim();
-    }
-
-    const endIndex = text.indexOf(end, contentStart);
-
-    if (endIndex === -1) {
-      return text.substring(contentStart).trim();
-    }
-
-    return text.substring(contentStart, endIndex).trim();
-  };
-
-  const faqs = [
-    {
-      id: 'materialer',
-      title: 'Materialer',
-      body: extractSection(infoText, 'Materialer', 'Størrelse og tyngde'),
-    },
-    {
-      id: 'stoerrelse',
-      title: 'Størrelse og tyngde',
-      body: extractSection(
-        infoText,
-        'Størrelse og tyngde',
-        'Målgruppe og brug',
-      ),
-    },
-    {
-      id: 'maalgruppe',
-      title: 'Målgruppe og brug',
-      body: extractSection(infoText, 'Målgruppe og brug', 'Produktion'),
-    },
-    {
-      id: 'produktion',
-      title: 'Produktion',
-      body: extractSection(infoText, 'Produktion', 'Vask, tørring og pleje'),
-    },
-    {
-      id: 'vask',
-      title: 'Vask, tørring og pleje',
-      body: extractSection(infoText, 'Vask, tørring og pleje', 'Sikkerhed'),
-    },
-    {
-      id: 'sikkerhed',
-      title: 'Sikkerhed',
-      body: extractSection(infoText, 'Sikkerhed'),
-    },
-  ].filter((item) => item.body);
+      return {
+        id: title?.toLowerCase()?.replace(/\s+/g, '-') || `section-${index}`,
+        title,
+        body,
+      };
+    })
+    .filter((item) => item.title && item.body);
 
   return {
     heading: 'PRODUCT',
     headingItalic: 'INFORMATION',
 
+    // ✅ ACCORDION DATA
     faqs:
       faqs.length > 0
         ? faqs
@@ -82,10 +42,7 @@ export const formatProductInformation = (product: any) => {
             {
               id: 'product-info',
               title: safeProduct?.name || 'Product Information',
-              body:
-                infoText ||
-                safeProduct?.description ||
-                'No product information available.',
+              body: description || 'No product information available.',
             },
           ],
 
@@ -118,6 +75,7 @@ export const formatProductInformation = (product: any) => {
         label: 'Wash',
         value: 'Machine 60°C',
       },
+
       {
         id: 'sku',
         label: 'SKU',

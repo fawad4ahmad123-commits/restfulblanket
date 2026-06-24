@@ -7,6 +7,9 @@ import { testimonials } from '../contants';
 const getYoutubeEmbedUrl = (youtubeId: string) =>
   `https://www.youtube.com/embed/${youtubeId}?autoplay=1&playsinline=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&controls=1`;
 
+const getYoutubeThumbnail = (youtubeId: string) =>
+  `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+
 export default function TestimonialVideoSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
@@ -81,15 +84,7 @@ export default function TestimonialVideoSlider() {
                 ref={(el) => {
                   cardRefs.current[item.id] = el;
                 }}
-                className={`
-                  relative shrink-0 snap-start overflow-hidden rounded-[24px]
-                  transition-all duration-500 ease-out
-                  ${
-                    isActive
-                      ? 'w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[580px]'
-                      : 'w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[290px]'
-                  }
-                `}
+                className="relative shrink-0 snap-start overflow-hidden rounded-[24px] w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[290px]"
               >
                 {isActive ? (
                   <iframe
@@ -101,7 +96,7 @@ export default function TestimonialVideoSlider() {
                   />
                 ) : (
                   <img
-                    src={item.poster}
+                    src={getYoutubeThumbnail(item.youtubeId)}
                     alt={`Testimonial from ${item.name}`}
                     className="h-[520px] w-full object-cover"
                   />

@@ -23,7 +23,7 @@ const MobileStickyCart = ({
   return (
     <div
       className={cn(
-        'fixed top-4 left-4 right-4 z-50 lg:hidden transition-all duration-300',
+        'fixed bottom-4 left-4 right-4 z-50 lg:hidden transition-all duration-300',
         visible
           ? 'translate-y-0 opacity-100'
           : 'pointer-events-none translate-y-20 opacity-0',

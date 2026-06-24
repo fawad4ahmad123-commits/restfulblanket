@@ -23,3 +23,8 @@ const ExtractFeaturesFromShortDescription = (
 };
 
 export default ExtractFeaturesFromShortDescription;
+
+export const formatPrice = (value: string | number) => {
+  if (!value) return '';
+  return `${Number(value).toLocaleString()} kr.`;
+};

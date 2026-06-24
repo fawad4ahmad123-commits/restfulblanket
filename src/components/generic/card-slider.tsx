@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Heart, Eye, ShoppingBag } from 'lucide-react';
 import { SliderCard as SliderCardProps } from './types';
 import { useRouter } from 'next/navigation';
+import { formatPrice } from '@/src/helper/product-feature';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -137,13 +138,13 @@ const SliderCard = ({
         <div className="mb-5 flex items-center gap-2">
           {price && (
             <span className="text-lg font-semibold text-[#3b281f]">
-              {price}
+              {formatPrice(price)}
             </span>
           )}
 
           {originalPrice && (
-            <span className="text-sm text-[ #E9DDD4] line-through">
-              {originalPrice}
+            <span className="text-sm text-[ #35281E] line-through">
+              {formatPrice(originalPrice)}
             </span>
           )}
         </div>
