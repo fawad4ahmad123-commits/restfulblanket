@@ -1,115 +1,92 @@
 'use client';
+
 import { useState } from 'react';
 import Image from 'next/image';
 import { Heart, Eye, ShoppingBag } from 'lucide-react';
-import { SliderCard as SliderCardProps } from './types';
 import { useRouter } from 'next/navigation';
-import { formatPrice } from '@/src/helper/product-feature';
+import { Product } from '../types/product';
 
-interface ExtendedSliderCardProps extends SliderCardProps {
-  hoverImage?: string;
+interface ProductCardProps {
+  product: any;
+  onAddToCart?: () => void;
 }
 
-const SliderCard = ({
-  image,
-  slug,
-  hoverImage,
-  title,
-  price,
-  badge,
-  id,
-  originalPrice,
-  rating = 4.9,
-  reviewCount = 1284,
-  weight,
-  dimensions,
-  onAddToCart,
-}: ExtendedSliderCardProps) => {
+export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const [wished, setWished] = useState(false);
   const router = useRouter();
+
+  const rating = product.rating || 4.9;
+  const reviewCount = product.reviewCount || 1284;
   const stars = Math.round(rating);
 
   return (
     <div
-      className="group overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"
-      onClick={() => router.push(`/product/${slug}`)}
+      className="group overflow-hidden rounded-[24px] bg-[#fdf9f6] transition-all duration-300 cursor-pointer"
+      onClick={() => router.push(`/product/${product.slug}`)}
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden rounded-[24px]">
         <div className="relative h-[340px] md:h-[420px]">
           <Image
-            src={image}
-            alt={title}
+            src={product.image}
+            alt={product.name}
             fill
             className={`object-cover transition-all duration-500 ${
-              hoverImage ? 'group-hover:opacity-0' : ''
+              product.hoverImage ? 'group-hover:opacity-0' : ''
             }`}
           />
 
-          {hoverImage && (
+          {product.hoverImage && (
             <Image
-              src={hoverImage}
-              alt={`${title} alternate view`}
+              src={product.hoverImage}
+              alt={`${product.name} alternate view`}
               fill
               className="object-cover opacity-0 transition-all duration-500 group-hover:opacity-100"
             />
           )}
         </div>
 
-        {(badge || 'Best Seller') && (
+        {(product.badge || product.isNew) && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
-            {badge || 'Best Seller'}
+            {product.badge || 'New'}
           </div>
         )}
 
         <button
           type="button"
-          aria-label={
-            wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
-          }
-          title={
-            wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
-          }
-          onClick={() => setWished((w) => !w)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setWished((prev) => !prev);
+          }}
           className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
           <Heart
-            aria-hidden="true"
             size={16}
             className={
               wished ? 'fill-[#35281e] text-[#35281e]' : 'text-[#35281e]'
             }
           />
         </button>
+
         <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
           <button
             type="button"
-            aria-label={`Quick view ${title}`}
-            title={`Quick view ${title}`}
-            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/product/${slug}`);
+              router.push(`/product/${product.slug}`);
             }}
+            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
           >
-            <Eye aria-hidden="true" size={14} />
+            <Eye size={14} />
             Quick View
           </button>
         </div>
       </div>
 
       <div className="px-5 pb-5 pt-5">
-        <div
-          className="mb-3 flex items-center gap-1"
-          aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
-        >
+        <div className="mb-3 flex items-center gap-1">
           {Array.from({ length: 5 }).map((_, i) => (
             <svg
               key={i}
-              aria-hidden="true"
               className={`h-4 w-4 ${
                 i < stars ? 'text-[#A38575]' : 'text-gray-300'
               }`}
@@ -120,48 +97,45 @@ const SliderCard = ({
             </svg>
           ))}
 
-          <span className="ml-2 text-xs text-[ #392A22]/60">
+          <span className="ml-2 text-xs text-[#392A22]/60">
             {rating} · {reviewCount.toLocaleString()}
           </span>
         </div>
 
-        <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[ #35281E]">
-          {title}
+        <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[#35281E]">
+          {product.name}
         </h3>
 
-        {(weight || dimensions) && (
-          <p className="mb-4 text-xs text-[ #35281E]/50">
-            {[weight, dimensions].filter(Boolean).join(' · ')}
+        {(product.weight || product.size) && (
+          <p className="mb-4 text-xs text-[#35281E]/50">
+            {[product.weight, product.size].filter(Boolean).join(' · ')}
           </p>
         )}
 
         <div className="mb-5 flex items-center gap-2">
-          {price && (
-            <span className="text-lg font-semibold text-[#3b281f]">
-              {formatPrice(price)}
-            </span>
-          )}
+          <span className="text-lg font-semibold text-[#3b281f]">
+            €{product.price}
+          </span>
 
-          {originalPrice && (
-            <span className="text-sm text-[ #35281E] line-through">
-              {formatPrice(originalPrice)}
+          {product.originalPrice && (
+            <span className="text-sm text-[#35281E] line-through">
+              €{product.originalPrice}
             </span>
           )}
         </div>
 
         <button
           type="button"
-          aria-label={`Add ${title} to cart`}
-          title={`Add ${title} to cart`}
-          onClick={onAddToCart}
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart?.();
+          }}
           className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
-          <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+          <ShoppingBag className="h-4 w-4" />
           Add To Cart
         </button>
       </div>
     </div>
   );
-};
-
-export default SliderCard;
+}

@@ -84,7 +84,8 @@ const BestSellers = ({
 
   return (
     <section
-      className={isProduct ? 'bg-[#FFF9F5] py-16' : 'bg-[#FAF4EE] py-16'}
+      // className={isProduct ? 'bg-{#FAF4EE] py-16' : 'bg-[#FAF4EE] py-16'}
+      className="bg-[#FAF4EE] py-16"
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
