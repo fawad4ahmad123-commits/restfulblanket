@@ -1,7 +1,7 @@
-"use client";
-import { useState } from "react";
-import { Minus, Plus } from "lucide-react";
-import { FAQS } from "../constants";
+'use client';
+import { useState } from 'react';
+import { Minus, Plus } from 'lucide-react';
+import { FAQS } from '../constants';
 
 type FAQItemProps = {
   question: string;
@@ -28,7 +28,7 @@ const FAQItem = ({ question, answer, isOpen, onToggle }: FAQItemProps) => (
 
     <div
       className={`overflow-hidden transition-all duration-300 ease-in-out ${
-        isOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+        isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
       }`}
     >
       <div className="px-5 pb-5 md:px-6 md:pb-6">

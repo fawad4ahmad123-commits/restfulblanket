@@ -1,5 +1,5 @@
-import Footer from "@/src/components/footer";
-import SiteHeader from "@/src/components/header";
+import Footer from '@/src/components/footer';
+import SiteHeader from '@/src/components/header';
 
 interface SiteLayoutProps {
   children: React.ReactNode;

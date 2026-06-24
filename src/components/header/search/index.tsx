@@ -1,6 +1,6 @@
-import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const SearchProducts = ({ isHome = true }: { isHome?: boolean }) => {
   return (
@@ -9,7 +9,7 @@ const SearchProducts = ({ isHome = true }: { isHome?: boolean }) => {
       variant="ghost"
       aria-label="Search products"
       title="Search products"
-      className={cn(!isHome && "text-[#392A22] hover:bg-[#392A22]/10")}
+      className={cn(!isHome && 'text-[#392A22] hover:bg-[#392A22]/10')}
     >
       <Search aria-hidden="true" className="size-4" />
     </Button>

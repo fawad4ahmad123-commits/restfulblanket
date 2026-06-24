@@ -1,6 +1,6 @@
-import { ArrowRight } from "lucide-react";
-import { BLOGS } from "../constants";
-import BlogCard from ".";
+import { ArrowRight } from 'lucide-react';
+import { BLOGS } from '../constants';
+import BlogCard from '.';
 
 const BlogsSection = () => {
   return (
@@ -10,7 +10,7 @@ const BlogsSection = () => {
           id="blogs-heading"
           className="mb-14 text-center font-serif text-4xl text-[#3b281f] md:text-6xl"
         >
-          Thoughts on{" "}
+          Thoughts on{' '}
           <span className="italic font-normal">Restful Living.</span>
         </h2>
 

@@ -1,25 +1,25 @@
-import * as React from "react";
-import { ShieldCheck } from "lucide-react";
+import * as React from 'react';
+import { ShieldCheck } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ProductInfoSection } from "./types";
-import { WhyRestfulBlanketContent } from "./why-restful-blanket-content";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { sections } from "./contants";
+} from '@/components/ui/accordion';
+import { ProductInfoSection } from './types';
+import { WhyRestfulBlanketContent } from './why-restful-blanket-content';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { sections } from './contants';
 
 interface ProductInfoAccordionProps {
   sections: ProductInfoSection[];
 }
 const trustItems = {
-  icon: "/home/shieldIcon.png",
-  alt: "90 night guarantee",
-  title: "90 nætter",
-  subtitle: "Sikkerhed",
+  icon: '/home/shieldIcon.png',
+  alt: '90 night guarantee',
+  title: '90 nætter',
+  subtitle: 'Sikkerhed',
   monochrome: true,
 };
 const ProductInfoAccordion = () => {
@@ -50,8 +50,8 @@ const ProductInfoAccordion = () => {
                   width={20}
                   height={20}
                   className={cn(
-                    "h-5 w-5 md:h-[18px] md:w-[18px]",
-                    trustItems.monochrome && "brightness-0",
+                    'h-5 w-5 md:h-[18px] md:w-[18px]',
+                    trustItems.monochrome && 'brightness-0',
                   )}
                 />
               </div>

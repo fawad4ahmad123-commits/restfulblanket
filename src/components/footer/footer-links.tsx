@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 const FooterLinks = ({ title, links }: { title: string; links: string[] }) => {
   return (

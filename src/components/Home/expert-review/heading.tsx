@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { User } from 'lucide-react';
 
 const Heading = () => {
   return (

@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Star } from 'lucide-react';
 
 const DetailReviewShipping = () => {
   return (
@@ -13,19 +13,25 @@ const DetailReviewShipping = () => {
         </div>
       </div>
       <div>
-        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[40px]">184k</div>
+        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[40px]">
+          184k
+        </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
           Nights Of Better Sleep
         </div>
       </div>
       <div>
-        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[38px] l:text-[40px]">30 Days</div>
+        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[38px] l:text-[40px]">
+          30 Days
+        </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
           Sleep Trial
         </div>
       </div>
       <div>
-        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[40px]">Free</div>
+        <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[40px]">
+          Free
+        </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
           Shipping
         </div>

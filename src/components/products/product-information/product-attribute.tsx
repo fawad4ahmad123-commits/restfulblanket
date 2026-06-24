@@ -1,6 +1,6 @@
-import { Snowflake, Flame } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TemperatureAttribute } from "../types";
+import { Snowflake, Flame } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { TemperatureAttribute } from '../types';
 
 interface ProductAttributesProps {
   title: string;
@@ -26,8 +26,8 @@ const ProductAttributes = ({
           <span
             key={option.id}
             className={cn(
-              "flex items-center gap-1.5 text-sm",
-              option.active ? "font-medium text-[#3F3A36]" : "text-[#C7C0B2]",
+              'flex items-center gap-1.5 text-sm',
+              option.active ? 'font-medium text-[#3F3A36]' : 'text-[#C7C0B2]',
             )}
           >
             <TemperatureIcon icon={option.icon} active={option.active} />
@@ -43,17 +43,17 @@ function TemperatureIcon({
   icon,
   active,
 }: {
-  icon: TemperatureAttribute["icon"];
+  icon: TemperatureAttribute['icon'];
   active: boolean;
 }) {
-  const colorClass = active ? "text-[#3F3A36]" : "text-[#C7C0B2]";
+  const colorClass = active ? 'text-[#3F3A36]' : 'text-[#C7C0B2]';
 
-  if (icon === "cool")
-    return <Snowflake className={cn("h-3.5 w-3.5", colorClass)} />;
-  if (icon === "warm")
-    return <Flame className={cn("h-3.5 w-3.5", colorClass)} />;
+  if (icon === 'cool')
+    return <Snowflake className={cn('h-3.5 w-3.5', colorClass)} />;
+  if (icon === 'warm')
+    return <Flame className={cn('h-3.5 w-3.5', colorClass)} />;
   return (
-    <span className={cn("h-1.5 w-1.5 rounded-full bg-current", colorClass)} />
+    <span className={cn('h-1.5 w-1.5 rounded-full bg-current', colorClass)} />
   );
 }
 

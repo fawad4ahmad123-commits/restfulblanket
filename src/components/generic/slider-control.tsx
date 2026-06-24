@@ -1,5 +1,5 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { SliderControls as SliderControlsProps } from "./types";
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { SliderControls as SliderControlsProps } from './types';
 
 const SliderControls = ({ prev, next }: SliderControlsProps) => {
   return (

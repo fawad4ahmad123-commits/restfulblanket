@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { Separator } from "@/components/ui/separator";
-import FeatureList from "./feature-list";
-import ColorSelector from "./color-selector";
-import OptionPillGroup from "./option-pill-group";
-import ProductInfoAccordion from "./product-info-accordion";
-import AddToCartBar from "./add-to-cart-bar";
-import Breadcrumbs from "./bread-crumbs";
-import RatingStars from "./rating-star";
-import PriceDisplay from "./price-display";
-import MobileStickyCart from "./mobile-stick-cart";
+import { useEffect, useRef, useState } from 'react';
+import { Separator } from '@/components/ui/separator';
+import FeatureList from './feature-list';
+import ColorSelector from './color-selector';
+import OptionPillGroup from './option-pill-group';
+import ProductInfoAccordion from './product-info-accordion';
+import AddToCartBar from './add-to-cart-bar';
+import Breadcrumbs from './bread-crumbs';
+import RatingStars from './rating-star';
+import PriceDisplay from './price-display';
+import MobileStickyCart from './mobile-stick-cart';
 
 const ProductInfoPanel = ({ product }: any) => {
   const addToCartRef = useRef<HTMLDivElement>(null);
@@ -21,20 +21,20 @@ const ProductInfoPanel = ({ product }: any) => {
   const features = product?.features ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
 
-  const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? "");
+  const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? '');
 
   const [selectedWeightId, setSelectedWeightId] = useState(
-    weights[1]?.id ?? weights[0]?.id ?? "",
+    weights[1]?.id ?? weights[0]?.id ?? '',
   );
 
   const [selectedSizeId, setSelectedSizeId] = useState(
-    sizes[1]?.id ?? sizes[0]?.id ?? "",
+    sizes[1]?.id ?? sizes[0]?.id ?? '',
   );
 
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
-    console.log("Add to cart", {
+    console.log('Add to cart', {
       productId: product?.id,
       colorId: selectedColorId,
       weightId: selectedWeightId,
@@ -82,7 +82,7 @@ const ProductInfoPanel = ({ product }: any) => {
       <PriceDisplay
         price={product?.price ?? 0}
         compareAtPrice={product?.compareAtPrice ?? 0}
-        currency={product?.currency ?? "kr"}
+        currency={product?.currency ?? 'kr'}
       />
 
       {features.length > 0 && <FeatureList features={features} />}
@@ -125,7 +125,7 @@ const ProductInfoPanel = ({ product }: any) => {
           quantity={quantity}
           onQuantityChange={setQuantity}
           price={product?.price ?? 0}
-          currency={product?.currency ?? "kr"}
+          currency={product?.currency ?? 'kr'}
           onAddToCart={handleAddToCart}
           stockQuantity={stockQuantity}
         />

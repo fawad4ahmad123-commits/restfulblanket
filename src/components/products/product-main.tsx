@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import BestSellers from "@/src/components/Home/best-seller-season";
-import Coments from "@/src/components/Home/comments";
-import RestfulBlanketVideo from "@/src/components/Home/video-descripton";
-import ProductInfoPanel from "@/src/components/products";
-import ProductGallery from "@/src/components/products/product-gallery";
-import ProductInformationSection from "@/src/components/products/product-information/product-information-section";
-import TestimonialVideoSlider from "@/src/components/products/video-testimonals.tsx";
-import { formatProduct } from "@/src/utilty/single-product-formatter";
-import { formatProductInformation } from "@/src/utilty/info-accordianc-formater";
+import { useEffect, useRef } from 'react';
+import BestSellers from '@/src/components/Home/best-seller-season';
+import Coments from '@/src/components/Home/comments';
+import RestfulBlanketVideo from '@/src/components/Home/video-descripton';
+import ProductInfoPanel from '@/src/components/products';
+import ProductGallery from '@/src/components/products/product-gallery';
+import ProductInformationSection from '@/src/components/products/product-information/product-information-section';
+import TestimonialVideoSlider from '@/src/components/products/video-testimonals.tsx';
+import { formatProduct } from '@/src/utilty/single-product-formatter';
+import { formatProductInformation } from '@/src/utilty/info-accordianc-formater';
 
 const ProductContent = ({
   likeProducts,
@@ -43,17 +43,17 @@ const ProductContent = ({
       }
     };
 
-    window.addEventListener("wheel", handleWheel, {
+    window.addEventListener('wheel', handleWheel, {
       passive: false,
     });
 
     return () => {
-      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener('wheel', handleWheel);
     };
   }, []);
   const product = productResponse ? formatProduct(productResponse) : null;
   const product_information = formatProductInformation(productResponse);
-  console.log("t3", { product,productResponse });
+  console.log('t3', { product, productResponse });
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
@@ -74,7 +74,7 @@ const ProductContent = ({
         </div>
       </div>
       <section>
-        <Coments />
+        <Coments id={product?.id || ''} />
       </section>
       <ProductInformationSection info={product_information} />
       <TestimonialVideoSlider />

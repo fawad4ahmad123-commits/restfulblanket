@@ -23,7 +23,7 @@ export interface SliderCard {
   reviewCount?: number;
   weight?: string;
   dimensions?: string;
-  type?: "product" | "category";
+  type?: 'product' | 'category';
   onAddToCart?: () => void;
 }
 

@@ -1,7 +1,7 @@
 export interface ProductColor {
   id: string;
   label: string;
-  value?:string;
+  value?: string;
   hex: string;
   hexSecondary?: string;
 }
@@ -71,7 +71,7 @@ export interface DetailRow {
 export interface TemperatureAttribute {
   id: string;
   label: string;
-  icon: "cool" | "medium" | "warm";
+  icon: 'cool' | 'medium' | 'warm';
   active: boolean;
 }
 

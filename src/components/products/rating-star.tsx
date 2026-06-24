@@ -1,5 +1,5 @@
-import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface RatingStarsProps {
   rating: number;
@@ -13,10 +13,10 @@ const RatingStars = ({ rating, reviewCount }: RatingStarsProps) => {
           <Star
             key={i}
             className={cn(
-              "h-4 w-4",
+              'h-4 w-4',
               i < Math.round(rating)
-                ? "fill-[#E6CBB8] text-[#E6CBB8]"
-                : "fill-[#E6CBB8] text-[#E6CBB8]",
+                ? 'fill-[#E6CBB8] text-[#E6CBB8]'
+                : 'fill-[#E6CBB8] text-[#E6CBB8]',
             )}
           />
         ))}

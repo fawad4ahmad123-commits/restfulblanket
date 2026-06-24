@@ -1,4 +1,4 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
 
 interface BreadcrumbsProps {
   items: string[];
@@ -12,7 +12,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
     >
       {items.map((item, i) => (
         <span key={item} className="flex items-center">
-          <span className={i === items.length - 1 ? "text-[#3F3A36]" : ""}>
+          <span className={i === items.length - 1 ? 'text-[#3F3A36]' : ''}>
             {item}
           </span>
           {i < items.length - 1 && (

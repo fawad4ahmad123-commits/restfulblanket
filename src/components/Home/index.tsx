@@ -1,13 +1,13 @@
-import HeroSection from "../hero";
-import BottomBanner from "../hero/bottom-banner";
-import CraftsmanshipSection from "./about-blanket";
-import BestSellers from "./best-seller-season";
-import BlogsSection from "./blog/blog-section";
-import Coments from "./comments";
-import CommonQuestions from "./common-question";
-import ExpertsSection from "./expert-review/expert-session";
-import ProductCategories from "./product-categories";
-import RestfulBlanketVideo from "./video-descripton";
+import HeroSection from '../hero';
+import BottomBanner from '../hero/bottom-banner';
+import CraftsmanshipSection from './about-blanket';
+import BestSellers from './best-seller-season';
+import BlogsSection from './blog/blog-section';
+import Coments from './comments';
+import CommonQuestions from './common-question';
+import ExpertsSection from './expert-review/expert-session';
+import ProductCategories from './product-categories';
+import RestfulBlanketVideo from './video-descripton';
 
 const Landing = ({ products, response_categories }: any) => {
   return (
@@ -18,7 +18,7 @@ const Landing = ({ products, response_categories }: any) => {
       <BestSellers isProduct={false} products={products} />
       <CraftsmanshipSection />
       <ExpertsSection />
-      <Coments />
+      <Coments id={''} />
       <RestfulBlanketVideo />
       <CommonQuestions />
       <BlogsSection />

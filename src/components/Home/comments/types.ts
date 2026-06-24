@@ -4,15 +4,15 @@ export interface Review {
   location: string;
   rating: number;
   review: string;
+  reviewer: string;
 }
 
-export interface LeftReview{
+export interface LeftReview {
   review: Review;
   current: number;
   animating: boolean;
-  direction: "left" | "right";
+  direction: 'left' | 'right';
 }
-
 
 export interface RightReviews {
   reviews: Review[];
@@ -26,10 +26,10 @@ export interface Info {
   showModal: boolean;
   current: number;
   totalReviews: number;
-  direction: "left" | "right";
+  direction: 'left' | 'right';
   animating: boolean;
   setCurrent: React.Dispatch<React.SetStateAction<number>>;
-  setDirection: React.Dispatch<React.SetStateAction<"left" | "right">>;
+  setDirection: React.Dispatch<React.SetStateAction<'left' | 'right'>>;
   setAnimating: React.Dispatch<React.SetStateAction<boolean>>;
   setReview: React.Dispatch<React.SetStateAction<boolean>>;
 }

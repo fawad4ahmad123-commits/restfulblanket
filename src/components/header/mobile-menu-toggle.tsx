@@ -1,7 +1,7 @@
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import MobileView from "./mobile-view";
+import { Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import MobileView from './mobile-view';
 
 const MobileViewMenuToggle = ({ wishlistCount }: { wishlistCount: number }) => {
   return (

@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-import CategoryCard from "./category-card";
-import SliderControls from "../../generic/slider-control";
-import { PLACEHOLDER_IMAGE } from "../../constant";
+'use client';
+import { useEffect, useRef, useState } from 'react';
+import CategoryCard from './category-card';
+import SliderControls from '../../generic/slider-control';
+import { PLACEHOLDER_IMAGE } from '../../constant';
 
 interface ProductCategory {
   id: number;
@@ -30,9 +30,9 @@ const ProductCategories = ({ response_categories }: any) => {
 
     checkScreen();
 
-    window.addEventListener("resize", checkScreen);
+    window.addEventListener('resize', checkScreen);
 
-    return () => window.removeEventListener("resize", checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
   const visibleCards = 4;
@@ -41,7 +41,7 @@ const ProductCategories = ({ response_categories }: any) => {
     if (!isDesktop) {
       sliderRef.current?.scrollBy({
         left: 350,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
       return;
     }
@@ -55,7 +55,7 @@ const ProductCategories = ({ response_categories }: any) => {
     if (!isDesktop) {
       sliderRef.current?.scrollBy({
         left: -350,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
       return;
     }

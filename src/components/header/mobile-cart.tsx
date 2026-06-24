@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { ShoppingBag } from 'lucide-react';
 
 const MobileCart = ({ cartCount }: { cartCount: number }) => {
   return (

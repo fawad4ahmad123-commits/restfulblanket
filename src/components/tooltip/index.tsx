@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 interface AppTooltipProps {
   children: React.ReactNode;
   content: React.ReactNode;
-  side?: "top" | "right" | "bottom" | "left";
+  side?: 'top' | 'right' | 'bottom' | 'left';
   disabled?: boolean;
 }
 
 export default function AppTooltip({
   children,
   content,
-  side = "top",
+  side = 'top',
   disabled = false,
 }: AppTooltipProps) {
   if (disabled) {
@@ -35,7 +35,7 @@ export default function AppTooltip({
           side={side}
           className="border-[#392A22] bg-[#392A22] text-[#E6CBB8]"
         >
-          {typeof content === "string" ? <p>{content}</p> : content}
+          {typeof content === 'string' ? <p>{content}</p> : content}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

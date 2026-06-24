@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import Image from 'next/image';
+import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface ProductGalleryProps {
   images?: string[];
@@ -16,7 +16,7 @@ interface ProductGalleryProps {
 const ProductGallery = ({
   images = [],
   badge,
-  productName = "Product",
+  productName = 'Product',
 }: ProductGalleryProps) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isFavorited, setIsFavorited] = React.useState(false);
@@ -51,24 +51,24 @@ const ProductGallery = ({
           className="object-cover"
         />
 
-        {badge && (
+        {/* {badge && (
           <Badge className="absolute left-4 top-4 rounded-full bg-[#F4EFE6] px-3 py-1 text-xs font-medium text-[#3F3A36] hover:bg-[#F4EFE6]">
             {badge}
           </Badge>
-        )}
+        )} */}
 
         <Button
           type="button"
           size="icon"
           variant="ghost"
-          aria-label={isFavorited ? "Remove from wishlist" : "Add to wishlist"}
+          aria-label={isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={() => setIsFavorited((v) => !v)}
           className="absolute right-4 top-4 h-9 w-9 rounded-full bg-white/90 hover:bg-white"
         >
           <Heart
             className={cn(
-              "h-4 w-4 transition-colors",
-              isFavorited ? "fill-[#3F3A36] text-[#3F3A36]" : "text-[#3F3A36]",
+              'h-4 w-4 transition-colors',
+              isFavorited ? 'fill-[#3F3A36] text-[#3F3A36]' : 'text-[#3F3A36]',
             )}
           />
         </Button>
@@ -108,10 +108,10 @@ const ProductGallery = ({
               aria-label={`Go to image ${i + 1}`}
               onClick={() => setActiveIndex(i)}
               className={cn(
-                "h-1.5 rounded-full transition-all",
+                'h-1.5 rounded-full transition-all',
                 i === activeIndex
-                  ? "w-6 bg-[#3F3A36]"
-                  : "w-1.5 bg-[#3F3A36]/30",
+                  ? 'w-6 bg-[#3F3A36]'
+                  : 'w-1.5 bg-[#3F3A36]/30',
               )}
             />
           ))}

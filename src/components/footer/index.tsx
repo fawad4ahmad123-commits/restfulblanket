@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { Mail } from "lucide-react";
-import FooterLinks from "./footer-links";
-import { shopLinks, socialLinks, supportLinks } from "../constant";
-import Image from "next/image";
+import Link from 'next/link';
+import { Mail } from 'lucide-react';
+import FooterLinks from './footer-links';
+import { shopLinks, socialLinks, supportLinks } from '../constant';
+import Image from 'next/image';
 
 const Footer = () => {
   return (

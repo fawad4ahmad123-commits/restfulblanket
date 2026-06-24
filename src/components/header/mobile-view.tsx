@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Heart, Search, User, ChevronDown } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { navigation } from "../constant";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Heart, Search, User, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { navigation } from '../constant';
 
 const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
   const pathname = usePathname();
@@ -26,7 +26,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
               aria-label={`Go to ${item.title}`}
               title={item.title}
               className={`border-b pb-3 text-base font-medium transition-colors hover:text-foreground/70 ${
-                isActive ? "text-foreground" : "text-foreground/80"
+                isActive ? 'text-foreground' : 'text-foreground/80'
               }`}
             >
               {item.title}
@@ -38,19 +38,19 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
           <div key={item.title} className="border-b pb-3">
             <button
               type="button"
-              aria-label={`${isOpen ? "Collapse" : "Expand"} ${item.title} menu`}
+              aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.title} menu`}
               aria-expanded={isOpen}
               aria-controls={`submenu-${item.title}`}
               onClick={() => setOpenItem(isOpen ? null : item.title)}
               className={`flex w-full items-center justify-between text-base font-medium transition-colors hover:text-foreground/70 ${
-                isActive ? "text-foreground" : "text-foreground/80"
+                isActive ? 'text-foreground' : 'text-foreground/80'
               }`}
             >
               {item.title}
               <ChevronDown
                 aria-hidden="true"
                 className={`size-4 transition-transform ${
-                  isOpen ? "rotate-180" : ""
+                  isOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
@@ -81,7 +81,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
         <Button
           size="icon"
           variant="ghost"
-          aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ""}`}
+          aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
           title="Wishlist"
           className="relative"
         >

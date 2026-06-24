@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface MobileStickyCartProps {
   visible: boolean;
@@ -23,10 +23,10 @@ const MobileStickyCart = ({
   return (
     <div
       className={cn(
-        "fixed top-4 left-4 right-4 z-50 lg:hidden transition-all duration-300",
+        'fixed top-4 left-4 right-4 z-50 lg:hidden transition-all duration-300',
         visible
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-20 opacity-0",
+          ? 'translate-y-0 opacity-100'
+          : 'pointer-events-none translate-y-20 opacity-0',
       )}
     >
       <div className="flex items-center gap-4 rounded-[24px] bg-[#3D2B1F] p-4 shadow-2xl">

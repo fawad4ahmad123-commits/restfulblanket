@@ -1,6 +1,6 @@
-import Image from "next/image";
-import { CalendarDays, Eye } from "lucide-react";
-import { BlogCard as BlogCardProps } from "../types";
+import Image from 'next/image';
+import { CalendarDays, Eye } from 'lucide-react';
+import { BlogCard as BlogCardProps } from '../types';
 
 const BlogCard = ({
   image,

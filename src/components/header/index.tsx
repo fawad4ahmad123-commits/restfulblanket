@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Heart, ShoppingBag, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import MobileViewMenuToggle from "./mobile-menu-toggle";
-import TopBar from "./top-bar";
-import Navigation from "./navigation";
-import SearchProducts from "./search";
-import MobileCart from "./mobile-cart";
-import { TrustBar } from "../trustbar";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { Heart, ShoppingBag, User } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import MobileViewMenuToggle from './mobile-menu-toggle';
+import TopBar from './top-bar';
+import Navigation from './navigation';
+import SearchProducts from './search';
+import MobileCart from './mobile-cart';
+import { TrustBar } from '../trustbar';
+import { cn } from '@/lib/utils';
 
 const SiteHeader = () => {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isHome = pathname === '/';
 
   const wishlistCount = 3;
   const cartCount = 2;
@@ -24,8 +24,8 @@ const SiteHeader = () => {
     <>
       <header
         className={cn(
-          "inset-x-0 top-0 z-50",
-          isHome ? "absolute text-white" : "relative text-[#392A22]",
+          'inset-x-0 top-0 z-50',
+          isHome ? 'absolute text-white' : 'relative text-[#392A22]',
         )}
       >
         <TopBar />
@@ -33,10 +33,10 @@ const SiteHeader = () => {
         <nav
           aria-label="Primary navigation"
           className={cn(
-            "relative z-[100] border-b backdrop-blur-md",
+            'relative z-[100] border-b backdrop-blur-md',
             isHome
-              ? "border-white/10 bg-black/20"
-              : "border-[#392A22]/10 bg-[#FFF9F5]",
+              ? 'border-white/10 bg-black/20'
+              : 'border-[#392A22]/10 bg-[#FFF9F5]',
           )}
         >
           <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-4 lg:px-6">
@@ -51,7 +51,7 @@ const SiteHeader = () => {
                 width={153}
                 height={32}
                 priority
-                className={isHome ? "" : "brightness-0 invert-0"}
+                className={isHome ? '' : 'brightness-0 invert-0'}
               />
             </Link>
 
@@ -63,11 +63,11 @@ const SiteHeader = () => {
               <Button
                 size="icon"
                 variant="ghost"
-                aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ""}`}
+                aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
                 title="Wishlist"
                 className={cn(
-                  "relative",
-                  !isHome && "text-[#392A22] hover:bg-[#392A22]/10",
+                  'relative',
+                  !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
                 )}
               >
                 <Heart aria-hidden="true" className="size-4" />
@@ -75,10 +75,10 @@ const SiteHeader = () => {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold",
+                      'absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold',
                       isHome
-                        ? "bg-[#F5F0EB] text-[#392A22]"
-                        : "bg-[#392A22] text-[#FFF9F5]",
+                        ? 'bg-[#F5F0EB] text-[#392A22]'
+                        : 'bg-[#392A22] text-[#FFF9F5]',
                     )}
                   >
                     {wishlistCount}
@@ -92,20 +92,20 @@ const SiteHeader = () => {
                 aria-label="My account"
                 title="My account"
                 className={cn(
-                  !isHome && "text-[#392A22] hover:bg-[#392A22]/10",
+                  !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
                 )}
               >
                 <User aria-hidden="true" className="size-4" />
               </Button>
 
               <Button
-                aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
+                aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
                 title="Shopping cart"
                 className={cn(
-                  "h-8 rounded-full border px-4 text-xs hover:bg-[#4A382E]",
+                  'h-8 rounded-full border px-4 text-xs hover:bg-[#4A382E]',
                   isHome
-                    ? "border-white/20 bg-[#392A22] text-white"
-                    : "border-[#392A22]/20 bg-[#392A22] text-[#FFF9F5]",
+                    ? 'border-white/20 bg-[#392A22] text-white'
+                    : 'border-[#392A22]/20 bg-[#392A22] text-[#FFF9F5]',
                 )}
               >
                 <span className="relative mr-2">

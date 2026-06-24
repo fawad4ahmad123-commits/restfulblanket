@@ -1,62 +1,38 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { Play, Pause, ArrowLeft, ArrowRight } from "lucide-react";
-import { testimonials } from "../contants";
+import { useRef, useState } from 'react';
+import { Play, Pause, ArrowLeft, ArrowRight } from 'lucide-react';
+import { testimonials } from '../contants';
+
+const getYoutubeEmbedUrl = (youtubeId: string) =>
+  `https://www.youtube.com/embed/${youtubeId}?autoplay=1&playsinline=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&controls=1`;
 
 export default function TestimonialVideoSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
-
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
-
-  const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({});
   const cardRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const scrollNext = () => {
-    sliderRef.current?.scrollBy({
-      left: 350,
-      behavior: "smooth",
-    });
+    sliderRef.current?.scrollBy({ left: 350, behavior: 'smooth' });
   };
 
   const scrollPrev = () => {
-    sliderRef.current?.scrollBy({
-      left: -350,
-      behavior: "smooth",
-    });
+    sliderRef.current?.scrollBy({ left: -350, behavior: 'smooth' });
   };
 
-  const toggleVideo = async (id: number) => {
-    const currentVideo = videoRefs.current[id];
-
-    if (!currentVideo) return;
-
+  const toggleVideo = (id: number) => {
     if (activeVideo === id) {
-      currentVideo.pause();
       setActiveVideo(null);
       return;
     }
 
-    Object.entries(videoRefs.current).forEach(([videoId, video]) => {
-      if (Number(videoId) !== id && video) {
-        video.pause();
-        video.currentTime = 0;
-      }
+    setActiveVideo(id);
+
+    cardRefs.current[id]?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest',
     });
-
-    try {
-      await currentVideo.play();
-
-      setActiveVideo(id);
-
-      cardRefs.current[id]?.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    } catch (error) {
-      console.error("Video play failed:", error);
-    }
   };
 
   return (
@@ -110,35 +86,28 @@ export default function TestimonialVideoSlider() {
                   transition-all duration-500 ease-out
                   ${
                     isActive
-                      ? "w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[580px]"
-                      : "w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[290px]"
+                      ? 'w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[580px]'
+                      : 'w-[85vw] sm:w-[320px] md:w-[340px] lg:w-[290px]'
                   }
                 `}
               >
-                <video
-                  ref={(el) => {
-                    videoRefs.current[item.id] = el;
-                  }}
-                  aria-label={`Testimonial video from ${item.name}`}
-                  poster={item.poster}
-                  playsInline
-                  muted
-                  preload="metadata"
-                  onEnded={() => setActiveVideo(null)}
-                  onPause={() => {
-                    if (activeVideo === item.id) {
-                      setActiveVideo(null);
-                    }
-                  }}
-                  onError={(e) => {
-                    console.error("Video error:", e);
-                  }}
-                  className="h-[520px] w-full object-cover"
-                >
-                  <source src={item.video} type="video/mp4" />
-                </video>
+                {isActive ? (
+                  <iframe
+                    className="h-[520px] w-full"
+                    src={getYoutubeEmbedUrl(item.youtubeId)}
+                    title={`Testimonial video from ${item.name}`}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <img
+                    src={item.poster}
+                    alt={`Testimonial from ${item.name}`}
+                    className="h-[520px] w-full object-cover"
+                  />
+                )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-5">
                   <div className="flex items-end justify-between">
@@ -146,7 +115,6 @@ export default function TestimonialVideoSlider() {
                       <h3 className="text-xl font-medium text-white">
                         {item.name}
                       </h3>
-
                       <p className="mt-1 text-sm text-white/70">{item.role}</p>
                     </div>
 
@@ -155,13 +123,13 @@ export default function TestimonialVideoSlider() {
                       onClick={() => toggleVideo(item.id)}
                       aria-label={
                         isActive
-                          ? `Pause testimonial video from ${item.name}`
+                          ? `Close testimonial video from ${item.name}`
                           : `Play testimonial video from ${item.name}`
                       }
                       aria-pressed={isActive}
                       title={
                         isActive
-                          ? `Pause testimonial video from ${item.name}`
+                          ? `Close testimonial video from ${item.name}`
                           : `Play testimonial video from ${item.name}`
                       }
                       className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"

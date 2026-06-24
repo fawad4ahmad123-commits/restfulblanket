@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import SizeGuideButton from "./modal";
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import SizeGuideButton from './modal';
 
 interface PillOption {
   id: string;
@@ -34,7 +34,7 @@ const OptionPillGroup = ({
           {label}
         </p>
 
-        {label === "Weight" ? (
+        {label === 'Weight' ? (
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -59,12 +59,12 @@ const OptionPillGroup = ({
               aria-pressed={isSelected}
               onClick={() => onSelect(option.id)}
               className={cn(
-                "rounded-full border px-4 py-1.5 text-sm transition-colors",
+                'rounded-full border px-4 py-1.5 text-sm transition-colors',
                 isSelected
-                  ? "border-[#E6CBB8] bg-[#E6CBB8] text-[#3F3A36]"
-                  : "border-[#E3DCCD] bg-transparent text-[#3F3A36] hover:border-[#3F3A36]",
+                  ? 'border-[#E6CBB8] bg-[#E6CBB8] text-[#3F3A36]'
+                  : 'border-[#E3DCCD] bg-transparent text-[#3F3A36] hover:border-[#3F3A36]',
                 !option.inStock &&
-                  "cursor-not-allowed border-[#E3DCCD] text-[#C7C0B2] line-through",
+                  'cursor-not-allowed border-[#E3DCCD] text-[#C7C0B2] line-through',
               )}
             >
               {option.label}

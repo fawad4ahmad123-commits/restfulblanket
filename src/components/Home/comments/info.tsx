@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, PenLine } from "lucide-react";
-import { Info as InfoProps } from "./types";
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, ArrowRight, PenLine } from 'lucide-react';
+import { Info as InfoProps } from './types';
 
 const Info = ({
   showModal,
@@ -11,15 +11,15 @@ const Info = ({
   setAnimating,
   totalReviews,
 }: InfoProps) => {
-  const navigate = (dir: "prev" | "next") => {
+  const navigate = (dir: 'prev' | 'next') => {
     if (animating) return;
 
     setAnimating(true);
-    setDirection(dir === "next" ? "left" : "right");
+    setDirection(dir === 'next' ? 'left' : 'right');
 
     setTimeout(() => {
       setCurrent((prev) =>
-        dir === "next"
+        dir === 'next'
           ? (prev + 1) % totalReviews
           : (prev - 1 + totalReviews) % totalReviews,
       );
@@ -70,7 +70,7 @@ const Info = ({
                 type="button"
                 aria-label="Previous review"
                 title="Previous review"
-                onClick={() => navigate("prev")}
+                onClick={() => navigate('prev')}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-[#392A22]/20 bg-[#fff9f5] text-[#392A22] transition hover:bg-[#392A22] hover:text-white"
               >
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" />
@@ -80,7 +80,7 @@ const Info = ({
                 type="button"
                 aria-label="Next review"
                 title="Next review"
-                onClick={() => navigate("next")}
+                onClick={() => navigate('next')}
                 className="flex h-9 w-9 items-center justify-center rounded-full bg-[#392A22] text-white transition hover:bg-[#4A382E]"
               >
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />

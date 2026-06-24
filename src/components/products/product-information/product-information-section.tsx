@@ -1,7 +1,7 @@
-import ProductAttributes from "./product-attribute";
-import ProductDetailsTable from "./product-details-table";
-import ProductFaqAccordion from "./product-faq-accordions";
-import { ProductInformation } from "../types";
+import ProductAttributes from './product-attribute';
+import ProductDetailsTable from './product-details-table';
+import ProductFaqAccordion from './product-faq-accordions';
+import { ProductInformation } from '../types';
 
 interface ProductInformationSectionProps {
   info: ProductInformation;

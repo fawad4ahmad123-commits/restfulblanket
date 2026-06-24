@@ -1,9 +1,9 @@
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import { Heart, Eye, ShoppingBag } from "lucide-react";
-import { SliderCard as SliderCardProps } from "./types";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState } from 'react';
+import Image from 'next/image';
+import { Heart, Eye, ShoppingBag } from 'lucide-react';
+import { SliderCard as SliderCardProps } from './types';
+import { useRouter } from 'next/navigation';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -40,7 +40,7 @@ const SliderCard = ({
             alt={title}
             fill
             className={`object-cover transition-all duration-500 ${
-              hoverImage ? "group-hover:opacity-0" : ""
+              hoverImage ? 'group-hover:opacity-0' : ''
             }`}
           />
 
@@ -54,9 +54,9 @@ const SliderCard = ({
           )}
         </div>
 
-        {(badge || "Best Seller") && (
+        {(badge || 'Best Seller') && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
-            {badge ||"Best Seller"}
+            {badge || 'Best Seller'}
           </div>
         )}
 
@@ -79,7 +79,7 @@ const SliderCard = ({
             aria-hidden="true"
             size={16}
             className={
-              wished ? "fill-[#35281e] text-[#35281e]" : "text-[#35281e]"
+              wished ? 'fill-[#35281e] text-[#35281e]' : 'text-[#35281e]'
             }
           />
         </button>
@@ -110,7 +110,7 @@ const SliderCard = ({
               key={i}
               aria-hidden="true"
               className={`h-4 w-4 ${
-                i < stars ? "text-[#A38575]" : "text-gray-300"
+                i < stars ? 'text-[#A38575]' : 'text-gray-300'
               }`}
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -130,7 +130,7 @@ const SliderCard = ({
 
         {(weight || dimensions) && (
           <p className="mb-4 text-xs text-[ #35281E]/50">
-            {[weight, dimensions].filter(Boolean).join(" · ")}
+            {[weight, dimensions].filter(Boolean).join(' · ')}
           </p>
         )}
 

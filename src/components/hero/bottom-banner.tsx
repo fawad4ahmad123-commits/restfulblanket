@@ -1,4 +1,4 @@
-import { BOTTIM_BANNER_ITEMS } from "../constant";
+import { BOTTIM_BANNER_ITEMS } from '../constant';
 
 const BottomBanner = () => {
   return (

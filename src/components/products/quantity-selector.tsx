@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Minus, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import AppTooltip from "../tooltip";
+import * as React from 'react';
+import { Minus, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import AppTooltip from '../tooltip';
 
 interface QuantitySelectorProps {
   quantity: number;
@@ -35,7 +35,7 @@ export function QuantitySelector({
         {quantity}
       </span>
       <AppTooltip
-        content={`Only ${max} item${max > 1 ? "s" : ""} available in stock`}
+        content={`Only ${max} item${max > 1 ? 's' : ''} available in stock`}
         disabled={quantity < max}
       >
         <span>

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { X } from "lucide-react";
+import { X } from 'lucide-react';
 
 const weightTable = [
-  { body: "5-10 kg", recommended: "2 kg" },
-  { body: "10-15 kg", recommended: "3 kg" },
-  { body: "15+ kg", recommended: "4 kg" },
+  { body: '5-10 kg', recommended: '2 kg' },
+  { body: '10-15 kg', recommended: '3 kg' },
+  { body: '15+ kg', recommended: '4 kg' },
 ];
 
 interface SizeGuideButtonProps {
@@ -62,7 +62,7 @@ const SizeGuideButton = ({ open, onClose }: SizeGuideButtonProps) => {
               {weightTable.map((row, index) => (
                 <tr
                   key={row.body}
-                  className={index % 2 === 0 ? "bg-white" : "bg-[#F7F3F0]"}
+                  className={index % 2 === 0 ? 'bg-white' : 'bg-[#F7F3F0]'}
                 >
                   <td className="px-5 py-3">{row.body}</td>
                   <td className="px-5 py-3">{row.recommended}</td>
@@ -77,21 +77,21 @@ const SizeGuideButton = ({ open, onClose }: SizeGuideButtonProps) => {
         </p>
 
         <p className="mt-4 text-[15px] leading-relaxed text-[#3A2A21]/80">
-          If you are in doubt, you are always welcome to call us at{" "}
+          If you are in doubt, you are always welcome to call us at{' '}
           <a
             href="tel:+4529905099"
             className="font-semibold text-[#3A2A21] underline-offset-2 hover:underline"
           >
             +45 29 90 50 99
-          </a>{" "}
-          or{" "}
+          </a>{' '}
+          or{' '}
           <a
             href="tel:+4529822973"
             className="font-semibold text-[#3A2A21] underline-offset-2 hover:underline"
           >
             +45 29 82 29 73
-          </a>{" "}
-          or send an email at{" "}
+          </a>{' '}
+          or send an email at{' '}
           <a
             href="mailto:kernero@restfulblanket.dk"
             className="font-semibold text-[#3A2A21] underline"

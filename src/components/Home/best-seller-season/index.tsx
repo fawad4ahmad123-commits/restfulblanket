@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import SliderCard from "../../generic/card-slider";
-import { CATEGORIES } from "../constants";
-import SliderControls from "../../generic/slider-control";
-import { PLACEHOLDER_IMAGE } from "../../constant";
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import SliderCard from '../../generic/card-slider';
+import { CATEGORIES } from '../constants';
+import SliderControls from '../../generic/slider-control';
+import { PLACEHOLDER_IMAGE } from '../../constant';
 
 const BestSellers = ({
   isProduct,
@@ -16,7 +16,7 @@ const BestSellers = ({
   products: any[];
 }) => {
   const [start, setStart] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState('All');
   const [visibleCount, setVisibleCount] = useState(4);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -40,13 +40,13 @@ const BestSellers = ({
 
     updateVisibleCount();
 
-    window.addEventListener("resize", updateVisibleCount);
+    window.addEventListener('resize', updateVisibleCount);
 
-    return () => window.removeEventListener("resize", updateVisibleCount);
+    return () => window.removeEventListener('resize', updateVisibleCount);
   }, []);
 
   const filteredProducts =
-    activeCategory === "All"
+    activeCategory === 'All'
       ? productData
       : productData.filter((product) =>
           product.categories?.some((cat: any) => cat.name === activeCategory),
@@ -56,7 +56,7 @@ const BestSellers = ({
     if (!isDesktop) {
       sliderRef.current?.scrollBy({
         left: 350,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
       return;
     }
@@ -70,7 +70,7 @@ const BestSellers = ({
     if (!isDesktop) {
       sliderRef.current?.scrollBy({
         left: -350,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
       return;
     }
@@ -84,7 +84,7 @@ const BestSellers = ({
 
   return (
     <section
-      className={isProduct ? "bg-[#FFF9F5] py-16" : "bg-[#FAF4EE] py-16"}
+      className={isProduct ? 'bg-[#FFF9F5] py-16' : 'bg-[#FAF4EE] py-16'}
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
@@ -127,8 +127,8 @@ const BestSellers = ({
                     }}
                     className={`whitespace-nowrap rounded-full px-4 py-2 text-xs transition ${
                       activeCategory === cat
-                        ? "bg-[#3b281f] text-white"
-                        : "text-[#3b281f]"
+                        ? 'bg-[#3b281f] text-white'
+                        : 'text-[#3b281f]'
                     }`}
                   >
                     {cat}
@@ -165,7 +165,7 @@ const BestSellers = ({
                     originalPrice={item.regular_price}
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
-                    badge={item.featured ? "BEST SELLER" : ""}
+                    badge={item.featured ? 'BEST SELLER' : ''}
                     type="product"
                   />
                 </div>
@@ -199,7 +199,7 @@ const BestSellers = ({
                     originalPrice={item.regular_price}
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
-                    badge={item.featured ? "BEST SELLER" : ""}
+                    badge={item.featured ? 'BEST SELLER' : ''}
                     type="product"
                   />
                 </div>

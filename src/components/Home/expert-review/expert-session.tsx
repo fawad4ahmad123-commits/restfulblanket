@@ -1,9 +1,9 @@
-import Link from "next/link";
-import ExpertCard from ".";
-import { EXPERTS } from "../constants";
-import Heading from "./heading";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import ExpertCard from '.';
+import { EXPERTS } from '../constants';
+import Heading from './heading';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const ExpertsSection = () => {
   return (

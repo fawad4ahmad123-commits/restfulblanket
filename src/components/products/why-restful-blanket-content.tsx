@@ -1,41 +1,35 @@
-import {
-  ShieldCheck,
-  Truck,
-  BadgeCheck,
-  Award,
-  RotateCcw,
-} from "lucide-react";
+import { ShieldCheck, Truck, BadgeCheck, Award, RotateCcw } from 'lucide-react';
 
 const benefits = [
   {
     icon: ShieldCheck,
-    title: "90 nights of security",
-    description: "You get 90 nights to figure out if it feels right.",
+    title: '90 nights of security',
+    description: 'You get 90 nights to figure out if it feels right.',
   },
   {
     icon: Truck,
-    title: "Flexible delivery",
-    description: "Fast and easy delivery that suits you.",
+    title: 'Flexible delivery',
+    description: 'Fast and easy delivery that suits you.',
   },
   {
     icon: Truck,
-    title: "Free delivery",
-    description: "On orders to Pakkeshop",
+    title: 'Free delivery',
+    description: 'On orders to Pakkeshop',
   },
   {
     icon: RotateCcw,
-    title: "Free returns",
-    description: "We cover return shipping costs.",
+    title: 'Free returns',
+    description: 'We cover return shipping costs.',
   },
   {
     icon: BadgeCheck,
-    title: "2 year warranty",
-    description: "On production defects.",
+    title: '2 year warranty',
+    description: 'On production defects.',
   },
   {
     icon: Award,
-    title: "CE class 1 + OEKO-TEX class 1",
-    description: "Certified cotton and medical.",
+    title: 'CE class 1 + OEKO-TEX class 1',
+    description: 'Certified cotton and medical.',
   },
 ];
 

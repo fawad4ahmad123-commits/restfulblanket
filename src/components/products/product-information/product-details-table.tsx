@@ -1,4 +1,4 @@
-import { DetailRow } from "../types";
+import { DetailRow } from '../types';
 
 interface ProductDetailsTableProps {
   title: string;

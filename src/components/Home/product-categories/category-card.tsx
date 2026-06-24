@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import Image from 'next/image';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 interface CategoryCardProps {
   image: string;
@@ -16,7 +16,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
       <div className="relative h-[420px] sm:h-[500px]">
         <Image
           src={image}
-          alt={`${title}${subtitle ? ` - ${subtitle}` : ""}`}
+          alt={`${title}${subtitle ? ` - ${subtitle}` : ''}`}
           fill
           className="object-cover transition duration-700 group-hover:scale-105"
         />

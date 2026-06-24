@@ -1,10 +1,10 @@
-"use client";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import HeroSlider from "./slider";
-import DetailReviewShipping from "./detail-review-shipping";
-import ShopButtons from "./shop-buttons";
-import { HERO_SLIDES } from "../constant";
+'use client';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import HeroSlider from './slider';
+import DetailReviewShipping from './detail-review-shipping';
+import ShopButtons from './shop-buttons';
+import { HERO_SLIDES } from '../constant';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,7 +31,7 @@ const HeroSection = () => {
       <div className="relative z-10 mx-auto flex min-h-auto w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">
         <div className="flex flex-1 items-center md:items-start">
           <div className="max-w-[520px] pt-[150px] text-[#fff9f5] sm:pt-0">
-            {" "}
+            {' '}
             <h1 className="font-serif text-[44px] leading-[0.95] tracking-[-0.02em] md:text-[60px] lg:text-[72px]">
               {HERO_SLIDES[currentSlide].title}
               <br />

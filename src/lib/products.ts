@@ -1,13 +1,58 @@
+export async function createReview({
+  productId,
+  review,
+  reviewer,
+  reviewerEmail,
+  rating,
+  reviewTitle,
+}: {
+  productId: number;
+  review: string;
+  reviewer: string;
+  reviewerEmail: string;
+  rating: number;
+  reviewTitle: string;
+}) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products/reviews`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Basic ' +
+          Buffer.from(
+            `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
+          ).toString('base64'),
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        review,
+        reviewer,
+        reviewer_email: reviewerEmail,
+        rating,
+        reviewTitle,
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to submit review');
+  }
+
+  return res.json();
+}
+
 export async function getBestSellers() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?status=publish&per_page=20`,
     {
       headers: {
         Authorization:
-          "Basic " +
+          'Basic ' +
           Buffer.from(
             `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
-          ).toString("base64"),
+          ).toString('base64'),
       },
       next: {
         revalidate: 3600,
@@ -24,10 +69,10 @@ export async function getCategories() {
     {
       headers: {
         Authorization:
-          "Basic " +
+          'Basic ' +
           Buffer.from(
             `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
-          ).toString("base64"),
+          ).toString('base64'),
       },
       next: {
         revalidate: 3600,
@@ -44,10 +89,10 @@ export async function getProductBySlug(slug: string) {
     {
       headers: {
         Authorization:
-          "Basic " +
+          'Basic ' +
           Buffer.from(
             `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
-          ).toString("base64"),
+          ).toString('base64'),
       },
       next: {
         revalidate: 3600,
@@ -56,7 +101,7 @@ export async function getProductBySlug(slug: string) {
   );
 
   if (!res.ok) {
-    console.error("Failed to fetch product", slug, res.status);
+    console.error('Failed to fetch product', slug, res.status);
     return null;
   }
 
@@ -65,43 +110,23 @@ export async function getProductBySlug(slug: string) {
   return product ?? null;
 }
 
-export async function createReview({
-  productId,
-  review,
-  reviewer,
-  reviewerEmail,
-  rating,
-}: {
-  productId: number;
-  review: string;
-  reviewer: string;
-  reviewerEmail: string;
-  rating: number;
-}) {
+export async function getProductReviews(productId: number) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products/reviews`,
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products/reviews?product=${productId}`,
     {
-      method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization:
-          "Basic " +
+          'Basic ' +
           Buffer.from(
             `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
-          ).toString("base64"),
+          ).toString('base64'),
       },
-      body: JSON.stringify({
-        product_id: productId,
-        review,
-        reviewer,
-        reviewer_email: reviewerEmail,
-        rating,
-      }),
+      cache: 'no-store',
     },
   );
 
   if (!res.ok) {
-    throw new Error("Failed to submit review");
+    throw new Error('Failed to fetch reviews');
   }
 
   return res.json();

@@ -1,7 +1,7 @@
-import { ShoppingBag } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { QuantitySelector } from "./quantity-selector";
-import { AddToCart } from "./types";
+import { ShoppingBag } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { QuantitySelector } from './quantity-selector';
+import { AddToCart } from './types';
 
 const AddToCartBar = ({
   quantity,
@@ -45,7 +45,7 @@ const AddToCartBar = ({
           <span>Add to Cart</span>
 
           <span aria-hidden="true">
-            {" "}
+            {' '}
             · {currency}
             {total}
           </span>
@@ -63,7 +63,7 @@ const AddToCartBar = ({
         quantity >= stockQuantity && (
           <p className="text-sm text-red-500">
             Only {stockQuantity} item
-            {stockQuantity > 1 ? "s" : ""} available in stock.
+            {stockQuantity > 1 ? 's' : ''} available in stock.
           </p>
         )}
     </div>

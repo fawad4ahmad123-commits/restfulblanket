@@ -1,5 +1,5 @@
-import React from "react";
-import { HERO_SLIDES } from "../constant";
+import React from 'react';
+import { HERO_SLIDES } from '../constant';
 
 const HeroSlider = ({
   currentSlide,
@@ -30,11 +30,11 @@ const HeroSlider = ({
           <span
             className={`text-xs transition-all duration-300 md:text-sm ${
               currentSlide === index
-                ? "font-medium text-[#fff9f5]"
-                : "text-[#fff9f5]/50"
+                ? 'font-medium text-[#fff9f5]'
+                : 'text-[#fff9f5]/50'
             }`}
           >
-            {String(index + 1).padStart(2, "0")}
+            {String(index + 1).padStart(2, '0')}
           </span>
         </button>
       ))}

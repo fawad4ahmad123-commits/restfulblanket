@@ -1,6 +1,5 @@
-import { Star } from "lucide-react";
-import { LeftReview as LeftReviewProps } from "./types";
-import { REVIEWS } from "../constants";
+import { Star } from 'lucide-react';
+import { LeftReview as LeftReviewProps } from './types';
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -12,35 +11,46 @@ function StarRating({ count }: { count: number }) {
   );
 }
 
-const LeftReview = ({ current, animating, direction }: LeftReviewProps) => {
+const LeftReview = ({
+  review,
+  current,
+  animating,
+  direction,
+}: LeftReviewProps) => {
+  if (!review) return null;
+
   return (
-    <div className="overflow-hidden rounded-2xl bg-[#fff9f5] p-8 shadow-sm">
+    <div className="relative h-[280px] overflow-hidden rounded-2xl bg-[#fff9f5] shadow-sm">
       <div
         key={current}
-        className={`${
+        className={`absolute inset-0 flex flex-col p-8 ${
           animating
-            ? direction === "left"
-              ? "animate-[slideOutLeft_0.35s_ease_forwards]"
-              : "animate-[slideOutRight_0.35s_ease_forwards]"
-            : direction === "left"
-              ? "animate-[slideInRight_0.35s_ease_forwards]"
-              : "animate-[slideInLeft_0.35s_ease_forwards]"
+            ? direction === 'left'
+              ? 'animate-[slideOutLeft_0.35s_ease_forwards]'
+              : 'animate-[slideOutRight_0.35s_ease_forwards]'
+            : direction === 'left'
+              ? 'animate-[slideInRight_0.35s_ease_forwards]'
+              : 'animate-[slideInLeft_0.35s_ease_forwards]'
         }`}
       >
-        <StarRating count={REVIEWS[current].rating} />
-        <blockquote className="mt-5 font-serif text-[22px] italic leading-relaxed text-[#392A22]">
-          "{REVIEWS[current].review}"
+        <StarRating count={review.rating} />
+
+        <blockquote className="mt-5 line-clamp-4 font-serif text-[22px] italic leading-relaxed text-[#392A22]">
+          "{review.review?.replace(/<[^>]*>/g, '')?.replace(/\n/g, '')}"
         </blockquote>
-        <div className="mt-8 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-[#392A22]/10 flex items-center justify-center text-[#392A22] font-semibold text-sm">
-            {REVIEWS[current].name.charAt(0)}
+
+        <div className="mt-auto flex items-center gap-3 pt-8">
+          <div className="h-10 w-10 flex-shrink-0 rounded-full bg-[#392A22]/10 flex items-center justify-center text-[#392A22] font-semibold text-sm">
+            {review.reviewer?.charAt(0)}
           </div>
+
           <div>
             <div className="text-sm font-medium text-[#392A22]">
-              {REVIEWS[current].name}
+              {review.reviewer}
             </div>
+
             <div className="text-xs uppercase tracking-widest text-[#392A22]/50">
-              {REVIEWS[current].location}
+              VERIFIED CUSTOMER
             </div>
           </div>
         </div>
@@ -48,4 +58,5 @@ const LeftReview = ({ current, animating, direction }: LeftReviewProps) => {
     </div>
   );
 };
+
 export default LeftReview;

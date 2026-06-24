@@ -1,8 +1,8 @@
-"use client";
-import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { FaqItem } from "../types";
+'use client';
+import { useState } from 'react';
+import { Plus, Minus } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { FaqItem } from '../types';
 
 interface ProductFaqAccordionProps {
   items: FaqItem[];
@@ -41,10 +41,10 @@ const ProductFaqAccordion = ({
             </button>
             <div
               className={cn(
-                "grid overflow-hidden transition-all duration-300 ease-in-out",
+                'grid overflow-hidden transition-all duration-300 ease-in-out',
                 isOpen
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0",
+                  ? 'grid-rows-[1fr] opacity-100'
+                  : 'grid-rows-[0fr] opacity-0',
               )}
             >
               <div className="min-h-0">
