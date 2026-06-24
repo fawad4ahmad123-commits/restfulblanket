@@ -1,6 +1,4 @@
 'use client';
-
-import * as React from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AppTooltip from '../tooltip';
@@ -19,7 +17,7 @@ export function QuantitySelector({
   max = 10,
 }: QuantitySelectorProps) {
   return (
-    <div className="flex items-center rounded-full border border-[#E3DCCD]">
+    <div className="inline-flex w-fit items-center rounded-full border border-[#E3DCCD] flex-shrink-0">
       <Button
         type="button"
         size="icon"
@@ -31,9 +29,11 @@ export function QuantitySelector({
       >
         <Minus className="h-3.5 w-3.5 text-[#3F3A36]" />
       </Button>
-      <span className="w-6 text-center text-sm font-medium text-[#3F3A36]">
+
+      <span className="w-8 text-center text-sm font-medium text-[#3F3A36]">
         {quantity}
       </span>
+
       <AppTooltip
         content={`Only ${max} item${max > 1 ? 's' : ''} available in stock`}
         disabled={quantity < max}

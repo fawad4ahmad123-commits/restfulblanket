@@ -22,30 +22,31 @@ const AddToCartBar = ({
   return (
     <div className="flex flex-col gap-2">
       <div
-        className="flex items-center gap-3"
+        className="flex flex-col gap-3 sm:flex-row sm:items-center"
         role="group"
         aria-label="Add to cart controls"
       >
-        <QuantitySelector
-          quantity={quantity}
-          onChange={onQuantityChange}
-          max={stockQuantity}
-          aria-label="Select quantity"
-        />
+        <div className="w-full sm:w-auto">
+          <QuantitySelector
+            quantity={quantity}
+            onChange={onQuantityChange}
+            max={stockQuantity}
+            aria-label="Select quantity"
+          />
+        </div>
 
         <Button
           type="button"
           onClick={onAddToCart}
           disabled={isOutOfStock}
-          className="h-12 flex-1 rounded-full bg-[#3F3A36] text-base font-medium text-white hover:bg-[#2E2A27] disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-12 w-full sm:flex-1 rounded-full bg-[#3F3A36] px-4 text-sm font-medium text-white hover:bg-[#2E2A27] sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={`Add ${quantity} item(s) to cart. Total price ${currency}${total}`}
         >
-          <ShoppingBag className="mr-2 h-4 w-4" aria-hidden="true" />
+          <ShoppingBag className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
 
-          <span>Add to Cart</span>
+          <span className="whitespace-nowrap">Add to Cart</span>
 
-          <span aria-hidden="true">
-            {' '}
+          <span aria-hidden="true" className="ml-1 truncate whitespace-nowrap">
             · {currency}
             {total}
           </span>
