@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import FeatureList from "./feature-list";
 import ColorSelector from "./color-selector";
@@ -10,13 +10,16 @@ import AddToCartBar from "./add-to-cart-bar";
 import Breadcrumbs from "./bread-crumbs";
 import RatingStars from "./rating-star";
 import PriceDisplay from "./price-display";
+import MobileStickyCart from "./mobile-stick-cart";
 
 const ProductInfoPanel = ({ product }: any) => {
+  const addToCartRef = useRef<HTMLDivElement>(null);
+  const [showStickyCart, setShowStickyCart] = useState(false);
   const colors = product?.colors ?? [];
   const weights = product?.weights ?? [];
   const sizes = product?.sizes ?? [];
   const features = product?.features ?? [];
-  const stockQuantity = product.stockQuantity;
+  const stockQuantity = product?.stockQuantity ?? 0;
 
   const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? "");
 
@@ -39,6 +42,23 @@ const ProductInfoPanel = ({ product }: any) => {
       quantity,
     });
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyCart(!entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,
+      },
+    );
+
+    if (addToCartRef.current) {
+      observer.observe(addToCartRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   if (!product) {
     return null;
@@ -100,16 +120,28 @@ const ProductInfoPanel = ({ product }: any) => {
         />
       )}
 
-      <AddToCartBar
-        quantity={quantity}
-        onQuantityChange={setQuantity}
-        price={product?.price ?? 0}
-        currency={product?.currency ?? "kr"}
-        onAddToCart={handleAddToCart}
-        stockQuantity={stockQuantity}
-      />
+      <div ref={addToCartRef}>
+        <AddToCartBar
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+          price={product?.price ?? 0}
+          currency={product?.currency ?? "kr"}
+          onAddToCart={handleAddToCart}
+          stockQuantity={stockQuantity}
+        />
+      </div>
 
       <ProductInfoAccordion />
+      <MobileStickyCart
+        visible={showStickyCart}
+        product={{
+          name: product?.name,
+          price: product?.price,
+          currency: product?.currency,
+          image: product?.images?.[0],
+        }}
+        onAddToCart={handleAddToCart}
+      />
     </div>
   );
 };

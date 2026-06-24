@@ -8,40 +8,55 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface ProductGalleryProps {
-  images: string[];
+  images?: string[];
   badge?: string;
-  productName: string;
+  productName?: string;
 }
 
 const ProductGallery = ({
-  images,
+  images = [],
   badge,
-  productName,
+  productName = "Product",
 }: ProductGalleryProps) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isFavorited, setIsFavorited] = React.useState(false);
 
+  const safeImages = Array.isArray(images) ? images : [];
+
   const goPrev = () =>
-    setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? safeImages.length - 1 : prev - 1));
+
   const goNext = () =>
-    setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === safeImages.length - 1 ? 0 : prev + 1));
+
+  if (safeImages.length === 0) {
+    return (
+      <div className="relative flex aspect-[636/704] w-full items-center justify-center rounded-2xl bg-[#EFE7DA]">
+        <span className="text-sm text-gray-500">
+          No product image available
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full overflow-hidden rounded-2xl bg-[#EFE7DA]">
       <div className="relative aspect-[636/704] w-full">
         <Image
-          src={images[activeIndex]}
+          src={safeImages[activeIndex]}
           alt={`${productName} – image ${activeIndex + 1}`}
           fill
           priority
           sizes="(max-width: 768px) 100vw, 636px"
           className="object-cover"
         />
+
         {badge && (
           <Badge className="absolute left-4 top-4 rounded-full bg-[#F4EFE6] px-3 py-1 text-xs font-medium text-[#3F3A36] hover:bg-[#F4EFE6]">
             {badge}
           </Badge>
         )}
+
         <Button
           type="button"
           size="icon"
@@ -57,7 +72,8 @@ const ProductGallery = ({
             )}
           />
         </Button>
-        {images.length > 1 && (
+
+        {safeImages.length > 1 && (
           <>
             <Button
               type="button"
@@ -69,6 +85,7 @@ const ProductGallery = ({
             >
               <ChevronLeft className="h-4 w-4 text-[#3F3A36]" />
             </Button>
+
             <Button
               type="button"
               size="icon"
@@ -82,9 +99,10 @@ const ProductGallery = ({
           </>
         )}
       </div>
-      {images.length > 1 && (
+
+      {safeImages.length > 1 && (
         <div className="flex justify-center gap-1.5 py-3">
-          {images.map((_, i) => (
+          {safeImages.map((_, i) => (
             <button
               key={i}
               aria-label={`Go to image ${i + 1}`}
@@ -102,4 +120,5 @@ const ProductGallery = ({
     </div>
   );
 };
+
 export default ProductGallery;

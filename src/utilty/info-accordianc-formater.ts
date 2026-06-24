@@ -1,6 +1,8 @@
 export const formatProductInformation = (product: any) => {
+  const safeProduct = product || {};
+
   const infoText =
-    product.attributes?.find(
+    safeProduct?.attributes?.find(
       (attr: any) =>
         attr?.name?.toLowerCase() === "info" ||
         attr?.slug?.toLowerCase() === "info",
@@ -79,8 +81,11 @@ export const formatProductInformation = (product: any) => {
         : [
             {
               id: "product-info",
-              title: product.name,
-              body: infoText || product.description || "",
+              title: safeProduct?.name || "Product Information",
+              body:
+                infoText ||
+                safeProduct?.description ||
+                "No product information available.",
             },
           ],
 
@@ -91,41 +96,44 @@ export const formatProductInformation = (product: any) => {
         id: "size",
         label: "Size",
         value:
-          product.dimensions?.width && product.dimensions?.length
-            ? `${product.dimensions.width} × ${product.dimensions.length} cm`
+          safeProduct?.dimensions?.width && safeProduct?.dimensions?.length
+            ? `${safeProduct.dimensions.width} × ${safeProduct.dimensions.length} cm`
             : "-",
       },
 
       {
         id: "height",
         label: "Height",
-        value: product.dimensions?.height
-          ? `${product.dimensions.height} cm`
+        value: safeProduct?.dimensions?.height
+          ? `${safeProduct.dimensions.height} cm`
           : "-",
       },
 
       {
         id: "weight",
         label: "Weight",
-        value: product.weight ? `${Number(product.weight) * 1000} g` : "-",
+        value: safeProduct?.weight
+          ? `${Number(safeProduct.weight) * 1000} g`
+          : "-",
       },
 
       {
         id: "sku",
         label: "SKU",
-        value: product.sku || "-",
+        value: safeProduct?.sku || "-",
       },
 
       {
         id: "product-id",
         label: "Product ID",
-        value: String(product.id || "-"),
+        value: String(safeProduct?.id || "-"),
       },
 
       {
         id: "stock",
         label: "Stock",
-        value: product.stock_status === "instock" ? "In Stock" : "Out of Stock",
+        value:
+          safeProduct?.stock_status === "instock" ? "In Stock" : "Out of Stock",
       },
     ],
 

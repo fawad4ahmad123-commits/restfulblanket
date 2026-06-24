@@ -1,3 +1,5 @@
+import getColorHex from "./color-hexa";
+
 export const formatProduct = (product: any) => {
   const getMetaValue = (key: string) =>
     product.meta_data?.find((item: any) => item.key === key)?.value;
@@ -213,17 +215,13 @@ export const formatProduct = (product: any) => {
         text: item,
       })) || [],
 
-    colors: getAttributeOptions("Color", "Farve").map(
-      (color: string, index: number) => {
-        const cleanName = color.trim();
-
-        return {
-          id: `${index + 1}`,
-          label: cleanName,
-          value: cleanName.toLowerCase(),
-          hex: COLOR_MAP[cleanName] || "#CCCCCC",
-        };
-      },
+    colors: getAttributeOptions("Color", "Farve", "Colour", "Farver").map(
+      (color: string, index: number) => ({
+        id: `${index + 1}`,
+        label: color.trim(),
+        value: color.trim().toLowerCase(),
+        hex: getColorHex(color),
+      }),
     ),
 
     weights: getAttributeOptions("Weight", "Vægt").map(

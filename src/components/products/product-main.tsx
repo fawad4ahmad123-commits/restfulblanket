@@ -1,23 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef } from "react";
 import BestSellers from "@/src/components/Home/best-seller-season";
 import Coments from "@/src/components/Home/comments";
 import RestfulBlanketVideo from "@/src/components/Home/video-descripton";
 import ProductInfoPanel from "@/src/components/products";
-import {
-  naturalCozyBlanket,
-  pearlClassicInfo,
-} from "@/src/components/products/contants";
 import ProductGallery from "@/src/components/products/product-gallery";
 import ProductInformationSection from "@/src/components/products/product-information/product-information-section";
 import TestimonialVideoSlider from "@/src/components/products/video-testimonals.tsx";
-import { WooCommerce } from "@/src/lib/woocommerce";
-import { useSearchParams } from "next/navigation";
-import { WooCommerceProduct } from "@/src/components/products/types";
 import { formatProduct } from "@/src/utilty/single-product-formatter";
-import { PLACEHOLDER_IMAGE } from "../constant";
 import { formatProductInformation } from "@/src/utilty/info-accordianc-formater";
 
 const ProductContent = ({
@@ -60,10 +51,9 @@ const ProductContent = ({
       window.removeEventListener("wheel", handleWheel);
     };
   }, []);
-
   const product = productResponse ? formatProduct(productResponse) : null;
   const product_information = formatProductInformation(productResponse);
-  console.log("t3", { product, productResponse });
+  console.log("t3", { product,productResponse });
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">

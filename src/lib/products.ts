@@ -64,3 +64,45 @@ export async function getProductBySlug(slug: string) {
   const product = Array.isArray(products) ? products[0] : products;
   return product ?? null;
 }
+
+export async function createReview({
+  productId,
+  review,
+  reviewer,
+  reviewerEmail,
+  rating,
+}: {
+  productId: number;
+  review: string;
+  reviewer: string;
+  reviewerEmail: string;
+  rating: number;
+}) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products/reviews`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Basic " +
+          Buffer.from(
+            `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
+          ).toString("base64"),
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        review,
+        reviewer,
+        reviewer_email: reviewerEmail,
+        rating,
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to submit review");
+  }
+
+  return res.json();
+}
