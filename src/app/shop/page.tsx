@@ -1,6 +1,4 @@
-import Shop from '@/src/components/all-products';
-
 const ShopPage = () => {
-  return <Shop />;
+  return <div className="h-screen">shop</div>;
 };
 export default ShopPage;

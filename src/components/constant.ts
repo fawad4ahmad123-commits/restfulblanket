@@ -4,7 +4,6 @@ import {
   FaPinterestP,
   FaLinkedinIn,
 } from 'react-icons/fa';
-import { Product } from './Home/types';
 
 export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 
@@ -118,75 +117,6 @@ export const categories = [
     image: '/categories/1.png',
     title: 'Puder',
     subtitle: '12 Products • 5–12 KG',
-  },
-];
-
-export const products: Product[] = [
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Classic Weighted Blanket',
-    price: '€249',
-    originalPrice: '€289',
-    rating: 4.9,
-    reviewCount: 1284,
-    weight: '7 kg',
-    dimensions: '150 × 200 cm',
-  },
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Premium Weighted Blanket',
-    price: '€269',
-    originalPrice: '€309',
-    rating: 4.8,
-    reviewCount: 964,
-    weight: '9 kg',
-    dimensions: '150 × 200 cm',
-  },
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Kids Weighted Blanket',
-    price: '€189',
-    originalPrice: '€219',
-    rating: 4.9,
-    reviewCount: 742,
-    weight: '4 kg',
-    dimensions: '100 × 150 cm',
-  },
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Luxury Sleep Blanket',
-    price: '€299',
-    originalPrice: '€349',
-    rating: 5.0,
-    reviewCount: 1568,
-    weight: '11 kg',
-    dimensions: '200 × 220 cm',
-  },
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Kids Weighted Blanket',
-    price: '€189',
-    originalPrice: '€219',
-    rating: 4.9,
-    reviewCount: 742,
-    weight: '4 kg',
-    dimensions: '100 × 150 cm',
-  },
-  {
-    image: '/product/bestselller.png',
-    hoverImage: '/product/detail.png',
-    title: 'Nord Luxury Sleep Blanket',
-    price: '€299',
-    originalPrice: '€349',
-    rating: 5.0,
-    reviewCount: 1568,
-    weight: '11 kg',
-    dimensions: '200 × 220 cm',
   },
 ];
 

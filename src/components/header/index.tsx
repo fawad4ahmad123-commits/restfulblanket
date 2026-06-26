@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 
 const SiteHeader = () => {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const isHome = ['/', '/shop'].includes(pathname);
 
   const wishlistCount = 3;
   const cartCount = 2;

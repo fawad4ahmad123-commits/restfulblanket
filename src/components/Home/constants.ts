@@ -1,6 +1,6 @@
 import { Product } from './types';
 
-export const products: Product[] = [
+export const BESTSELLERPRODUCT: Product[] = [
   {
     image: '/products/blanket-1.jpg',
     title: 'Nord Classic Weighted Blanket',

@@ -73,13 +73,13 @@ const ProductContent = ({
           </div>
         </div>
       </div>
-      <section>
-        <Coments id={product?.id || ''} />
+      <section className="mt-6">
+        <BestSellers isProduct={true} products={likeProducts} />
       </section>
+      <Coments id={product?.id || ''} />
       <ProductInformationSection info={product_information} />
       <TestimonialVideoSlider />
       <RestfulBlanketVideo />
-      <BestSellers isProduct products={likeProducts} />
     </main>
   );
 };

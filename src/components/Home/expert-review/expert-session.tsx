@@ -1,11 +1,14 @@
-import Link from 'next/link';
-import ExpertCard from '.';
-import { EXPERTS } from '../constants';
-import Heading from './heading';
+'use client';
+import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ExpertCard from '.';
+import Heading from './heading';
+import { EXPERTS } from '../constants';
 
 const ExpertsSection = () => {
+  const router = useRouter();
+
   return (
     <section className="bg-[#FAF4EE] py-20" aria-labelledby="experts-heading">
       <div className="mx-auto max-w-[1400px] px-5">
@@ -31,22 +34,24 @@ const ExpertsSection = () => {
         <Button
           type="button"
           aria-label="Not sure which blanket suits your needs"
-          className="rounded-full bg-[#e5d8cb] px-4 py-4 text-sm text-[#3b281f]"
+          className="rounded-full bg-[#e5d8cb] px-4 py-4 text-sm text-[#3b281f] hover:bg-[#e5d8cb] hover:text-[#3b281f] hover:shadow-none"
         >
           Not sure which blanket suits your needs?
         </Button>
-
-        <Link
-          href="/products"
+        <p
           aria-label="Book a free consultation"
           title="Book a free consultation"
           className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
         >
           Book a free consultation
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
-            <ArrowRight aria-hidden="true" size={14} />
+          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20 cursor-pointer">
+            <ArrowRight
+              aria-hidden="true"
+              size={14}
+              onClick={() => router.push('/expert')}
+            />
           </span>
-        </Link>
+        </p>
       </div>
     </section>
   );
