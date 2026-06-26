@@ -139,8 +139,6 @@ const BestSellers = ({
             </div>
           )}
         </div>
-
-        {/* Mobile */}
         <div className="lg:hidden">
           <div
             ref={sliderRef}
@@ -174,8 +172,6 @@ const BestSellers = ({
             })}
           </div>
         </div>
-
-        {/* Desktop */}
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"

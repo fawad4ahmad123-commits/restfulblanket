@@ -1,6 +1,8 @@
+'use client';
 import Image from 'next/image';
 import { CalendarDays, Eye } from 'lucide-react';
 import { BlogCard as BlogCardProps } from '../types';
+import { useRouter } from 'next/navigation';
 
 const BlogCard = ({
   image,
@@ -11,6 +13,7 @@ const BlogCard = ({
   date,
   views,
 }: BlogCardProps) => {
+  const router = useRouter();
   return (
     <article className="group">
       <div className="relative overflow-hidden rounded-[28px]">
@@ -69,6 +72,7 @@ const BlogCard = ({
           type="button"
           aria-label={`Read more about ${title}`}
           title={`Read more about ${title}`}
+          onClick={() => router.push('/blog-detail')}
           className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:bg-[#e6dbd0] md:text-[#3b281f]"
         >
           Read More
