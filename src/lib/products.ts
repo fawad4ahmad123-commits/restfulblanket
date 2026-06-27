@@ -131,3 +131,36 @@ export async function getProductReviews(productId: number) {
 
   return res.json();
 }
+
+export type WooProduct = {
+  id: number;
+  name: string;
+  slug: string;
+  price: string;
+  images: { src: string }[];
+  categories: { id: number; name: string }[];
+};
+
+export async function searchProducts(query: string, perPage = 6) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?search=${encodeURIComponent(
+      query,
+    )}&per_page=${perPage}&status=publish`,
+    {
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(
+            `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
+          ).toString('base64'),
+      },
+      cache: 'no-store',
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to search products');
+  }
+
+  return res.json() as Promise<WooProduct[]>;
+}

@@ -11,26 +11,53 @@ export const navigation = [
   {
     title: 'Tyngdedyner',
     href: '/weighted-blankets',
-    children: [
+    groups: [
       {
-        title: 'Tyngdetæpper',
-        href: '/weighted-blankets/blankets',
+        heading: 'VORES TYNGDEDYNER',
+        links: [
+          { title: 'Tyngdetæpper', href: '/weighted-blankets/blankets' },
+          { title: 'Tilbehør', href: '/weighted-blankets/accessories' },
+        ],
       },
       {
-        title: 'Tilbehør',
-        href: '/weighted-blankets/accessories',
+        heading: 'NYTTIG INFORMATION',
+        links: [
+          { title: 'Vælg den rigtige', href: '/weighted-blankets/guide' },
+          {
+            title: 'Materialer og dokumentation',
+            href: '/weighted-blankets/materials',
+          },
+          {
+            title: 'For professionelle',
+            href: '/weighted-blankets/professionals',
+          },
+        ],
+      },
+    ],
+    products: [
+      {
+        title: 'Pearl Classic',
+        price: '€79',
+        image: '/products/pearl-classic.jpg',
+        href: '/products/pearl-classic',
       },
       {
-        title: 'Vælg den rigtige',
-        href: '/weighted-blankets/guide',
+        title: 'Pearl Cotton Eco',
+        price: '€89',
+        image: '/products/pearl-cotton-eco.jpg',
+        href: '/products/pearl-cotton-eco',
       },
       {
-        title: 'Materialer og dokumentation',
-        href: '/weighted-blankets/materials',
+        title: 'Pearl Lyocell',
+        price: '€151.20',
+        image: '/products/pearl-lyocell.jpg',
+        href: '/products/pearl-lyocell',
       },
       {
-        title: 'For professionelle',
-        href: '/weighted-blankets/professionals',
+        title: 'ProCare Pearl',
+        price: '€99.50',
+        image: '/products/procare-pearl.jpg',
+        href: '/products/procare-pearl',
       },
     ],
   },
@@ -45,10 +72,10 @@ export const navigation = [
   {
     title: 'Om Os',
     href: '/about',
-    children: [
+    groups: [
       {
-        title: 'Om RestfulBlanket',
-        href: '/about/restfulblanket',
+        heading: 'OM OS',
+        links: [{ title: 'Om RestfulBlanket', href: '/about/restfulblanket' }],
       },
     ],
   },

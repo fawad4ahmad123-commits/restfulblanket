@@ -15,10 +15,12 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
     <nav aria-label="Mobile navigation" className="flex flex-col gap-3">
       {navigation.map((item: any) => {
         const isActive = pathname === item.href;
+        const hasGroups = item.groups?.length > 0;
         const hasChildren = item.children?.length > 0;
+        const hasDropdown = hasGroups || hasChildren;
         const isOpen = openItem === item.title;
 
-        if (!hasChildren) {
+        if (!hasDropdown) {
           return (
             <Link
               key={item.title}
@@ -58,19 +60,38 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
             {isOpen && (
               <div
                 id={`submenu-${item.title}`}
-                className="mt-3 flex flex-col gap-3 pl-3"
+                className="mt-3 flex flex-col gap-4 pl-3"
               >
-                {item.children.map((child: any) => (
-                  <Link
-                    key={child.title}
-                    href={child.href}
-                    aria-label={`Go to ${child.title}`}
-                    title={child.title}
-                    className="text-sm text-foreground/80 hover:text-foreground/70"
-                  >
-                    {child.title}
-                  </Link>
-                ))}
+                {hasGroups
+                  ? item.groups.map((group: any) => (
+                      <div key={group.heading} className="flex flex-col gap-2">
+                        <span className="text-xs font-medium uppercase tracking-wide text-foreground/40">
+                          {group.heading}
+                        </span>
+                        {group.links.map((link: any) => (
+                          <Link
+                            key={link.title}
+                            href={link.href}
+                            aria-label={`Go to ${link.title}`}
+                            title={link.title}
+                            className="text-sm text-foreground/80 hover:text-foreground/70"
+                          >
+                            {link.title}
+                          </Link>
+                        ))}
+                      </div>
+                    ))
+                  : item.children.map((child: any) => (
+                      <Link
+                        key={child.title}
+                        href={child.href}
+                        aria-label={`Go to ${child.title}`}
+                        title={child.title}
+                        className="text-sm text-foreground/80 hover:text-foreground/70"
+                      >
+                        {child.title}
+                      </Link>
+                    ))}
               </div>
             )}
           </div>
