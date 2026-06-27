@@ -33,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
     isNew,
   } = product;
   const stars = Math.round(rating);
-
+  console.log('t5 card', { image });
   return (
     <div className="group overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
       <div className="relative overflow-hidden">

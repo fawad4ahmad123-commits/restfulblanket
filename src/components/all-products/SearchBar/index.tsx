@@ -20,36 +20,31 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative z-10 mx-auto flex w-full max-w-4xl items-center gap-6  bg-white px-8 py-5 shadow-lg"
-      style={{ borderTopRightRadius: '20px', borderTopLeftRadius: '20px' }}
+      className="flex items-center justify-between gap-8"
     >
-      <div className="hidden shrink-0 text-left sm:block">
-        <span className="text-sm font-semibold text-stone-700">
-          Give All You Need
-        </span>
+      <div className="shrink-0 text-[18px] font-semibold text-[#392A22]">
+        Give All You Need
       </div>
 
-      {/* Divider */}
-      <div className="hidden h-8 w-px bg-stone-200 sm:block" />
+      <div className="h-8 w-px bg-[#E8E1DA]" />
 
-      {/* Search Input */}
-      <div className="relative flex-1">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
+      <div className="flex h-[63px] flex-1 items-center gap-3 rounded-full border-[1.5px] border-[#E8E1DA] px-2 py-2">
+        <Search className="h-5 w-5 text-[#8D837B]" />
+
         <Input
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search your item..."
-          className="h-12 border-0 bg-transparent pl-12 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="border-0 p-0 shadow-none focus-visible:ring-0"
         />
-      </div>
 
-      {/* Button */}
-      <Button
-        type="submit"
-        className="rounded-full px-8 py-6 text-sm font-medium"
-      >
-        Search
-      </Button>
+        <Button
+          type="submit"
+          className="h-[47px] rounded-full px-10 bg-[#392A22]"
+        >
+          Search
+        </Button>
+      </div>
     </form>
   );
 }
