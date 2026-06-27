@@ -16,7 +16,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
   return (
     <div
       className="group relative overflow-hidden rounded-[28px]"
-      onClick={() => router.push(`/shop`)}
+      onClick={() => router.push(`/categories`)}
     >
       <div className="relative h-[420px] sm:h-[500px]">
         <Image
@@ -60,7 +60,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
             aria-hidden="true"
             size={22}
             className="absolute scale-0 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
-            onClick={() => router.push(`/shop`)}
+            onClick={() => router.push(`/categories`)}
           />
         </button>
       </div>

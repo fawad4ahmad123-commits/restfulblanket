@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { pageData } from '../contants';
 
 export function FAQSection() {
@@ -38,7 +38,7 @@ export function FAQSection() {
         {pageData.faqs.map((faq, index) => (
           <div
             key={index}
-            className="overflow-hidden rounded-[16px] border border-[#E9DDD4] bg-[#FAF4EF]"
+            className="overflow-hidden rounded-[16px] border border-[#E9DDD4] "
           >
             <button
               onClick={() => toggleFAQ(index)}

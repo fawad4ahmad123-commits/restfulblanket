@@ -18,7 +18,10 @@ interface ProductCategory {
   count: number;
 }
 
-const ProductCategories = ({ response_categories }: any) => {
+const ProductCategories = ({
+  response_categories,
+  isCategory = false,
+}: any) => {
   const [start, setStart] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -71,7 +74,7 @@ const ProductCategories = ({ response_categories }: any) => {
 
   return (
     <section
-      className="bg-[#fff9f5] py-12 md:py-20"
+      className={`${isCategory ? '' : 'bg-[#fff9f5]'} py-12 md:py-20`}
       aria-labelledby="product-categories-heading"
     >
       <div className="mx-auto max-w-[1400px] px-4">

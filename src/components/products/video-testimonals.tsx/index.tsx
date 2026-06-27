@@ -10,7 +10,11 @@ const getYoutubeEmbedUrl = (youtubeId: string) =>
 const getYoutubeThumbnail = (youtubeId: string) =>
   `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
 
-export default function TestimonialVideoSlider() {
+export default function TestimonialVideoSlider({
+  isCategory,
+}: {
+  isCategory?: boolean;
+}) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
   const cardRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -39,7 +43,8 @@ export default function TestimonialVideoSlider() {
   };
 
   return (
-    <section className="bg-[#FFF9F5] py-16">
+    <section className={`${isCategory ? '' : 'bg-[#FFF9F5]'} py-16`}>
+      {' '}
       <div className="mx-auto max-w-[1400px] px-5">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="font-serif text-3xl text-[#3A2A21] md:text-5xl">
