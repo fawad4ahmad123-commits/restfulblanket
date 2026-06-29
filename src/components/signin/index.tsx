@@ -10,10 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SignInFormValues, signInSchema } from './schema';
+import { useRouter } from 'next/navigation';
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -185,7 +186,8 @@ export default function SignInForm() {
 
         <button
           type="button"
-          className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-[#211711]"
+          onClick={() => router.push('/')}
+          className="mt-6 flex self-start items-center gap-2 text-sm font-medium text-[#35281E] transition-opacity hover:opacity-80 cursor-pointer"
         >
           <ArrowLeft size={16} />
           Back to Shopping Cart

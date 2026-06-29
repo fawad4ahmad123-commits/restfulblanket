@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
 import BestSellers from '@/src/components/Home/best-seller-season';
 import Coments from '@/src/components/Home/comments';
@@ -53,7 +52,7 @@ const ProductContent = ({
   }, []);
   const product = productResponse ? formatProduct(productResponse) : null;
   const product_information = formatProductInformation(productResponse);
-  console.log('t3', { product, productResponse });
+
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
       <div className="mx-auto max-w-7xl">
@@ -65,10 +64,7 @@ const ProductContent = ({
               productName={product?.name}
             />
           </div>
-          <div
-            ref={detailsRef}
-            className="min-w-0 p-3"
-          >
+          <div ref={detailsRef} className="min-w-0 p-3">
             <ProductInfoPanel product={product} />
           </div>
         </div>

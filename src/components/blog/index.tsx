@@ -4,7 +4,7 @@ import { FeaturedArticle } from './featured-article';
 import BlogCard from '../Home/blog';
 import { BLOGS } from '../Home/constants';
 
-const Blog = () => {
+const Blog = ({ blogs }: any) => {
   const isSlider = false;
   return (
     <div className="container mx-auto max-w-7xl px-6 py-8">
@@ -14,7 +14,7 @@ const Blog = () => {
       <BlogHero />
       <BlogFilters />
       <div className="mt-16 mb-16">
-        <FeaturedArticle />
+        <FeaturedArticle blogs={blogs} />
       </div>
       <div className="mb-8 flex items-center justify-between">
         <h3 className="text-[32px] font-serif text-[#35281E]">
@@ -32,7 +32,7 @@ const Blog = () => {
         role="region"
         aria-label="Blog articles"
       >
-        {BLOGS.map((blog, index) => (
+        {blogs.map((blog: any, index: number) => (
           <div
             key={`${blog.title}-${index}`}
             className={

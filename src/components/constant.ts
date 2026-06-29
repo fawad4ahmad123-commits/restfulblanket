@@ -9,6 +9,10 @@ export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 
 export const navigation = [
   {
+    title: 'All Products',
+    href: '/shop',
+  },
+  {
     title: 'Tyngdedyner',
     href: '/weighted-blankets',
     groups: [
@@ -72,12 +76,10 @@ export const navigation = [
   {
     title: 'Om Os',
     href: '/about',
-    groups: [
-      {
-        heading: 'OM OS',
-        links: [{ title: 'Om RestfulBlanket', href: '/about/restfulblanket' }],
-      },
-    ],
+  },
+  {
+    title: 'Blog',
+    href: '/blog',
   },
 ];
 

@@ -18,6 +18,7 @@ export interface BlogCard {
   excerpt: string;
   date: string;
   views: string;
+  slug: string;
 }
 
 export interface CategoryCard {

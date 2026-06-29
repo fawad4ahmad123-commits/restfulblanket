@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Heart, ShoppingBag, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MobileViewMenuToggle from './mobile-menu-toggle';
@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 const SiteHeader = () => {
   const pathname = usePathname();
   const isHome = ['/', '/shop'].includes(pathname);
-
+  const router = useRouter();
   const wishlistCount = 3;
   const cartCount = 2;
 
@@ -91,6 +91,7 @@ const SiteHeader = () => {
                 variant="ghost"
                 aria-label="My account"
                 title="My account"
+                onClick={() => router.push('/sign-in')}
                 className={cn(
                   !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
                 )}

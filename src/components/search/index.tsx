@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Search, X, User, Baby, Layers } from 'lucide-react';
 import Link from 'next/link';
-import { WooProduct } from '@/src/lib/products';
+import { WooProduct } from '@/src/lib/types';
 
 const TRENDING_SEARCHES = [
   'Weighted blanket',

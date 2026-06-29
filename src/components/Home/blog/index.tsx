@@ -1,8 +1,9 @@
 'use client';
+
 import Image from 'next/image';
 import { CalendarDays, Eye } from 'lucide-react';
-import { BlogCard as BlogCardProps } from '../types';
 import { useRouter } from 'next/navigation';
+import { BlogCard as BlogCardProps } from '../types';
 
 const BlogCard = ({
   image,
@@ -12,10 +13,12 @@ const BlogCard = ({
   excerpt,
   date,
   views,
+  slug,
 }: BlogCardProps) => {
   const router = useRouter();
+
   return (
-    <article className="group">
+    <article className="group flex h-full flex-col">
       <div className="relative overflow-hidden rounded-[28px]">
         <div className="relative h-[320px]">
           <Image
@@ -39,22 +42,22 @@ const BlogCard = ({
         </div>
       </div>
 
-      <div className="px-2 pt-5">
-        <h3 className="font-serif text-[32px] leading-[1.05] text-[#3b281f]">
+      <div className="flex flex-1 flex-col px-2 pt-5">
+        <h3 className="line-clamp-2 min-h-[68px] font-serif text-[32px] leading-[1.05] text-[#3b281f]">
           {title}
         </h3>
 
-        <p className="mt-3 line-clamp-2 text-sm leading-7 text-[#85776d]">
+        <p className="mt-3 line-clamp-2 min-h-[56px] text-sm leading-7 text-[#85776d]">
           {excerpt}
         </p>
 
-        <div className="mt-5 border-t border-[#d9cec5] pt-4">
+        <div className="mt-5 border-t border-[#d9cec5] pt-4 pb-3">
           <div className="flex items-center gap-6 text-sm text-[#85776d]">
             <div
               className="flex items-center gap-2"
               aria-label={`Published on ${date}`}
             >
-              <CalendarDays aria-hidden="true" size={16} />
+              <CalendarDays size={16} />
               {date}
             </div>
 
@@ -62,7 +65,7 @@ const BlogCard = ({
               className="flex items-center gap-2"
               aria-label={`${views} views`}
             >
-              <Eye aria-hidden="true" size={16} />
+              <Eye size={16} />
               {views}
             </div>
           </div>
@@ -72,8 +75,8 @@ const BlogCard = ({
           type="button"
           aria-label={`Read more about ${title}`}
           title={`Read more about ${title}`}
-          onClick={() => router.push('/blog-detail')}
-          className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:bg-[#e6dbd0] md:text-[#3b281f]"
+          onClick={() => router.push(`/blog-detail/${slug}`)}
+          className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:mt-auto md:bg-[#e6dbd0] md:text-[#3b281f]"
         >
           Read More
         </button>

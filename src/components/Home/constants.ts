@@ -129,6 +129,7 @@ export const BLOGS = [
       'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
     date: '6/13/2026',
     views: '10k Viewers',
+    slug: '',
   },
   {
     image: '/blog/1.png',
@@ -139,6 +140,7 @@ export const BLOGS = [
       'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
     date: '6/13/2026',
     views: '10k Viewers',
+    slug: '',
   },
   {
     image: '/blog/1.png',
@@ -149,6 +151,7 @@ export const BLOGS = [
       'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
     date: '6/13/2026',
     views: '10k Viewers',
+    slug: '',
   },
   {
     image: '/blog/1.png',
@@ -159,6 +162,7 @@ export const BLOGS = [
       'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
     date: '6/13/2026',
     views: '10k Viewers',
+    slug: '',
   },
 ];
 

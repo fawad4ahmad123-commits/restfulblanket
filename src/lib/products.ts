@@ -1,3 +1,5 @@
+import { WooProduct } from './types';
+
 export async function createReview({
   productId,
   review,
@@ -132,15 +134,6 @@ export async function getProductReviews(productId: number) {
   return res.json();
 }
 
-export type WooProduct = {
-  id: number;
-  name: string;
-  slug: string;
-  price: string;
-  images: { src: string }[];
-  categories: { id: number; name: string }[];
-};
-
 export async function searchProducts(query: string, perPage = 6) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?search=${encodeURIComponent(
@@ -164,8 +157,6 @@ export async function searchProducts(query: string, perPage = 6) {
 
   return res.json() as Promise<WooProduct[]>;
 }
-
-// src/lib/products.ts
 
 export async function getAllProducts(params?: {
   search?: string;

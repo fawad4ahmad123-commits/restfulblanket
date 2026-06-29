@@ -7,16 +7,19 @@ import ArticleLayout from './article-layout';
 import AuthorCard from './author-card';
 import CommentSection from './comment-section';
 import { useRouter } from 'next/navigation';
+import { formatBlogDetail } from '@/src/utilty/blog-detail-formater';
 
-const Article = () => {
+const Article = ({ blog }: any) => {
+  const article = formatBlogDetail(blog);
+  console.log('t2 blog details', { article, blog });
   const router = useRouter();
   return (
     <main className="bg-[#F5F1EE]">
       <div className="container mx-auto max-w-7xl px-6 py-12">
-        <ArticleHero />
-        <ArticleLayout />
+        <ArticleHero data={article.hero} />
+        <ArticleLayout data={article.content} />
         <AuthorCard />
-        <CommentSection />
+        {/* <CommentSection /> */}
         <div className="mb-8 flex items-center justify-center mt-8">
           <h1 className="text-[32px] font-serif text-[#35281E]">
             You Might Also Like
