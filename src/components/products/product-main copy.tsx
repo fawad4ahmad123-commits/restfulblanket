@@ -67,7 +67,7 @@ const ProductContent = ({
           </div>
           <div
             ref={detailsRef}
-            className="min-w-0 p-3"
+            className="min-w-0 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto scrollbar-hide p-3"
           >
             <ProductInfoPanel product={product} />
           </div>

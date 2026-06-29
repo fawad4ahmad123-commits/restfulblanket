@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import CategoryCard from './category-card';
 import SliderControls from '../../generic/slider-control';
@@ -18,14 +19,22 @@ interface ProductCategory {
   count: number;
 }
 
+interface ProductCategoriesProps {
+  response_categories: ProductCategory[];
+  isCategory?: boolean;
+}
+
 const ProductCategories = ({
   response_categories,
   isCategory = false,
-}: any) => {
+}: ProductCategoriesProps) => {
   const [start, setStart] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+
   const categories = response_categories ?? [];
+  const filteredCategories = categories.filter((item) => item.parent !== 0);
+
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -50,7 +59,9 @@ const ProductCategories = ({
     }
 
     setStart((prev) =>
-      prev >= categories.length - visibleCards ? 0 : prev + 1,
+      prev >= Math.max(filteredCategories.length - visibleCards, 0)
+        ? 0
+        : prev + 1,
     );
   };
 
@@ -64,11 +75,13 @@ const ProductCategories = ({
     }
 
     setStart((prev) =>
-      prev === 0 ? categories.length - visibleCards : prev - 1,
+      prev === 0
+        ? Math.max(filteredCategories.length - visibleCards, 0)
+        : prev - 1,
     );
   };
 
-  if (!categories.length) {
+  if (!filteredCategories.length) {
     return null;
   }
 
@@ -88,7 +101,6 @@ const ProductCategories = ({
 
           <SliderControls prev={prev} next={next} />
         </div>
-
         <div className="lg:hidden">
           <div
             ref={sliderRef}
@@ -96,7 +108,7 @@ const ProductCategories = ({
             role="region"
             aria-label="Product categories slider"
           >
-            {categories.map((item: any, i: number) => (
+            {filteredCategories.map((item, i) => (
               <div
                 key={item.id}
                 className="w-[85%] shrink-0 snap-center sm:w-[70%] md:w-[48%]"
@@ -104,23 +116,22 @@ const ProductCategories = ({
                 <CategoryCard
                   image={item.image?.src || PLACEHOLDER_IMAGE}
                   title={item.name}
-                  subtitle={item.parent ? undefined : `${item.count} produkter`}
+                  subtitle={`${item.count} produkter`}
                   index={`0${i + 1}`}
                 />
               </div>
             ))}
           </div>
         </div>
-
         <div className="hidden gap-5 lg:grid lg:grid-cols-4">
-          {categories
+          {filteredCategories
             .slice(start, start + visibleCards)
-            .map((item: any, i: number) => (
+            .map((item, i) => (
               <CategoryCard
                 key={item.id}
                 image={item.image?.src || PLACEHOLDER_IMAGE}
                 title={item.name}
-                subtitle={item.parent ? undefined : `${item.count} produkter`}
+                subtitle={`${item.count} produkter`}
                 index={`0${start + i + 1}`}
               />
             ))}

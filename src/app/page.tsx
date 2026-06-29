@@ -7,5 +7,6 @@ export default async function Home() {
     getCategories(),
   ]);
   console.log('t2', { products, categories });
+  console.table("t3",categories);
   return <Landing products={products} response_categories={categories} />;
 }
