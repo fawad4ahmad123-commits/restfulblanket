@@ -164,3 +164,50 @@ export async function searchProducts(query: string, perPage = 6) {
 
   return res.json() as Promise<WooProduct[]>;
 }
+
+// src/lib/products.ts
+
+export async function getAllProducts(params?: {
+  search?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  perPage?: number;
+}) {
+  const query = new URLSearchParams();
+
+  query.set('status', 'publish');
+  query.set('per_page', String(params?.perPage ?? 20));
+
+  if (params?.search) query.set('search', params.search);
+  if (params?.category) query.set('category', params.category);
+  if (params?.minPrice !== undefined)
+    query.set('min_price', String(params.minPrice));
+  if (params?.maxPrice !== undefined)
+    query.set('max_price', String(params.maxPrice));
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?${query.toString()}`,
+    {
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(
+            `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
+          ).toString('base64'),
+      },
+      // no-store when search/filters are present so results aren't cached/stale,
+      // otherwise use revalidate for the default listing
+      ...(params?.search || params?.category
+        ? { cache: 'no-store' as const }
+        : { next: { revalidate: 3600 } }),
+    },
+  );
+
+  if (!res.ok) {
+    console.error('Failed to fetch products', res.status);
+    return [];
+  }
+
+  return res.json();
+}

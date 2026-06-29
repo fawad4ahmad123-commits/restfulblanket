@@ -3,14 +3,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 
-const ExpertCard = ({ expert }: any) => {
+const ExpertCard = ({ expert, isExpert = false }: any) => {
   const { name, image, role, position, tags = [] } = expert;
   const router = useRouter();
-
+  const profileUrl = isExpert ? '/expert-detail' : '/expert';
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[24px] border border-[#e4dad1] bg-[#faf4ee]">
       <div
-        className="cursor-pointer"
+        className="flex flex-1 flex-col cursor-pointer"
         onClick={() => router.push('/expert-detail')}
       >
         <div className="relative h-[280px]">
@@ -46,7 +46,7 @@ const ExpertCard = ({ expert }: any) => {
             type="button"
             aria-label={`View full profile of ${name}`}
             title={`View full profile of ${name}`}
-            onClick={() => router.push('/expert')}
+            onClick={() => router.push(profileUrl)}
             className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#e5d8cb] py-3 text-sm text-[#3b281f] transition hover:bg-[#dac8b7] cursor-pointer"
           >
             View full profile

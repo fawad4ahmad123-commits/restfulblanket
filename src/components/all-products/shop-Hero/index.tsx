@@ -32,7 +32,7 @@ const ShopHero = ({ onSearch }: any) => {
       </section>
       <section className="bg-[#F7F3EE]">
         <div className="mx-auto max-w-[1728px] px-6">
-          <div className="-translate-y-19 rounded-t-[32px] bg-white px-3 py-2">
+          <div className="relative z-10 -translate-y-19 rounded-t-[32px] bg-white px-3 py-2">
             <SearchBar onSearch={onSearch} />
           </div>
         </div>

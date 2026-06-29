@@ -92,3 +92,37 @@ const getColorHex = (colorName: string): string => {
   return '#CCCCCC';
 };
 export default getColorHex;
+
+export function getProductsColorHex(color: string) {
+  if (!color) return '#D9D9D9';
+
+  const value = color.trim();
+
+  if (/^#([0-9A-F]{3}){1,2}$/i.test(value)) {
+    return value;
+  }
+
+  const colorMap: Record<string, string> = {
+    red: '#FF0000',
+    blue: '#0000FF',
+    green: '#008000',
+    yellow: '#FFFF00',
+    orange: '#FFA500',
+    purple: '#800080',
+    pink: '#FFC0CB',
+    black: '#000000',
+    white: '#FFFFFF',
+    gray: '#808080',
+    grey: '#808080',
+    brown: '#8B4513',
+    beige: '#F5F5DC',
+    cream: '#FFFDD0',
+    brun: '#8B4513',
+    lysebrun: '#C4A484',
+    'blå creme': '#BFD7EA',
+    'bla creme': '#BFD7EA',
+    creme: '#FFFDD0',
+  };
+
+  return colorMap[value.toLowerCase()] || '#D9D9D9';
+}

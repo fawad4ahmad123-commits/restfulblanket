@@ -1,23 +1,51 @@
 'use client';
+import { useEffect, useState } from 'react';
+import ShopHero from '@/src/components/all-products/shop-Hero';
+import { getAllProducts } from '@/src/lib/products';
+import { formatProducts } from '@/src/utilty/all-product-foemater';
+import Shop from './shop';
+import { Loader } from '../loader';
 
-import { useState } from 'react';
-import ProductGrid from './ProductGrid';
-import ProductSidebar from './Sidebar';
-import { defaultFilters, SelectedFilters } from './types';
+export default function ShopPageClient({
+  initialData,
+}: {
+  initialData: any[];
+}) {
+  const [data, setData] = useState<any[]>(initialData);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
 
-export default function Shop() {
-  const [filters, setFilters] = useState<SelectedFilters>(defaultFilters);
+  useEffect(() => {
+    let active = true;
+
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const allProductData = await getAllProducts({
+          search: searchQuery,
+        });
+        const response = formatProducts(allProductData);
+        if (active) setData(response);
+      } catch (err) {
+        console.error('search fetch failed', err);
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    fetchData();
+
+    return () => {
+      active = false;
+    };
+  }, [searchQuery]);
 
   return (
-    <section className="bg-[#F7F3EE] py-12">
-      <div className="mx-auto max-w-7xl px-4">
-        <div className="mb-10 text-sm text-[#8A7A6F]">Home / All Product</div>
-
-        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
-          <ProductSidebar filters={filters} setFilters={setFilters} />
-          <ProductGrid filters={filters} setFilters={setFilters} />
-        </div>
+    <>
+      <ShopHero data={data} onSearch={setSearchQuery} />
+      <div className="bg-[#FDF9F6]">
+        {loading ? <Loader /> : <Shop data={data} />}
       </div>
-    </section>
+    </>
   );
 }

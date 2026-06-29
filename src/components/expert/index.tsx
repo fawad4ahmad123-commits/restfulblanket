@@ -80,7 +80,7 @@ const ExpertSection = ({ isAllExpert = true }: ExpertSectionProps) => {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {filteredExperts.map((expert: any, index: number) => (
-          <ExpertCard key={index} expert={expert} />
+          <ExpertCard key={index} expert={expert} isExpert={true} />
         ))}
       </div>
 
