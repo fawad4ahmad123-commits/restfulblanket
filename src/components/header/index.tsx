@@ -12,13 +12,27 @@ import SearchProducts from './search';
 import MobileCart from './mobile-cart';
 import { TrustBar } from '../trustbar';
 import { cn } from '@/lib/utils';
+import CartOffcanvas from '../cart';
+import { useCart } from '@/src/core/context/card-Provider';
 
 const SiteHeader = () => {
   const pathname = usePathname();
   const isHome = ['/', '/shop'].includes(pathname);
   const router = useRouter();
   const wishlistCount = 3;
-  const cartCount = 2;
+
+  const {
+    items,
+    upsellItems,
+    isOpen,
+    setCartOpen,
+    removeFromCart,
+    updateQuantity,
+    addUpsellToCart,
+    getTotalItems,
+  } = useCart();
+
+  const cartCount = getTotalItems();
 
   return (
     <>
@@ -71,6 +85,7 @@ const SiteHeader = () => {
                 )}
               >
                 <Heart aria-hidden="true" className="size-4" />
+
                 {wishlistCount > 0 && (
                   <span
                     aria-hidden="true"
@@ -91,7 +106,7 @@ const SiteHeader = () => {
                 variant="ghost"
                 aria-label="My account"
                 title="My account"
-                onClick={() => router.push('/sign-in')}
+                onClick={() => router.push('/signin')}
                 className={cn(
                   !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
                 )}
@@ -100,6 +115,7 @@ const SiteHeader = () => {
               </Button>
 
               <Button
+                onClick={() => setCartOpen(true)}
                 aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
                 title="Shopping cart"
                 className={cn(
@@ -123,7 +139,21 @@ const SiteHeader = () => {
           </div>
         </nav>
       </header>
+
       <TrustBar isHome={isHome} />
+
+      <CartOffcanvas
+        open={isOpen}
+        onOpenChange={setCartOpen}
+        items={items}
+        upsellItems={upsellItems}
+        onRemoveItem={removeFromCart}
+        onChangeQty={updateQuantity}
+        onAddUpsell={addUpsellToCart}
+        onApplyDiscount={(code) => console.log(code)}
+        onCheckout={() => router.push('/checkout')}
+        onContinueShopping={() => setCartOpen(false)}
+      />
     </>
   );
 };

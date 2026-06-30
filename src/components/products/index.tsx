@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import FeatureList from './feature-list';
 import ColorSelector from './color-selector';
@@ -11,8 +11,17 @@ import Breadcrumbs from './bread-crumbs';
 import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
+import { CartContext } from '@/src/core/context/cart-context';
 
 const ProductInfoPanel = ({ product }: any) => {
+  const cart = useContext(CartContext);
+
+  if (!cart) {
+    throw new Error('CartContext not found');
+  }
+
+  const { addToCart } = cart;
+
   const addToCartRef = useRef<HTMLDivElement>(null);
   const [showStickyCart, setShowStickyCart] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
@@ -21,27 +30,40 @@ const ProductInfoPanel = ({ product }: any) => {
   const sizes = product?.sizes ?? [];
   const features = product?.features ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
-
   const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? '');
-
   const [selectedWeightId, setSelectedWeightId] = useState(
     weights[1]?.id ?? weights[0]?.id ?? '',
   );
-
   const [selectedSizeId, setSelectedSizeId] = useState(
     sizes[1]?.id ?? sizes[0]?.id ?? '',
   );
-
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
-    console.log('Add to cart', {
-      productId: product?.id,
-      colorId: selectedColorId,
-      weightId: selectedWeightId,
-      sizeId: selectedSizeId,
-      quantity,
-    });
+    const selectedColor =
+      colors.find((c: any) => c.id === selectedColorId)?.label ||
+      colors.find((c: any) => c.id === selectedColorId)?.name ||
+      '';
+
+    const selectedWeight =
+      weights.find((w: any) => w.id === selectedWeightId)?.label ?? '';
+
+    const selectedSize =
+      sizes.find((s: any) => s.id === selectedSizeId)?.label ?? '';
+
+    const uniqueId = `${product.id}-${selectedColor}-${selectedWeight}-${selectedSize}`;
+
+    for (let i = 0; i < quantity; i++) {
+      addToCart({
+        id: uniqueId,
+        name: product.name,
+        color: selectedColor,
+        variant: selectedSize,
+        weight: selectedWeight,
+        price: Number(product.price),
+        image: product.images?.[0] ?? '',
+      });
+    }
   };
 
   useEffect(() => {
@@ -68,6 +90,7 @@ const ProductInfoPanel = ({ product }: any) => {
   return (
     <div className="flex flex-col gap-5">
       <Breadcrumbs items={product?.breadcrumbs ?? []} />
+
       {!activeAccordion && (
         <>
           <div className="space-y-2">
@@ -80,13 +103,17 @@ const ProductInfoPanel = ({ product }: any) => {
               reviewCount={product?.reviewCount ?? 0}
             />
           </div>
+
           <PriceDisplay
             price={product?.price ?? 0}
             compareAtPrice={product?.compareAtPrice ?? 0}
             currency={product?.currency ?? 'kr'}
           />
+
           {features.length > 0 && <FeatureList features={features} />}
+
           <Separator className="bg-[#E3DCCD]" />
+
           {colors.length > 0 && (
             <ColorSelector
               colors={colors}
@@ -125,10 +152,12 @@ const ProductInfoPanel = ({ product }: any) => {
           </div>
         </>
       )}
+
       <ProductInfoAccordion
         activeAccordion={activeAccordion}
         setActiveAccordion={setActiveAccordion}
       />
+
       <MobileStickyCart
         visible={showStickyCart}
         product={{

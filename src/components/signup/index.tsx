@@ -56,32 +56,6 @@ export default function SignUpForm() {
               variant="outline"
               className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
             >
-              <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
-                <path
-                  fill="#EA4335"
-                  d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3.01A11.934 11.934 0 0 0 12 0C7.305 0 3.232 2.582 1.036 6.418l4.23 3.347z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M16.04 15.345c-1.077.736-2.5 1.173-4.04 1.173-2.918 0-5.391-1.991-6.273-4.682l-4.227 3.273A11.934 11.934 0 0 0 12 24c3.305 0 6.277-1.118 8.445-3.045l-4.405-5.61z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M1.036 15.118l4.227-3.273a7.045 7.045 0 0 1 0-3.691L1.036 6.418A11.932 11.932 0 0 0 0 12c0 1.114.155 2.191.436 3.218z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M23.523 9.955H12v4.582h6.586c-.6 2.118-2.11 3.636-4.236 4.436l4.405 5.61C21.436 22.118 24 17.51 24 12c0-.709-.073-1.391-.218-2.045z"
-                />
-              </svg>
-              Continue with Google
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
-            >
               Continue as Guest
             </Button>
           </div>
@@ -187,7 +161,7 @@ export default function SignUpForm() {
 
           <p className="text-center text-sm text-[#70655E]">
             Already have an account?{' '}
-            <a href="/sign-in" className="font-semibold text-[#211711]">
+            <a href="/signin" className="font-semibold text-[#211711]">
               Sign In
             </a>
           </p>

@@ -1,14 +1,12 @@
 'use client';
-
 import { useEffect, useState, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
+import { getProductReviews } from '@/src/lib/products';
 import LeftReview from './detail-review';
 import RightReviews from './right-side-review';
 import Info from './info';
 import ReviewForm from './review-form';
-import { getProductReviews } from '@/src/lib/products';
 import { Loader } from '../../loader';
-import { REVIEWS } from '../constants';
-import { usePathname } from 'next/navigation';
 
 const Coments = ({ id }: { id: string }) => {
   const pathname = usePathname();
@@ -55,7 +53,6 @@ const Coments = ({ id }: { id: string }) => {
           totalReviews={reviews.length}
           isHome={isHome}
         />
-
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="order-2 lg:order-1">
             {reviews.length > 0 && (
@@ -67,14 +64,12 @@ const Coments = ({ id }: { id: string }) => {
               />
             )}
           </div>
-
           <div className="order-1 lg:order-2 flex h-full flex-col justify-end">
             {showModal ? (
               <ReviewForm
                 onClose={() => setShowModal(false)}
                 productId={Number(id)}
                 onReviewCreated={loadReviews}
-                isHome={isHome}
               />
             ) : (
               <RightReviews

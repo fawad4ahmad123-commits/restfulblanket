@@ -10,21 +10,20 @@ export interface Product {
 }
 
 export interface SliderCard {
-  image: string;
-  hoverImage?: string;
-  title: string;
+  id: number | string;
   slug: string;
-  price?: string;
-  subtitle?: string;
-  badge?: string;
-  id: number;
-  originalPrice?: string;
+  image: string;
+  title: string;
+  price: string | number;
+  originalPrice?: string | number;
   rating?: number;
   reviewCount?: number;
+  badge?: string;
   weight?: string;
   dimensions?: string;
-  type?: 'product' | 'category';
-  onAddToCart?: () => void;
+  color?: string;
+  size?: string;
+  type: string;
 }
 
 export interface SliderControls {

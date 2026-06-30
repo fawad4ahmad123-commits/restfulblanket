@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import './globals.css';
 import MainLayout from '../core/Mainlayouts';
 import { Toaster } from '@/components/ui/sonner';
+import { CartProvider } from '../core/context/cart-context';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -29,10 +30,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <MainLayout>
-          {children}
-          <Toaster />
-        </MainLayout>
+        <CartProvider>
+          <MainLayout>
+            {children}
+            <Toaster />
+          </MainLayout>
+        </CartProvider>
       </body>
     </html>
   );

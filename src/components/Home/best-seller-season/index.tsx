@@ -82,6 +82,7 @@ const BestSellers = ({
     );
   };
 
+  console.log('t6', { filteredProducts });
   return (
     <section
       className={isProduct ? 'bg-{#FAF4EE] py-16' : 'bg-[#FAF4EE] py-16'}
@@ -147,7 +148,22 @@ const BestSellers = ({
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
 
               const hoverImage = item.images?.[1]?.src || mainImage;
+              const colorAttribute = item.attributes?.find(
+                (attr: any) =>
+                  attr.slug === 'pa_color' ||
+                  attr.name?.toLowerCase() === 'color',
+              );
 
+              const sizeAttribute = item.attributes?.find(
+                (attr: any) =>
+                  attr.slug === 'pa_stoerrelse' ||
+                  attr.slug === 'size' ||
+                  attr.name?.toLowerCase().includes('size') ||
+                  attr.name?.toLowerCase().includes('størrelse'),
+              );
+
+              const color = colorAttribute?.options?.[0] || '';
+              const size = sizeAttribute?.options?.[0] || '';
               return (
                 <div
                   key={item.id}
@@ -164,6 +180,8 @@ const BestSellers = ({
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
                     badge={item.featured ? 'BEST SELLER' : ''}
+                    color={color}
+                    size={size}
                     type="product"
                   />
                 </div>

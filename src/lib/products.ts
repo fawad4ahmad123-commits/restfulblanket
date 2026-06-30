@@ -47,45 +47,6 @@ export async function createProductReview({
   return res.json();
 }
 
-export async function createSiteReview({
-  review,
-  reviewer,
-  reviewerEmail,
-  rating,
-  reviewTitle,
-}: {
-  review: string;
-  reviewer: string;
-  reviewerEmail: string;
-  rating: number;
-  reviewTitle: string;
-}) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/feedback`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: reviewTitle,
-        content: review,
-        reviewer,
-        reviewer_email: reviewerEmail,
-        rating,
-      }),
-    },
-  );
-
-  if (!res.ok) {
-    const error = await res.text();
-    console.error(error);
-    throw new Error('Failed to submit site review');
-  }
-
-  return res.json();
-}
-
 export async function getBestSellers() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/products?status=publish&per_page=20`,

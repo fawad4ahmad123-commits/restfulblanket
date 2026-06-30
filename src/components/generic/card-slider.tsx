@@ -1,10 +1,12 @@
 'use client';
+
 import { useState } from 'react';
 import Image from 'next/image';
 import { Heart, Eye, ShoppingBag } from 'lucide-react';
 import { SliderCard as SliderCardProps } from './types';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/src/helper/product-feature';
+import { useCart } from '@/src/core/context/card-Provider';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -23,10 +25,13 @@ const SliderCard = ({
   reviewCount = 1284,
   weight,
   dimensions,
-  onAddToCart,
+  color,
+  size,
 }: ExtendedSliderCardProps) => {
   const [wished, setWished] = useState(false);
   const router = useRouter();
+  const { addToCart } = useCart();
+
   const stars = Math.round(rating);
 
   return (
@@ -44,7 +49,6 @@ const SliderCard = ({
               hoverImage ? 'group-hover:opacity-0' : ''
             }`}
           />
-
           {hoverImage && (
             <Image
               src={hoverImage}
@@ -54,13 +58,11 @@ const SliderCard = ({
             />
           )}
         </div>
-
         {(badge || 'Best Seller') && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
             {badge || 'Best Seller'}
           </div>
         )}
-
         <button
           type="button"
           aria-label={
@@ -73,7 +75,10 @@ const SliderCard = ({
               ? `Remove ${title} from wishlist`
               : `Add ${title} to wishlist`
           }
-          onClick={() => setWished((w) => !w)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setWished((w) => !w);
+          }}
           className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
           <Heart
@@ -100,7 +105,6 @@ const SliderCard = ({
           </button>
         </div>
       </div>
-
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div
           className="mb-3 flex items-center gap-1"
@@ -153,7 +157,19 @@ const SliderCard = ({
           type="button"
           aria-label={`Add ${title} to cart`}
           title={`Add ${title} to cart`}
-          onClick={onAddToCart}
+          onClick={(e) => {
+            e.stopPropagation();
+
+            addToCart({
+              id: String(id),
+              name: title,
+              color: color || '',
+              variant: size || '',
+              weight: weight || '',
+              price: Number(price) || 0,
+              image,
+            });
+          }}
           className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
