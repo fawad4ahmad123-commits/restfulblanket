@@ -13,7 +13,8 @@ import { cn } from '@/lib/utils';
 import { sections } from './contants';
 
 interface ProductInfoAccordionProps {
-  sections: ProductInfoSection[];
+  activeAccordion: string | null;
+  setActiveAccordion: (value: string | null) => void;
 }
 const trustItems = {
   icon: '/home/shieldIcon.png',
@@ -22,11 +23,17 @@ const trustItems = {
   subtitle: 'Sikkerhed',
   monochrome: true,
 };
-const ProductInfoAccordion = () => {
+
+const ProductInfoAccordion = ({
+  activeAccordion,
+  setActiveAccordion,
+}: ProductInfoAccordionProps) => {
   return (
     <Accordion
       type="single"
       collapsible
+      value={activeAccordion || ''}
+      onValueChange={(value) => setActiveAccordion(value || null)}
       className="rounded-2xl border border-[#E3DCCD] px-4"
     >
       {sections.map((section) => (

@@ -9,13 +9,16 @@ import ProductInformationSection from '@/src/components/products/product-informa
 import TestimonialVideoSlider from '@/src/components/products/video-testimonals.tsx';
 import { formatProduct } from '@/src/utilty/single-product-formatter';
 import { formatProductInformation } from '@/src/utilty/info-accordianc-formater';
+import ProductCategories from '../Home/product-categories';
 
 const ProductContent = ({
   likeProducts,
   productResponse,
+  categories,
 }: {
   likeProducts: any[];
   productResponse: any[];
+  categories: any[];
 }) => {
   const detailsRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +79,7 @@ const ProductContent = ({
       <ProductInformationSection info={product_information} />
       <TestimonialVideoSlider />
       <RestfulBlanketVideo />
+      <ProductCategories response_categories={categories} />
     </main>
   );
 };

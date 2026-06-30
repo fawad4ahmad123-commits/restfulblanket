@@ -24,6 +24,7 @@ export interface RightReviews {
 
 export interface Info {
   showModal: boolean;
+  isHome: boolean;
   current: number;
   totalReviews: number;
   direction: 'left' | 'right';

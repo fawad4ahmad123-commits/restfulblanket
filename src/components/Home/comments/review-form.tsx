@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Star, X } from 'lucide-react';
-import { createReview } from '@/src/lib/products';
+import { createProductReview, createSiteReview } from '@/src/lib/products';
 
 interface ReviewFormProps {
-  onClose: () => void;
   productId: number;
+  isHome: boolean;
+  onClose: () => void;
   onReviewCreated: () => void | Promise<void>;
 }
 
@@ -23,6 +24,7 @@ const ReviewForm = ({
   onClose,
   productId,
   onReviewCreated,
+  isHome,
 }: ReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
@@ -49,15 +51,24 @@ const ReviewForm = ({
 
     try {
       setLoading(true);
-
-      await createReview({
-        productId,
-        reviewer: data.name,
-        reviewerEmail: data.email,
-        rating,
-        reviewTitle: data.title,
-        review: data.review,
-      });
+      if (isHome) {
+        await createSiteReview({
+          reviewer: data.name,
+          reviewerEmail: data.email,
+          rating,
+          reviewTitle: data.title,
+          review: data.review,
+        });
+      } else {
+        await createProductReview({
+          productId,
+          reviewer: data.name,
+          reviewerEmail: data.email,
+          rating,
+          reviewTitle: data.title,
+          review: data.review,
+        });
+      }
 
       toast.success('Review submitted successfully!');
 

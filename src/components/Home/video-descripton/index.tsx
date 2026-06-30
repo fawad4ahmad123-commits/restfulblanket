@@ -9,7 +9,7 @@ const RestfulBlanketVideo = () => {
   const YOUTUBE_ID = 'jCupG9MHVZc';
 
   return (
-    <section className="bg-[#FAF4EE] py-16 md:py-20 xl:py-24">
+    <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#FAF4EE] py-16 md:py-20 xl:py-24">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8">
         <div className="mx-auto flex max-w-4xl flex-col items-center">
           <h2 className="mb-10 max-w-xl text-center font-serif text-3xl font-semibold leading-snug tracking-tight text-[#2c2318] md:text-4xl">

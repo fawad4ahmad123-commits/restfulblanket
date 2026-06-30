@@ -20,7 +20,7 @@ const LeftReview = ({
   if (!review) return null;
 
   return (
-    <div className="relative h-[280px] overflow-hidden rounded-2xl bg-[#fff9f5] shadow-sm">
+    <div className="relative h-full min-h-[280px] overflow-hidden rounded-2xl bg-[#fff9f5] shadow-sm">
       <div
         key={current}
         className={`absolute inset-0 flex flex-col p-8 ${

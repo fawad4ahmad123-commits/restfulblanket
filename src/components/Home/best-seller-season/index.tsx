@@ -84,8 +84,7 @@ const BestSellers = ({
 
   return (
     <section
-      // className={isProduct ? 'bg-{#FAF4EE] py-16' : 'bg-[#FAF4EE] py-16'}
-      className="bg-[#FAF4EE] py-16"
+      className={isProduct ? 'bg-{#FAF4EE] py-16' : 'bg-[#FAF4EE] py-16'}
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
@@ -103,8 +102,8 @@ const BestSellers = ({
               id="best-sellers-heading"
               className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
             >
-              <em>Best Sellers</em>
-              <span className="font-sans font-normal"> of the season</span>
+              <em> Sæsonens bedst</em>
+              <span className="font-sans font-normal">sælgende produkter</span>
             </h2>
           )}
 
@@ -208,8 +207,8 @@ const BestSellers = ({
         {!isProduct && (
           <div className="mt-8 flex justify-center">
             <Link
-              href="/product"
-              className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
+              href="/shop"
+              className="flex items-center gap-2 text-sm font-medium text-[#3b281f] cursor-pointer"
             >
               VIEW ALL PRODUCTS
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">

@@ -15,6 +15,7 @@ import MobileStickyCart from './mobile-stick-cart';
 const ProductInfoPanel = ({ product }: any) => {
   const addToCartRef = useRef<HTMLDivElement>(null);
   const [showStickyCart, setShowStickyCart] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const colors = product?.colors ?? [];
   const weights = product?.weights ?? [];
   const sizes = product?.sizes ?? [];
@@ -67,71 +68,67 @@ const ProductInfoPanel = ({ product }: any) => {
   return (
     <div className="flex flex-col gap-5">
       <Breadcrumbs items={product?.breadcrumbs ?? []} />
+      {!activeAccordion && (
+        <>
+          <div className="space-y-2">
+            <h1 className="font-serif text-[35px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
+              {product?.name}
+            </h1>
 
-      <div className="space-y-2">
-        <h1 className="font-serif text-[40px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
-          {product?.name}
-        </h1>
+            <RatingStars
+              rating={product?.rating ?? 0}
+              reviewCount={product?.reviewCount ?? 0}
+            />
+          </div>
+          <PriceDisplay
+            price={product?.price ?? 0}
+            compareAtPrice={product?.compareAtPrice ?? 0}
+            currency={product?.currency ?? 'kr'}
+          />
+          {features.length > 0 && <FeatureList features={features} />}
+          <Separator className="bg-[#E3DCCD]" />
+          {colors.length > 0 && (
+            <ColorSelector
+              colors={colors}
+              selectedColorId={selectedColorId}
+              onSelect={setSelectedColorId}
+            />
+          )}
 
-        <RatingStars
-          rating={product?.rating ?? 0}
-          reviewCount={product?.reviewCount ?? 0}
-        />
-      </div>
+          {weights.length > 0 && (
+            <OptionPillGroup
+              label="Weight"
+              options={weights}
+              selectedId={selectedWeightId}
+              onSelect={setSelectedWeightId}
+            />
+          )}
 
-      <PriceDisplay
-        price={product?.price ?? 0}
-        compareAtPrice={product?.compareAtPrice ?? 0}
-        currency={product?.currency ?? 'kr'}
+          {sizes.length > 0 && (
+            <OptionPillGroup
+              label="Size"
+              options={sizes}
+              selectedId={selectedSizeId}
+              onSelect={setSelectedSizeId}
+            />
+          )}
+
+          <div ref={addToCartRef}>
+            <AddToCartBar
+              quantity={quantity}
+              onQuantityChange={setQuantity}
+              price={product?.price ?? 0}
+              currency={product?.currency ?? 'kr'}
+              onAddToCart={handleAddToCart}
+              stockQuantity={stockQuantity}
+            />
+          </div>
+        </>
+      )}
+      <ProductInfoAccordion
+        activeAccordion={activeAccordion}
+        setActiveAccordion={setActiveAccordion}
       />
-
-      {features.length > 0 && <FeatureList features={features} />}
-
-      <Separator className="bg-[#E3DCCD]" />
-
-      {colors.length > 0 && (
-        <ColorSelector
-          colors={colors}
-          selectedColorId={selectedColorId}
-          onSelect={setSelectedColorId}
-        />
-      )}
-
-      {weights.length > 0 && (
-        <OptionPillGroup
-          label="Weight"
-          options={weights}
-          selectedId={selectedWeightId}
-          onSelect={setSelectedWeightId}
-          trailingSlot={
-            <button className="cursor-pointer text-xs font-medium text-[#3F3A36] underline-offset-2 hover:underline">
-              Weight guide
-            </button>
-          }
-        />
-      )}
-
-      {sizes.length > 0 && (
-        <OptionPillGroup
-          label="Size"
-          options={sizes}
-          selectedId={selectedSizeId}
-          onSelect={setSelectedSizeId}
-        />
-      )}
-
-      <div ref={addToCartRef}>
-        <AddToCartBar
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-          price={product?.price ?? 0}
-          currency={product?.currency ?? 'kr'}
-          onAddToCart={handleAddToCart}
-          stockQuantity={stockQuantity}
-        />
-      </div>
-
-      <ProductInfoAccordion />
       <MobileStickyCart
         visible={showStickyCart}
         product={{

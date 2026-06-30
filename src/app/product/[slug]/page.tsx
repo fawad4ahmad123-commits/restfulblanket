@@ -1,6 +1,11 @@
 import { Suspense } from 'react';
 import ProductContent from '@/src/components/products/product-main';
-import { getBestSellers, getProductBySlug } from '@/src/lib/products';
+import {
+  getBestSellers,
+  getCategories,
+  getProductBySlug,
+} from '@/src/lib/products';
+import { Loader } from '@/src/components/loader';
 
 export default async function ProductPage({
   params,
@@ -9,14 +14,25 @@ export default async function ProductPage({
 }) {
   const { slug } = await params;
 
-  const [likeProducts, product] = await Promise.all([
+  const [allProducts, product, categories] = await Promise.all([
     getBestSellers(),
     getProductBySlug(slug),
+    getCategories(),
   ]);
 
+  const relatedIds = product?.related_ids || [];
+
+  const relatedProducts = allProducts.filter((item: any) =>
+    relatedIds.some((id: number | string) => Number(id) === Number(item.id)),
+  );
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ProductContent likeProducts={likeProducts} productResponse={product} />
+    <Suspense fallback={<Loader />}>
+      <ProductContent
+        likeProducts={relatedProducts}
+        productResponse={product}
+        categories={categories}
+      />
     </Suspense>
   );
 }

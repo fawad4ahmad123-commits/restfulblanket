@@ -10,6 +10,7 @@ const Info = ({
   animating,
   setAnimating,
   totalReviews,
+  isHome,
 }: InfoProps) => {
   const navigate = (dir: 'prev' | 'next') => {
     if (animating) return;
@@ -37,7 +38,7 @@ const Info = ({
         </h2>
 
         <div className="flex items-center gap-3">
-          {!showModal && (
+          {!isHome && !showModal && (
             <Button
               type="button"
               variant="outline"

@@ -31,7 +31,7 @@ const SliderCard = ({
 
   return (
     <div
-      className="group overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"
+      className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"
       onClick={() => router.push(`/product/${slug}`)}
     >
       <div className="relative overflow-hidden">
@@ -101,7 +101,7 @@ const SliderCard = ({
         </div>
       </div>
 
-      <div className="px-5 pb-5 pt-5">
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div
           className="mb-3 flex items-center gap-1"
           aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
@@ -120,17 +120,17 @@ const SliderCard = ({
             </svg>
           ))}
 
-          <span className="ml-2 text-xs text-[ #392A22]/60">
+          <span className="ml-2 text-xs text-[#392A22]/60">
             {rating} · {reviewCount.toLocaleString()}
           </span>
         </div>
 
-        <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[ #35281E]">
+        <h3 className="mb-2 line-clamp-2 min-h-[3.25rem] text-lg font-medium leading-snug text-[#35281E]">
           {title}
         </h3>
 
         {(weight || dimensions) && (
-          <p className="mb-4 text-xs text-[ #35281E]/50">
+          <p className="mb-4 text-xs text-[#35281E]/50">
             {[weight, dimensions].filter(Boolean).join(' · ')}
           </p>
         )}
@@ -143,7 +143,7 @@ const SliderCard = ({
           )}
 
           {originalPrice && (
-            <span className="text-sm text-[ #35281E] line-through">
+            <span className="text-sm text-[#35281E] line-through">
               {formatPrice(originalPrice)}
             </span>
           )}
@@ -154,7 +154,7 @@ const SliderCard = ({
           aria-label={`Add ${title} to cart`}
           title={`Add ${title} to cart`}
           onClick={onAddToCart}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
           Add To Cart

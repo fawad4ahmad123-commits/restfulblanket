@@ -6,21 +6,25 @@ import RightReviews from './right-side-review';
 import Info from './info';
 import ReviewForm from './review-form';
 import { getProductReviews } from '@/src/lib/products';
+import { Loader } from '../../loader';
+import { REVIEWS } from '../constants';
+import { usePathname } from 'next/navigation';
 
 const Coments = ({ id }: { id: string }) => {
+  const pathname = usePathname();
   const [showModal, setShowModal] = useState(false);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<'left' | 'right'>('left');
   const [animating, setAnimating] = useState(false);
-
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const isHome = ['/'].includes(pathname);
 
   const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getProductReviews(Number(id));
-      setReviews(data || []);
+      const data = await getProductReviews(Number(id), isHome);
+      setReviews(data);
     } catch (error) {
       console.error('Failed to load reviews:', error);
     } finally {
@@ -33,7 +37,7 @@ const Coments = ({ id }: { id: string }) => {
   }, [loadReviews]);
 
   if (loading) {
-    return <div>Loading reviews...</div>;
+    return <Loader />;
   }
 
   return (
@@ -49,6 +53,7 @@ const Coments = ({ id }: { id: string }) => {
           animating={animating}
           setAnimating={setAnimating}
           totalReviews={reviews.length}
+          isHome={isHome}
         />
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -69,6 +74,7 @@ const Coments = ({ id }: { id: string }) => {
                 onClose={() => setShowModal(false)}
                 productId={Number(id)}
                 onReviewCreated={loadReviews}
+                isHome={isHome}
               />
             ) : (
               <RightReviews
