@@ -1,11 +1,14 @@
 'use client';
+
 import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Heart, ShoppingBag, Eye } from 'lucide-react';
 
 interface Product {
   image: string;
   title: string;
+  slug: string;
   price: string;
   originalPrice?: string;
   rating?: number;
@@ -21,9 +24,12 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [wished, setWished] = useState(false);
+  const router = useRouter();
+
   const {
     image,
     title,
+    slug,
     price,
     originalPrice,
     rating = 4.9,
@@ -32,8 +38,9 @@ export function ProductCard({ product }: ProductCardProps) {
     dimensions,
     isNew,
   } = product;
+
   const stars = Math.round(rating);
-  console.log('t5 card', { image });
+
   return (
     <div className="group overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
       <div className="relative overflow-hidden">
@@ -65,7 +72,7 @@ export function ProductCard({ product }: ProductCardProps) {
               : `Add ${title} to wishlist`
           }
           onClick={() => setWished((w) => !w)}
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
+          className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
           <Heart
             aria-hidden="true"
@@ -75,6 +82,22 @@ export function ProductCard({ product }: ProductCardProps) {
             }
           />
         </button>
+
+        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
+          <button
+            type="button"
+            aria-label={`Quick view ${title}`}
+            title={`Quick view ${title}`}
+            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/product/${slug}`);
+            }}
+          >
+            <Eye aria-hidden="true" size={14} />
+            Quick View
+          </button>
+        </div>
       </div>
 
       <div className="px-5 pb-5 pt-5">
@@ -86,7 +109,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <svg
               key={i}
               aria-hidden="true"
-              className={`h-4 w-4 ${i < stars ? 'text-[#A38575]' : 'text-gray-300'}`}
+              className={`h-4 w-4 ${
+                i < stars ? 'text-[#A38575]' : 'text-gray-300'
+              }`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -111,6 +136,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="mb-5 flex items-center gap-2">
           <span className="text-lg font-semibold text-[#3b281f]">{price}</span>
+
           {originalPrice && (
             <span className="text-sm text-[#35281E] line-through">
               {originalPrice}

@@ -8,23 +8,25 @@ interface Props {
 
 export default function CartFooter({ subtotal, onCheckout }: Props) {
   return (
-    <div className="border-t border-stone-200 px-6 py-4">
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col">
-          <span className="font-medium">Subtotal</span>
-          <p className="mt-1 text-sm text-[#6B6B6B]">
+    <div className="border-t border-stone-200 px-4 py-3.5 md:px-6 md:py-4">
+      <div className="flex items-start justify-between text-sm md:text-base">
+        <div className="flex flex-col min-w-0">
+          <span className="font-medium text-stone-900">Subtotal</span>
+          <p className="mt-0.5 text-[10px] md:text-xs text-[#6B6B6B] leading-tight">
             Shipping & taxes may be re-calculated at checkout
           </p>
         </div>
 
-        <span className="font-medium">kr{subtotal.toFixed(2)}</span>
+        <span className="font-semibold text-stone-900 shrink-0 ml-4">
+          kr{subtotal.toFixed(2)}
+        </span>
       </div>
       <Button
         onClick={onCheckout}
-        className="mt-4 h-[56px] w-full max-w-[448px] cursor-pointer rounded-full bg-[#35281E] hover:bg-[#35281E] hover:opacity-100"
+        className="mt-3.5 md:mt-4 h-[44px] md:h-[56px] w-full cursor-pointer rounded-full bg-[#35281E] hover:bg-[#35281E] hover:opacity-100 text-xs md:text-base font-semibold text-white"
       >
         Proceed to Checkout
-        <ArrowRight className="ml-2 h-4 w-4" />
+        <ArrowRight className="ml-2 h-3.5 w-3.5 md:h-4 md:w-4" />
       </Button>
     </div>
   );

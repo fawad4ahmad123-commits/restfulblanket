@@ -19,7 +19,7 @@ export default function CartOffcanvas({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full max-w-md p-0">
+      <SheetContent side="right" className="w-[85vw] md:w-full md:max-w-md p-0">
         {items.length === 0 ? (
           <EmptyCart
             onClose={handleClose}

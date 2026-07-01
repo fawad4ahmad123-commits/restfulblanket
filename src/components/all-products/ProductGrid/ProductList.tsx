@@ -21,8 +21,11 @@ export default function ProductList({ products }: Props) {
           product={{
             image: product.image || '',
             title: product.name,
+            slug: product.slug || String(product.id),
             price: `${product.currency}${product.price}`,
-            originalPrice: `${product.currency}${product.originalPrice}`,
+            originalPrice: product.originalPrice
+              ? `${product.currency}${product.originalPrice}`
+              : undefined,
             weight: product.weight,
             dimensions: product.dimensions,
             rating: product.rating,

@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -23,14 +24,15 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       role="search"
       aria-label="Site-wide search"
     >
+      {/* Hide on mobile */}
       <div
-        className="shrink-0 text-[18px] font-semibold text-[#392A22]"
+        className="hidden shrink-0 text-[18px] font-semibold text-[#392A22] lg:block"
         aria-hidden="true"
       >
         Give All You Need
       </div>
 
-      <div className="flex h-[63px] w-[663px] items-center gap-3 rounded-full border-[1.5px] border-[#E8E1DA] px-2">
+      <div className="flex h-[63px] w-full items-center gap-3 rounded-full border-[1.5px] border-[#E8E1DA] px-2 lg:w-[663px]">
         <Search
           className="h-5 w-5 text-[#8D837B]"
           aria-hidden="true"
@@ -50,7 +52,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
         <Button
           type="submit"
-          className="h-[47px] rounded-full px-10 bg-[#392A22]"
+          className="h-[47px] rounded-full bg-[#392A22] px-6 sm:px-10"
           aria-label="Submit search"
         >
           Search

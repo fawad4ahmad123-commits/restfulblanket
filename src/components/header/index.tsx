@@ -11,8 +11,8 @@ import Navigation from './navigation';
 import SearchProducts from './search';
 import MobileCart from './mobile-cart';
 import { TrustBar } from '../trustbar';
-import { cn } from '@/lib/utils';
 import CartOffcanvas from '../cart';
+import { cn } from '@/lib/utils';
 import { useCart } from '@/src/core/context/card-Provider';
 
 const SiteHeader = () => {
@@ -119,21 +119,31 @@ const SiteHeader = () => {
                 aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
                 title="Shopping cart"
                 className={cn(
-                  'h-8 rounded-full border px-4 text-xs hover:bg-[#4A382E]',
+                  'relative h-8 w-8 rounded-full border p-0 hover:bg-[#4A382E] flex items-center justify-center',
                   isHome
                     ? 'border-white/20 bg-[#392A22] text-white'
                     : 'border-[#392A22]/20 bg-[#392A22] text-[#FFF9F5]',
                 )}
               >
-                <span className="relative mr-2">
-                  <ShoppingBag className="h-3.5 w-3.5" />
-                </span>
-                Vogn{cartCount > 0 && ` - ${cartCount}`}
+                <div className="relative">
+                  <ShoppingBag className="h-4 w-4" />
+                  {cartCount > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#FFF9F5] text-[10px] font-semibold text-[#392A22]"
+                    >
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
               </Button>
             </div>
 
             <div className="flex items-center gap-1 lg:hidden">
-              <MobileCart cartCount={cartCount} />
+              <MobileCart
+                cartCount={cartCount}
+                onClick={() => setCartOpen(true)}
+              />
               <MobileViewMenuToggle wishlistCount={wishlistCount} />
             </div>
           </div>

@@ -1,13 +1,28 @@
 import { Button } from '@/components/ui/button';
 import { ShoppingBag } from 'lucide-react';
 
-const MobileCart = ({ cartCount }: { cartCount: number }) => {
+interface MobileCartProps {
+  cartCount: number;
+  onClick?: () => void;
+}
+
+const MobileCart = ({ cartCount, onClick }: MobileCartProps) => {
   return (
-    <Button className="h-8 rounded-full border border-white/20 bg-[#392A22] px-3 text-xs text-white hover:bg-[#4A382E]">
-      <span className="relative mr-1.5">
-        <ShoppingBag className="h-3.5 w-3.5" />
-      </span>
-      Vogn{cartCount > 0 && ` - ${cartCount}`}
+    <Button
+      onClick={onClick}
+      className="relative h-8 w-8 rounded-full border border-white/20 bg-[#392A22] p-0 text-white hover:bg-[#4A382E] flex items-center justify-center"
+    >
+      <div className="relative">
+        <ShoppingBag className="h-4 w-4" />
+        {cartCount > 0 && (
+          <span
+            aria-hidden="true"
+            className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#FFF9F5] text-[10px] font-semibold text-[#392A22]"
+          >
+            {cartCount}
+          </span>
+        )}
+      </div>
     </Button>
   );
 };
