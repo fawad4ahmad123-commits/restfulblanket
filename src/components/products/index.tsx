@@ -12,6 +12,7 @@ import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
+import OthersAlsoBought from './related-product-slider';
 
 const ProductInfoPanel = ({ product }: any) => {
   const cart = useContext(CartContext);
@@ -91,68 +92,64 @@ const ProductInfoPanel = ({ product }: any) => {
     <div className="flex flex-col gap-5">
       <Breadcrumbs items={product?.breadcrumbs ?? []} />
 
-      {!activeAccordion && (
-        <>
-          <div className="space-y-2">
-            <h1 className="font-serif text-[35px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
-              {product?.name}
-            </h1>
+      <div className="space-y-2">
+        <h1 className="font-serif text-[35px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
+          {product?.name}
+        </h1>
 
-            <RatingStars
-              rating={product?.rating ?? 0}
-              reviewCount={product?.reviewCount ?? 0}
-            />
-          </div>
+        <RatingStars
+          rating={product?.rating ?? 0}
+          reviewCount={product?.reviewCount ?? 0}
+        />
+      </div>
 
-          <PriceDisplay
-            price={product?.price ?? 0}
-            compareAtPrice={product?.compareAtPrice ?? 0}
-            currency={product?.currency ?? 'kr'}
-          />
+      <PriceDisplay
+        price={product?.price ?? 0}
+        compareAtPrice={product?.compareAtPrice ?? 0}
+        currency={product?.currency ?? 'kr'}
+      />
 
-          {features.length > 0 && <FeatureList features={features} />}
+      {features.length > 0 && <FeatureList features={features} />}
 
-          <Separator className="bg-[#E3DCCD]" />
+      <Separator className="bg-[#E3DCCD]" />
 
-          {colors.length > 0 && (
-            <ColorSelector
-              colors={colors}
-              selectedColorId={selectedColorId}
-              onSelect={setSelectedColorId}
-            />
-          )}
-
-          {weights.length > 0 && (
-            <OptionPillGroup
-              label="Weight"
-              options={weights}
-              selectedId={selectedWeightId}
-              onSelect={setSelectedWeightId}
-            />
-          )}
-
-          {sizes.length > 0 && (
-            <OptionPillGroup
-              label="Size"
-              options={sizes}
-              selectedId={selectedSizeId}
-              onSelect={setSelectedSizeId}
-            />
-          )}
-
-          <div ref={addToCartRef}>
-            <AddToCartBar
-              quantity={quantity}
-              onQuantityChange={setQuantity}
-              price={product?.price ?? 0}
-              currency={product?.currency ?? 'kr'}
-              onAddToCart={handleAddToCart}
-              stockQuantity={stockQuantity}
-            />
-          </div>
-        </>
+      {colors.length > 0 && (
+        <ColorSelector
+          colors={colors}
+          selectedColorId={selectedColorId}
+          onSelect={setSelectedColorId}
+        />
       )}
 
+      {weights.length > 0 && (
+        <OptionPillGroup
+          label="Weight"
+          options={weights}
+          selectedId={selectedWeightId}
+          onSelect={setSelectedWeightId}
+        />
+      )}
+
+      {sizes.length > 0 && (
+        <OptionPillGroup
+          label="Size"
+          options={sizes}
+          selectedId={selectedSizeId}
+          onSelect={setSelectedSizeId}
+        />
+      )}
+
+      <div ref={addToCartRef}>
+        <AddToCartBar
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+          price={product?.price ?? 0}
+          currency={product?.currency ?? 'kr'}
+          onAddToCart={handleAddToCart}
+          stockQuantity={stockQuantity}
+        />
+      </div>
+      {/* <OthersAlsoBought /> */}
       <ProductInfoAccordion
         activeAccordion={activeAccordion}
         setActiveAccordion={setActiveAccordion}

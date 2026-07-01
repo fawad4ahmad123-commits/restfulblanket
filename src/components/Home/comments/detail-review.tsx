@@ -35,11 +35,11 @@ const LeftReview = ({
       >
         <StarRating count={review.rating} />
 
-        <blockquote className="mt-5 line-clamp-4 font-serif text-[22px] italic leading-relaxed text-[#392A22]">
+        <blockquote className="mt-5 max-h-[180px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden font-serif text-[22px] italic leading-relaxed text-[#392A22]">
           "{review.review?.replace(/<[^>]*>/g, '')?.replace(/\n/g, '')}"
         </blockquote>
 
-        <div className="mt-auto flex items-center gap-3 pt-8">
+        <div className="mt-auto flex items-center gap-3 p-1">
           <div className="h-10 w-10 flex-shrink-0 rounded-full bg-[#392A22]/10 flex items-center justify-center text-[#392A22] font-semibold text-sm">
             {review.reviewer?.charAt(0)}
           </div>

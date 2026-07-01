@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export const VisaIcon = () => (
   <div className="flex h-8 w-16 items-center justify-center rounded-md bg-white shadow-sm">
     <svg
@@ -36,55 +38,7 @@ export const MastercardIcon = () => (
 
 export const QuickPayIcon = () => (
   <div className="flex h-8 w-16 shrink-0 items-center justify-center rounded-md bg-white shadow-sm">
-    <svg
-      viewBox="0 0 24 24"
-      className="h-5 w-5"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* hand */}
-      <path
-        d="M6 13.5V8a1.5 1.5 0 0 1 3 0v4"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9 12V6a1.5 1.5 0 0 1 3 0v6"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M12 12V6.5a1.5 1.5 0 0 1 3 0V12"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15 12V8a1.5 1.5 0 0 1 3 0v6c0 3.31-2.69 6-6 6h-1c-2 0-3-.6-4.2-2L4 15.5C3.4 14.8 3.5 14 4.2 13.5c.6-.4 1.4-.3 1.9.2L7 15"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* tap/contactless waves */}
-      <path
-        d="M18.5 6.5c1 1 1.5 2.2 1.5 3.5"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M20 4.5c1.6 1.6 2.5 3.6 2.5 5.5"
-        stroke="#2563EB"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
+    <Image src="/home/mobilepay.png" alt="quickpay" width={20} height={20} />
   </div>
 );
 

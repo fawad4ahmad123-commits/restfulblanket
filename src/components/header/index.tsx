@@ -1,7 +1,5 @@
 'use client';
-
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Heart, ShoppingBag, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +12,12 @@ import { TrustBar } from '../trustbar';
 import CartOffcanvas from '../cart';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/src/core/context/card-Provider';
+import { Courgette } from 'next/font/google';
+
+const courgette = Courgette({
+  subsets: ['latin'],
+  weight: '400',
+});
 
 const SiteHeader = () => {
   const pathname = usePathname();
@@ -59,14 +63,11 @@ const SiteHeader = () => {
               aria-label="RestfulBlanket Home"
               title="RestfulBlanket Home"
             >
-              <Image
-                src="/home/span.font-heading.png"
-                alt="RestfulBlanket"
-                width={153}
-                height={32}
-                priority
-                className={isHome ? '' : 'brightness-0 invert-0'}
-              />
+              <h3
+                className={`${courgette.className} ${isHome ? 'text-white' : 'bg-[#FFF9F5] text-[#35281E]'} pt-3 text-center text-2xl leading-8`}
+              >
+                RestfulBlanket
+              </h3>
             </Link>
 
             <Navigation isHome={isHome} />
