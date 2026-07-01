@@ -1,9 +1,11 @@
 import {
   FaInstagram,
   FaFacebookF,
-  FaPinterestP,
   FaLinkedinIn,
+  FaTiktok,
+  FaYoutube,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 
@@ -106,49 +108,6 @@ export const slides = [
   },
 ];
 
-export const categories = [
-  {
-    image: '/categories/1.png',
-    title: 'Tyngdedyner',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Tyngdetæppe',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Sengesæt',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Puder',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Tyngdedyner',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Tyngdetæppe',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Sengesæt',
-    subtitle: '12 Products • 5–12 KG',
-  },
-  {
-    image: '/categories/1.png',
-    title: 'Puder',
-    subtitle: '12 Products • 5–12 KG',
-  },
-];
-
 export const shopLinks = [
   'Adult Weighted Blankets',
   'Kids Weighted Blankets',
@@ -167,10 +126,36 @@ export const supportLinks = [
 ];
 
 export const socialLinks = [
-  { icon: FaInstagram, href: '#', name: 'Instagram' },
-  { icon: FaFacebookF, href: '#', name: 'Facebook' },
-  { icon: FaPinterestP, href: '#', name: 'Pinterest' },
-  { icon: FaLinkedinIn, href: '#', name: 'LinkedIn' },
+  {
+    icon: FaInstagram,
+    href: 'https://www.instagram.com/restfulblanket/',
+    name: 'Instagram',
+  },
+  {
+    icon: FaFacebookF,
+    href: 'https://www.facebook.com/restfulblanket/',
+    name: 'Facebook',
+  },
+  {
+    icon: FaTiktok,
+    href: 'https://www.tiktok.com/@restfulblanket',
+    name: 'TikTok',
+  },
+  {
+    icon: FaXTwitter,
+    href: 'https://x.com/RestfulBlanket',
+    name: 'X (Twitter)',
+  },
+  {
+    icon: FaYoutube,
+    href: 'https://www.youtube.com/@RestfulBlanketDK',
+    name: 'YouTube',
+  },
+  {
+    icon: FaLinkedinIn,
+    href: 'https://www.linkedin.com/company/106909912/',
+    name: 'LinkedIn',
+  },
 ];
 
 export const HERO_SLIDES = [

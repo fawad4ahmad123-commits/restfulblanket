@@ -4,9 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import SliderCard from '../../generic/card-slider';
-import { CATEGORIES } from '../constants';
 import SliderControls from '../../generic/slider-control';
 import { PLACEHOLDER_IMAGE } from '../../constant';
+
+const CATEGORIES = ['All', 'Adult', 'Kids', 'Duvets', 'Accessories'];
+
+const CATEGORY_MAPPING: Record<string, string> = {
+  tyngdetaeppe: 'Adult',
+  gaveideer: 'Accessories',
+};
 
 const BestSellers = ({
   isProduct,
@@ -48,8 +54,11 @@ const BestSellers = ({
   const filteredProducts =
     activeCategory === 'All'
       ? productData
-      : productData.filter((product) =>
-          product.categories?.some((cat: any) => cat.name === activeCategory),
+      : productData.filter((product: any) =>
+          product.categories?.some(
+            (category: any) =>
+              CATEGORY_MAPPING[category.slug] === activeCategory,
+          ),
         );
 
   const next = () => {
@@ -82,10 +91,9 @@ const BestSellers = ({
     );
   };
 
-  console.log('t6', { filteredProducts });
   return (
     <section
-      className={isProduct ? 'bg-{#FAF4EE] py-16' : 'bg-[#FAF4EE] py-16'}
+      className="bg-[#FAF4EE] py-16"
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
@@ -103,7 +111,7 @@ const BestSellers = ({
               id="best-sellers-heading"
               className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
             >
-              <em> Sæsonens bedst</em>
+              <em>Sæsonens bedst </em>
               <span className="font-sans font-normal">sælgende produkter</span>
             </h2>
           )}
@@ -117,28 +125,29 @@ const BestSellers = ({
               aria-label="Product categories"
             >
               <div className="inline-flex min-w-max gap-2 rounded-full border border-[#3b281f]/20 p-1">
-                {CATEGORIES.map((cat) => (
+                {CATEGORIES.map((category) => (
                   <button
-                    key={cat}
+                    key={category}
                     type="button"
-                    aria-pressed={activeCategory === cat}
+                    aria-pressed={activeCategory === category}
                     onClick={() => {
-                      setActiveCategory(cat);
+                      setActiveCategory(category);
                       setStart(0);
                     }}
                     className={`whitespace-nowrap rounded-full px-4 py-2 text-xs transition ${
-                      activeCategory === cat
+                      activeCategory === category
                         ? 'bg-[#3b281f] text-white'
                         : 'text-[#3b281f]'
                     }`}
                   >
-                    {cat}
+                    {category}
                   </button>
                 ))}
               </div>
             </div>
           )}
         </div>
+
         <div className="lg:hidden">
           <div
             ref={sliderRef}
@@ -146,8 +155,8 @@ const BestSellers = ({
           >
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
-
               const hoverImage = item.images?.[1]?.src || mainImage;
+
               const colorAttribute = item.attributes?.find(
                 (attr: any) =>
                   attr.slug === 'pa_color' ||
@@ -164,6 +173,7 @@ const BestSellers = ({
 
               const color = colorAttribute?.options?.[0] || '';
               const size = sizeAttribute?.options?.[0] || '';
+
               return (
                 <div
                   key={item.id}
@@ -189,6 +199,7 @@ const BestSellers = ({
             })}
           </div>
         </div>
+
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -198,8 +209,8 @@ const BestSellers = ({
           >
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
-
               const hoverImage = item.images?.[1]?.src || mainImage;
+
               const colorAttribute = item.attributes?.find(
                 (attr: any) =>
                   attr.slug === 'pa_color' ||
@@ -244,7 +255,7 @@ const BestSellers = ({
           <div className="mt-8 flex justify-center">
             <Link
               href="/shop"
-              className="flex items-center gap-2 text-sm font-medium text-[#3b281f] cursor-pointer"
+              className="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#3b281f]"
             >
               VIEW ALL PRODUCTS
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">

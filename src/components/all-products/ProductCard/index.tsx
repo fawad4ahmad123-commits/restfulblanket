@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Heart, ShoppingBag, Eye } from 'lucide-react';
-
+import { useCart } from '@/src/core/context/card-Provider';
 interface Product {
   image: string;
   title: string;
@@ -25,7 +25,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [wished, setWished] = useState(false);
   const router = useRouter();
-
+  const { addToCart } = useCart();
   const {
     image,
     title,
@@ -148,6 +148,17 @@ export function ProductCard({ product }: ProductCardProps) {
           type="button"
           aria-label={`Add ${title} to cart`}
           title={`Add ${title} to cart`}
+          onClick={() => {
+            addToCart({
+              id: slug,
+              name: title,
+              price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
+              image,
+              variant: weight || '',
+              weight: weight || '',
+              color: '',
+            });
+          }}
           className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
