@@ -140,6 +140,18 @@
   }
 }
 
+@keyframes searchbar-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 .animate-progress {
   animation: progress 5s linear forwards;
 }

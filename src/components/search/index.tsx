@@ -1,28 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Search, X, User, Baby, Layers } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { WooProduct } from '@/src/lib/types';
-
-const TRENDING_SEARCHES = [
-  'Weighted blanket',
-  'Kids duvet',
-  'Organic cotton',
-  '7 Kg blanket',
-  'Sleep accessories',
-];
-
-const CATEGORIES = [
-  { label: 'For Adults', count: 32, icon: User },
-  { label: 'For Kids', count: 16, icon: Baby },
-  { label: 'For Duvets', count: 24, icon: Layers },
-];
-
-const NO_RESULT_SUGGESTIONS = [
-  'Weighted blanket',
-  'Organic cotton',
-  'Kids blanket',
-  'Sleep accessories',
-];
+import SearchLoadingBar from './search-loading-bar';
+import {
+  CATEGORIES,
+  NO_RESULT_SUGGESTIONS,
+  TRENDING_SEARCHES,
+} from './constants';
 
 function useProductSearch(query: string) {
   const [products, setProducts] = useState<WooProduct[]>([]);
@@ -32,6 +17,7 @@ function useProductSearch(query: string) {
     const trimmed = query.trim();
     if (!trimmed) {
       setProducts([]);
+      setLoading(false);
       return;
     }
 
@@ -48,7 +34,6 @@ function useProductSearch(query: string) {
         const data = await res.json();
         setProducts(data.products ?? []);
       } catch {
-        // aborted or failed — leave previous results in place
       } finally {
         setLoading(false);
       }
@@ -123,16 +108,10 @@ function SearchStart({
   );
 }
 
-function SearchResults({
-  products,
-  loading,
-}: {
-  products: WooProduct[];
-  loading: boolean;
-}) {
+function SearchResults({ products }: { products: WooProduct[] }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-[#392A22]/10 bg-white">
-      <SectionLabel>{loading ? 'Searching…' : 'Results'}</SectionLabel>
+      <SectionLabel>Results</SectionLabel>
       <div className="border-t border-[#392A22]/10">
         {products.map((product) => (
           <Link
@@ -205,15 +184,19 @@ export default function SearchPage({ onClose }: { onClose: () => void }) {
       <div className="mx-auto max-w-2xl px-4 py-6">
         <div className="flex items-center gap-3">
           <div className="flex flex-1 items-center gap-3 rounded-full border border-[#392A22]/10 bg-white px-4 py-3">
-            <Search className="size-4 text-[#392A22]/40" />
-            <input
-              autoFocus
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search your item..."
-              className="flex-1 bg-transparent text-sm text-[#392A22] placeholder:text-[#392A22]/40 focus:outline-none"
-            />
-            {hasQuery && (
+            <Search className="size-4 shrink-0 text-[#392A22]/40" />
+            {loading ? (
+              <SearchLoadingBar />
+            ) : (
+              <input
+                autoFocus
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search your item..."
+                className="flex-1 bg-transparent text-sm text-[#392A22] placeholder:text-[#392A22]/40 focus:outline-none"
+              />
+            )}
+            {hasQuery && !loading && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
@@ -230,8 +213,8 @@ export default function SearchPage({ onClose }: { onClose: () => void }) {
 
         <div className="mt-4">
           {!hasQuery && <SearchStart onSelectTerm={setQuery} />}
-          {hasQuery && (hasResults || loading) && (
-            <SearchResults products={products} loading={loading} />
+          {hasQuery && hasResults && !loading && (
+            <SearchResults products={products} />
           )}
           {hasQuery && !hasResults && !loading && (
             <SearchEmpty query={query} onSelectTerm={setQuery} />

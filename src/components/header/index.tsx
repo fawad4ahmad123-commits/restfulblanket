@@ -79,6 +79,7 @@ const SiteHeader = () => {
                 variant="ghost"
                 aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
                 title="Wishlist"
+                onClick={() => router.push('/wishlist')}
                 className={cn(
                   'relative',
                   !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
@@ -90,7 +91,7 @@ const SiteHeader = () => {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      'absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold',
+                      'absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold cursor-pointer',
                       isHome
                         ? 'bg-[#F5F0EB] text-[#392A22]'
                         : 'bg-[#392A22] text-[#FFF9F5]',
@@ -140,6 +141,19 @@ const SiteHeader = () => {
             </div>
 
             <div className="flex items-center gap-1 lg:hidden">
+              <SearchProducts isHome={isHome} />
+              <Button
+                size="icon"
+                variant="ghost"
+                aria-label="My account"
+                title="My account"
+                onClick={() => router.push('/signin')}
+                className={cn(
+                  !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
+                )}
+              >
+                <User aria-hidden="true" className="size-4" />
+              </Button>
               <MobileCart
                 cartCount={cartCount}
                 onClick={() => setCartOpen(true)}

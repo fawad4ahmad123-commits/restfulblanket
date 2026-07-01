@@ -5,6 +5,7 @@ import HeroSlider from './slider';
 import DetailReviewShipping from './detail-review-shipping';
 import ShopButtons from './shop-buttons';
 import { HERO_SLIDES } from '../constant';
+import PaymentTrustBadge from './trustpilot-badge';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -46,7 +47,7 @@ const HeroSection = () => {
           </div>
           <div className="flex-1" />
         </div>
-
+        <PaymentTrustBadge />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <HeroSlider
             currentSlide={currentSlide}

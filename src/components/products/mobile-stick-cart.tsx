@@ -53,8 +53,9 @@ const MobileStickyCart = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-white">
+        <div className="flex items-center gap-3">
+          {/* Product image — always visible */}
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
             {product.image && (
               <Image
                 src={product.image}
@@ -65,20 +66,24 @@ const MobileStickyCart = ({
             )}
           </div>
 
-          <div className="min-w-0 flex-1 md:block">
+          {/* Name + price — hidden on small, shown on md+ */}
+          <div className="hidden min-w-0 flex-1 md:block">
             <h3 className="truncate font-serif text-2xl text-[#35281E]">
               {product.name}
             </h3>
-
             <p className="text-xl text-[#6F6258]">
               {product.currency}
               {product.price}
             </p>
           </div>
 
+          {/* Spacer on small screens to push button to the right */}
+          <div className="flex-1 md:hidden" />
+
+          {/* Button — fixed width, never stretches */}
           <Button
             onClick={onAddToCart}
-            className="ml-12 h-11 rounded-full bg-[#35281E] px-4 text-sm text-white hover:bg-[#35281E]"
+            className="h-10 shrink-0 rounded-full bg-[#35281E] px-5 text-sm text-white hover:bg-[#35281E]/90 md:h-11 md:px-6"
           >
             Add to Cart
           </Button>

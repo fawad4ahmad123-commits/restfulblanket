@@ -12,128 +12,103 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   return (
-    <nav aria-label="Mobile navigation" className="flex flex-col gap-3">
-      {navigation.map((item: any) => {
-        const isActive = pathname === item.href;
-        const hasGroups = item.groups?.length > 0;
-        const hasChildren = item.children?.length > 0;
-        const hasDropdown = hasGroups || hasChildren;
-        const isOpen = openItem === item.title;
+    <nav
+      aria-label="Mobile navigation"
+      className="flex flex-col flex-1 h-full min-h-0"
+    >
+      <div className="flex-1">
+        {navigation.map((item: any) => {
+          const isActive = pathname === item.href;
+          const hasGroups = item.groups?.length > 0;
+          const hasChildren = item.children?.length > 0;
+          const hasDropdown = hasGroups || hasChildren;
+          const isOpen = openItem === item.title;
 
-        if (!hasDropdown) {
-          return (
-            <Link
-              key={item.title}
-              href={item.href}
-              aria-label={`Go to ${item.title}`}
-              title={item.title}
-              className={`border-b pb-3 text-base font-medium transition-colors hover:text-foreground/70 ${
-                isActive ? 'text-foreground' : 'text-foreground/80'
-              }`}
-            >
-              {item.title}
-            </Link>
-          );
-        }
-
-        return (
-          <div key={item.title} className="border-b pb-3">
-            <button
-              type="button"
-              aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.title} menu`}
-              aria-expanded={isOpen}
-              aria-controls={`submenu-${item.title}`}
-              onClick={() => setOpenItem(isOpen ? null : item.title)}
-              className={`flex w-full items-center justify-between text-base font-medium transition-colors hover:text-foreground/70 ${
-                isActive ? 'text-foreground' : 'text-foreground/80'
-              }`}
-            >
-              {item.title}
-              <ChevronDown
-                aria-hidden="true"
-                className={`size-4 transition-transform ${
-                  isOpen ? 'rotate-180' : ''
-                }`}
-              />
-            </button>
-
-            {isOpen && (
-              <div
-                id={`submenu-${item.title}`}
-                className="mt-3 flex flex-col gap-4 pl-3"
+          if (!hasDropdown) {
+            return (
+              <Link
+                key={item.title}
+                href={item.href}
+                aria-label={`Go to ${item.title}`}
+                title={item.title}
+                className={`flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70`}
               >
-                {hasGroups
-                  ? item.groups.map((group: any) => (
-                      <div key={group.heading} className="flex flex-col gap-2">
-                        <span className="text-xs font-medium uppercase tracking-wide text-foreground/40">
-                          {group.heading}
-                        </span>
-                        {group.links.map((link: any) => (
-                          <Link
-                            key={link.title}
-                            href={link.href}
-                            aria-label={`Go to ${link.title}`}
-                            title={link.title}
-                            className="text-sm text-foreground/80 hover:text-foreground/70"
-                          >
-                            {link.title}
-                          </Link>
-                        ))}
-                      </div>
-                    ))
-                  : item.children.map((child: any) => (
-                      <Link
-                        key={child.title}
-                        href={child.href}
-                        aria-label={`Go to ${child.title}`}
-                        title={child.title}
-                        className="text-sm text-foreground/80 hover:text-foreground/70"
-                      >
-                        {child.title}
-                      </Link>
-                    ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
+                {item.title}
+              </Link>
+            );
+          }
 
-      <div className="flex items-center gap-4 pt-2">
-        <Button
-          size="icon"
-          variant="ghost"
-          aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
-          title="Wishlist"
-          className="relative"
-        >
-          <Heart aria-hidden="true" className="size-5" />
-          {wishlistCount > 0 && (
-            <span
-              aria-hidden="true"
-              className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#F5F0EB] text-[10px] font-semibold text-[#392A22]"
-            >
-              {wishlistCount}
-            </span>
-          )}
-        </Button>
+          return (
+            <div key={item.title} className="border-b border-[#E9DDD4]/60 py-4">
+              <button
+                type="button"
+                aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.title} menu`}
+                aria-expanded={isOpen}
+                aria-controls={`submenu-${item.title}`}
+                onClick={() => setOpenItem(isOpen ? null : item.title)}
+                className="flex w-full items-center justify-between text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
+              >
+                {item.title}
+                <ChevronDown
+                  aria-hidden="true"
+                  className={`size-4 text-[#35281E] transition-transform duration-300 ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
 
-        <Button
-          size="icon"
-          variant="ghost"
-          aria-label="Search products"
-          title="Search products"
-        >
-          <Search aria-hidden="true" className="size-5" />
-        </Button>
+              {isOpen && (
+                <div
+                  id={`submenu-${item.title}`}
+                  className="mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] pl-4 ml-1 py-1"
+                >
+                  {hasGroups
+                    ? item.groups.map((group: any) => (
+                        <div
+                          key={group.heading}
+                          className="flex flex-col gap-2.5"
+                        >
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40">
+                            {group.heading}
+                          </span>
+                          {group.links.map((link: any) => (
+                            <Link
+                              key={link.title}
+                              href={link.href}
+                              aria-label={`Go to ${link.title}`}
+                              title={link.title}
+                              className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
+                            >
+                              {link.title}
+                            </Link>
+                          ))}
+                        </div>
+                      ))
+                    : item.children.map((child: any) => (
+                        <Link
+                          key={child.title}
+                          href={child.href}
+                          aria-label={`Go to ${child.title}`}
+                          title={child.title}
+                          className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
+                        >
+                          {child.title}
+                        </Link>
+                      ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-        <Button
-          size="icon"
-          variant="ghost"
-          aria-label="My account"
-          title="My account"
-        >
-          <User aria-hidden="true" className="size-5" />
-        </Button>
+      <div className="mt-auto pt-6 shrink-0">
+        <Link href="/wishlist" className="w-full block">
+          <Button className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer">
+            <Heart aria-hidden="true" className="size-4" />
+            Wishlist
+          </Button>
+        </Link>
       </div>
     </nav>
   );
