@@ -18,12 +18,12 @@ const CheckoutPage: React.FC = () => {
     email: '',
     city: '',
     state: '',
+    phone: '',
     zip: '',
     saveForFuture: false,
   });
 
   const [shippingMethod, setShippingMethod] = useState('free');
-
   const [paymentData, setPaymentData] = useState<PaymentData>({
     paymentMethod: 'credit',
     cardHolder: '',
@@ -77,11 +77,10 @@ const CheckoutPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#fff9f5]">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="flex items-center gap-2 mb-8">
-          <ShoppingBag className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Checkout</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-[#35281E] text-center">Checkout</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

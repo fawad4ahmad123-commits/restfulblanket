@@ -1,4 +1,3 @@
-// types/checkout.ts
 export interface OrderItem {
   id: string;
   name: string;
@@ -11,6 +10,7 @@ export interface ShippingAddress {
   name: string;
   address: string;
   email: string;
+  phone: string;
   city: string;
   state: string;
   zip: string;

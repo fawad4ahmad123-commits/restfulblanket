@@ -29,16 +29,16 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
   };
 
   return (
-    <Card className="border shadow-sm">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">
+        <CardTitle className="text-lg font-semibold text-[#35281E">
           Shipping Address
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name" className='text-[#736760]'>Name</Label>
             <Input
               id="name"
               placeholder="First & Last Name"
@@ -47,7 +47,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="address" className='text-[#736760]'>Address</Label>
             <Input
               id="address"
               placeholder="Your Complete Address"
@@ -55,19 +55,38 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               onChange={(e) => handleChange('address', e.target.value)}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="contact@gmail.com"
-              value={address.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="city">City</Label>
+              <Label htmlFor="email" className="text-[#736760]">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="contact@gmail.com"
+                value={address.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-[#736760]">
+                Phone
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+1 234 567 890"
+                value={address.phone}
+                onChange={(e) => handleChange('phone', e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="space-y-2">
+              <Label htmlFor="city" className="text-[#736760]">
+                City
+              </Label>
               <Input
                 id="city"
                 placeholder="Ottawa"
@@ -75,33 +94,30 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 onChange={(e) => handleChange('city', e.target.value)}
               />
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="state">State</Label>
-              <Select
+              <Label htmlFor="state" className="text-[#736760]">
+                State
+              </Label>
+              <Input
+                id="state"
+                placeholder="Ontario"
                 value={address.state}
-                onValueChange={(value: any) => handleChange('state', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select State" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ON">Ontario</SelectItem>
-                  <SelectItem value="QC">Quebec</SelectItem>
-                  <SelectItem value="BC">British Columbia</SelectItem>
-                  <SelectItem value="AB">Alberta</SelectItem>
-                  <SelectItem value="MB">Manitoba</SelectItem>
-                </SelectContent>
-              </Select>
+                onChange={(e) => handleChange('state', e.target.value)}
+              />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="zip">Zip</Label>
-            <Input
-              id="zip"
-              placeholder="Zip Code"
-              value={address.zip}
-              onChange={(e) => handleChange('zip', e.target.value)}
-            />
+
+            <div className="space-y-2">
+              <Label htmlFor="zip" className="text-[#736760]">
+                Zip
+              </Label>
+              <Input
+                id="zip"
+                placeholder="Zip Code"
+                value={address.zip}
+                onChange={(e) => handleChange('zip', e.target.value)}
+              />
+            </div>
           </div>
           <div className="flex items-center space-x-2 pt-2">
             <Checkbox
