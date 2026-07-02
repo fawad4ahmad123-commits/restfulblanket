@@ -29,11 +29,11 @@ const ExpertsSection = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center justify-center gap-4 px-5 sm:gap-5 md:flex-row md:gap-6">
+      <div className="mt-8 flex flex-col items-center justify-center gap-4 px-3 sm:gap-5 md:flex-row md:gap-6">
         <p
           role="note"
           aria-label="Not sure which blanket suits your needs"
-          className="w-full max-w-[520px] rounded-full bg-[#e5d8cb] px-4 py-3 text-center text-xs leading-relaxed text-[#3b281f] sm:px-6 sm:py-4 sm:text-sm"
+          className="w-full max-w-[420px] rounded-full bg-[#e5d8cb] px-4 py-2 text-center text-xs leading-relaxed text-[#3b281f] sm:px-6 sm:py-4 sm:text-sm"
         >
           Er du i tvivl om, hvilken dyne der passer til dine behov?
         </p>
