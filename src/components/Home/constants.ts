@@ -90,35 +90,31 @@ export const REVIEWS = [
 
 export const EXPERTS: any = [
   {
-    image: '/experts/1.png',
-    role: 'SLEEP THERAPIST',
-    name: 'Dr. Sarah Mitchell',
-    position: 'Lead Consultant',
-    tags: ['Weighted Therapy', 'Anxiety Relief', 'Pediatrics'],
+    image: '/experts/expert_1.jpg',
+    role: 'SPECIALIST IN GENERAL MEDICINE',
+    name: 'Liselotte Rønne',
+    position: 'Medical Advisor & Expert Reviewer',
+    tags: [
+      'Insomnia',
+      'Trauma-Informed Regulation',
+      'Mindfulness-Based Approaches',
+    ],
   },
   {
-    image: '/experts/1.png',
-    role: 'ERGOTHERAPIST',
-    name: 'Lars Eriksen',
-    position: 'Senior Consultant',
-    tags: ['Sensory Integration', 'Chronic Stress', 'Adults'],
+    image: '/experts/nina-schioetz-psykoterapeut-tyngdedyne-terapi.jpg',
+    role: 'REGISTERED PSYCHOTHERAPIST',
+    name: 'Nina Schiøtz',
+    position: 'Expert Panel Member',
+    tags: ['Stress & Anxiety', 'Trauma Therapy', 'Nervous System Regulation'],
   },
   {
-    image: '/experts/1.png',
-    role: 'SLEEP RESEARCHER',
-    name: 'Dr. Anna Lindgren',
-    position: 'Research Advisor',
-    tags: ['Neuroscience', 'Deep Sleep', 'Research'],
-  },
-  {
-    image: '/experts/1.png',
-    role: 'SLEEP THERAPIST',
-    name: 'Dr. Sarah Mitchell',
-    position: 'Lead Consultant',
-    tags: ['Weighted Therapy', 'Anxiety Relief', 'Pediatrics'],
+    image: '/experts/Tina-Jenny-Kjeldsen3.webp',
+    role: 'DEMENTIA CONSULTANT & VISO SPECIALIST',
+    name: 'Tina Jenny Kjeldsen',
+    position: 'Expert Panel Member',
+    tags: ['Dementia Care', 'Sensory Regulation', 'Family Support'],
   },
 ];
-
 export const BLOGS = [
   {
     image: '/blog/1.png',
@@ -168,28 +164,28 @@ export const BLOGS = [
 
 export const FAQS = [
   {
-    question: 'How do I choose the right weight?',
+    question: 'Hvordan vælger jeg den rigtige vægt?',
     answer:
-      "We recommend selecting a blanket that is approximately 10–12% of your body weight. Use our weight guide above — if you're between sizes, we suggest going with the lighter option for your first blanket. You can always exchange within the 30-night trial.",
+      'Vi anbefaler at vælge et tæppe, der vejer cirka 10–12% af din kropsvægt. Brug vores vægtguide ovenfor — hvis du ligger mellem to størrelser, anbefaler vi at vælge den lettere variant til dit første tæppe. Du kan altid bytte inden for vores 30-nætters prøveperiode.',
   },
   {
-    question: 'Is the Nord Classic suitable for hot sleepers?',
+    question: 'Er Nord Classic egnet til varme sovende?',
     answer:
-      'Yes! The Nord Classic uses breathable natural materials that regulate temperature throughout the night, making it a great option for hot sleepers. Many customers report sleeping cooler with the weighted blanket than with a standard duvet.',
+      'Ja! Nord Classic er lavet af åndbare, naturlige materialer, der regulerer temperaturen hele natten, hvilket gør det til et godt valg for varme sovende. Mange kunder oplever faktisk, at de sover køligere med et vægtet tæppe end med en almindelig dyne.',
   },
   {
-    question: 'Can I use the weighted blanket with a duvet cover?',
+    question: 'Kan jeg bruge det vægtede tæppe med et dynebetræk?',
     answer:
-      'Absolutely. Our blankets are designed to fit standard duvet covers. We also offer our own range of covers made from the same breathable materials, sized specifically for each blanket weight.',
+      'Absolut. Vores tæpper er designet til at passe til standard dynebetræk. Vi tilbyder også vores egen kollektion af betræk lavet af de samme åndbare materialer, tilpasset hver enkelt tæppevægt.',
   },
   {
-    question: 'How do I clean the blanket?',
+    question: 'Hvordan rengør jeg tæppet?',
     answer:
-      'All Nord Classic blankets are machine washable on a gentle cycle up to 30°C. We recommend using a large-capacity machine (at least 8 kg) for even cleaning. Tumble dry on low or lay flat to air dry.',
+      'Alle Nord Classic tæpper kan maskinvaskes på et skånsomt program op til 30°C. Vi anbefaler at bruge en vaskemaskine med stor kapacitet (mindst 8 kg) for en jævn rengøring. Tørretumbl på lav varme eller lad det lufttørre fladt.',
   },
   {
-    question: 'What is your return policy?',
+    question: 'Hvad er jeres returpolitik?',
     answer:
-      "We offer a 30-night trial on all blankets. If you're not completely satisfied, contact our team and we'll arrange a free collection and full refund — no questions asked.",
+      'Vi tilbyder en 30-nætters prøveperiode på alle tæpper. Hvis du ikke er helt tilfreds, kan du kontakte vores team, så arrangerer vi gratis afhentning og fuld refundering — uden spørgsmål.',
   },
 ];

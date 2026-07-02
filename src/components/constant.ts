@@ -11,31 +11,23 @@ export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 
 export const navigation = [
   {
-    title: 'All Products',
+    title: 'Alle Produkter',
     href: '/shop',
   },
   {
-    title: 'Tyngdedyner',
-    href: '/weighted-blankets',
+    title: 'Tyngdetæpper',
+    href: '/categories',
     groups: [
       {
-        heading: 'VORES TYNGDEDYNER',
+        heading: 'VORES TYNGDETÆPPER',
         links: [
-          { title: 'Tyngdetæpper', href: '/weighted-blankets/blankets' },
-          { title: 'Tilbehør', href: '/weighted-blankets/accessories' },
-        ],
-      },
-      {
-        heading: 'NYTTIG INFORMATION',
-        links: [
-          { title: 'Vælg den rigtige', href: '/weighted-blankets/guide' },
           {
-            title: 'Materialer og dokumentation',
-            href: '/weighted-blankets/materials',
+            title: 'Voksne',
+            href: '/categories',
           },
           {
-            title: 'For professionelle',
-            href: '/weighted-blankets/professionals',
+            title: 'Børn',
+            href: '/categories',
           },
         ],
       },
@@ -44,36 +36,55 @@ export const navigation = [
       {
         title: 'Pearl Classic',
         price: '€79',
-        image: '/products/pearl-classic.jpg',
-        href: '/products/pearl-classic',
+        image: '/categories/pearl-classic.jpg',
+        href: '/categories',
       },
       {
         title: 'Pearl Cotton Eco',
         price: '€89',
-        image: '/products/pearl-cotton-eco.jpg',
-        href: '/products/pearl-cotton-eco',
+        image: '/categories/pearl-cotton-eco.jpg',
+        href: '/categories',
       },
       {
         title: 'Pearl Lyocell',
         price: '€151.20',
-        image: '/products/pearl-lyocell.jpg',
-        href: '/products/pearl-lyocell',
+        image: '/categories/pearl-lyocell.jpg',
+        href: '/categories',
       },
       {
         title: 'ProCare Pearl',
         price: '€99.50',
-        image: '/products/procare-pearl.jpg',
-        href: '/products/procare-pearl',
+        image: '/categories/procare-pearl.jpg',
+        href: '/categories',
       },
     ],
   },
   {
-    title: 'Tilbehør',
-    href: '/accessories',
+    title: 'Tyngdetæppe',
+    href: '/categories',
   },
   {
-    title: 'Søvn & Ro',
-    href: '/sleep',
+    title: 'Tilbehør',
+    href: '/categories',
+    groups: [
+      {
+        heading: 'VORES TILBEHØR',
+        links: [
+          {
+            title: 'Hovedpuder',
+            href: '/categories',
+          },
+          {
+            title: 'Sengesæt',
+            href: '/categories',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Eksperter',
+    href: '/expert',
   },
   {
     title: 'Om Os',
@@ -109,22 +120,38 @@ export const slides = [
 ];
 
 export const shopLinks = [
-  'Adult Weighted Blankets',
-  'Kids Weighted Blankets',
-  'Premium Duvets',
-  'Sleep Accessories',
-  'Gift Cards',
+  {
+    title: 'Alle Produkter',
+    href: '/shop',
+  },
+  {
+    title: 'Voksne Tyngdetæpper',
+    href: '/categories',
+  },
+  {
+    title: 'Eksperter',
+    href: '/expert',
+  },
+  {
+    title: 'Om Os',
+    href: '/about',
+  },
+  {
+    title: 'Blog',
+    href: '/blog',
+  },
 ];
 
 export const supportLinks = [
-  'About Us',
-  'Help Center',
-  'Sleep Trial',
-  'Shipping & Returns',
-  'Care Guide',
-  'Contact',
+  {
+    title: 'Om Os',
+    href: '/about',
+  },
+  {
+    title: 'Kontakt',
+    href: '/contact',
+  },
 ];
-
 export const socialLinks = [
   {
     icon: FaInstagram,
@@ -160,31 +187,22 @@ export const socialLinks = [
 
 export const HERO_SLIDES = [
   {
-    image: '/home/hero-img.jpg',
-    title: 'Sleep Better.',
-    subtitle: 'Live Better.',
+    image: '/home/hero-img2.jpg',
+    title: 'Tyngdedyner',
     description:
-      'Hand-crafted weighted blankets and duvets, shaped by Nordic calm. Designed in Stockholm to ease anxious nights and gently hold you into deeper rest.',
+      'RestfulBlanket designer og producere tyngdedyner i naturlig OEKO-TEX bomuld i Odsherred, Danmark.',
   },
   {
     image: '/home/hero-img.jpg',
-    title: 'Feel Calm.',
-    subtitle: 'Every Night.',
+    title: 'Naturlig Tyngdetæpper',
     description:
-      'Premium weighted bedding created to reduce stress and help you fall asleep faster.',
-  },
-  {
-    image: '/home/hero-img.jpg',
-    title: 'Wake Refreshed.',
-    subtitle: 'Every Morning.',
-    description:
-      'Experience Scandinavian comfort designed for deeper sleep and brighter mornings.',
+      'RestfulBlanket designer og producerer Tyngdetæpper i naturlig OEKO-TEX bomuld i Odsherred, Danmark.',
   },
 ];
 
-export const BOTTIM_BANNER_ITEMS = [
-  '30-NIGHT SLEEP TRIAL, NO QUESTIONS ASKED',
-  'HAND-FINISHED IN SMÅLAND, SWEDEN',
-  'OEKO-TEX & CE CERTIFIED',
-  'FREE CARBON-NEUTRAL SHIPPING OVER €120',
+export const BOTTOM_BANNER_ITEMS = [
+  '30 DAGES SØVNPRØVE – INGEN SPØRGSMÅL STILLET',
+  'HÅNDLAVET I SMÅLAND, SVERIGE',
+  'OEKO-TEX®- OG CE-CERTIFICERET',
+  'GRATIS KLIMANEUTRAL LEVERING OVER €120',
 ];

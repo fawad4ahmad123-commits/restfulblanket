@@ -49,8 +49,8 @@ const LeftReview = ({
               {review.reviewer}
             </div>
 
-            <div className="text-xs uppercase tracking-widest text-[#392A22]/50">
-              VERIFIED CUSTOMER
+            <div className="text-xs uppercase tracking-widest text-[#35281E]">
+              VERIFICERET KUNDE
             </div>
           </div>
         </div>

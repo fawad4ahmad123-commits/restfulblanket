@@ -10,8 +10,7 @@ const BlogsSection = () => {
           id="blogs-heading"
           className="mb-14 text-center font-serif text-4xl text-[#3b281f] md:text-6xl"
         >
-          Thoughts on{' '}
-          <span className="italic font-normal">Restful Living.</span>
+          Tanker om <span className="italic font-normal">Roligt liv</span>
         </h2>
 
         <div
@@ -31,7 +30,7 @@ const BlogsSection = () => {
 
         <div className="mt-16 flex items-center justify-center gap-4">
           <span className="text-sm font-medium uppercase tracking-[0.35em] text-[#3b281f]">
-            View All Blogs
+            Se alle blogindlæg
           </span>
 
           <button

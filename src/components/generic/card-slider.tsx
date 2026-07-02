@@ -101,7 +101,7 @@ const SliderCard = ({
             }}
           >
             <Eye aria-hidden="true" size={14} />
-            Quick View
+            Hurtig visning
           </button>
         </div>
       </div>
@@ -124,7 +124,7 @@ const SliderCard = ({
             </svg>
           ))}
 
-          <span className="ml-2 text-xs text-[#392A22]/60">
+          <span className="ml-2 text-xs text-[#35281E]">
             {rating} · {reviewCount.toLocaleString()}
           </span>
         </div>
@@ -173,7 +173,7 @@ const SliderCard = ({
           className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
-          Add To Cart
+          Tilføj til kurv
         </button>
       </div>
     </div>

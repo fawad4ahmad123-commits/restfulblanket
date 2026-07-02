@@ -33,8 +33,21 @@ const ProductCategories = ({
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const categories = response_categories ?? [];
-  const filteredCategories = categories.filter((item) => item.parent !== 0);
+  const ALLOWED_CATEGORIES = [
+    'Tyngdedyner',
+    'Tyngdetæppe',
+    'Sengesæt',
+    'Hovedpuder',
+  ];
 
+  const filteredCategories = categories
+    .filter(
+      (item) => item.parent !== 0 && ALLOWED_CATEGORIES.includes(item.name),
+    )
+    .sort(
+      (a, b) =>
+        ALLOWED_CATEGORIES.indexOf(a.name) - ALLOWED_CATEGORIES.indexOf(b.name),
+    );
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth >= 1024);

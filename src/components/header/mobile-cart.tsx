@@ -10,10 +10,12 @@ const MobileCart = ({ cartCount, onClick }: MobileCartProps) => {
   return (
     <Button
       onClick={onClick}
+      aria-label={`Open shopping cart${cartCount > 0 ? ` with ${cartCount} items` : ''}`}
+      title="Shopping cart"
       className="relative h-8 w-8 rounded-full border border-white/20 bg-[#392A22] p-0 text-white hover:bg-[#4A382E] flex items-center justify-center"
     >
       <div className="relative">
-        <ShoppingBag className="h-4 w-4" />
+        <ShoppingBag aria-hidden="true" className="h-4 w-4" />
         {cartCount > 0 && (
           <span
             aria-hidden="true"

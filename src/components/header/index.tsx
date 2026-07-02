@@ -63,6 +63,7 @@ const SiteHeader = () => {
               aria-label="RestfulBlanket Home"
               title="RestfulBlanket Home"
             >
+              <span className="sr-only">RestfulBlanket Home</span>
               <h3
                 className={`${courgette.className} ${isHome ? 'text-white' : 'bg-[#FFF9F5] text-[#35281E]'} pt-3 text-center text-2xl leading-8`}
               >
@@ -78,7 +79,7 @@ const SiteHeader = () => {
               <Button
                 size="icon"
                 variant="ghost"
-                aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}
+                aria-label={`Wishlist${wishlistCount > 0 ? ` (${wishlistCount} items)` : ''}`}
                 title="Wishlist"
                 onClick={() => router.push('/wishlist')}
                 className={cn(
@@ -106,7 +107,7 @@ const SiteHeader = () => {
               <Button
                 size="icon"
                 variant="ghost"
-                aria-label="My account"
+                aria-label="Sign in or manage account"
                 title="My account"
                 onClick={() => router.push('/signin')}
                 className={cn(
@@ -118,7 +119,7 @@ const SiteHeader = () => {
 
               <Button
                 onClick={() => setCartOpen(true)}
-                aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
+                aria-label={`Open shopping cart${cartCount > 0 ? ` with ${cartCount} items` : ''}`}
                 title="Shopping cart"
                 className={cn(
                   'relative h-8 w-8 rounded-full border p-0 hover:bg-[#4A382E] flex items-center justify-center',

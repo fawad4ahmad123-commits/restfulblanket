@@ -8,17 +8,18 @@ const CraftsmanshipSection = () => {
         <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <div>
             <h2 className="font-serif text-[32px] font-bold leading-[0.95] tracking-[-0.03em] text-[#3B281F] md:text-[46px] lg:text-[68px]">
-              We <span className="font-normal italic">build</span> wardrobes
-              that
-              <br />
-              <span className="font-normal italic">outlive</span> that
+              Om <span className="font-normal italic">RestfulBlanket</span>
+              <div className="mt-[10px]"></div>
             </h2>
-
             <p className="mt-8 max-w-[470px] text-[15px] leading-8 text-[#7D7068]">
-              We've lived with ADHD. We have children with special needs. We've
-              known sleepless nights, anxiety, and the kind of fatigue that
-              sinks deep into your bones. When your body can't relax, no matter
-              how much you crave peace and quiet, you know what it's all about.
+              Vi har levet med ADHD. Vi har børn med særlige behov. Vi har kendt
+              søvnløse nætter, angst og den slags træthed, der sætter sig helt
+              ind i knoglerne. Når kroppen ikke kan slappe af, uanset hvor meget
+              man længes efter ro – så ved man, hvad det handler om.
+              <br />
+              Vi prøvede alt. Men de hjælpemidler, der fandtes, virkede ikke for
+              os. For stive. For varme. Fyldt med plastik og raslende kugler. De
+              føltes forkerte. … Så vi gik i gang selv
             </p>
 
             <div className="mt-12 flex flex-wrap gap-8 md:grid md:grid-cols-3 md:gap-12">
@@ -26,8 +27,8 @@ const CraftsmanshipSection = () => {
                 <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
                   12
                 </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#A38575]">
-                  Styles Per Year
+                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
+                  Modeller om året
                 </div>
               </div>
 
@@ -35,8 +36,8 @@ const CraftsmanshipSection = () => {
                 <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
                   8 yrs
                 </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#A38575]">
-                  Average Lifespan
+                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
+                  Gennemsnitlig levetid
                 </div>
               </div>
 
@@ -44,8 +45,8 @@ const CraftsmanshipSection = () => {
                 <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
                   100%
                 </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#A38575]">
-                  Repairable Design
+                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
+                  Kan repareres
                 </div>
               </div>
             </div>
@@ -66,16 +67,19 @@ const CraftsmanshipSection = () => {
               <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-4 p-5 md:flex-row md:items-end md:justify-between md:p-8">
                 <div className="text-white">
                   <h3 className="text-xl font-medium md:text-3xl">
-                    Mara, pattern cutter
+                    Mara, mønsterkonstruktør
                   </h3>
 
                   <p className="mt-1 text-sm text-white/70">
-                    9 years with the studio
+                    9 år hos virksomheden
                   </p>
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3 rounded-full bg-[#e6cfbb] px-5 py-3 text-sm font-medium text-[#3B281F] transition hover:scale-105 md:w-auto">
-                  Read More
+                <button
+                  className="flex w-full items-center justify-center gap-3 rounded-full bg-[#e6cfbb] px-5 py-3 text-sm font-medium text-[#3B281F] transition hover:scale-105 md:w-auto"
+                 
+                >
+                  Læs mere
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3B281F] text-white">
                     <ArrowRight size={14} />
                   </span>

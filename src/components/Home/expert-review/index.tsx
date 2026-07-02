@@ -29,7 +29,7 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
         <div className="flex flex-1 flex-col p-4">
           <h3 className="font-serif text-[28px] text-[#3b281f]">{name}</h3>
 
-          <p className="mt-1 text-sm text-[#8d7c71]">{position}</p>
+          <p className="mt-1 text-sm text-[#35281E]">{position}</p>
 
           <div className="mt-4 flex flex-wrap gap-2 pb-2">
             {tags.map((tag: string, index: number) => (
@@ -49,7 +49,7 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
             onClick={() => router.push(profileUrl)}
             className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#e5d8cb] py-3 text-sm text-[#3b281f] transition hover:bg-[#dac8b7] cursor-pointer"
           >
-            View full profile
+            Se hele profilen
             <ArrowRight aria-hidden="true" size={15} />
           </button>
         </div>

@@ -38,3 +38,30 @@ export interface CartContextType {
   getTotalItems: () => number;
   getTotalPrice: () => number;
 }
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  parent: number;
+  count?: number;
+  description?: string;
+  image?: any;
+}
+
+export interface CategoryContextType {
+  categories: Category[];
+  parentCategories: Category[];
+  getChildren: (parentId: number) => Category[];
+  getProductsByCategory: (
+    categoryId: number | null,
+    limit?: number,
+  ) => {
+    id: number;
+    title: string;
+    price: string;
+    image: string;
+    href: string;
+    categoryIds: number[];
+  }[];
+}

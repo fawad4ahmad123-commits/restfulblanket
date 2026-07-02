@@ -11,7 +11,6 @@ interface SiteLayoutProps {
 
 const MainLayout = ({ children }: SiteLayoutProps) => {
   const pathname = usePathname();
-
   const isHeader = ['/signup', '/checkout', '/signin'].includes(pathname);
 
   return (

@@ -13,11 +13,11 @@ const RestfulBlanketVideo = () => {
       <div className="mx-auto max-w-[1320px] px-5 md:px-8">
         <div className="mx-auto flex max-w-4xl flex-col items-center">
           <h2 className="mb-10 max-w-xl text-center font-serif text-3xl font-semibold leading-snug tracking-tight text-[#2c2318] md:text-4xl">
-            Watch how a{' '}
+            Se, hvordan et{' '}
             <span className="font-light italic text-[#8b6f52]">
               RestfulBlanket
             </span>{' '}
-            is made.
+            bliver fremstillet.
           </h2>
 
           <div className="group relative w-full overflow-hidden rounded-2xl shadow-xl">
@@ -60,7 +60,8 @@ const RestfulBlanketVideo = () => {
                     </p>
 
                     <p className="max-w-xs font-serif text-lg font-medium leading-tight md:text-xl">
-                      Småland, Sweden — where every stitch is slow on purpose.
+                      Småland, Sverige – hvor hver eneste syning udføres med
+                      omhu.
                     </p>
                   </div>
 
@@ -71,7 +72,7 @@ const RestfulBlanketVideo = () => {
                       </p>
 
                       <p className="mt-0.5 font-mono text-[9px] uppercase tracking-widest opacity-70">
-                        Artisans
+                        Håndværkere
                       </p>
                     </div>
 
@@ -79,26 +80,26 @@ const RestfulBlanketVideo = () => {
 
                     <div className="text-center">
                       <p className="font-serif text-xl font-semibold leading-none">
-                        38h
+                        38 timer
                       </p>
 
                       <p className="mt-0.5 font-mono text-[9px] uppercase tracking-widest opacity-70">
-                        Per Blanket
+                        Pr. tæppe
                       </p>
                     </div>
                   </div>
 
                   <span className="absolute left-4 top-4 z-10 rounded-full bg-white/20 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white backdrop-blur-sm">
-                    Handcrafted
+                    Håndlavet
                   </span>
                 </>
               )}
             </div>
           </div>
 
-          <p className="mt-6 max-w-sm text-center font-serif text-sm italic text-[#a08c78]">
-            Each blanket leaves our workshop only when it's ready — never
-            before.
+          <p className="mt-6 max-w-sm text-center font-serif text-sm italic text-[#35281E]">
+            Hvert tæppe forlader først vores værksted, når det er helt færdigt –
+            aldrig før.
           </p>
         </div>
       </div>

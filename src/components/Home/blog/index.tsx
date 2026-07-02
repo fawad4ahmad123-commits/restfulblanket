@@ -78,7 +78,7 @@ const BlogCard = ({
           onClick={() => router.push(`/blog-detail/${slug}`)}
           className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:mt-auto md:bg-[#e6dbd0] md:text-[#3b281f]"
         >
-          Read More
+          Læs mere
         </button>
       </div>
     </article>

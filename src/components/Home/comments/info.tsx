@@ -33,8 +33,8 @@ const Info = ({
     <div>
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-serif text-[36px] md:text-[48px] leading-tight text-[#392A22]">
-          12,480 nights.
-          <span className="italic font-normal">One verdict.</span>
+          {totalReviews} nætter.
+          <span className="italic font-normal">Én konklusion.</span>
         </h2>
 
         <div className="flex items-center gap-3">
@@ -48,7 +48,7 @@ const Info = ({
               className="rounded-full border-[#392A22]/20 bg-[#fff9f5] px-4 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white gap-2"
             >
               <PenLine aria-hidden="true" className="h-3.5 w-3.5" />
-              Write a review
+              Skriv en anmeldelse
             </Button>
           )}
 
@@ -61,7 +61,7 @@ const Info = ({
               onClick={() => setReview(false)}
               className="rounded-full border-[#392A22]/20 bg-[#e6cfbb] px-4 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white gap-2"
             >
-              Reviews ({totalReviews})
+              Anmeldelser ({totalReviews})
             </Button>
           )}
 

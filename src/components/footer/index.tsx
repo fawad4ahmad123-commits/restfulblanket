@@ -26,11 +26,25 @@ const Footer = () => {
               </Link>
             </h2>
 
-            <h3 className="mt-6 font-serif text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-[56px]">
-              Hand-finished in Sweden,
-              <br className="hidden sm:block" />
-              crafted for deeper rest.
+            <h3 className="mt-6 font-serif text-[18px] leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-[26px]">
+              Vig Erhvervspark Søndre Vænge 19E 4560 Vig
             </h3>
+            <p className="mt-5 max-w-[420px] text-sm leading-7 text-[ #F5F1EA] lg:mx-0">
+              +45 29 82 29 4.73
+              <br />
+              KerneRo@RestfulBlanket.dk
+              <br />
+              CVR: 43362674
+            </p>
+            <p className="mt-5 max-w-[420px] text-sm leading-7 text-[ #F5F1EA] lg:mx-0">
+              Åbningstider
+              <br />
+              M-F 10:00 - 16:00
+              <br />
+              Lør 10:00 - 14:00
+              <br />
+              Søn Lukket
+            </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:max-w-[450px] sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-[#fff9f5]/15 sm:px-5 sm:py-2">
               <div className="flex items-center rounded-full border border-[#fff9f5]/15 px-4 py-3 sm:flex-1 sm:border-0 sm:px-0 sm:py-0">
@@ -56,11 +70,6 @@ const Footer = () => {
                 SUBSCRIBE
               </button>
             </div>
-
-            <p className="mt-5 max-w-[420px] text-sm leading-7 text-[ #F5F1EA] lg:mx-0">
-              No noise. Only first looks at collections, mill visits, and field
-              notes from our regenerative partners.
-            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-8 lg:contents">

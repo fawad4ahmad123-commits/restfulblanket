@@ -9,7 +9,7 @@ const DetailReviewShipping = () => {
           <Star className="h-5 w-5 fill-[#e6cfbb] text-[#e6cfbb] sm:h-6 sm:w-6 md:h-7 md:w-7" />
         </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
-          12,480+ Reviews
+          12,480+ anmeldelser
         </div>
       </div>
       <div>
@@ -17,7 +17,7 @@ const DetailReviewShipping = () => {
           184k
         </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
-          Nights Of Better Sleep
+          nætter med bedre søvn
         </div>
       </div>
       <div>
@@ -25,15 +25,15 @@ const DetailReviewShipping = () => {
           30 Days
         </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
-          Sleep Trial
+          dages søvnprøve
         </div>
       </div>
       <div>
         <div className="text-[28px] text-[#fff9f5] sm:text-[34px] md:text-[40px]">
-          Free
+          Gratis
         </div>
         <div className="text-[10px] uppercase tracking-[0.2em] text-[#fff9f5]/60 sm:text-[11px] md:text-xs">
-          Shipping
+          levering
         </div>
       </div>
     </div>

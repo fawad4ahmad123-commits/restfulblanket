@@ -85,7 +85,7 @@ const RightReviews = ({
 
               <div
                 className={`mt-1 line-clamp-2 text-xs leading-relaxed ${
-                  i === 0 ? 'text-white/70' : 'text-[#392A22]/60'
+                  i === 0 ? 'text-white/70' : 'text-[#35281E]'
                 }`}
                 dangerouslySetInnerHTML={{
                   __html: review.review || '',

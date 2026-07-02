@@ -57,7 +57,7 @@ const CommonQuestions = () => {
               fontFamily: "'Georgia', 'Times New Roman', serif",
             }}
           >
-            Common <em className="font-normal italic">questions</em>
+            Almindelige <em className="font-normal italic">spørgsmål</em>
           </h2>
 
           <div className="flex flex-col gap-3">

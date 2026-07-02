@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, Search, User, ChevronDown } from 'lucide-react';
+import { Heart, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { navigation } from '../constant';
+import { useCategories } from '@/src/core/context/category-provider';
 
 const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
   const pathname = usePathname();
   const [openItem, setOpenItem] = useState<string | null>(null);
+
+  const { parentCategories, getChildren } = useCategories();
 
   return (
     <nav
@@ -18,12 +21,70 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
     >
       <div className="flex-1">
         {navigation.map((item: any) => {
-          const isActive = pathname === item.href;
+          const isOpen = openItem === item.title;
+          if (item.href === '/shop') {
+            return (
+              <div
+                key={item.title}
+                className="border-b border-[#E9DDD4]/60 py-4"
+              >
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls="submenu-all-products"
+                  onClick={() => setOpenItem(isOpen ? null : item.title)}
+                  className="flex w-full items-center justify-between text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
+                >
+                  {item.title}
+
+                  <ChevronDown
+                    aria-hidden="true"
+                    className={`size-4 text-[#35281E] transition-transform duration-300 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {isOpen && (
+                  <div
+                    id="submenu-all-products"
+                    className="mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] pl-4 ml-1 py-1"
+                  >
+                    {parentCategories.map((category: any) => {
+                      const children = getChildren(category.id);
+
+                      return (
+                        <div
+                          key={category.id}
+                          className="flex flex-col gap-2.5"
+                        >
+                          <Link
+                            href={`/shop?slug=${category.slug}`}
+                            className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40"
+                          >
+                            {category.name}
+                          </Link>
+
+                          {children.map((child: any) => (
+                            <Link
+                              key={child.id}
+                              href={`/shop?slug=${child.slug}`}
+                              className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
+                            >
+                              {child.name}
+                            </Link>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          }
           const hasGroups = item.groups?.length > 0;
           const hasChildren = item.children?.length > 0;
           const hasDropdown = hasGroups || hasChildren;
-          const isOpen = openItem === item.title;
-
           if (!hasDropdown) {
             return (
               <Link
@@ -31,13 +92,12 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                 href={item.href}
                 aria-label={`Go to ${item.title}`}
                 title={item.title}
-                className={`flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70`}
+                className="flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
               >
                 {item.title}
               </Link>
             );
           }
-
           return (
             <div key={item.title} className="border-b border-[#E9DDD4]/60 py-4">
               <button
@@ -49,6 +109,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                 className="flex w-full items-center justify-between text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
               >
                 {item.title}
+
                 <ChevronDown
                   aria-hidden="true"
                   className={`size-4 text-[#35281E] transition-transform duration-300 ${
@@ -56,7 +117,6 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                   }`}
                 />
               </button>
-
               {isOpen && (
                 <div
                   id={`submenu-${item.title}`}
@@ -71,6 +131,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                           <span className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40">
                             {group.heading}
                           </span>
+
                           {group.links.map((link: any) => (
                             <Link
                               key={link.title}
@@ -101,7 +162,6 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
           );
         })}
       </div>
-
       <div className="mt-auto pt-6 shrink-0">
         <Link href="/wishlist" className="w-full block">
           <Button className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer">

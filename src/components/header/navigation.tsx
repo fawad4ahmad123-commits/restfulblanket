@@ -2,13 +2,43 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
-import { navigation } from '../constant';
 import { cn } from '@/lib/utils';
+import { useCategories } from '@/src/core/context/category-provider';
+import { useMergedNavigation } from '@/src/hooks/use-merged-navigation';
+
+const MAX_MAIN_CATEGORIES = 4;
+const MAX_SUB_CATEGORIES = 4;
 
 const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
   const pathname = usePathname();
+  const { parentCategories, getChildren, getProductsByCategory } =
+    useCategories();
+  const navigation = useMergedNavigation();
+
+  const visibleParentCategories = useMemo(
+    () => parentCategories.slice(0, MAX_MAIN_CATEGORIES),
+    [parentCategories],
+  );
+
+  const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(
+    null,
+  );
+
+  const activeCategoryId =
+    hoveredCategoryId ?? visibleParentCategories[0]?.id ?? null;
+
+  const shopDropdownProducts = useMemo(
+    () => getProductsByCategory(activeCategoryId, 4),
+    [activeCategoryId, getProductsByCategory],
+  );
+
+  const activeCategory = useMemo(
+    () => visibleParentCategories.find((c: any) => c.id === activeCategoryId),
+    [visibleParentCategories, activeCategoryId],
+  );
 
   return (
     <nav
@@ -16,6 +46,156 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
       className="hidden items-center gap-6 lg:flex xl:gap-8"
     >
       {navigation.map((item: any) => {
+        if (item.href === '/shop') {
+          const isActive = pathname === '/shop';
+
+          const baseLinkClass = cn(
+            'whitespace-nowrap text-sm transition-colors',
+            isHome
+              ? cn(
+                  'hover:text-white/70',
+                  isActive ? 'text-white' : 'text-white/90',
+                )
+              : cn(
+                  'hover:text-[#392A22]/70',
+                  isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
+                ),
+          );
+
+          return (
+            <div key={item.title} className="group static">
+              <Link
+                href="/shop"
+                aria-label="All Products"
+                aria-haspopup="menu"
+                title="All Products"
+                className={cn('flex items-center gap-1', baseLinkClass)}
+              >
+                Alle Produkter
+                <ChevronDown
+                  aria-hidden="true"
+                  className="size-3.5 transition-transform group-hover:rotate-180"
+                />
+              </Link>
+
+              <div
+                role="menu"
+                aria-label="All Products submenu"
+                className={cn(
+                  'invisible absolute inset-x-0 top-full z-[9999] opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100',
+                  'flex justify-start',
+                  isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg',
+                )}
+              >
+                <div
+                  className={cn(
+                    'flex w-full gap-12 px-10 py-8',
+                    isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg',
+                  )}
+                >
+                  {visibleParentCategories.map((category: any) => {
+                    const children = getChildren(category.id).slice(
+                      0,
+                      MAX_SUB_CATEGORIES,
+                    );
+
+                    return (
+                      <div
+                        key={category.id}
+                        className="flex min-w-[180px] max-w-[200px] flex-col gap-1"
+                        onMouseEnter={() => setHoveredCategoryId(category.id)}
+                      >
+                        <Link
+                          href={`/shop?slug=${category.slug}`}
+                          title={category.name}
+                          className={cn(
+                            'mb-2 block truncate text-xs font-medium uppercase tracking-wide',
+                            isHome ? 'text-[#E9DDD4]/60' : 'text-[#392A22]/50',
+                          )}
+                        >
+                          {category.name}
+                        </Link>
+
+                        {children.map((child: any) => (
+                          <Link
+                            key={child.id}
+                            href={`/shop?slug=${child.slug}`}
+                            role="menuitem"
+                            aria-label={`Go to ${child.name}`}
+                            title={child.name}
+                            onMouseEnter={() => setHoveredCategoryId(child.id)}
+                            className={cn(
+                              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                              isHome
+                                ? 'text-[#E9DDD4] hover:bg-white/10'
+                                : 'text-[#392A22] hover:bg-[#392A22]/10',
+                            )}
+                          >
+                            <span className="truncate">{child.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })}
+
+                  {/* Right-side product panel, filtered by hovered category */}
+                  {shopDropdownProducts.length > 0 && (
+                    <div className="flex flex-1 flex-col gap-4 border-l border-white/10 pl-10">
+                      {activeCategory?.image?.src && (
+                        <div className="relative h-20 w-full overflow-hidden rounded-lg">
+                          <Image
+                            src={activeCategory.image.src}
+                            alt={activeCategory.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="grid flex-1 grid-cols-4 gap-6">
+                        {shopDropdownProducts.map((product) => (
+                          <Link
+                            key={product.id}
+                            href={product.href}
+                            title={product.title}
+                            className="group/product flex flex-col gap-2"
+                          >
+                            <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
+                              <Image
+                                src={product.image}
+                                alt={product.title}
+                                fill
+                                className="object-cover transition-transform group-hover/product:scale-105"
+                              />
+                            </div>
+                            <span
+                              className={cn(
+                                'truncate text-sm',
+                                isHome ? 'text-[#E9DDD4]' : 'text-[#392A22]',
+                              )}
+                            >
+                              {product.title}
+                            </span>
+                            <span
+                              className={cn(
+                                'truncate text-sm',
+                                isHome
+                                  ? 'text-[#E9DDD4]/60'
+                                  : 'text-[#392A22]/60',
+                              )}
+                            >
+                              {product.price}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
         const isActive = pathname === item.href;
         const hasGroups = item.groups?.length > 0;
         const hasChildren = item.children?.length > 0;
@@ -78,44 +258,45 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
             >
               <div
                 className={cn(
-                  'mx-auto flex max-w-[1400px] gap-12 px-6 py-8',
-                  !hasProducts && 'inline-flex w-auto rounded-xl border p-5',
+                  'flex w-full gap-12 px-6 py-8',
+                  !hasProducts && 'inline-flex w-auto rounded-xl p-5',
                   !hasProducts &&
-                    (isHome
-                      ? 'border-white/10 bg-[#392A22]'
-                      : 'border-[#392A22]/10 bg-white shadow-lg'),
+                    (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
                 )}
               >
-                {item.groups.map((group: any) => (
+                {item.groups?.map((group: any) => (
                   <div
                     key={group.heading}
-                    className="flex min-w-[180px] flex-col gap-1"
+                    className="flex min-w-[180px] max-w-[200px] flex-col gap-1"
                   >
                     <span
+                      title={group.heading}
                       className={cn(
-                        'mb-2 whitespace-nowrap text-xs font-medium uppercase tracking-wide',
+                        'mb-2 block truncate text-xs font-medium uppercase tracking-wide',
                         isHome ? 'text-[#E9DDD4]/60' : 'text-[#392A22]/50',
                       )}
                     >
                       {group.heading}
                     </span>
-                    {group.links.map((link: any) => (
-                      <Link
-                        key={link.title}
-                        href={link.href}
-                        role="menuitem"
-                        aria-label={`Go to ${link.title}`}
-                        title={link.title}
-                        className={cn(
-                          'block whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors',
-                          isHome
-                            ? 'text-[#E9DDD4] hover:bg-white/10'
-                            : 'text-[#392A22] hover:bg-[#392A22]/10',
-                        )}
-                      >
-                        {link.title}
-                      </Link>
-                    ))}
+
+                    {group.links
+                      .slice(0, MAX_SUB_CATEGORIES)
+                      .map((link: any) => (
+                        <Link
+                          key={link.title}
+                          href={link.href}
+                          role="menuitem"
+                          title={link.title}
+                          className={cn(
+                            'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                            isHome
+                              ? 'text-[#E9DDD4] hover:bg-white/10'
+                              : 'text-[#392A22] hover:bg-[#392A22]/10',
+                          )}
+                        >
+                          <span className="truncate">{link.title}</span>
+                        </Link>
+                      ))}
                   </div>
                 ))}
 
@@ -125,8 +306,6 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                       <Link
                         key={product.title}
                         href={product.href}
-                        role="menuitem"
-                        aria-label={`Go to ${product.title}`}
                         title={product.title}
                         className="group/product flex flex-col gap-2"
                       >
@@ -138,44 +317,24 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                             className="object-cover transition-transform group-hover/product:scale-105"
                           />
                         </div>
+
                         <span
                           className={cn(
-                            'text-sm',
+                            'truncate text-sm',
                             isHome ? 'text-[#E9DDD4]' : 'text-[#392A22]',
                           )}
                         >
                           {product.title}
                         </span>
+
                         <span
                           className={cn(
-                            'text-sm',
+                            'truncate text-sm',
                             isHome ? 'text-[#E9DDD4]/60' : 'text-[#392A22]/60',
                           )}
                         >
                           {product.price}
                         </span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-
-                {!hasProducts && !item.groups.length && hasChildren && (
-                  <div className="flex flex-col gap-1">
-                    {item.children.map((child: any) => (
-                      <Link
-                        key={child.title}
-                        href={child.href}
-                        role="menuitem"
-                        aria-label={`Go to ${child.title}`}
-                        title={child.title}
-                        className={cn(
-                          'block whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors',
-                          isHome
-                            ? 'text-[#E9DDD4] hover:bg-white/10'
-                            : 'text-[#392A22] hover:bg-[#392A22]/10',
-                        )}
-                      >
-                        {child.title}
                       </Link>
                     ))}
                   </div>

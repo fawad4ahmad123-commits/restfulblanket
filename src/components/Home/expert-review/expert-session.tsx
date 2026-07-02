@@ -1,7 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ExpertCard from '.';
 import Heading from './heading';
 import { EXPERTS } from '../constants';
@@ -30,28 +29,27 @@ const ExpertsSection = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button
-          type="button"
-          aria-label="Not sure which blanket suits your needs"
-          className="rounded-full bg-[#e5d8cb] px-4 py-4 text-sm text-[#3b281f] hover:bg-[#e5d8cb] hover:text-[#3b281f] hover:shadow-none"
-        >
-          Not sure which blanket suits your needs?
-        </Button>
+      <div className="mt-8 flex flex-col items-center justify-center gap-4 px-5 sm:gap-5 md:flex-row md:gap-6">
         <p
-          aria-label="Book a free consultation"
-          title="Book a free consultation"
-          className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
+          role="note"
+          aria-label="Not sure which blanket suits your needs"
+          className="w-full max-w-[520px] rounded-full bg-[#e5d8cb] px-4 py-3 text-center text-xs leading-relaxed text-[#3b281f] sm:px-6 sm:py-4 sm:text-sm"
         >
-          Book a free consultation
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20 cursor-pointer">
-            <ArrowRight
-              aria-hidden="true"
-              size={14}
-              onClick={() => router.push('/expert')}
-            />
-          </span>
+          Er du i tvivl om, hvilken dyne der passer til dine behov?
         </p>
+
+        <button
+          type="button"
+          onClick={() => router.push('/expert')}
+          aria-label="Book a free consultation"
+          className="flex items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80"
+        >
+          <span>Book en gratis konsultation</span>
+
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#3b281f]/20">
+            <ArrowRight size={14} />
+          </span>
+        </button>
       </div>
     </section>
   );

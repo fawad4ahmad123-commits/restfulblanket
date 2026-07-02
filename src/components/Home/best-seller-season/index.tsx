@@ -7,11 +7,11 @@ import SliderCard from '../../generic/card-slider';
 import SliderControls from '../../generic/slider-control';
 import { PLACEHOLDER_IMAGE } from '../../constant';
 
-const CATEGORIES = ['All', 'Adult', 'Kids', 'Duvets', 'Accessories'];
+const CATEGORIES = ['Alle', 'Voksne', 'Børn', 'Dyner', 'Tilbehør'];
 
 const CATEGORY_MAPPING: Record<string, string> = {
-  tyngdetaeppe: 'Adult',
-  gaveideer: 'Accessories',
+  tyngdetaeppe: 'Voksne',
+  gaveideer: 'Tilbehør',
 };
 
 const BestSellers = ({
@@ -22,7 +22,7 @@ const BestSellers = ({
   products: any[];
 }) => {
   const [start, setStart] = useState(0);
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState('Alle');
   const [visibleCount, setVisibleCount] = useState(4);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -45,14 +45,13 @@ const BestSellers = ({
     };
 
     updateVisibleCount();
-
     window.addEventListener('resize', updateVisibleCount);
 
     return () => window.removeEventListener('resize', updateVisibleCount);
   }, []);
 
   const filteredProducts =
-    activeCategory === 'All'
+    activeCategory === 'Alle'
       ? productData
       : productData.filter((product: any) =>
           product.categories?.some(
@@ -97,20 +96,15 @@ const BestSellers = ({
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        {/* HEADER */}
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           {isProduct ? (
-            <h2
-              id="best-sellers-heading"
-              className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
-            >
+            <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
               <em>You may also </em>
               <span className="font-sans font-normal">like.</span>
             </h2>
           ) : (
-            <h2
-              id="best-sellers-heading"
-              className="font-serif text-3xl text-[#3b281f] lg:text-5xl"
-            >
+            <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
               <em>Sæsonens bedst </em>
               <span className="font-sans font-normal">sælgende produkter</span>
             </h2>
@@ -119,22 +113,17 @@ const BestSellers = ({
           {isProduct ? (
             <SliderControls prev={prev} next={next} />
           ) : (
-            <div
-              className="overflow-x-auto scrollbar-hide"
-              role="tablist"
-              aria-label="Product categories"
-            >
-              <div className="inline-flex min-w-max gap-2 rounded-full border border-[#3b281f]/20 p-1">
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="inline-flex min-w-max gap-1.5 rounded-full border border-[#3b281f]/20 p-1">
                 {CATEGORIES.map((category) => (
                   <button
                     key={category}
                     type="button"
-                    aria-pressed={activeCategory === category}
                     onClick={() => {
                       setActiveCategory(category);
                       setStart(0);
                     }}
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-xs transition ${
+                    className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition ${
                       activeCategory === category
                         ? 'bg-[#3b281f] text-white'
                         : 'text-[#3b281f]'
@@ -148,10 +137,11 @@ const BestSellers = ({
           )}
         </div>
 
+        {/* 🟢 MOBILE SLIDER (FIXED) */}
         <div className="lg:hidden">
           <div
             ref={sliderRef}
-            className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
+            className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide touch-pan-x snap-x snap-mandatory scroll-smooth"
           >
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
@@ -166,9 +156,7 @@ const BestSellers = ({
               const sizeAttribute = item.attributes?.find(
                 (attr: any) =>
                   attr.slug === 'pa_stoerrelse' ||
-                  attr.slug === 'size' ||
-                  attr.name?.toLowerCase().includes('size') ||
-                  attr.name?.toLowerCase().includes('størrelse'),
+                  attr.name?.toLowerCase().includes('size'),
               );
 
               const color = colorAttribute?.options?.[0] || '';
@@ -177,7 +165,7 @@ const BestSellers = ({
               return (
                 <div
                   key={item.id}
-                  className="w-[85%] shrink-0 sm:w-[60%] md:w-[48%]"
+                  className="w-[85%] shrink-0 snap-start sm:w-[60%] md:w-[48%]"
                 >
                   <SliderCard
                     id={item.id}
@@ -200,6 +188,7 @@ const BestSellers = ({
           </div>
         </div>
 
+        {/* DESKTOP SLIDER (UNCHANGED) */}
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -210,23 +199,6 @@ const BestSellers = ({
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
               const hoverImage = item.images?.[1]?.src || mainImage;
-
-              const colorAttribute = item.attributes?.find(
-                (attr: any) =>
-                  attr.slug === 'pa_color' ||
-                  attr.name?.toLowerCase() === 'color',
-              );
-
-              const sizeAttribute = item.attributes?.find(
-                (attr: any) =>
-                  attr.slug === 'pa_stoerrelse' ||
-                  attr.slug === 'size' ||
-                  attr.name?.toLowerCase().includes('size') ||
-                  attr.name?.toLowerCase().includes('størrelse'),
-              );
-
-              const color = colorAttribute?.options?.[0] || '';
-              const size = sizeAttribute?.options?.[0] || '';
 
               return (
                 <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
@@ -241,8 +213,8 @@ const BestSellers = ({
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
                     badge={item.featured ? 'BEST SELLER' : ''}
-                    color={color}
-                    size={size}
+                    color=""
+                    size=""
                     type="product"
                   />
                 </div>
@@ -251,13 +223,14 @@ const BestSellers = ({
           </div>
         </div>
 
+        {/* FOOTER LINK */}
         {!isProduct && (
           <div className="mt-8 flex justify-center">
             <Link
               href="/shop"
-              className="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#3b281f]"
+              className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
             >
-              VIEW ALL PRODUCTS
+              SE ALLE PRODUKTER
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3b281f]/20">
                 <ArrowRight size={14} />
               </span>

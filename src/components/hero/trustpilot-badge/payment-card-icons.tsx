@@ -77,7 +77,7 @@ export const StarIcon = () => (
 
 export const TrustpilotBadge = () => (
   <div className="flex items-center gap-2">
-    <span className="text-sm font-semibold text-white"> Excellent </span>
+    <span className="text-sm font-semibold text-white"> Fremragende </span>
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
         <div

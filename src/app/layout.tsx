@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
-
 import './globals.css';
 import MainLayout from '../core/Mainlayouts';
 import { Toaster } from '@/components/ui/sonner';
 import { CartProvider } from '../core/context/cart-context';
+import { CategoryProvider } from '../core/context/category-provider';
+import { getBestSellers, getCategories } from '../lib/products';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -18,11 +19,16 @@ export const metadata: Metadata = {
     'Hand-crafted weighted blankets and duvets designed for deeper sleep and relaxation.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [products, categories] = await Promise.all([
+    getBestSellers(),
+    getCategories(),
+  ]);
+
   return (
     <html
       lang="en"
@@ -30,12 +36,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <CartProvider>
-          <MainLayout>
-            {children}
-            <Toaster />
-          </MainLayout>
-        </CartProvider>
+        <CategoryProvider categories={categories} products={products}>
+          <CartProvider>
+            <MainLayout>
+              {children}
+              <Toaster />
+            </MainLayout>
+          </CartProvider>
+        </CategoryProvider>
       </body>
     </html>
   );
