@@ -1,7 +1,9 @@
-import Image from 'next/image';
+'use client';
 import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const CraftsmanshipSection = () => {
+  const router = useRouter();
   return (
     <section className="bg-[#fdf9f6] py-16 md:py-24">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8">
@@ -9,8 +11,9 @@ const CraftsmanshipSection = () => {
           <div>
             <h2 className="font-serif text-[32px] font-bold leading-[0.95] tracking-[-0.03em] text-[#3B281F] md:text-[46px] lg:text-[68px]">
               Om <span className="font-normal italic">RestfulBlanket</span>
-              <div className="mt-[10px]"></div>
+              <div className="mt-[10px]" />
             </h2>
+
             <p className="mt-8 max-w-[470px] text-[15px] leading-8 text-[#7D7068]">
               Vi har levet med ADHD. Vi har børn med særlige behov. Vi har kendt
               søvnløse nætter, angst og den slags træthed, der sætter sig helt
@@ -19,72 +22,29 @@ const CraftsmanshipSection = () => {
               <br />
               Vi prøvede alt. Men de hjælpemidler, der fandtes, virkede ikke for
               os. For stive. For varme. Fyldt med plastik og raslende kugler. De
-              føltes forkerte. … Så vi gik i gang selv
+              føltes forkerte. … Så vi gik i gang selv.
             </p>
 
-            <div className="mt-12 flex flex-wrap gap-8 md:grid md:grid-cols-3 md:gap-12">
-              <div className="min-w-[120px]">
-                <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
-                  12
-                </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
-                  Modeller om året
-                </div>
-              </div>
-
-              <div className="min-w-[120px]">
-                <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
-                  8 yrs
-                </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
-                  Gennemsnitlig levetid
-                </div>
-              </div>
-
-              <div className="min-w-[120px]">
-                <div className="font-serif text-[32px] font-bold text-[#3B281F] md:text-[40px]">
-                  100%
-                </div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#35281E]">
-                  Kan repareres
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={() => router.push('/about')}
+              className="mt-8 flex items-center gap-3 rounded-full bg-[#e6cfbb] px-5 py-3 text-sm font-medium text-[#3B281F] transition hover:scale-105"
+            >
+              Læs mere
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3B281F] text-white">
+                <ArrowRight size={14} />
+              </span>
+            </button>
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div className="relative h-[420px] w-full max-w-[620px] overflow-hidden rounded-[28px] md:h-[520px]">
-              <Image
-                src="/home/craftman.png"
-                alt="Craftsmanship"
-                fill
-                className="object-cover"
-                priority
+            <div className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg">
+              <iframe
+                className="h-full w-full"
+                src="https://www.youtube.com/embed/-Lya47BOKec?rel=0"
+                title="RestfulBlanket Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
               />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-
-              <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-4 p-5 md:flex-row md:items-end md:justify-between md:p-8">
-                <div className="text-white">
-                  <h3 className="text-xl font-medium md:text-3xl">
-                    Mara, mønsterkonstruktør
-                  </h3>
-
-                  <p className="mt-1 text-sm text-white/70">
-                    9 år hos virksomheden
-                  </p>
-                </div>
-
-                <button
-                  className="flex w-full items-center justify-center gap-3 rounded-full bg-[#e6cfbb] px-5 py-3 text-sm font-medium text-[#3B281F] transition hover:scale-105 md:w-auto"
-                 
-                >
-                  Læs mere
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#3B281F] text-white">
-                    <ArrowRight size={14} />
-                  </span>
-                </button>
-              </div>
             </div>
           </div>
         </div>
