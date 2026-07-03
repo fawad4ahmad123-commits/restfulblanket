@@ -59,7 +59,7 @@ export async function getBestSellers() {
           ).toString('base64'),
       },
       next: {
-        revalidate: 3600,
+        revalidate: 300,
       },
     },
   );
@@ -78,7 +78,7 @@ export async function getCategories() {
           ).toString('base64'),
       },
       next: {
-        revalidate: 3600,
+        revalidate: 300,
       },
     },
   );

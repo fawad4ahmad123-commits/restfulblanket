@@ -146,7 +146,7 @@ const BestSellers = ({
         <div className="lg:hidden">
           <div
             ref={sliderRef}
-            className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide touch-pan-x snap-x snap-mandatory scroll-smooth"
+            className="flex gap-4 overflow-x-auto overscroll-x-contain pb-2 scrollbar-hide snap-x snap-mandatory scroll-smooth"
           >
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
