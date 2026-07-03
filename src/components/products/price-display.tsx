@@ -27,7 +27,7 @@ const PriceDisplay = ({
       )}
       {savings > 0 && (
         <Badge className="rounded-full bg-[#E6CBB8] px-2.5 py-0.5 text-xs font-medium text-[#3F3A36] hover:bg-[#E6CBB8]">
-          Save {currency}
+          Gem {currency}
           {savings}
         </Badge>
       )}

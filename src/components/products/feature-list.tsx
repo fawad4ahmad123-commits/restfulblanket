@@ -28,7 +28,7 @@ const FeatureList = ({ features }: FeatureListProps) => {
         }}
         className="mt-4 inline-flex text-sm font-medium text-[#3F3A36] underline underline-offset-4 transition hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F3A36] focus-visible:ring-offset-2 cursor-pointer"
       >
-        Read More
+        Læs mere
       </button>
     </div>
   );

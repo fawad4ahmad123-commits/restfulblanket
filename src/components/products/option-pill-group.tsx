@@ -34,13 +34,13 @@ const OptionPillGroup = ({
           {label}
         </p>
 
-        {label === 'Weight' ? (
+        {label === 'Vægtguide' ? (
           <button
             type="button"
             onClick={() => setOpen(true)}
             className="text-sm font-medium text-[#3A2A21] underline underline-offset-2 hover:opacity-70 cursor-pointer"
           >
-            Weight guide
+            Vægtguide
           </button>
         ) : (
           trailingSlot

@@ -18,7 +18,7 @@ const BestSellers = ({
   isProduct,
   products = [],
 }: {
-  isProduct?: boolean;
+  isProduct: boolean;
   products: any[];
 }) => {
   const [start, setStart] = useState(0);
@@ -57,11 +57,12 @@ const BestSellers = ({
         String(meta.value).toUpperCase() === 'BESTSELLER',
     ),
   );
+  const baseProducts = isProduct ? productData : bestsellerProducts;
 
   const filteredProducts =
     activeCategory === 'Alle'
-      ? bestsellerProducts
-      : bestsellerProducts.filter((product: any) =>
+      ? baseProducts
+      : baseProducts.filter((product: any) =>
           product.categories?.some(
             (category: any) =>
               CATEGORY_MAPPING[category.slug] === activeCategory,
@@ -100,15 +101,15 @@ const BestSellers = ({
 
   return (
     <section
-      className="bg-[#FAF4EE] py-16"
+      className={isProduct ? 'py-16' : 'bg-[#FAF4EE] py-16'}
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           {isProduct ? (
             <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
-              <em>You may also </em>
-              <span className="font-sans font-normal">like.</span>
+              <em>Relaterede  </em>
+              <span className="font-sans font-normal">produkter.</span>
             </h2>
           ) : (
             <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
@@ -190,6 +191,7 @@ const BestSellers = ({
                     color={color}
                     size={size}
                     type="product"
+                    isProduct={isProduct}
                   />
                 </div>
               );
@@ -227,6 +229,7 @@ const BestSellers = ({
                     color=""
                     size=""
                     type="product"
+                    isProduct={isProduct}
                   />
                 </div>
               );

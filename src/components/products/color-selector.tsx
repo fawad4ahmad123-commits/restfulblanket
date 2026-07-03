@@ -18,7 +18,7 @@ const ColorSelector = ({
   return (
     <div className="space-y-2">
       <p className="text-xs font-medium uppercase tracking-wide text-[#8A8377]">
-        Color {selectedColor?.label ? `· ${selectedColor.label}` : ''}
+        Vælg farve {selectedColor?.label ? `· ${selectedColor.label}` : ''}
       </p>
 
       <div className="flex items-center gap-2">

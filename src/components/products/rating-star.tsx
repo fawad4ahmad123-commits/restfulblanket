@@ -28,7 +28,7 @@ const RatingStars = ({ rating, reviewCount }: RatingStarsProps) => {
         {hasReviews ? rating : '0.0'}
       </span>
       <span className="text-sm text-[#8A8377]">
-        ({reviewCount.toLocaleString()} reviews)
+        ({reviewCount.toLocaleString()} anmeldelser)
       </span>
     </div>
   );

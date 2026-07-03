@@ -24,6 +24,7 @@ export interface SliderCard {
   color?: string;
   size?: string;
   type: string;
+  isProduct: boolean;
 }
 
 export interface SliderControls {

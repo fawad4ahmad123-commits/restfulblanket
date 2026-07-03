@@ -27,6 +27,7 @@ const SliderCard = ({
   dimensions,
   color,
   size,
+  isProduct,
 }: ExtendedSliderCardProps) => {
   const [wished, setWished] = useState(false);
   const router = useRouter();
@@ -58,7 +59,7 @@ const SliderCard = ({
             />
           )}
         </div>
-        {(badge || 'Best Seller') && (
+        {isProduct === false && (badge || 'Best Seller') && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
             {badge || 'Best Seller'}
           </div>

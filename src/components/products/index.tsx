@@ -123,7 +123,7 @@ const ProductInfoPanel = ({ product }: any) => {
 
       {weights.length > 0 && (
         <OptionPillGroup
-          label="Weight"
+          label="Vægtguide"
           options={weights}
           selectedId={selectedWeightId}
           onSelect={setSelectedWeightId}
@@ -132,7 +132,7 @@ const ProductInfoPanel = ({ product }: any) => {
 
       {sizes.length > 0 && (
         <OptionPillGroup
-          label="Size"
+          label="Størrelse"
           options={sizes}
           selectedId={selectedSizeId}
           onSelect={setSelectedSizeId}

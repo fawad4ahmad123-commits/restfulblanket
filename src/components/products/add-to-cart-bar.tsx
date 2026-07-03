@@ -24,14 +24,14 @@ const AddToCartBar = ({
       <div
         className="flex flex-col gap-3 sm:flex-row sm:items-center"
         role="group"
-        aria-label="Add to cart controls"
+        aria-label="Tilføj til kurv-kontroller"
       >
         <div className="w-full sm:w-auto">
           <QuantitySelector
             quantity={quantity}
             onChange={onQuantityChange}
             max={stockQuantity}
-            aria-label="Select quantity"
+            aria-label="Vælg antal"
           />
         </div>
 
@@ -40,11 +40,11 @@ const AddToCartBar = ({
           onClick={onAddToCart}
           disabled={isOutOfStock}
           className="h-12 w-full sm:flex-1 rounded-full bg-[#3F3A36] px-4 text-sm font-medium text-white hover:bg-[#2E2A27] sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
-          aria-label={`Add ${quantity} item(s) to cart. Total price ${currency}${total}`}
+          aria-label={`Tilføj ${quantity} vare(r) til kurven. Samlet pris ${currency}${total}`}
         >
           <ShoppingBag className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
 
-          <span className="whitespace-nowrap">Add to Cart</span>
+          <span className="whitespace-nowrap">Tilføj til kurv</span>
 
           <span aria-hidden="true" className="ml-1 truncate whitespace-nowrap">
             · {currency}
@@ -52,7 +52,7 @@ const AddToCartBar = ({
           </span>
 
           <span className="sr-only">
-            , total price is {currency}
+            , samlet pris er {currency}
             {total}
           </span>
         </Button>
@@ -63,8 +63,8 @@ const AddToCartBar = ({
         stockQuantity > 0 &&
         quantity >= stockQuantity && (
           <p className="text-sm text-red-500">
-            Only {stockQuantity} item
-            {stockQuantity > 1 ? 's' : ''} available in stock.
+            Kun {stockQuantity} vare
+            {stockQuantity > 1 ? 'r' : ''} på lager.
           </p>
         )}
     </div>

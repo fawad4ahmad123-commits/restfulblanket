@@ -34,27 +34,26 @@ const MobileStickyCart = ({
         <div className="mb-4 grid grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
           <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
             <Truck className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">Free delivery</span>
+            <span className="text-xs text-[#6F6258]">Gratis levering</span>
             <span className="text-sm font-medium text-[#35281E]">
-              Over kr 350
+              Over 350 kr.
             </span>
           </div>
 
           <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
             <ShieldCheck className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">Secure</span>
-            <span className="text-sm font-medium text-[#35281E]">Payment</span>
+            <span className="text-xs text-[#6F6258]">Sikker</span>
+            <span className="text-sm font-medium text-[#35281E]">Betaling</span>
           </div>
 
           <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center">
             <Clock3 className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">5-7 days</span>
-            <span className="text-sm font-medium text-[#35281E]">Delivery</span>
+            <span className="text-xs text-[#6F6258]">5-7 dage</span>
+            <span className="text-sm font-medium text-[#35281E]">Levering</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Product image — always visible */}
           <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
             {product.image && (
               <Image
@@ -66,7 +65,6 @@ const MobileStickyCart = ({
             )}
           </div>
 
-          {/* Name + price — hidden on small, shown on md+ */}
           <div className="hidden min-w-0 flex-1 md:block">
             <h3 className="truncate font-serif text-2xl text-[#35281E]">
               {product.name}
@@ -77,15 +75,13 @@ const MobileStickyCart = ({
             </p>
           </div>
 
-          {/* Spacer on small screens to push button to the right */}
           <div className="flex-1 md:hidden" />
 
-          {/* Button — fixed width, never stretches */}
           <Button
             onClick={onAddToCart}
             className="h-10 shrink-0 rounded-full bg-[#35281E] px-5 text-sm text-white hover:bg-[#35281E]/90 md:h-11 md:px-6"
           >
-            Add to Cart
+            Tilføj til kurv
           </Button>
         </div>
       </div>

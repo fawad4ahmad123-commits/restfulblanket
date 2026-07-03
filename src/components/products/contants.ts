@@ -118,7 +118,7 @@ export const testimonials = [
 export const sections = [
   {
     id: 'why-restful',
-    title: 'Why Restfulblanket?',
-    body: 'Trusted quality. Made for your well-being. Every blanket is tested for safety and crafted from natural, breathable materials so you fall asleep faster and stay asleep longer.',
+    title: 'Hvorfor RestfulBlanket?',
+    body: 'Pålidelig kvalitet. Skabt til dit velvære. Hver dyne er testet for sikkerhed og fremstillet af naturlige, åndbare materialer, så du falder hurtigere i søvn og sover længere uden afbrydelser.',
   },
 ];

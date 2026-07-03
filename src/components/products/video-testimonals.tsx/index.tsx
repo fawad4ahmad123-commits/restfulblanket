@@ -44,11 +44,10 @@ export default function TestimonialVideoSlider({
 
   return (
     <section className={`${isCategory ? '' : 'bg-[#FFF9F5]'} py-16`}>
-      {' '}
       <div className="mx-auto max-w-[1400px] px-5">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="font-serif text-3xl text-[#3A2A21] md:text-5xl">
-            Trusted by <em>partners</em> worldwide.
+            Betroet af <em>partnere</em> verden over.
           </h2>
 
           <div className="flex gap-3">

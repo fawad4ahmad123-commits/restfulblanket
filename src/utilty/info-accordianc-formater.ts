@@ -31,27 +31,25 @@ export const formatProductInformation = (product: any) => {
     .filter((item) => item.title && item.body);
 
   return {
-    heading: 'PRODUCT',
+    heading: 'PRODUKT',
     headingItalic: 'INFORMATION',
-
-    // ✅ ACCORDION DATA
     faqs:
       faqs.length > 0
         ? faqs
         : [
             {
               id: 'product-info',
-              title: safeProduct?.name || 'Product Information',
-              body: description || 'No product information available.',
+              title: safeProduct?.name || 'Produktinformation',
+              body: description || 'Ingen produktinformation tilgængelig.',
             },
           ],
 
-    detailsTitle: 'DETAILS',
+    detailsTitle: 'DETALJER',
 
     details: [
       {
         id: 'size',
-        label: 'Size',
+        label: 'Størrelse',
         value:
           safeProduct?.dimensions?.width && safeProduct?.dimensions?.length
             ? `${safeProduct.dimensions.width} × ${safeProduct.dimensions.length} cm`
@@ -60,20 +58,20 @@ export const formatProductInformation = (product: any) => {
 
       {
         id: 'outer-material',
-        label: 'Outer material',
-        value: '100% cotton',
+        label: 'Ydermateriale',
+        value: '100% bomuld',
       },
 
       {
         id: 'inner-filling',
-        label: 'Inner filling',
-        value: 'Glass beads, poly wadding',
+        label: 'Fyld',
+        value: 'Glasperler, polyvat',
       },
 
       {
         id: 'wash',
-        label: 'Wash',
-        value: 'Machine 60°C',
+        label: 'Vask',
+        value: 'Maskinvask 60°C',
       },
 
       {
@@ -86,30 +84,32 @@ export const formatProductInformation = (product: any) => {
         id: 'ean-gtin',
         label: 'EAN / GTIN',
         value:
-          safeProduct?.stock_status === 'instock' ? 'In Stock' : 'Out of Stock',
+          safeProduct?.stock_status === 'instock'
+            ? 'På lager'
+            : 'Ikke på lager',
       },
     ],
 
-    attributesTitle: 'ATTRIBUTES',
+    attributesTitle: 'EGENSKABER',
 
-    temperatureLabel: 'Temperature',
+    temperatureLabel: 'Temperatur',
 
     temperatureOptions: [
       {
         id: 'cool',
-        label: 'Cool',
+        label: 'Kølig',
         icon: 'cool',
         active: false,
       },
       {
         id: 'medium',
-        label: 'Medium',
+        label: 'Mellem',
         icon: 'medium',
         active: true,
       },
       {
         id: 'warm',
-        label: 'Warm',
+        label: 'Varm',
         icon: 'warm',
         active: false,
       },
