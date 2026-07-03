@@ -1,6 +1,12 @@
-import { ShieldCheck, Truck, BadgeCheck, Award, RotateCcw } from 'lucide-react';
+import Image from 'next/image';
+import { ShieldCheck, Truck, BadgeCheck, RotateCcw, Award } from 'lucide-react';
 
 const benefits = [
+  {
+    icon: ShieldCheck,
+    title: '90 nætters tryghed',
+    description: 'Får du 90 nætter til at finde ud af, om det føles rigtigt.',
+  },
   {
     icon: Truck,
     title: 'Fleksibel levering',
@@ -21,6 +27,11 @@ const benefits = [
     title: '2 års garanti',
     description: 'På produktionsfejl.',
   },
+  {
+    icon: Award,
+    title: 'CE kl. 1 + OEKO-TEX kl. 1',
+    description: 'Certificeret bomuld og medicinsk',
+  },
 ];
 
 export type Certification = {
@@ -29,7 +40,10 @@ export type Certification = {
 };
 
 const defaultCertifications: Certification[] = [
-  { src: '/certifications/goodmarket.png', alt: 'Good Market Approved' },
+  {
+    src: '/certifications/goodmarket.png',
+    alt: 'Good Market Approved',
+  },
   {
     src: '/certifications/peopleandplanetfirst.png',
     alt: 'People Planet First',
@@ -68,10 +82,7 @@ export function WhyRestfulBlanketContent({
               className="rounded-2xl border border-[#E3DCCD] p-5"
             >
               <div className="flex items-start gap-4">
-                <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F7F2EC]"
-                  aria-hidden="true"
-                >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F7F2EC]">
                   <Icon className="h-6 w-6 text-[#3F3A36]" />
                 </div>
 
@@ -90,28 +101,25 @@ export function WhyRestfulBlanketContent({
         })}
       </div>
 
-      {certifications.length > 0 && (
-        <div className="border-t border-[#E3DCCD] pt-4">
-          <p className="mb-4 text-sm text-[#6F6860]">
-            Anerkendt og verificeret socialøkonomisk virksomhed
-          </p>
+      <div className="border-t border-[#E3DCCD] pt-4">
+        <p className="mb-4 text-sm text-[#6F6860]">
+          Anerkendt og verificeret socialøkonomisk virksomhed
+        </p>
 
-          <div
-            className="flex flex-wrap items-center gap-x-5 gap-y-4"
-            aria-label="Certificeringer"
-          >
-            {certifications.map((cert) => (
-              <img
-                key={cert.src}
+        <div className="flex flex-wrap items-center gap-1">
+          {certifications.map((cert) => (
+            <div key={cert.src} className="relative h-12 w-[120px] shrink-0">
+              <Image
                 src={cert.src}
                 alt={cert.alt}
-                loading="lazy"
-                className="h-12 w-auto max-w-[120px] shrink-0 object-contain"
+                fill
+                sizes="120px"
+                className="object-contain"
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
