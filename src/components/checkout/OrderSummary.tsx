@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +21,7 @@ interface OrderSummaryProps {
   onTermsChange: (accepted: boolean) => void;
   onConfirmationChange: (accepted: boolean) => void;
   onPlaceOrder: () => void;
+  isSubmitting?: boolean;
 }
 
 export const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
@@ -31,6 +34,7 @@ export const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
   onTermsChange,
   onConfirmationChange,
   onPlaceOrder,
+  isSubmitting = false,
 }) => {
   return (
     <Card className="border shadow-sm sticky top-4">
@@ -49,7 +53,9 @@ export const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
               <div>
                 <p className="font-medium">{item.name}</p>
                 <p className="text-muted-foreground text-xs">
-                  {item.size}, {item.weight}
+                  {item.size}
+                  {item.size && item.weight ? ', ' : ''}
+                  {item.weight}
                 </p>
               </div>
               <span className="font-medium">${item.price.toFixed(2)}</span>
@@ -136,10 +142,10 @@ export const OrderSummaryComponent: React.FC<OrderSummaryProps> = ({
           className="w-full gap-2"
           size="lg"
           onClick={onPlaceOrder}
-          disabled={!termsAccepted || !confirmationAccepted}
+          disabled={!termsAccepted || !confirmationAccepted || isSubmitting}
         >
           <Lock className="h-4 w-4" />
-          Place Order
+          {isSubmitting ? 'Placing Order...' : 'Place Order'}
         </Button>
       </CardContent>
     </Card>

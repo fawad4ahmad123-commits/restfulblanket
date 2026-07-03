@@ -64,7 +64,6 @@ export const ShippingMethodComponent: React.FC<ShippingMethodProps> = ({
                 <p className="text-[16px] font-medium text-[#392A22]">
                   {selected.title}
                 </p>
-
                 <p className="mt-1 text-sm text-[#8A7E77]">
                   {selected.estimate} /{' '}
                   <span className="font-semibold text-[#392A22]">
@@ -74,8 +73,9 @@ export const ShippingMethodComponent: React.FC<ShippingMethodProps> = ({
               </div>
 
               <ChevronDown
-                className={`h-5 w-5 text-[#6F625B] transition-transform duration-200 ${open ? 'rotate-180' : ''
-                  }`}
+                className={`h-5 w-5 text-[#6F625B] transition-transform duration-200 ${
+                  open ? 'rotate-180' : ''
+                }`}
               />
             </div>
           </button>
@@ -90,16 +90,16 @@ export const ShippingMethodComponent: React.FC<ShippingMethodProps> = ({
                   <label
                     key={option.id}
                     htmlFor={option.id}
-                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors hover:bg-white ${index !== shippingOptions.length - 1
+                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors hover:bg-white ${
+                      index !== shippingOptions.length - 1
                         ? 'border-b border-[#E9E3DE]'
                         : ''
-                      }`}
+                    }`}
                   >
                     <div>
                       <p className="text-[15px] font-medium text-[#392A22]">
                         {option.title}
                       </p>
-
                       <p className="mt-1 text-sm text-[#8A7E77]">
                         {option.estimate} /{' '}
                         <span className="font-semibold text-[#392A22]">

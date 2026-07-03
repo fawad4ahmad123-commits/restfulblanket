@@ -3,13 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { ShippingAddress } from './types';
 
 interface ShippingAddressProps {
@@ -31,14 +24,16 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#35281E">
+        <CardTitle className="text-lg font-semibold text-[#35281E]">
           Shipping Address
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className='text-[#736760]'>Name</Label>
+            <Label htmlFor="name" className="text-[#736760]">
+              Name
+            </Label>
             <Input
               id="name"
               placeholder="First & Last Name"
@@ -46,8 +41,11 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               onChange={(e) => handleChange('name', e.target.value)}
             />
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="address" className='text-[#736760]'>Address</Label>
+            <Label htmlFor="address" className="text-[#736760]">
+              Address
+            </Label>
             <Input
               id="address"
               placeholder="Your Complete Address"
@@ -55,6 +53,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               onChange={(e) => handleChange('address', e.target.value)}
             />
           </div>
+
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-[#736760]">
@@ -82,6 +81,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               />
             </div>
           </div>
+
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="city" className="text-[#736760]">
@@ -119,6 +119,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               />
             </div>
           </div>
+
           <div className="flex items-center space-x-2 pt-2">
             <Checkbox
               id="saveForFuture"

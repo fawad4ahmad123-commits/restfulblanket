@@ -1,11 +1,3 @@
-export interface OrderItem {
-  id: string;
-  name: string;
-  size: string;
-  weight: string;
-  price: number;
-}
-
 export interface ShippingAddress {
   name: string;
   address: string;
@@ -17,15 +9,25 @@ export interface ShippingAddress {
   saveForFuture: boolean;
 }
 
+export interface OrderSummaryItem {
+  id: string | number;
+  name: string;
+  size?: string;
+  weight?: string;
+  price: number;
+  image?: string;
+  color?: string;
+}
+
 export interface OrderSummary {
-  items: OrderItem[];
+  items: OrderSummaryItem[];
   subtotal: number;
   shipping: number;
   tax: number;
   total: number;
 }
 
-export interface PaymentData {
+export interface PaymentDetails {
   paymentMethod: string;
   cardHolder: string;
   cardNumber: string;
