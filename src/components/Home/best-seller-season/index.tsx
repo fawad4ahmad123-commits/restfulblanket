@@ -50,10 +50,18 @@ const BestSellers = ({
     return () => window.removeEventListener('resize', updateVisibleCount);
   }, []);
 
+  const bestsellerProducts = productData.filter((product: any) =>
+    product.meta_data?.some(
+      (meta: any) =>
+        meta.key === '_card_label' &&
+        String(meta.value).toUpperCase() === 'BESTSELLER',
+    ),
+  );
+
   const filteredProducts =
     activeCategory === 'Alle'
-      ? productData
-      : productData.filter((product: any) =>
+      ? bestsellerProducts
+      : bestsellerProducts.filter((product: any) =>
           product.categories?.some(
             (category: any) =>
               CATEGORY_MAPPING[category.slug] === activeCategory,
@@ -96,7 +104,6 @@ const BestSellers = ({
       aria-labelledby="best-sellers-heading"
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        {/* HEADER */}
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           {isProduct ? (
             <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
@@ -136,8 +143,6 @@ const BestSellers = ({
             </div>
           )}
         </div>
-
-        {/* 🟢 MOBILE SLIDER (FIXED) */}
         <div className="lg:hidden">
           <div
             ref={sliderRef}
@@ -162,6 +167,10 @@ const BestSellers = ({
               const color = colorAttribute?.options?.[0] || '';
               const size = sizeAttribute?.options?.[0] || '';
 
+              const badge =
+                item.meta_data?.find((meta: any) => meta.key === '_card_label')
+                  ?.value || '';
+
               return (
                 <div
                   key={item.id}
@@ -177,7 +186,7 @@ const BestSellers = ({
                     originalPrice={item.regular_price}
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
-                    badge={item.featured ? 'BEST SELLER' : ''}
+                    badge={badge}
                     color={color}
                     size={size}
                     type="product"
@@ -187,8 +196,6 @@ const BestSellers = ({
             })}
           </div>
         </div>
-
-        {/* DESKTOP SLIDER (UNCHANGED) */}
         <div className="hidden overflow-hidden lg:block">
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -199,6 +206,10 @@ const BestSellers = ({
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
               const hoverImage = item.images?.[1]?.src || mainImage;
+
+              const badge =
+                item.meta_data?.find((meta: any) => meta.key === '_card_label')
+                  ?.value || '';
 
               return (
                 <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
@@ -212,7 +223,7 @@ const BestSellers = ({
                     originalPrice={item.regular_price}
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
-                    badge={item.featured ? 'BEST SELLER' : ''}
+                    badge={badge}
                     color=""
                     size=""
                     type="product"
@@ -222,8 +233,6 @@ const BestSellers = ({
             })}
           </div>
         </div>
-
-        {/* FOOTER LINK */}
         {!isProduct && (
           <div className="mt-8 flex justify-center">
             <Link

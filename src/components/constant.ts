@@ -152,6 +152,7 @@ export const supportLinks = [
     href: '/contact',
   },
 ];
+
 export const socialLinks = [
   {
     icon: FaInstagram,
@@ -187,7 +188,7 @@ export const socialLinks = [
 
 export const HERO_SLIDES = [
   {
-    image: '/home/hero-img2.jpg',
+    image: '/home/heroimage22.jpg',
     title: 'Tyngdedyner',
     description:
       'RestfulBlanket designer og producere tyngdedyner i naturlig OEKO-TEX bomuld i Odsherred, Danmark.',

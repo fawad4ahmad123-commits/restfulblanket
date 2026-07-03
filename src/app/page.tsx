@@ -8,6 +8,6 @@ export default async function Home() {
     getPages(),
   ]);
   const homePage = pages.find((page: any) => page.slug === 'home');
-  console.log('t3', { categories });
+  console.log('t3', { a: products[0].meta_data });
   return <Landing products={products} response_categories={categories} />;
 }

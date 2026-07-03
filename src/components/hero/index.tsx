@@ -28,11 +28,11 @@ const HeroSection = () => {
         sizes="100vw"
         className="object-cover"
         style={{
-          objectPosition: 'center 25%',
+          objectPosition: 'center 15%',
         }}
       />
 
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30" />
 
       <div className="relative z-10 mx-auto flex min-h-auto w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">
         <div className="flex flex-1 items-center md:items-start">
