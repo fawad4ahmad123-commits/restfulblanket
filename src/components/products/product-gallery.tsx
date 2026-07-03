@@ -12,6 +12,8 @@ interface ProductGalleryProps {
   productName?: string;
 }
 
+const SWIPE_THRESHOLD = 50; // px needed to trigger a slide change
+
 const ProductGallery = ({
   images = [],
   badge,
@@ -28,6 +30,40 @@ const ProductGallery = ({
   const goNext = () =>
     setActiveIndex((prev) => (prev === safeImages.length - 1 ? 0 : prev + 1));
 
+  // --- Swipe / drag handling ---
+  const pointerStartX = React.useRef<number | null>(null);
+  const pointerDeltaX = React.useRef(0);
+  const isDragging = React.useRef(false);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (safeImages.length <= 1) return;
+    pointerStartX.current = e.clientX;
+    pointerDeltaX.current = 0;
+    isDragging.current = true;
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current || pointerStartX.current === null) return;
+    pointerDeltaX.current = e.clientX - pointerStartX.current;
+  };
+
+  const endDrag = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    const delta = pointerDeltaX.current;
+    if (Math.abs(delta) > SWIPE_THRESHOLD) {
+      if (delta < 0) {
+        goNext();
+      } else {
+        goPrev();
+      }
+    }
+    pointerStartX.current = null;
+    pointerDeltaX.current = 0;
+  };
+
   if (safeImages.length === 0) {
     return (
       <div className="relative flex aspect-[636/704] w-full items-center justify-center rounded-2xl bg-[#EFE7DA]">
@@ -40,14 +76,22 @@ const ProductGallery = ({
 
   return (
     <div className="relative w-full overflow-hidden rounded-2xl bg-[#EFE7DA]">
-      <div className="relative aspect-[636/704] w-full">
+      <div
+        className="relative aspect-[636/704] w-full touch-pan-y select-none"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+      >
         <Image
           src={safeImages[activeIndex]}
           alt={`${productName} – image ${activeIndex + 1}`}
           fill
           priority
+          draggable={false}
           sizes="(max-width: 768px) 100vw, 636px"
-          className="object-cover"
+          className="object-cover pointer-events-none"
         />
         <Button
           type="button"

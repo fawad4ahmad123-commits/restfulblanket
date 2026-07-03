@@ -2,14 +2,9 @@ import { ShieldCheck, Truck, BadgeCheck, Award, RotateCcw } from 'lucide-react';
 
 const benefits = [
   {
-    icon: ShieldCheck,
-    title: '90 nætters tryghed',
-    description: 'Du får 90 nætter til at finde ud af, om den føles rigtig.',
-  },
-  {
     icon: Truck,
     title: 'Fleksibel levering',
-    description: 'Hurtig og nem levering, der passer til dig.',
+    description: 'Hurtig og nem levering der passer dig',
   },
   {
     icon: Truck,
@@ -25,11 +20,6 @@ const benefits = [
     icon: BadgeCheck,
     title: '2 års garanti',
     description: 'På produktionsfejl.',
-  },
-  {
-    icon: Award,
-    title: 'CE klasse 1 + OEKO-TEX klasse 1',
-    description: 'Certificeret bomuld og medicinsk godkendt.',
   },
 ];
 
@@ -101,7 +91,7 @@ export function WhyRestfulBlanketContent({
       </div>
 
       {certifications.length > 0 && (
-        <div className="border-t border-[#E3DCCD] pt-4 pb-6 overflow-visible">
+        <div className="border-t border-[#E3DCCD] pt-4">
           <p className="mb-4 text-sm text-[#6F6860]">
             Anerkendt og verificeret socialøkonomisk virksomhed
           </p>

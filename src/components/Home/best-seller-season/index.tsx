@@ -108,7 +108,7 @@ const BestSellers = ({
         <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           {isProduct ? (
             <h2 className="font-serif text-3xl text-[#3b281f] lg:text-5xl">
-              <em>Relaterede  </em>
+              <em>Relaterede </em>
               <span className="font-sans font-normal">produkter.</span>
             </h2>
           ) : (

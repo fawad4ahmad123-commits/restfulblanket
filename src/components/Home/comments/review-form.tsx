@@ -38,12 +38,12 @@ const ReviewForm = ({
 
   const onSubmit = async (data: ReviewFormValues) => {
     if (!agreed) {
-      toast.error('Please confirm your purchase experience.');
+      toast.error('Bekræft venligst din købsoplevelse.');
       return;
     }
 
     if (!rating) {
-      toast.error('Please select a rating.');
+      toast.error('Vælg venligst en bedømmelse.');
       return;
     }
 
@@ -58,7 +58,7 @@ const ReviewForm = ({
         review: data.review,
       });
 
-      toast.success('Review submitted successfully!');
+      toast.success('Anmeldelse indsendt!');
 
       reset();
       setRating(0);
@@ -70,7 +70,7 @@ const ReviewForm = ({
       console.error(error);
 
       toast.error(
-        error?.message || 'Something went wrong while submitting review',
+        error?.message || 'Noget gik galt under indsendelse af anmeldelsen',
       );
     } finally {
       setLoading(false);
@@ -83,7 +83,9 @@ const ReviewForm = ({
       className="w-full rounded-2xl bg-[#F5F0EB] p-8 shadow-sm"
     >
       <div className="mb-6 flex items-center justify-between">
-        <h3 className="font-serif text-2xl text-[#392A22]">Write a Review</h3>
+        <h3 className="font-serif text-2xl text-[#392A22]">
+          Skriv en anmeldelse
+        </h3>
 
         <button
           type="button"
@@ -96,7 +98,7 @@ const ReviewForm = ({
 
       <div className="mb-4">
         <label className="mb-2 block text-sm font-medium text-[#392A22]">
-          Overall Rating
+          Samlet bedømmelse
         </label>
 
         <div className="flex gap-1">
@@ -122,14 +124,14 @@ const ReviewForm = ({
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-[#392A22]">
-          Your Name
+          Dit navn
         </label>
 
         <input
           {...register('name', {
-            required: 'Name is required',
+            required: 'Navn er påkrævet',
           })}
-          placeholder="Enter your name"
+          placeholder="Indtast dit navn"
           className="w-full rounded-lg border border-[#392A22]/15 bg-white px-4 py-2.5 text-sm"
         />
 
@@ -140,31 +142,31 @@ const ReviewForm = ({
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-[#392A22]">
-          Review Title
+          Anmeldelsestitel
         </label>
 
         <input
           {...register('title')}
-          placeholder="Summarize your experience"
+          placeholder="Opsummer din oplevelse"
           className="w-full rounded-lg border border-[#392A22]/15 bg-white px-4 py-2.5 text-sm"
         />
       </div>
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-[#392A22]">
-          Your Review
+          Din anmeldelse
         </label>
 
         <textarea
           rows={4}
           {...register('review', {
-            required: 'Review is required',
+            required: 'Anmeldelse er påkrævet',
             minLength: {
               value: 10,
-              message: 'Review must be at least 10 characters',
+              message: 'Anmeldelsen skal være mindst 10 tegn',
             },
           })}
-          placeholder="Share the details of your experience..."
+          placeholder="Del detaljerne om din oplevelse..."
           className="w-full resize-none rounded-lg border border-[#392A22]/15 bg-white px-4 py-2.5 text-sm"
         />
 
@@ -175,15 +177,15 @@ const ReviewForm = ({
 
       <div className="mb-5">
         <label className="mb-1 block text-sm font-medium text-[#392A22]">
-          Your Email
+          Din e-mail
         </label>
 
         <input
           type="email"
           {...register('email', {
-            required: 'Email is required',
+            required: 'E-mail er påkrævet',
           })}
-          placeholder="Enter your email"
+          placeholder="Indtast din e-mail"
           className="w-full rounded-lg border border-[#392A22]/15 bg-white px-4 py-2.5 text-sm"
         />
 
@@ -199,8 +201,8 @@ const ReviewForm = ({
           onChange={(e) => setAgreed(e.target.checked)}
           className="mt-0.5 h-4 w-4 accent-[#392A22]"
         />
-        I confirm this is based on my own experience and I purchased this
-        product.
+        Jeg bekræfter, at dette er baseret på min egen oplevelse, og at jeg har
+        købt dette produkt.
       </label>
 
       <button
@@ -208,7 +210,7 @@ const ReviewForm = ({
         disabled={loading}
         className="w-full rounded-full bg-[#392A22] py-3 text-sm font-medium text-white transition hover:bg-[#4A382E] disabled:opacity-50"
       >
-        {loading ? 'Submitting...' : 'Submit Review'}
+        {loading ? 'Indsender...' : 'Indsend anmeldelse'}
       </button>
     </form>
   );

@@ -98,7 +98,7 @@ export async function getProductBySlug(slug: string) {
           ).toString('base64'),
       },
       next: {
-        revalidate: 3600,
+        revalidate: 300,
       },
     },
   );
@@ -189,11 +189,9 @@ export async function getAllProducts(params?: {
             `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
           ).toString('base64'),
       },
-      // no-store when search/filters are present so results aren't cached/stale,
-      // otherwise use revalidate for the default listing
       ...(params?.search || params?.category
         ? { cache: 'no-store' as const }
-        : { next: { revalidate: 3600 } }),
+        : { next: { revalidate: 300 } }),
     },
   );
 
@@ -210,7 +208,7 @@ export async function getPages() {
     `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/pages?per_page=100`,
     {
       next: {
-        revalidate: 3600,
+        revalidate: 300,
       },
     },
   );

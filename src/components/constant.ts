@@ -32,32 +32,6 @@ export const navigation = [
         ],
       },
     ],
-    products: [
-      {
-        title: 'Pearl Classic',
-        price: '€79',
-        image: '/categories/pearl-classic.jpg',
-        href: '/categories',
-      },
-      {
-        title: 'Pearl Cotton Eco',
-        price: '€89',
-        image: '/categories/pearl-cotton-eco.jpg',
-        href: '/categories',
-      },
-      {
-        title: 'Pearl Lyocell',
-        price: '€151.20',
-        image: '/categories/pearl-lyocell.jpg',
-        href: '/categories',
-      },
-      {
-        title: 'ProCare Pearl',
-        price: '€99.50',
-        image: '/categories/procare-pearl.jpg',
-        href: '/categories',
-      },
-    ],
   },
   {
     title: 'Tyngdetæppe',

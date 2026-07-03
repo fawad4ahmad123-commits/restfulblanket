@@ -19,8 +19,8 @@ export interface BlogCard {
   date: string;
   views: string;
   slug: string;
+  isSlide?: boolean;
 }
-
 export interface CategoryCard {
   image: string;
   title: string;

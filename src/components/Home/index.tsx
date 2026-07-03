@@ -9,7 +9,7 @@ import ExpertsSection from './expert-review/expert-session';
 import ProductCategories from './product-categories';
 import RestfulBlanketVideo from './video-descripton';
 
-const Landing = ({ products, response_categories }: any) => {
+const Landing = ({ products, response_categories, blogs }: any) => {
   return (
     <div>
       <HeroSection />
@@ -21,7 +21,7 @@ const Landing = ({ products, response_categories }: any) => {
       <Coments id={''} />
       <RestfulBlanketVideo />
       <CommonQuestions />
-      <BlogsSection />
+      <BlogsSection blog={blogs} />
     </div>
   );
 };

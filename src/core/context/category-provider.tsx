@@ -1,11 +1,6 @@
 'use client';
 import { createContext, useContext, useMemo, ReactNode } from 'react';
 import { Category, CategoryContextType } from './types';
-
-// --- Product normalization -------------------------------------------
-// ASSUMPTION: getBestSellers() returns WooCommerce-style objects.
-// Adjust the field lookups below if your real API shape differs —
-// this is the only function that needs to change.
 function normalizeProduct(p: any) {
   const image =
     p.images?.[0]?.src ??

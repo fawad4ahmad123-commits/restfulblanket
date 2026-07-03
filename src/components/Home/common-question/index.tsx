@@ -57,7 +57,8 @@ const CommonQuestions = () => {
               fontFamily: "'Georgia', 'Times New Roman', serif",
             }}
           >
-            Almindelige <em className="font-normal italic">spørgsmål</em>
+            Hvorfor vælge{' '}
+            <em className="font-normal italic"> RestfulBlanket?</em>
           </h2>
 
           <div className="flex flex-col gap-3">

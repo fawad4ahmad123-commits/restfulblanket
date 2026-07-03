@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useMemo } from 'react';
@@ -12,15 +11,25 @@ import { useMergedNavigation } from '@/src/hooks/use-merged-navigation';
 const MAX_MAIN_CATEGORIES = 4;
 const MAX_SUB_CATEGORIES = 4;
 
+const SUBCATEGORY_ORDER = [
+  'Tyngdedyner',
+  'Tyngdetæppe',
+  'Sengesæt',
+  'Hovedpuder',
+];
+
 const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
   const pathname = usePathname();
-  const { parentCategories, getChildren, getProductsByCategory } =
+  const { categories, parentCategories, getChildren, getProductsByCategory } =
     useCategories();
-  const navigation = useMergedNavigation();
 
+  const navigation = useMergedNavigation();
   const visibleParentCategories = useMemo(
-    () => parentCategories.slice(0, MAX_MAIN_CATEGORIES),
-    [parentCategories],
+    () =>
+      parentCategories
+        .filter((category: any) => getChildren(category.id).length > 0)
+        .slice(0, MAX_MAIN_CATEGORIES),
+    [parentCategories, getChildren],
   );
 
   const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(
@@ -39,6 +48,23 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
     () => visibleParentCategories.find((c: any) => c.id === activeCategoryId),
     [visibleParentCategories, activeCategoryId],
   );
+  const tyngdedynerCategory = categories.find(
+    (c: any) => c.slug === 'tyngdedyner',
+  );
+
+  const sovevaerelseCategory = categories.find(
+    (c: any) => c.slug === 'sovevaerelse',
+  );
+
+  const tyngdedynerChildren = tyngdedynerCategory
+    ? getChildren(tyngdedynerCategory.id)
+    : [];
+
+  const tilbehoerCategories = sovevaerelseCategory
+    ? getChildren(sovevaerelseCategory.id).filter(
+        (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
+      )
+    : [];
 
   return (
     <nav
@@ -46,22 +72,21 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
       className="hidden items-center gap-6 lg:flex xl:gap-8"
     >
       {navigation.map((item: any) => {
+        const isActive = pathname === item.href;
+
+        const baseLinkClass = cn(
+          'whitespace-nowrap text-sm transition-colors',
+          isHome
+            ? cn(
+                'hover:text-white/70',
+                isActive ? 'text-white' : 'text-white/90',
+              )
+            : cn(
+                'hover:text-[#392A22]/70',
+                isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
+              ),
+        );
         if (item.href === '/shop') {
-          const isActive = pathname === '/shop';
-
-          const baseLinkClass = cn(
-            'whitespace-nowrap text-sm transition-colors',
-            isHome
-              ? cn(
-                  'hover:text-white/70',
-                  isActive ? 'text-white' : 'text-white/90',
-                )
-              : cn(
-                  'hover:text-[#392A22]/70',
-                  isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
-                ),
-          );
-
           return (
             <div key={item.title} className="group static">
               <Link
@@ -94,15 +119,18 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                   )}
                 >
                   {visibleParentCategories.map((category: any) => {
-                    const children = getChildren(category.id).slice(
-                      0,
-                      MAX_SUB_CATEGORIES,
-                    );
+                    const children = [...getChildren(category.id)]
+                      .sort(
+                        (a: any, b: any) =>
+                          SUBCATEGORY_ORDER.indexOf(a.name) -
+                          SUBCATEGORY_ORDER.indexOf(b.name),
+                      )
+                      .slice(0, MAX_SUB_CATEGORIES);
 
                     return (
                       <div
                         key={category.id}
-                        className="flex min-w-[180px] max-w-[200px] flex-col gap-1"
+                        className="flex min-w-[180px] max-w-[220px] flex-col gap-1"
                         onMouseEnter={() => setHoveredCategoryId(category.id)}
                       >
                         <Link
@@ -116,29 +144,44 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           {category.name}
                         </Link>
 
-                        {children.map((child: any) => (
-                          <Link
-                            key={child.id}
-                            href={`/shop?slug=${child.slug}`}
-                            role="menuitem"
-                            aria-label={`Go to ${child.name}`}
-                            title={child.name}
-                            onMouseEnter={() => setHoveredCategoryId(child.id)}
-                            className={cn(
-                              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
-                              isHome
-                                ? 'text-[#E9DDD4] hover:bg-white/10'
-                                : 'text-[#392A22] hover:bg-[#392A22]/10',
-                            )}
-                          >
-                            <span className="truncate">{child.name}</span>
-                          </Link>
-                        ))}
+                        {children.map((child: any) => {
+                          const childImageSrc = child?.image?.src;
+
+                          return (
+                            <Link
+                              key={child.id}
+                              href={`/shop?slug=${child.slug}`}
+                              role="menuitem"
+                              aria-label={`Go to ${child.name}`}
+                              title={child.name}
+                              onMouseEnter={() =>
+                                setHoveredCategoryId(child.id)
+                              }
+                              className={cn(
+                                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                                isHome
+                                  ? 'text-[#E9DDD4] hover:bg-white/10'
+                                  : 'text-[#392A22] hover:bg-[#392A22]/10',
+                              )}
+                            >
+                              {childImageSrc ? (
+                                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
+                                  <Image
+                                    src={childImageSrc}
+                                    alt={child.name}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                </span>
+                              ) : null}
+                              <span className="truncate">{child.name}</span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     );
                   })}
 
-                  {/* Right-side product panel, filtered by hovered category */}
                   {shopDropdownProducts.length > 0 && (
                     <div className="flex flex-1 flex-col gap-4 border-l border-white/10 pl-10">
                       {activeCategory?.image?.src && (
@@ -175,16 +218,6 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                             >
                               {product.title}
                             </span>
-                            <span
-                              className={cn(
-                                'truncate text-sm',
-                                isHome
-                                  ? 'text-[#E9DDD4]/60'
-                                  : 'text-[#392A22]/60',
-                              )}
-                            >
-                              {product.price}
-                            </span>
                           </Link>
                         ))}
                       </div>
@@ -195,27 +228,14 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
             </div>
           );
         }
+        const hasRealGroups =
+          Array.isArray(item.groups) &&
+          item.groups.some(
+            (group: any) =>
+              Array.isArray(group.links) && group.links.length > 0,
+          );
 
-        const isActive = pathname === item.href;
-        const hasGroups = item.groups?.length > 0;
-        const hasChildren = item.children?.length > 0;
-        const hasProducts = item.products?.length > 0;
-        const hasDropdown = hasGroups || hasChildren;
-
-        const baseLinkClass = cn(
-          'whitespace-nowrap text-sm transition-colors',
-          isHome
-            ? cn(
-                'hover:text-white/70',
-                isActive ? 'text-white' : 'text-white/90',
-              )
-            : cn(
-                'hover:text-[#392A22]/70',
-                isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
-              ),
-        );
-
-        if (!hasDropdown) {
+        if (!hasRealGroups) {
           return (
             <Link
               key={item.title}
@@ -228,6 +248,15 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
             </Link>
           );
         }
+
+        const dynamicProducts =
+          item.title === 'Tyngdetæpper'
+            ? getProductsByCategory(tyngdedynerCategory?.id ?? null, 4)
+            : item.title === 'Tilbehør'
+              ? getProductsByCategory(sovevaerelseCategory?.id ?? null, 4)
+              : item.products || [];
+
+        const hasProducts = dynamicProducts.length > 0;
 
         return (
           <div key={item.title} className="group static">
@@ -264,7 +293,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                     (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
                 )}
               >
-                {item.groups?.map((group: any) => (
+                {item.groups.map((group: any) => (
                   <div
                     key={group.heading}
                     className="flex min-w-[180px] max-w-[200px] flex-col gap-1"
@@ -279,22 +308,44 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                       {group.heading}
                     </span>
 
-                    {group.links
+                    {(item.title === 'Tyngdetæpper'
+                      ? tyngdedynerChildren
+                      : item.title === 'Tilbehør'
+                        ? tilbehoerCategories
+                        : group.links
+                    )
                       .slice(0, MAX_SUB_CATEGORIES)
-                      .map((link: any) => (
+                      .map((category: any) => (
                         <Link
-                          key={link.title}
-                          href={link.href}
+                          key={category.id || category.title}
+                          href={
+                            category.slug
+                              ? `/shop?slug=${category.slug}`
+                              : category.href
+                          }
                           role="menuitem"
-                          title={link.title}
+                          title={category.name || category.title}
                           className={cn(
-                            'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                             isHome
                               ? 'text-[#E9DDD4] hover:bg-white/10'
                               : 'text-[#392A22] hover:bg-[#392A22]/10',
                           )}
                         >
-                          <span className="truncate">{link.title}</span>
+                          {(category?.image?.src || category?.image) && (
+                            <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
+                              <Image
+                                src={category?.image?.src || category?.image}
+                                alt={category.name || category.title}
+                                fill
+                                className="object-cover"
+                              />
+                            </span>
+                          )}
+
+                          <span className="truncate">
+                            {category.name || category.title}
+                          </span>
                         </Link>
                       ))}
                   </div>
@@ -302,7 +353,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
 
                 {hasProducts && (
                   <div className="grid flex-1 grid-cols-4 gap-6">
-                    {item.products.map((product: any) => (
+                    {dynamicProducts.map((product: any) => (
                       <Link
                         key={product.title}
                         href={product.href}
@@ -325,15 +376,6 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           )}
                         >
                           {product.title}
-                        </span>
-
-                        <span
-                          className={cn(
-                            'truncate text-sm',
-                            isHome ? 'text-[#E9DDD4]/60' : 'text-[#392A22]/60',
-                          )}
-                        >
-                          {product.price}
                         </span>
                       </Link>
                     ))}

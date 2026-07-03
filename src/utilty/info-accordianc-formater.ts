@@ -1,6 +1,23 @@
 export const formatProductInformation = (product: any) => {
   const safeProduct = product || {};
 
+  const metaData = safeProduct?.meta_data || [];
+
+  const getMetaValue = (key: string) =>
+    metaData.find((item: any) => item.key === key)?.value;
+
+  const temperature = getMetaValue('_cura_temperature');
+
+  let certificates: any[] = [];
+
+  try {
+    certificates = JSON.parse(getMetaValue('_cura_certificate_images') || '[]');
+  } catch {
+    certificates = [];
+  }
+
+  const properties = getMetaValue('_cura_properties');
+
   const description = safeProduct?.description || '';
 
   const stripHtml = (html: string) =>
@@ -32,7 +49,9 @@ export const formatProductInformation = (product: any) => {
 
   return {
     heading: 'PRODUKT',
+
     headingItalic: 'INFORMATION',
+
     faqs:
       faqs.length > 0
         ? faqs
@@ -59,19 +78,24 @@ export const formatProductInformation = (product: any) => {
       {
         id: 'outer-material',
         label: 'Ydermateriale',
-        value: '100% bomuld',
+        value:
+          safeProduct?.attributes
+            ?.find((attr: any) => attr.name?.toLowerCase() === 'materials')
+            ?.options?.join(', ') || '-',
       },
 
       {
         id: 'inner-filling',
         label: 'Fyld',
-        value: 'Glasperler, polyvat',
+        value: properties || '-',
       },
 
       {
         id: 'wash',
         label: 'Vask',
-        value: 'Maskinvask 60°C',
+        value: safeProduct?.short_description?.includes('60°C')
+          ? 'Maskinvask 60°C'
+          : '-',
       },
 
       {
@@ -79,18 +103,11 @@ export const formatProductInformation = (product: any) => {
         label: 'SKU',
         value: safeProduct?.sku || '-',
       },
-
-      {
-        id: 'ean-gtin',
-        label: 'EAN / GTIN',
-        value:
-          safeProduct?.stock_status === 'instock'
-            ? 'På lager'
-            : 'Ikke på lager',
-      },
     ],
 
     attributesTitle: 'EGENSKABER',
+
+    certificates,
 
     temperatureLabel: 'Temperatur',
 
@@ -99,19 +116,21 @@ export const formatProductInformation = (product: any) => {
         id: 'cool',
         label: 'Kølig',
         icon: 'cool',
-        active: false,
+        active: temperature === 'cool',
       },
       {
         id: 'medium',
         label: 'Mellem',
         icon: 'medium',
-        active: true,
+        active:
+          temperature === 'medium' ||
+          !['cool', 'medium', 'warm'].includes(temperature),
       },
       {
         id: 'warm',
         label: 'Varm',
         icon: 'warm',
-        active: false,
+        active: temperature === 'warm',
       },
     ],
   };

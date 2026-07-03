@@ -164,28 +164,43 @@ export const BLOGS = [
 
 export const FAQS = [
   {
-    question: 'Hvordan vælger jeg den rigtige vægt?',
+    question: 'Naturlige og plastfri materialer',
     answer:
-      'Vi anbefaler at vælge et tæppe, der vejer cirka 10–12% af din kropsvægt. Brug vores vægtguide ovenfor — hvis du ligger mellem to størrelser, anbefaler vi at vælge den lettere variant til dit første tæppe. Du kan altid bytte inden for vores 30-nætters prøveperiode.',
+      'Naturlige, plastfri tyngdeprodukter syet i Danmark med renset, polerede og gennemtørrede rapsfrø, som hjælper kroppen og nervesystemet med at finde ro. Produkterne er CE-mærkede som medicinsk udstyr klasse 1, lavet i OEKO-TEX certificeret bomuld og kan vaskes ved 60 °C, så de holder til virkeligt liv.',
   },
   {
-    question: 'Er Nord Classic egnet til varme sovende?',
+    question: 'CE-mærket medicinsk udstyr (Klasse 1)',
     answer:
-      'Ja! Nord Classic er lavet af åndbare, naturlige materialer, der regulerer temperaturen hele natten, hvilket gør det til et godt valg for varme sovende. Mange kunder oplever faktisk, at de sover køligere med et vægtet tæppe end med en almindelig dyne.',
+      'En RestfulBlanket-tyngdedyne er designet til at give stille, jævn sansestimulering, der hjælper med at falde til ro, uden glas eller plast og uden unødig varme. Den kan bruges sammen med din egen dyne eller alene, så du får både rolig tyngde og frihed frem for kompromis.',
   },
   {
-    question: 'Kan jeg bruge det vægtede tæppe med et dynebetræk?',
+    question: 'Udviklet til nervesystemet',
     answer:
-      'Absolut. Vores tæpper er designet til at passe til standard dynebetræk. Vi tilbyder også vores egen kollektion af betræk lavet af de samme åndbare materialer, tilpasset hver enkelt tæppevægt.',
+      'RestfulBlanket tilbyder også tyngdetæpper, børnemodeller og tilbehør, alle med naturligt rapsfyld og organisk materialer. Produkterne former sig blødt omkring kroppen, giver kølig komfort og er næsten lydløse, så sansestærke personer oplever ro uden plastiklyde.',
   },
   {
-    question: 'Hvordan rengør jeg tæppet?',
+    question: 'Dansk produceret, håndsyet kvalitet',
     answer:
-      'Alle Nord Classic tæpper kan maskinvaskes på et skånsomt program op til 30°C. Vi anbefaler at bruge en vaskemaskine med stor kapacitet (mindst 8 kg) for en jævn rengøring. Tørretumbl på lav varme eller lad det lufttørre fladt.',
+      'Naturlig tyngde kan hjælpe, hvis du eller dit barn har angst, stress, uro, ADHD, autisme, PTSD, tankemylder eller generelle søvnproblemer. Tyngden skaber en dyb, jævn stimulering, som kan understøtte ro og hvile sammen med andre strategier som rutiner og terapi.',
   },
   {
-    question: 'Hvad er jeres returpolitik?',
+    question: 'Vaskbar og praktisk i hverdagen',
     answer:
-      'Vi tilbyder en 30-nætters prøveperiode på alle tæpper. Hvis du ikke er helt tilfreds, kan du kontakte vores team, så arrangerer vi gratis afhentning og fuld refundering — uden spørgsmål.',
+      'RestfulBlanket fokuserer på at skabe ægte ro for rigtige mennesker, ikke blot tekniske certificeringer. Kunder oplever forbedret søvn, kølig komfort, naturlige materialer uden kvalme varme og en følelse af tryghed, når kroppen får lov at give slip.',
+  },
+  {
+    question: 'Kølig, stille og behagelig tyngde',
+    answer:
+      'Produkter fra RestfulBlanket er håndsyet med omhu og naturlige materialer, samtidig med at de er praktiske i hverdagen, fordi de kan vaskes ved 60 °C og tørretumbles uden at miste form eller funktion.',
+  },
+  {
+    question: 'Socialøkonomisk virksomhed',
+    answer:
+      'Et alternativ til traditionelle tyngdedyner med glas- eller plastkugler, som kan være varme, knitre og svære at vaske. RestfulBlanket bruger naturligt rapsfyld, som er køligere, stille og bedre egnet til følsomme sanser uden plastik i fyldet.',
+  },
+  {
+    question: 'Bredt udvalg til forskellige behov',
+    answer:
+      'Når du vælger et produkt fra RestfulBlanket, får du både en naturlig løsning og støtte til kroppen, samtidig med at du støtter en socialøkonomisk virksomhed, der skaber meningsfulde job og arbejder med ro og omsorg i hele produktionen.',
   },
 ];

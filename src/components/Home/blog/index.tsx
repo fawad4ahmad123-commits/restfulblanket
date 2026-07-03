@@ -18,7 +18,7 @@ const BlogCard = ({
   const router = useRouter();
 
   return (
-    <article className="group flex h-full flex-col">
+    <article className="group flex h-full w-full flex-col">
       <div className="relative overflow-hidden rounded-[28px]">
         <div className="relative h-[320px]">
           <Image
@@ -51,7 +51,7 @@ const BlogCard = ({
           {excerpt}
         </p>
 
-        <div className="mt-5 border-t border-[#d9cec5] pt-4 pb-3">
+        <div className="mt-5 border-t border-[#d9cec5] pb-3 pt-4">
           <div className="flex items-center gap-6 text-sm text-[#85776d]">
             <div
               className="flex items-center gap-2"
@@ -76,7 +76,7 @@ const BlogCard = ({
           aria-label={`Read more about ${title}`}
           title={`Read more about ${title}`}
           onClick={() => router.push(`/blog-detail/${slug}`)}
-          className="mt-6 w-full rounded-full bg-[#3b281f] py-4 text-sm font-medium text-white transition hover:bg-[#3b281f] hover:text-white md:mt-auto md:bg-[#e6dbd0] md:text-[#3b281f]"
+          className="mt-6 w-full rounded-full bg-[#E9DDD4] py-4 text-sm font-medium text-[#35281E] transition hover:bg-[#2a1c15]"
         >
           Læs mere
         </button>

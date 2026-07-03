@@ -1,9 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Truck, ShieldCheck, Clock3 } from 'lucide-react';
+import {
+  Truck,
+  ShieldCheck,
+  Clock3,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 
 interface MobileStickyCartProps {
   visible: boolean;
@@ -21,6 +28,8 @@ const MobileStickyCart = ({
   product,
   onAddToCart,
 }: MobileStickyCartProps) => {
+  const [showInfo, setShowInfo] = useState(true);
+
   return (
     <div
       className={cn(
@@ -31,26 +40,47 @@ const MobileStickyCart = ({
       )}
     >
       <div className="rounded-[28px] bg-[#FDF9F6] p-4 shadow-2xl">
-        <div className="mb-4 grid grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
-          <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
-            <Truck className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">Gratis levering</span>
-            <span className="text-sm font-medium text-[#35281E]">
-              Over 350 kr.
-            </span>
-          </div>
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => setShowInfo((prev) => !prev)}
+            aria-label={showInfo ? 'Hide information' : 'Show information'}
+            className="mb-2 flex w-full items-center justify-end text-[#35281E]"
+          >
+            {showInfo ? (
+              <ChevronUp className="h-5 w-5" />
+            ) : (
+              <ChevronDown className="h-5 w-5" />
+            )}
+          </button>
 
-          <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
-            <ShieldCheck className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">Sikker</span>
-            <span className="text-sm font-medium text-[#35281E]">Betaling</span>
-          </div>
+          {showInfo && (
+            <div className="grid grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
+              <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
+                <Truck className="h-4 w-4 text-[#35281E]" />
+                <span className="text-xs text-[#6F6258]">Gratis levering</span>
+                <span className="text-sm font-medium text-[#35281E]">
+                  Over 350 kr.
+                </span>
+              </div>
 
-          <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center">
-            <Clock3 className="h-4 w-4 text-[#35281E]" />
-            <span className="text-xs text-[#6F6258]">5-7 dage</span>
-            <span className="text-sm font-medium text-[#35281E]">Levering</span>
-          </div>
+              <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
+                <ShieldCheck className="h-4 w-4 text-[#35281E]" />
+                <span className="text-xs text-[#6F6258]">Sikker</span>
+                <span className="text-sm font-medium text-[#35281E]">
+                  Betaling
+                </span>
+              </div>
+
+              <div className="flex flex-col items-center justify-center gap-1 px-2 py-3 text-center">
+                <Clock3 className="h-4 w-4 text-[#35281E]" />
+                <span className="text-xs text-[#6F6258]">5-7 dage</span>
+                <span className="text-sm font-medium text-[#35281E]">
+                  Levering
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-3">

@@ -1,13 +1,18 @@
 import Landing from '../components/Home';
 import { getBestSellers, getCategories, getPages } from '@/src/lib/products';
+import { getBlogs } from '../lib/blog';
 
 export default async function Home() {
-  const [products, categories, pages] = await Promise.all([
+  const [products, categories, blogs] = await Promise.all([
     getBestSellers(),
     getCategories(),
-    getPages(),
+    getBlogs(),
   ]);
-  const homePage = pages.find((page: any) => page.slug === 'home');
-  console.log('t3', { a: products[0].meta_data });
-  return <Landing products={products} response_categories={categories} />;
+  return (
+    <Landing
+      products={products}
+      response_categories={categories}
+      blogs={blogs}
+    />
+  );
 }
