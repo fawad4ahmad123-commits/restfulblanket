@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import SliderCard from '../../generic/card-slider';
 import SliderControls from '../../generic/slider-control';
 import { PLACEHOLDER_IMAGE } from '../../constant';
+import CompareBar from '../../compare/compare-bar';
 
 const CATEGORIES = ['Alle', 'Voksne', 'Børn', 'Dyner', 'Tilbehør'];
 
@@ -236,6 +237,7 @@ const BestSellers = ({
             })}
           </div>
         </div>
+        <CompareBar />
         {!isProduct && (
           <div className="mt-8 flex justify-center">
             <Link

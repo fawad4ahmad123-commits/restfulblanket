@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { CartProvider } from '../core/context/cart-context';
 import { CategoryProvider } from '../core/context/category-provider';
 import { getBestSellers, getCategories } from '../lib/products';
+import { CompareProvider } from '../core/context/compare-provider';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -37,12 +38,14 @@ export default async function RootLayout({
     >
       <body suppressHydrationWarning>
         <CategoryProvider categories={categories} products={products}>
-          <CartProvider>
-            <MainLayout>
-              {children}
-              <Toaster />
-            </MainLayout>
-          </CartProvider>
+          <CompareProvider>
+            <CartProvider>
+              <MainLayout>
+                {children}
+                <Toaster />
+              </MainLayout>
+            </CartProvider>
+          </CompareProvider>
         </CategoryProvider>
       </body>
     </html>

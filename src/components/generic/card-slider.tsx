@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, Eye, ShoppingBag } from 'lucide-react';
+import { Heart, Eye, ShoppingBag, Check, Scale } from 'lucide-react';
 import { SliderCard as SliderCardProps } from './types';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/src/helper/product-feature';
 import { useCart } from '@/src/core/context/card-Provider';
+import { useCompare } from '@/src/core/context/compare-provider';
+import { cn } from '@/lib/utils';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -30,9 +32,13 @@ const SliderCard = ({
   isProduct,
 }: ExtendedSliderCardProps) => {
   const [wished, setWished] = useState(false);
-  const router = useRouter();
+  const { compareItems, toggleCompare } = useCompare();
   const { addToCart } = useCart();
+  const router = useRouter();
 
+  const isCompared = compareItems.some(
+    (item) => String(item.id) === String(id),
+  );
   const stars = Math.round(rating);
 
   return (
@@ -140,18 +146,52 @@ const SliderCard = ({
           </p>
         )}
 
-        <div className="mb-5 flex items-center gap-2">
-          {price && (
-            <span className="text-lg font-semibold text-[#3b281f]">
-              {formatPrice(price)}
-            </span>
-          )}
+        <div className="mb-5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {price && (
+              <span className="text-lg font-semibold text-[#3b281f]">
+                {formatPrice(price)}
+              </span>
+            )}
 
-          {originalPrice && (
-            <span className="text-sm text-[#35281E] line-through">
-              {formatPrice(originalPrice)}
-            </span>
-          )}
+            {originalPrice && (
+              <span className="text-sm text-[#35281E] line-through">
+                {formatPrice(originalPrice)}
+              </span>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+
+              toggleCompare({
+                id: String(id),
+                title,
+                image,
+                price: Number(price) || 0,
+                slug,
+              });
+            }}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 ${
+              isCompared
+                ? 'border-[#3B281F] bg-[#3B281F] text-white'
+                : 'border-[#E9DDD4] bg-white text-[#3B281F]'
+            }`}
+          >
+            {isCompared ? (
+              <Check className="h-5 w-5" />
+            ) : (
+              <Image
+                src="/home/card-compare-icon.png"
+                alt="compare-icon"
+                width={20}
+                height={20}
+                className={cn('h-5 w-5 md:h-[18px] md:w-[18px]')}
+              />
+            )}
+          </button>
         </div>
 
         <button
