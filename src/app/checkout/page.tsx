@@ -79,7 +79,7 @@ const CheckoutPage: React.FC = () => {
         body: JSON.stringify({
           shippingAddress,
           shippingMethod,
-          paymentDetails,
+          paymentMethod: paymentDetails.paymentMethod, // ✅ FIXED
           cartItems,
         }),
       });
@@ -100,11 +100,10 @@ const CheckoutPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#fdf9f6]">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="flex items-center gap-2 mb-8">
-          <ShoppingBag className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Checkout</h1>
+          <h1 className="text-2xl font-bold text-[#35281E]">Checkout</h1>
         </div>
 
         {orderError && (

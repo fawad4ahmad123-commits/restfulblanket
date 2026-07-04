@@ -39,6 +39,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               placeholder="First & Last Name"
               value={address.name}
               onChange={(e) => handleChange('name', e.target.value)}
+              className="p-5"
             />
           </div>
 
@@ -51,6 +52,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
               placeholder="Your Complete Address"
               value={address.address}
               onChange={(e) => handleChange('address', e.target.value)}
+              className="p-5"
             />
           </div>
 
@@ -65,6 +67,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 placeholder="contact@gmail.com"
                 value={address.email}
                 onChange={(e) => handleChange('email', e.target.value)}
+                className="p-5"
               />
             </div>
 
@@ -78,6 +81,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 placeholder="+1 234 567 890"
                 value={address.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
+                className="p-5"
               />
             </div>
           </div>
@@ -92,6 +96,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 placeholder="Ottawa"
                 value={address.city}
                 onChange={(e) => handleChange('city', e.target.value)}
+                className="p-5"
               />
             </div>
 
@@ -104,6 +109,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 placeholder="Ontario"
                 value={address.state}
                 onChange={(e) => handleChange('state', e.target.value)}
+                className="p-5"
               />
             </div>
 
@@ -116,6 +122,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
                 placeholder="Zip Code"
                 value={address.zip}
                 onChange={(e) => handleChange('zip', e.target.value)}
+                className="p-5"
               />
             </div>
           </div>
@@ -130,7 +137,7 @@ export const ShippingAddressComponent: React.FC<ShippingAddressProps> = ({
             />
             <Label
               htmlFor="saveForFuture"
-              className="text-sm font-normal cursor-pointer"
+              className="text-sm font-normal cursor-pointer text-[#35281E]"
             >
               Save for future purchases
             </Label>
