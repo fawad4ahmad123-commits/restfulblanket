@@ -6,15 +6,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { CreditCard, Smartphone, Wallet, Apple } from 'lucide-react';
+import { PaymentDetails } from './types';
 
-interface PaymentMethodProps {
-  paymentMethod: string;
-  cardHolder: string;
-  cardNumber: string;
-  expiryDate: string;
-  securityCode: string;
-  sameAsShipping: boolean;
-  onUpdate: (data: Partial<PaymentMethodProps>) => void;
+interface PaymentMethodProps extends PaymentDetails {
+  onUpdate: (data: Partial<PaymentDetails>) => void;
 }
 
 export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
@@ -50,6 +45,7 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
             return (
               <Button
                 key={option.id}
+                type="button"
                 variant={paymentMethod === option.id ? 'default' : 'outline'}
                 className="flex flex-col items-center gap-1 h-auto py-3 px-2"
                 onClick={() => onUpdate({ paymentMethod: option.id })}
@@ -73,6 +69,7 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
               onChange={(e) => onUpdate({ cardHolder: e.target.value })}
             />
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="cardNumber">Card Number</Label>
             <Input
@@ -82,6 +79,7 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
               onChange={(e) => onUpdate({ cardNumber: e.target.value })}
             />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="expiry">Expiry Date</Label>
@@ -102,6 +100,7 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
               />
             </div>
           </div>
+
           <div className="flex items-center space-x-2 pt-2">
             <Checkbox
               id="sameAsShipping"
