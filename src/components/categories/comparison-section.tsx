@@ -5,10 +5,9 @@ export default function ComparisonSection() {
     <section className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#F7F3EE] py-20">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="mb-10 text-center text-[44px] font-normal text-[#34261D]">
-          The Modern <span className="font-serif italic">Weighted Blanket</span>{' '}
-          Difference
+          Forskningen bag:{' '}
+          <span className="font-serif italic">Hvorfor virker de?</span>
         </h2>
-
         <ComparisonTable />
       </div>
     </section>

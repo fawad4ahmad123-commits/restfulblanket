@@ -75,8 +75,6 @@ export const expertData = {
   ],
 };
 
-// constants/data.ts
-
 export const pageData = {
   title: 'Pre-licensable experience',
   description:

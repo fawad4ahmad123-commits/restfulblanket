@@ -320,7 +320,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           key={category.id || category.title}
                           href={
                             category.slug
-                              ? `/shop?slug=${category.slug}`
+                              ? `/categories/${category.slug}`
                               : category.href
                           }
                           role="menuitem"

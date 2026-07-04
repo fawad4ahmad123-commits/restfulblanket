@@ -8,15 +8,15 @@ export default function ComparisonTable() {
           <thead>
             <tr className="bg-[#34261D] text-white">
               <th className="border-r border-[#4A3B31] px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                Feature
+                Funktion
               </th>
 
               <th className="border-r border-[#4A3B31] px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                RestfulBlanket
+                RestfulBlanket (Rapsfrø)
               </th>
 
               <th className="px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                Traditional plastic-bead
+                Traditionel Kugledyne (Glas/Plastik)
               </th>
             </tr>
           </thead>

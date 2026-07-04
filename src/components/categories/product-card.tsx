@@ -2,15 +2,20 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, ShoppingBag, Star } from 'lucide-react';
+import { Heart, ShoppingBag, Star, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+
 import { formatPrice } from '@/src/helper/product-feature';
+import { useCart } from '@/src/core/context/card-Provider';
+import { useCompare } from '@/src/core/context/compare-provider';
+import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
-  id: number;
+  id: number | string;
   slug: string;
   image: string;
-  title: string;
+  hoverImage?: string;
+  name: string;
   price: number;
   originalPrice?: number;
   badge?: string;
@@ -18,13 +23,16 @@ interface ProductCardProps {
   reviewCount?: number;
   weight?: string;
   dimensions?: string;
-  onAddToCart?: () => void;
+  color?: string;
+  size?: string;
 }
 
 const ProductCard = ({
+  id,
   slug,
   image,
-  title,
+  hoverImage,
+  name,
   price,
   originalPrice,
   badge,
@@ -32,37 +40,80 @@ const ProductCard = ({
   reviewCount = 3254,
   weight,
   dimensions,
-  onAddToCart,
-}: any) => {
+  color,
+  size,
+}: ProductCardProps) => {
   const [wished, setWished] = useState(false);
-  const router = useRouter();
 
+  const router = useRouter();
+  const { addToCart } = useCart();
+  const { compareItems, toggleCompare } = useCompare();
+
+  const isCompared = compareItems.some(
+    (item) => String(item.id) === String(id),
+  );
+
+  const stars = Math.round(rating);
+
+  const handleNavigate = () => {
+    router.push(`/product/${slug}`);
+  };
+  console.log('y2 b', { name });
   return (
     <div
-      onClick={() => router.push(`/product/${slug}`)}
-      className="cursor-pointer overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md"
+      role="link"
+      tabIndex={0}
+      aria-label={`View product ${name}`}
+      onClick={handleNavigate}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleNavigate();
+        }
+      }}
+      className="group cursor-pointer overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#35281E] focus:ring-offset-2"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-[#F7F2ED]">
         <Image
           src={image}
-          alt={slug}
+          alt={`${name} product image`}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className={`object-cover transition-all duration-500 ${
+            hoverImage ? 'group-hover:opacity-0' : ''
+          }`}
         />
+
+        {hoverImage && (
+          <Image
+            src={hoverImage}
+            alt={`${name} alternate product image`}
+            fill
+            className="object-cover opacity-0 transition-all duration-500 group-hover:opacity-100"
+          />
+        )}
 
         {badge && (
           <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#35281E]">
             {badge}
           </div>
         )}
+
         <button
+          type="button"
+          aria-label={
+            wished ? `Remove ${name} from wishlist` : `Add ${name} to wishlist`
+          }
+          title={
+            wished ? `Remove ${name} from wishlist` : `Add ${name} to wishlist`
+          }
           onClick={(e) => {
             e.stopPropagation();
-            setWished(!wished);
+            setWished((prev) => !prev);
           }}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm"
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#35281E]"
         >
           <Heart
+            aria-hidden="true"
             size={15}
             className={
               wished ? 'fill-[#35281E] text-[#35281E]' : 'text-[#35281E]'
@@ -70,11 +121,21 @@ const ProductCard = ({
           />
         </button>
       </div>
+
       <div className="p-4">
-        <div className="mb-2 flex items-center gap-2">
+        <div
+          className="mb-2 flex items-center gap-2"
+          aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
+        >
           <div className="flex items-center gap-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-4 w-4 fill-[#E6CBB8] text-[#E6CBB8]" />
+              <Star
+                aria-hidden="true"
+                key={i}
+                className={`h-4 w-4 ${
+                  i < stars ? 'fill-[#E6CBB8] text-[#E6CBB8]' : 'text-gray-300'
+                }`}
+              />
             ))}
           </div>
 
@@ -85,8 +146,16 @@ const ProductCard = ({
           </span>
         </div>
 
-        <h3 className="mb-2 line-clamp-2 text-[15px] font-medium leading-5 text-[#35281E]">
-          {title}
+        <h3
+          className="mb-2 text-[15px] font-medium leading-5 text-[#35281E]"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
+        >
+          {name}
         </h3>
         {(weight || dimensions) && (
           <p className="mb-3 text-xs text-[#8A8377]">
@@ -94,27 +163,80 @@ const ProductCard = ({
           </p>
         )}
 
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-lg font-semibold text-[#35281E]">
-            {formatPrice(price)}
-          </span>
-
-          {originalPrice && (
-            <span className="text-sm text-[#8A8377] line-through">
-              {formatPrice(originalPrice)}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-semibold text-[#35281E]">
+              {formatPrice(price)}
             </span>
-          )}
+
+            {originalPrice && (
+              <span className="text-sm text-[#8A8377] line-through">
+                {formatPrice(originalPrice)}
+              </span>
+            )}
+          </div>
+
+          <button
+            type="button"
+            aria-label={
+              isCompared ? `Remove ${name} from comparison` : `Compare ${name}`
+            }
+            title={
+              isCompared ? `Remove ${name} from comparison` : `Compare ${name}`
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+
+              toggleCompare({
+                id: String(id),
+                title: name,
+                image,
+                price: Number(price) || 0,
+                slug,
+              });
+            }}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#35281E] ${
+              isCompared
+                ? 'border-[#3B281F] bg-[#3B281F] text-white'
+                : 'border-[#E9DDD4] bg-white text-[#3B281F]'
+            }`}
+          >
+            {isCompared ? (
+              <Check aria-hidden="true" className="h-5 w-5" />
+            ) : (
+              <Image
+                src="/home/card-compare-icon.png"
+                alt=""
+                aria-hidden="true"
+                width={20}
+                height={20}
+                className={cn('h-5 w-5')}
+              />
+            )}
+          </button>
         </div>
 
         <button
+          type="button"
+          aria-label={`Add ${name} to cart`}
+          title={`Add ${name} to cart`}
           onClick={(e) => {
             e.stopPropagation();
-            onAddToCart?.();
+
+            addToCart({
+              id: String(id),
+              name,
+              color: color || '',
+              variant: size || '',
+              weight: weight || '',
+              price: Number(price) || 0,
+              image,
+            });
           }}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition-all hover:bg-[#35281E] hover:text-white"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition-all hover:bg-[#35281E] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#35281E]"
         >
-          <ShoppingBag size={16} />
-          Add To Cart
+          <ShoppingBag aria-hidden="true" size={16} />
+          Tilføj til kurv
         </button>
       </div>
     </div>

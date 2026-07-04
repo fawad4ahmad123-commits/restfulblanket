@@ -1,20 +1,20 @@
 import { RatingSummary } from './rating-summary';
 
-export function BlanketHeader() {
+export function BlanketHeader({ rating, reviewCount }: any) {
   return (
     <div className="space-y-4">
-      <h1 className="text-4xl font-serif">Weighted Blankets</h1>
+      <h1 className="text-4xl font-serif">Tyngdedyner</h1>
 
-      <p className="max-w-3xl text-sm text-[#6B625B]">
-        Experience true peace with a weighted blanket designed for the nervous
-        system. Where traditional blankets with glass or plastic beads often
-        trap heat and disturb sleep with unnecessary noise, our heat-treated
-        rapeseed offers a silent, breathable and cooling embrace. All our
-        weighted blankets are CE marked as medical devices class 1, made from
-        OEKO-TEX certified cotton and can be washed at 60°C.
+      <p className="text-sm text-[#6B625B]">
+        Oplev ægte ro med en <strong>tyngdedyne</strong> skabt til
+        nervesystemet. Hvor traditionelle dyner med glas- eller plastikkugler
+        ofte fanger varmen og forstyrrer søvnen med unødig støj, tilbyder vores
+        varmebehandlede rapsfrø en lydløs, åndbar og kølende omfavnelse. Alle
+        vores tyngdedyner er CE-mærkede som medicinsk udstyr klasse 1, lavet i
+        OEKO-TEX-certificeret bomuld og kan vaskes ved 60 °C.
       </p>
 
-      <RatingSummary rating={4.9} reviewCount={3254} />
+      <RatingSummary rating={rating} reviewCount={reviewCount} />
     </div>
   );
 }
