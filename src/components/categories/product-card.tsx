@@ -42,23 +42,19 @@ const ProductCard = ({
       onClick={() => router.push(`/product/${slug}`)}
       className="cursor-pointer overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md"
     >
-      {/* Image */}
       <div className="relative aspect-[4/5] overflow-hidden bg-[#F7F2ED]">
         <Image
           src={image}
-          alt={title}
+          alt={slug}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Badge */}
         {badge && (
           <div className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#35281E]">
             {badge}
           </div>
         )}
-
-        {/* Wishlist */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -74,10 +70,7 @@ const ProductCard = ({
           />
         </button>
       </div>
-
-      {/* Content */}
       <div className="p-4">
-        {/* Rating */}
         <div className="mb-2 flex items-center gap-2">
           <div className="flex items-center gap-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -92,19 +85,15 @@ const ProductCard = ({
           </span>
         </div>
 
-        {/* Title */}
         <h3 className="mb-2 line-clamp-2 text-[15px] font-medium leading-5 text-[#35281E]">
           {title}
         </h3>
-
-        {/* Weight & Dimensions */}
         {(weight || dimensions) && (
           <p className="mb-3 text-xs text-[#8A8377]">
             {[weight, dimensions].filter(Boolean).join(' • ')}
           </p>
         )}
 
-        {/* Price */}
         <div className="mb-4 flex items-center gap-2">
           <span className="text-lg font-semibold text-[#35281E]">
             {formatPrice(price)}
@@ -117,7 +106,6 @@ const ProductCard = ({
           )}
         </div>
 
-        {/* Add To Cart */}
         <button
           onClick={(e) => {
             e.stopPropagation();

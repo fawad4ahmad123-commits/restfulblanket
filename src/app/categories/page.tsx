@@ -1,29 +1,15 @@
-import { BlanketHeader } from '@/src/components/categories/blanket-header';
-import { CategoryTabs } from '@/src/components/categories/category-tabs';
-import ComparisonSection from '@/src/components/categories/comparison-section';
-import { ProductGrid } from '@/src/components/categories/product-grid';
-import { FAQSection } from '@/src/components/expert/expert-detail/faq-Section';
-import ProductCategories from '@/src/components/Home/product-categories';
-import TestimonialVideoSlider from '@/src/components/products/video-testimonals.tsx';
+import Categories from '@/src/components/categories';
+import { getBestSellers } from '@/src/lib/products';
 import { getCategories } from '@/src/lib/products';
+import { formatProducts } from '@/src/utilty/all-product-foemater';
 
-export default async function BlanketsPage() {
-  const [categories] = await Promise.all([getCategories()]);
-  return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
-      <BlanketHeader />
+const Categorypage = async () => {
+  const [products, categories] = await Promise.all([
+    getBestSellers(),
+    getCategories(),
+  ]);
+  const product_response = formatProducts(products);
+  return <Categories products={product_response} categories={categories} />;
+};
 
-      <div className="mt-8">
-        <CategoryTabs />
-      </div>
-
-      <div className="mt-10 mb-10">
-        <ProductGrid />
-      </div>
-      <TestimonialVideoSlider isCategory={true} />
-      <ComparisonSection />
-      <FAQSection />
-      <ProductCategories response_categories={categories} isCategory={true} />
-    </main>
-  );
-}
+export default Categorypage;
