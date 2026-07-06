@@ -1,5 +1,4 @@
 import { Star } from 'lucide-react';
-
 import { cn } from '@/lib/utils';
 
 interface StarRatingProps {
@@ -17,12 +16,13 @@ export function StarRating({ rating, reviewCount }: StarRatingProps) {
             className={cn(
               'h-3.5 w-3.5',
               i < Math.round(rating)
-                ? 'fill-amber-500 text-amber-500'
+                ? 'fill-[#e6cbb8] text-[#e6cbb8]'
                 : 'fill-stone-200 text-stone-200',
             )}
           />
         ))}
       </div>
+
       <span className="text-xs text-stone-500">
         {rating.toFixed(1)} · {reviewCount.toLocaleString()}
       </span>

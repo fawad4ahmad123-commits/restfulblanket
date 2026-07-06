@@ -211,7 +211,7 @@ const SliderCard = ({
               image,
             });
           }}
-          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
           Tilføj til kurv

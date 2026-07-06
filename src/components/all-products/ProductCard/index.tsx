@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Heart, ShoppingBag, Eye } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { useCart } from '@/src/core/context/card-Provider';
+import { cn } from '@/lib/utils'; // adjust path if your cn() lives elsewhere
+
 interface Product {
+  id: string | number;
   image: string;
   title: string;
   slug: string;
@@ -20,13 +23,26 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
+  isCompared?: boolean;
+  toggleCompare?: (item: {
+    id: string;
+    title: string;
+    image: string;
+    price: number;
+    slug: string;
+  }) => void;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({
+  product,
+  isCompared = false,
+  toggleCompare,
+}: ProductCardProps) {
   const [wished, setWished] = useState(false);
   const router = useRouter();
   const { addToCart } = useCart();
   const {
+    id,
     image,
     title,
     slug,
@@ -42,7 +58,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const stars = Math.round(rating);
 
   return (
-    <div className="group overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
+    <div className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
       <div className="relative overflow-hidden">
         <div className="relative h-[340px]">
           <Image
@@ -100,7 +116,9 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="px-5 pb-5 pt-5">
+      {/* flex-1 makes this section stretch to fill remaining height,
+          so the bottom block always lands in the same place */}
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div
           className="mb-3 flex items-center gap-1"
           aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
@@ -134,36 +152,82 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
         )}
 
-        <div className="mb-5 flex items-center gap-2">
-          <span className="text-lg font-semibold text-[#3b281f]">{price}</span>
+        {/* mt-auto pushes this whole block to the bottom of the card,
+            regardless of how much (or how little) content is above it */}
+        <div className="mt-auto">
+          <div className="mb-5 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-semibold text-[#3b281f]">
+                kr {price}
+              </span>
 
-          {originalPrice && (
-            <span className="text-sm text-[#35281E] line-through">
-              {originalPrice}
-            </span>
-          )}
+              {originalPrice && (
+                <span className="text-sm text-[#35281E] line-through">
+                  kr {originalPrice}
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              aria-label={
+                isCompared ? `Remove ${title} from compare` : `Compare ${title}`
+              }
+              title={
+                isCompared ? `Remove ${title} from compare` : `Compare ${title}`
+              }
+              onClick={(e) => {
+                e.stopPropagation();
+
+                toggleCompare?.({
+                  id: String(id),
+                  title,
+                  image,
+                  price: Number(price) || 0,
+                  slug,
+                });
+              }}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
+                isCompared
+                  ? 'border-[#3B281F] bg-[#3B281F] text-white'
+                  : 'border-[#E9DDD4] bg-white text-[#3B281F]'
+              }`}
+            >
+              {isCompared ? (
+                <Check className="h-5 w-5" />
+              ) : (
+                <Image
+                  src="/home/card-compare-icon.png"
+                  alt="compare-icon"
+                  width={20}
+                  height={20}
+                  className={cn('h-5 w-5 md:h-[18px] md:w-[18px]')}
+                />
+              )}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            aria-label={`Add ${title} to cart`}
+            title={`Add ${title} to cart`}
+            onClick={() => {
+              addToCart({
+                id: slug,
+                name: title,
+                price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
+                image,
+                variant: weight || '',
+                weight: weight || '',
+                color: '',
+              });
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+          >
+            <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+            Add To Cart
+          </button>
         </div>
-
-        <button
-          type="button"
-          aria-label={`Add ${title} to cart`}
-          title={`Add ${title} to cart`}
-          onClick={() => {
-            addToCart({
-              id: slug,
-              name: title,
-              price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
-              image,
-              variant: weight || '',
-              weight: weight || '',
-              color: '',
-            });
-          }}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
-        >
-          <ShoppingBag aria-hidden="true" className="h-4 w-4" />
-          Add To Cart
-        </button>
       </div>
     </div>
   );

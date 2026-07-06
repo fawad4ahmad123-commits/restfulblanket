@@ -58,7 +58,7 @@ const ProductCard = ({
   const handleNavigate = () => {
     router.push(`/product/${slug}`);
   };
-  console.log('y2 b', { name });
+
   return (
     <div
       role="link"
@@ -71,7 +71,7 @@ const ProductCard = ({
           handleNavigate();
         }
       }}
-      className="group cursor-pointer overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#35281E] focus:ring-offset-2"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#35281E] focus:ring-offset-2"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-[#F7F2ED]">
         <Image
@@ -122,7 +122,8 @@ const ProductCard = ({
         </button>
       </div>
 
-      <div className="p-4">
+      {/* flex-1 makes this stretch to fill remaining card height */}
+      <div className="flex flex-1 flex-col p-4">
         <div
           className="mb-2 flex items-center gap-2"
           aria-label={`${rating} out of 5 stars from ${reviewCount} reviews`}
@@ -157,87 +158,95 @@ const ProductCard = ({
         >
           {name}
         </h3>
+
         {(weight || dimensions) && (
           <p className="mb-3 text-xs text-[#8A8377]">
             {[weight, dimensions].filter(Boolean).join(' • ')}
           </p>
         )}
 
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-[#35281E]">
-              {formatPrice(price)}
-            </span>
-
-            {originalPrice && (
-              <span className="text-sm text-[#8A8377] line-through">
-                {formatPrice(originalPrice)}
+        {/* mt-auto pins this block to the bottom regardless of content above */}
+        <div className="mt-auto">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-semibold text-[#35281E]">
+                {formatPrice(price)}
               </span>
-            )}
+
+              {originalPrice && (
+                <span className="text-sm text-[#8A8377] line-through">
+                  {formatPrice(originalPrice)}
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              aria-label={
+                isCompared
+                  ? `Remove ${name} from comparison`
+                  : `Compare ${name}`
+              }
+              title={
+                isCompared
+                  ? `Remove ${name} from comparison`
+                  : `Compare ${name}`
+              }
+              onClick={(e) => {
+                e.stopPropagation();
+
+                toggleCompare({
+                  id: String(id),
+                  title: name,
+                  image,
+                  price: Number(price) || 0,
+                  slug,
+                });
+              }}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#35281E] ${
+                isCompared
+                  ? 'border-[#3B281F] bg-[#3B281F] text-white'
+                  : 'border-[#E9DDD4] bg-white text-[#3B281F]'
+              }`}
+            >
+              {isCompared ? (
+                <Check aria-hidden="true" className="h-5 w-5" />
+              ) : (
+                <Image
+                  src="/home/card-compare-icon.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={20}
+                  height={20}
+                  className={cn('h-5 w-5')}
+                />
+              )}
+            </button>
           </div>
 
           <button
             type="button"
-            aria-label={
-              isCompared ? `Remove ${name} from comparison` : `Compare ${name}`
-            }
-            title={
-              isCompared ? `Remove ${name} from comparison` : `Compare ${name}`
-            }
+            aria-label={`Add ${name} to cart`}
+            title={`Add ${name} to cart`}
             onClick={(e) => {
               e.stopPropagation();
 
-              toggleCompare({
+              addToCart({
                 id: String(id),
-                title: name,
-                image,
+                name,
+                color: color || '',
+                variant: size || '',
+                weight: weight || '',
                 price: Number(price) || 0,
-                slug,
+                image,
               });
             }}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#35281E] ${
-              isCompared
-                ? 'border-[#3B281F] bg-[#3B281F] text-white'
-                : 'border-[#E9DDD4] bg-white text-[#3B281F]'
-            }`}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition-all hover:bg-[#35281E] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#35281E]"
           >
-            {isCompared ? (
-              <Check aria-hidden="true" className="h-5 w-5" />
-            ) : (
-              <Image
-                src="/home/card-compare-icon.png"
-                alt=""
-                aria-hidden="true"
-                width={20}
-                height={20}
-                className={cn('h-5 w-5')}
-              />
-            )}
+            <ShoppingBag aria-hidden="true" size={16} />
+            Tilføj til kurv
           </button>
         </div>
-
-        <button
-          type="button"
-          aria-label={`Add ${name} to cart`}
-          title={`Add ${name} to cart`}
-          onClick={(e) => {
-            e.stopPropagation();
-
-            addToCart({
-              id: String(id),
-              name,
-              color: color || '',
-              variant: size || '',
-              weight: weight || '',
-              price: Number(price) || 0,
-              image,
-            });
-          }}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition-all hover:bg-[#35281E] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#35281E]"
-        >
-          <ShoppingBag aria-hidden="true" size={16} />
-          Tilføj til kurv
-        </button>
       </div>
     </div>
   );

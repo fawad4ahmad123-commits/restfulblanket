@@ -1,63 +1,119 @@
-import Image from 'next/image';
-import { Heart, ShoppingCart } from 'lucide-react';
+'use client';
 
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import Image from 'next/image';
+import { Heart, ShoppingBag } from 'lucide-react';
 import { Product } from './constants';
 import { StarRating } from './start-rating';
+import { useCart } from '@/src/core/context/card-Provider';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { title, image, price, originalPrice, badge, weightKg, sizeCm } =
+    product;
+  const [wished, setWished] = useState(false);
+  const { addToCart } = useCart();
+
   return (
-    <Card className="overflow-hidden">
-      <div className="relative aspect-[4/3] w-full bg-[#d9c3a1]">
-        <Image
-          src={product.image}
-          alt={product.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 320px"
-          className="object-cover"
-        />
-        <Badge className="absolute left-4 top-4">{product.badge}</Badge>
+    <div className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
+      <div className="relative overflow-hidden">
+        <div className="relative h-[340px] md:h-[420px]">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, 420px"
+            className="object-cover"
+          />
+        </div>
+
+        {badge && (
+          <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
+            {badge}
+          </div>
+        )}
+
         <button
           type="button"
-          aria-label="Add to wishlist"
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-stone-700 shadow-sm transition hover:bg-white"
+          aria-label={
+            wished
+              ? `Remove ${title} from wishlist`
+              : `Add ${title} to wishlist`
+          }
+          title={
+            wished
+              ? `Remove ${title} from wishlist`
+              : `Add ${title} to wishlist`
+          }
+          onClick={(e) => {
+            e.stopPropagation();
+            setWished((w) => !w);
+          }}
+          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
-          <Heart className="h-4 w-4" />
+          <Heart
+            aria-hidden="true"
+            size={16}
+            className={
+              wished ? 'fill-[#35281e] text-[#35281e]' : 'text-[#35281e]'
+            }
+          />
         </button>
       </div>
 
-      <div className="space-y-3 p-5">
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <StarRating rating={product.rating} reviewCount={product.reviewCount} />
 
-        <div>
-          <h3 className="text-base font-medium leading-snug text-stone-900">
-            {product.title}
-          </h3>
-          <p className="mt-1 text-xs text-stone-500">
-            {product.weightKg} kg · {product.sizeCm}
+        <h3 className="mb-2 mt-3 line-clamp-2 min-h-[3.25rem] text-lg font-medium leading-snug text-[#35281E]">
+          {title}
+        </h3>
+
+        {(weightKg || sizeCm) && (
+          <p className="mb-4 text-xs text-[#35281E]/50">
+            {[weightKg ? `${weightKg} kg` : null, sizeCm]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
+        )}
+
+        <div className="mb-5 flex items-center gap-2">
+          {price && (
+            <span className="text-lg font-semibold text-[#3b281f]">
+              kr{price}
+            </span>
+          )}
+          {originalPrice && (
+            <span className="text-sm text-[#35281E] line-through">
+              kr{originalPrice}
+            </span>
+          )}
         </div>
 
-        <div className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold text-stone-900">
-            €{product.price}
-          </span>
-          <span className="text-sm text-stone-400 line-through">
-            €{product.originalPrice}
-          </span>
-        </div>
-
-        <Button className="w-full">
-          <ShoppingCart className="h-4 w-4" />
-          Add to cart
-        </Button>
+        <button
+          type="button"
+          aria-label={`Add ${title} to cart`}
+          title={`Add ${title} to cart`}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart({
+              id: String(product.id),
+              name: title,
+              color: product.material || '',
+              variant: product.sizeCm || '',
+              weight: weightKg ? `${weightKg} kg` : '',
+              price: Number(price) || 0,
+              image,
+            });
+          }}
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+        >
+          <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+          Tilføj til kurv
+        </button>
       </div>
-    </Card>
+    </div>
   );
 }

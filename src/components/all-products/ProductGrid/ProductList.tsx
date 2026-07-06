@@ -19,6 +19,7 @@ export default function ProductList({ products }: Props) {
         <ProductCard
           key={`${product.id}-${product.slug || index}`}
           product={{
+            id: product.id,
             image: product.image || '',
             title: product.name,
             slug: product.slug || String(product.id),

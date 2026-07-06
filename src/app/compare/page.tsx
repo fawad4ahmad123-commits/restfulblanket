@@ -1,5 +1,5 @@
 import { BreadcrumbNav } from '@/src/components/compare/bread-crumbs';
-import { ProductCard } from '@/src/components/all-products/ProductCard';
+import { ProductCard } from '@/src/components/compare/compare-product-card';
 import { SpecComparisonTable } from '@/src/components/compare/comparison-table';
 import { getProductBySlug } from '@/src/lib/products';
 import { formatWooProducts } from '@/src/utilty/compare-product-formater';
