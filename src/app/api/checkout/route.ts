@@ -32,7 +32,7 @@ export async function POST(req: Request) {
           Authorization:
             'Basic ' +
             Buffer.from(
-              `${process.env.NEXT_PUBLIC_WC_CONSUMER_KEY}:${process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET}`,
+              `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`,
             ).toString('base64'),
           'Content-Type': 'application/json',
         },
