@@ -6,9 +6,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL!;
 const KEY = process.env.WC_CONSUMER_KEY!;
 const SECRET = process.env.WC_CONSUMER_SECRET!;
 
-/**
- * Helper to build authenticated WooCommerce URL
- */
 function wcUrl(path: string, params?: Record<string, string | number>) {
   const url = new URL(`${BASE_URL}/wp-json/wc/v3/${path}`);
 
@@ -24,9 +21,55 @@ function wcUrl(path: string, params?: Record<string, string | number>) {
   return url.toString();
 }
 
-/* -----------------------------
-   CREATE REVIEW
-------------------------------*/
+async function safeJsonFetch(url: string, options?: RequestInit) {
+  let res: Response;
+
+  try {
+    res = await fetch(url, options);
+  } catch (err) {
+    console.error(
+      'Network error fetching:',
+      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
+      err,
+    );
+    return null;
+  }
+
+  const contentType = res.headers.get('content-type') || '';
+
+  if (!res.ok || !contentType.includes('application/json')) {
+    let bodyText = '';
+    try {
+      bodyText = await res.text();
+    } catch {
+      // ignore
+    }
+
+    console.error(
+      'WooCommerce/WP fetch failed:',
+      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
+      '\nStatus:',
+      res.status,
+      '\nContent-Type:',
+      contentType,
+      '\nBody (first 300 chars):',
+      bodyText.slice(0, 300),
+    );
+    return null;
+  }
+
+  try {
+    return await res.json();
+  } catch (err) {
+    console.error(
+      'Failed to parse JSON from:',
+      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
+      err,
+    );
+    return null;
+  }
+}
+
 export async function createProductReview({
   productId,
   review,
@@ -42,7 +85,7 @@ export async function createProductReview({
   rating: number;
   reviewTitle: string;
 }) {
-  const res = await fetch(wcUrl('products/reviews'), {
+  const data = await safeJsonFetch(wcUrl('products/reviews'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -57,84 +100,57 @@ export async function createProductReview({
     }),
   });
 
-  if (!res.ok) {
-    throw new Error(await res.text());
+  if (data === null) {
+    throw new Error('Failed to create product review');
   }
 
-  return res.json();
+  return data;
 }
 
-/* -----------------------------
-   BEST SELLERS / PRODUCTS
-------------------------------*/
 export async function getBestSellers() {
-  const res = await fetch(
+  const data = await safeJsonFetch(
     wcUrl('products', { status: 'publish', per_page: 20 }),
     { next: { revalidate: 300 } },
   );
 
-  return res.json();
+  return data ?? [];
 }
-
-/* -----------------------------
-   CATEGORIES
-------------------------------*/
-// export async function getCategories() {
-//   const res = await fetch(wcUrl('products/categories', { per_page: 20 }), {
-//     next: { revalidate: 300 },
-//   });
-
-//   return res.json();
-// }
 
 export async function getCategories() {
-  const res = await fetch(wcUrl('products/categories', { per_page: 20 }), {
-    next: { revalidate: 300 },
-  });
+  const data = await safeJsonFetch(
+    wcUrl('products/categories', { per_page: 20 }),
+    { next: { revalidate: 300 } },
+  );
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    console.error('WooCommerce Category Fetch Failed:', errorText);
-    return []; // Return safe empty array instead of crashing your app
-  }
-
-  return res.json();
+  return data ?? [];
 }
 
-/* -----------------------------
-   PRODUCT BY SLUG
-------------------------------*/
 export async function getProductBySlug(slug: string) {
-  const res = await fetch(wcUrl('products', { slug }), {
+  const data = await safeJsonFetch(wcUrl('products', { slug }), {
     next: { revalidate: 300 },
   });
 
-  if (!res.ok) return null;
+  if (data === null) return null;
 
-  const products = await res.json();
-  return Array.isArray(products) ? products[0] : products;
+  return Array.isArray(data) ? data[0] : data;
 }
 
-/* -----------------------------
-   REVIEWS
-------------------------------*/
 export async function getProductReviews(productId: number, isHome: boolean) {
   const endpoint = isHome
     ? wcUrl('products/reviews')
     : wcUrl('products/reviews', { product: productId });
 
-  const res = await fetch(endpoint, { cache: 'no-store' });
+  const data = await safeJsonFetch(endpoint, { cache: 'no-store' });
 
-  if (!res.ok) throw new Error('Failed to fetch reviews');
+  if (data === null) {
+    throw new Error('Failed to fetch reviews');
+  }
 
-  return res.json();
+  return data;
 }
 
-/* -----------------------------
-   SEARCH PRODUCTS
-------------------------------*/
 export async function searchProducts(query: string, perPage = 6) {
-  const res = await fetch(
+  const data = await safeJsonFetch(
     wcUrl('products', {
       search: encodeURIComponent(query),
       per_page: perPage,
@@ -143,14 +159,13 @@ export async function searchProducts(query: string, perPage = 6) {
     { cache: 'no-store' },
   );
 
-  if (!res.ok) throw new Error('Failed to search products');
+  if (data === null) {
+    throw new Error('Failed to search products');
+  }
 
-  return res.json() as Promise<WooProduct[]>;
+  return data as WooProduct[];
 }
 
-/* -----------------------------
-   ALL PRODUCTS (FILTERS)
-------------------------------*/
 export async function getAllProducts(params?: {
   search?: string;
   category?: string;
@@ -168,26 +183,24 @@ export async function getAllProducts(params?: {
   if (params?.minPrice !== undefined) query.min_price = params.minPrice;
   if (params?.maxPrice !== undefined) query.max_price = params.maxPrice;
 
-  const res = await fetch(wcUrl('products', query), {
+  const data = await safeJsonFetch(wcUrl('products', query), {
     ...(params?.search || params?.category
       ? { cache: 'no-store' }
       : { next: { revalidate: 300 } }),
   });
 
-  if (!res.ok) return [];
-
-  return res.json();
+  return data ?? [];
 }
 
-/* -----------------------------
-   PAGES (WP REST - NO AUTH NEEDED)
-------------------------------*/
 export async function getPages() {
-  const res = await fetch(`${BASE_URL}/wp-json/wp/v2/pages?per_page=100`, {
-    next: { revalidate: 300 },
-  });
+  const data = await safeJsonFetch(
+    `${BASE_URL}/wp-json/wp/v2/pages?per_page=100`,
+    { next: { revalidate: 300 } },
+  );
 
-  if (!res.ok) throw new Error(`Failed to fetch pages: ${res.status}`);
+  if (data === null) {
+    throw new Error('Failed to fetch pages');
+  }
 
-  return res.json();
+  return data;
 }

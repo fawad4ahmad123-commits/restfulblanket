@@ -89,7 +89,7 @@ export async function POST(req: Request) {
     const payment_url =
       `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/checkout/order-pay/${order.id}/` +
       `?pay_for_order=true&key=${order.order_key}`;
-      
+
     return NextResponse.json({
       order_id: order.id,
       payment_url,

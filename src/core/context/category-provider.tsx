@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useMemo, ReactNode } from 'react';
 import { Category, CategoryContextType } from './types';
+
 function normalizeProduct(p: any) {
   const image =
     p.images?.[0]?.src ??
@@ -45,22 +46,25 @@ export function CategoryProvider({
   categories: Category[];
   products?: any[];
 }) {
+  const safeCategories = Array.isArray(categories) ? categories : [];
+  const safeProducts = Array.isArray(products) ? products : [];
+
   const parentCategories = useMemo(
     () =>
-      categories.filter(
+      safeCategories.filter(
         (category) =>
           category.parent === 0 && category.slug !== 'ukategoriseret',
       ),
-    [categories],
+    [safeCategories],
   );
 
   const getChildren = (parentId: number) => {
-    return categories.filter((category) => category.parent === parentId);
+    return safeCategories.filter((category) => category.parent === parentId);
   };
 
   const normalizedProducts = useMemo(
-    () => products.map(normalizeProduct),
-    [products],
+    () => safeProducts.map(normalizeProduct),
+    [safeProducts],
   );
 
   const getProductsByCategory = (categoryId: number | null, limit = 4) => {
@@ -73,7 +77,7 @@ export function CategoryProvider({
   return (
     <CategoryContext.Provider
       value={{
-        categories,
+        categories: safeCategories,
         parentCategories,
         getChildren,
         getProductsByCategory,
