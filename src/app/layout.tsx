@@ -8,6 +8,7 @@ import { CartProvider } from '../core/context/cart-context';
 import { CategoryProvider } from '../core/context/category-provider';
 import { getBestSellers, getCategories } from '../lib/products';
 import { CompareProvider } from '../core/context/compare-provider';
+import { AuthProvider } from '../core/context/auth-context';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -37,16 +38,18 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <CategoryProvider categories={categories} products={products}>
-          <CompareProvider>
-            <CartProvider>
-              <MainLayout>
-                {children}
-                <Toaster />
-              </MainLayout>
-            </CartProvider>
-          </CompareProvider>
-        </CategoryProvider>
+        <AuthProvider>
+          <CategoryProvider categories={categories} products={products}>
+            <CompareProvider>
+              <CartProvider>
+                <MainLayout>
+                  {children}
+                  <Toaster />
+                </MainLayout>
+              </CartProvider>
+            </CompareProvider>
+          </CategoryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

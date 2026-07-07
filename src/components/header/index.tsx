@@ -13,17 +13,29 @@ import CartOffcanvas from '../cart';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/src/core/context/card-Provider';
 import { Courgette } from 'next/font/google';
+import { useAuth } from '@/src/core/context/auth-context';
 
 const courgette = Courgette({
   subsets: ['latin'],
   weight: '400',
 });
 
+const getInitials = (name?: string) =>
+  name
+    ? name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '';
+
 const SiteHeader = () => {
   const pathname = usePathname();
   const isHome = ['/', '/shop'].includes(pathname);
   const router = useRouter();
   const wishlistCount = 3;
+  const { user, isAuthenticated } = useAuth();
 
   const {
     items,
@@ -104,18 +116,59 @@ const SiteHeader = () => {
                 )}
               </Button>
 
-              <Button
-                size="icon"
-                variant="ghost"
-                aria-label="Sign in or manage account"
-                title="My account"
-                onClick={() => router.push('/signin')}
-                className={cn(
-                  !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
-                )}
-              >
-                <User aria-hidden="true" className="size-4" />
-              </Button>
+              {isAuthenticated ? (
+                <Link
+                  href="/profile"
+                  aria-label={`${user?.name} profile`}
+                  title="My profile"
+                  className={cn(
+                    'flex items-center gap-2 rounded-full px-2 py-1 transition-colors',
+                    !isHome && 'hover:bg-[#392A22]/10',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold',
+                      isHome
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#392A22] text-[#FFF9F5]',
+                    )}
+                  >
+                    {getInitials(user?.name)}
+                  </span>
+                  <span className="hidden flex-col leading-tight xl:flex">
+                    <span
+                      className={cn(
+                        'text-sm font-medium',
+                        isHome ? 'text-white' : 'text-[#392A22]',
+                      )}
+                    >
+                      {user?.name}
+                    </span>
+                    <span
+                      className={cn(
+                        'text-xs',
+                        isHome ? 'text-white/60' : 'text-[#392A22]/50',
+                      )}
+                    >
+                      Restful Member
+                    </span>
+                  </span>
+                </Link>
+              ) : (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  aria-label="Sign in or manage account"
+                  title="My account"
+                  onClick={() => router.push('/signin')}
+                  className={cn(
+                    !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
+                  )}
+                >
+                  <User aria-hidden="true" className="size-4" />
+                </Button>
+              )}
 
               <Button
                 onClick={() => setCartOpen(true)}

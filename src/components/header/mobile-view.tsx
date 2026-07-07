@@ -2,16 +2,27 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, ChevronDown } from 'lucide-react';
+import { Heart, ChevronDown, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { navigation } from '../constant';
 import { useCategories } from '@/src/core/context/category-provider';
+import { useAuth } from '@/src/core/context/auth-context';
+
+const getInitials = (name?: string) =>
+  name
+    ? name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '';
 
 const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
   const pathname = usePathname();
   const [openItem, setOpenItem] = useState<string | null>(null);
-
+  const { user, isAuthenticated } = useAuth();
   const { parentCategories, getChildren } = useCategories();
 
   return (
@@ -163,6 +174,37 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
         })}
       </div>
       <div className="mt-auto pt-6 shrink-0">
+        {isAuthenticated ? (
+          <Link
+            href="/profile"
+            aria-label={`${user?.name} profile`}
+            title="My profile"
+            className="flex items-center gap-3 rounded-full border border-[#E9DDD4] bg-white px-4 py-2.5 mb-3 transition-colors hover:bg-[#35281E]/5"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#35281E] text-xs font-semibold text-white shrink-0">
+              {getInitials(user?.name)}
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="text-sm font-medium text-[#35281E]">
+                {user?.name}
+              </span>
+              <span className="text-xs text-[#6F6258]">Restful Member</span>
+            </span>
+          </Link>
+        ) : (
+          <Link href="/signin" className="w-full block mb-3">
+            <Button
+              variant="ghost"
+              aria-label="Sign in or manage account"
+              title="My account"
+              className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer"
+            >
+              <User aria-hidden="true" className="size-4" />
+              Sign In
+            </Button>
+          </Link>
+        )}
+
         <Link href="/wishlist" className="w-full block">
           <Button className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer">
             <Heart aria-hidden="true" className="size-4" />
