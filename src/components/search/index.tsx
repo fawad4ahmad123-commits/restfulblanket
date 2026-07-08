@@ -3,11 +3,8 @@ import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { WooProduct } from '@/src/lib/types';
 import SearchLoadingBar from './search-loading-bar';
-import {
-  CATEGORIES,
-  NO_RESULT_SUGGESTIONS,
-  TRENDING_SEARCHES,
-} from './constants';
+import { CATEGORIES, NO_RESULT_SUGGESTIONS } from './constants';
+import { useCategories } from '@/src/core/context/category-provider';
 
 function useProductSearch(query: string) {
   const [products, setProducts] = useState<WooProduct[]>([]);
@@ -75,31 +72,44 @@ function SearchStart({
 }: {
   onSelectTerm: (term: string) => void;
 }) {
+  const { categories, parentCategories } = useCategories();
+
   return (
     <div className="overflow-hidden rounded-2xl border border-[#392A22]/10 bg-white">
       <SectionLabel>Trending Searches</SectionLabel>
       <div className="flex flex-wrap gap-2 px-6 pb-5">
-        {TRENDING_SEARCHES.map((term) => (
-          <Pill key={term} onClick={() => onSelectTerm(term)}>
-            {term}
+        {categories.slice(0, 5).map((category: any) => (
+          <Pill key={category.id} onClick={() => onSelectTerm(category.name)}>
+            {category.name}
           </Pill>
         ))}
       </div>
 
       <SectionLabel>Browse Categories</SectionLabel>
       <div className="border-t border-[#392A22]/10">
-        {CATEGORIES.map(({ label, count, icon: Icon }) => (
+        {parentCategories.slice(0, 4).map((category) => (
           <button
-            key={label}
+            key={category.id}
             type="button"
+            onClick={() => onSelectTerm(category.name)}
             className="flex w-full items-center justify-between border-b border-[#392A22]/10 px-6 py-4 text-left last:border-b-0 hover:bg-[#392A22]/5"
           >
             <span className="flex items-center gap-3 text-[#392A22]">
-              <Icon className="size-4 text-[#392A22]/50" />
-              {label}
+              {category.image?.src ? (
+                <img
+                  src={category.image.src}
+                  alt={category.name}
+                  className="size-8 rounded-md object-cover"
+                />
+              ) : (
+                <Search className="size-4 text-[#392A22]/50" />
+              )}
+
+              {category.name}
             </span>
+
             <span className="rounded-full border border-[#392A22]/10 px-3 py-1 text-xs text-[#392A22]/50">
-              {count} products
+              {category.count} products
             </span>
           </button>
         ))}
@@ -156,18 +166,12 @@ function SearchEmpty({
     <div className="flex flex-col items-center px-6 py-16 text-center">
       <Search className="mb-4 size-8 text-[#392A22]/30" />
       <p className="text-base font-medium text-[#392A22]">
-        No result for &ldquo;{query}&rdquo;
+        Ingen resultater for &ldquo;{query}&rdquo;
       </p>
+
       <p className="mt-1 text-sm text-[#392A22]/50">
-        We don&apos;t carry this yet — try one of these instead;
+        Vi har desværre ikke dette produkt endnu – prøv i stedet en af disse.
       </p>
-      <div className="mt-5 flex flex-wrap justify-center gap-2">
-        {NO_RESULT_SUGGESTIONS.map((term) => (
-          <Pill key={term} onClick={() => onSelectTerm(term)}>
-            {term}
-          </Pill>
-        ))}
-      </div>
     </div>
   );
 }
