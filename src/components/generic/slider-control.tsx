@@ -9,7 +9,7 @@ const SliderControls = ({ prev, next }: SliderControlsProps) => {
         aria-label="Show previous product categories"
         title="Show previous product categories"
         onClick={prev}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f]/20"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f]/20 cursor-pointer"
       >
         <ArrowLeft aria-hidden="true" size={20} />
       </button>
@@ -19,7 +19,7 @@ const SliderControls = ({ prev, next }: SliderControlsProps) => {
         aria-label="Show next product categories"
         title="Show next product categories"
         onClick={next}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f]/20 bg-[#3b281f]"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f]/20 bg-[#3b281f] cursor-pointer"
       >
         <ArrowRight aria-hidden="true" size={20} color="white" />
       </button>

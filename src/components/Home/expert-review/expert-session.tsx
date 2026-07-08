@@ -1,5 +1,6 @@
 'use client';
-import { useRouter } from 'next/navigation';
+
+import { useRouter, usePathname } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import ExpertCard from '.';
 import Heading from './heading';
@@ -7,6 +8,7 @@ import { EXPERTS } from '../constants';
 
 const ExpertsSection = () => {
   const router = useRouter();
+  const shouldSlider = EXPERTS.length > 4;
 
   return (
     <section className="bg-[#FAF4EE] py-20" aria-labelledby="experts-heading">
@@ -14,14 +16,22 @@ const ExpertsSection = () => {
         <Heading />
 
         <div
-          className="flex gap-5 overflow-x-auto pb-4 md:pb-0 xl:grid xl:grid-cols-4 xl:overflow-visible"
+          className={
+            shouldSlider
+              ? 'flex gap-5 overflow-x-auto pb-4 scrollbar-hide'
+              : 'grid gap-5 xl:grid-cols-4'
+          }
           role="region"
           aria-label="Expert profiles"
         >
           {EXPERTS.map((expert: any, index: number) => (
             <div
               key={`${expert.name}-${index}`}
-              className="w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-auto"
+              className={
+                shouldSlider
+                  ? 'w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-[32%]'
+                  : 'w-full'
+              }
             >
               <ExpertCard expert={expert} />
             </div>
@@ -42,7 +52,7 @@ const ExpertsSection = () => {
           type="button"
           onClick={() => router.push('/expert')}
           aria-label="Book a free consultation"
-          className="flex items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80"
+          className="flex items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80 cursor-pointer"
         >
           <span>Book en gratis konsultation</span>
 

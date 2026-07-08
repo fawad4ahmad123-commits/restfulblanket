@@ -88,33 +88,88 @@ export const REVIEWS = [
   },
 ];
 
-export const EXPERTS: any = [
+export const EXPERTS = [
   {
     image: '/experts/expert_1.jpg',
-    role: 'SPECIALIST IN GENERAL MEDICINE',
+    role: 'SPECIALLÆGE I ALMEN MEDICIN',
     name: 'Liselotte Rønne',
-    position: 'Medical Advisor & Expert Reviewer',
+    position: 'Medicinsk Rådgiver & Faglig Reviewer',
+    profession: 'Læge',
+    specialization: 'Almen Medicin, Søvn og Sundhed',
     tags: [
-      'Insomnia',
-      'Trauma-Informed Regulation',
-      'Mindfulness-Based Approaches',
+      'Søvnløshed',
+      'Traumeinformeret Regulering',
+      'Mindfulness-baserede Tilgange',
     ],
   },
   {
     image: '/experts/nina-schioetz-psykoterapeut-tyngdedyne-terapi.jpg',
-    role: 'REGISTERED PSYCHOTHERAPIST',
+    role: 'AUTORISERET PSYKOTERAPEUT',
     name: 'Nina Schiøtz',
-    position: 'Expert Panel Member',
-    tags: ['Stress & Anxiety', 'Trauma Therapy', 'Nervous System Regulation'],
+    position: 'Medlem af Ekspertpanelet',
+    profession: 'Psykoterapeut',
+    specialization: 'Traumer, Angst og Nervesystemregulering',
+    tags: ['Stress og Angst', 'Traumeterapi', 'Regulering af Nervesystemet'],
   },
   {
     image: '/experts/Tina-Jenny-Kjeldsen3.webp',
-    role: 'DEMENTIA CONSULTANT & VISO SPECIALIST',
+    role: 'DEMENSKONSULENT & VISO-SPECIALIST',
     name: 'Tina Jenny Kjeldsen',
-    position: 'Expert Panel Member',
-    tags: ['Dementia Care', 'Sensory Regulation', 'Family Support'],
+    position: 'Medlem af Ekspertpanelet',
+    profession: 'Demenskonsulent',
+    specialization: 'Demens, Kognitive Udfordringer og Sanseregulering',
+    tags: ['Demensomsorg', 'Sanseregulering', 'Støtte til Pårørende'],
+  },
+  {
+    image: '/experts/expertavatar.png',
+    role: 'ERGOTERAPEUT, NEUROSPECIALIST & VISO-SPECIALIST',
+    name: 'Betina Lassen',
+    position: 'Faglig Sparringspartner & Reviewer',
+    profession: 'Ergoterapeut',
+    specialization:
+      'Sanseregulering, Neurodivergens, Psykiatri og Kognitive Udfordringer',
+    tags: [
+      'Sanseregulering',
+      'Neurodivergens',
+      'ADHD & Autisme',
+      'Psykiatri',
+      'Kognition',
+    ],
+  },
+  {
+    image: '/experts/Silke-Enar.png',
+    role: 'KONSULENT & PEER-KOORDINATOR',
+    name: 'Silke Ena',
+    position: 'Medlem af Ekspertpanelet',
+    profession: 'Konsulent & Peer-Koordinator',
+    specialization:
+      'ADHD, Autisme, Neurodivergens, Skolevægring og Sanseregulering',
+    tags: [
+      'ADHD',
+      'Autisme',
+      'Neurodivergens',
+      'Skolevægring',
+      'Sanseregulering',
+    ],
+  },
+  {
+    image: '/experts/om-zafir.webp',
+    role: 'STIFTER & LEDER AF EKSPERTPANELET',
+    name: 'Zafir Bæk',
+    position: 'Stifter, Ekspertpanelleder & Faglig Koordinator',
+    profession: 'Socialøkonomisk Iværksætter & Søvnrådgiver',
+    specialization:
+      'Søvn, ADHD, Angst, PTSD, Nervesystemregulering og Tyngdeprodukter',
+    tags: [
+      'Søvnproblemer',
+      'ADHD',
+      'Traumer',
+      'Angst',
+      'Nervesystemregulering',
+    ],
   },
 ];
+
 export const BLOGS = [
   {
     image: '/blog/1.png',

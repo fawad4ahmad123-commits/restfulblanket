@@ -59,7 +59,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
           <ArrowRight
             aria-hidden="true"
             size={22}
-            className="absolute scale-0 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
+            className="absolute scale-0 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 cursor-pointer"
             onClick={() => router.push(`/categories`)}
           />
         </button>

@@ -113,7 +113,7 @@ const BlogsSection = ({ blog }: any) => {
             aria-label="View all blog articles"
             title="View all blog articles"
             onClick={() => router.push('/blogs')}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white cursor-pointer"
           >
             <ArrowRight size={18} />
           </button>

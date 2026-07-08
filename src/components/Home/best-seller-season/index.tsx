@@ -136,7 +136,7 @@ const BestSellers = ({
                       activeCategory === category
                         ? 'bg-[#3b281f] text-white'
                         : 'text-[#3b281f]'
-                    }`}
+                    } cursor-pointer`}
                   >
                     {category}
                   </button>

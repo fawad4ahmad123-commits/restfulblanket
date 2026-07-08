@@ -181,14 +181,14 @@ const SliderCard = ({
             }`}
           >
             {isCompared ? (
-              <Check className="h-5 w-5" />
+              <Check className="h-5 w-5 cursor-pointer" />
             ) : (
               <Image
                 src="/home/card-compare-icon.png"
                 alt="compare-icon"
                 width={20}
                 height={20}
-                className={cn('h-5 w-5 md:h-[18px] md:w-[18px]')}
+                className={cn('h-5 w-5 md:h-[18px] md:w-[18px] cursor-pointer')}
               />
             )}
           </button>
@@ -211,7 +211,7 @@ const SliderCard = ({
               image,
             });
           }}
-          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+          className="mt-auto flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white cursor-pointer"
         >
           <ShoppingBag aria-hidden="true" className="h-4 w-4" />
           Tilføj til kurv

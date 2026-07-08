@@ -72,7 +72,7 @@ const Info = ({
                 aria-label="Previous review"
                 title="Previous review"
                 onClick={() => navigate('prev')}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#392A22]/20 bg-[#fff9f5] text-[#392A22] transition hover:bg-[#392A22] hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#392A22]/20 bg-[#fff9f5] text-[#392A22] transition hover:bg-[#392A22] hover:text-white cursor-pointer"
               >
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" />
               </button>
@@ -82,7 +82,7 @@ const Info = ({
                 aria-label="Next review"
                 title="Next review"
                 onClick={() => navigate('next')}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#392A22] text-white transition hover:bg-[#4A382E]"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#392A22] text-white transition hover:bg-[#4A382E] cursor-pointer"
               >
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </button>

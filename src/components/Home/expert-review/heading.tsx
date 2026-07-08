@@ -19,7 +19,7 @@ const Heading = () => {
             aria-label="View all experts"
             title="View all experts"
             onClick={() => router.push('/expert')}
-            className="h-12 gap-2 rounded-full border-[#392A22]/20 bg-[#e5d8cb] px-5 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white"
+            className="h-12 gap-2 rounded-full border-[#392A22]/20 bg-[#e5d8cb] px-5 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white cursor-pointer"
           >
             <User aria-hidden="true" className="h-3.5 w-3.5" />
             Se alle specialister
