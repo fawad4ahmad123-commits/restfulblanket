@@ -7,6 +7,7 @@ import ProductList from './ProductList';
 import ProductSort from './ProductSort';
 import { Pagination } from '../Pagination';
 import { SelectedFilters } from '../types';
+import CompareBar from '../../compare/compare-bar';
 
 const PRODUCTS_PER_PAGE = 6;
 
@@ -53,7 +54,7 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
       </div>
 
       <ProductList products={paginatedProducts} />
-
+      <CompareBar />
       <div className="mt-10">
         <Pagination
           currentPage={currentPage}

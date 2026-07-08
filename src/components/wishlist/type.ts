@@ -1,13 +1,17 @@
-export interface WishlistItem {
-  id: string;
-  name: string;
-  badge?: string;
+export interface ExtendedWishlistCardProps {
   image: string;
-  rating: number;
-  reviewCount: number;
-  weight: string;
-  dimensions: string;
+  slug: string;
+  hoverImage?: string;
+  title: string;
   price: number;
-  originalPrice: number;
-  currency: string;
+  badge?: string;
+  id: string | number;
+  originalPrice?: number;
+  rating?: number;
+  reviewCount?: number;
+  weight?: string;
+  dimensions?: string;
+  color?: string;
+  size?: string;
+  isProduct?: boolean;
 }

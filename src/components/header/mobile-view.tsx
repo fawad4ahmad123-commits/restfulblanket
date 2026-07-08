@@ -208,7 +208,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
         <Link href="/wishlist" className="w-full block">
           <Button className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer">
             <Heart aria-hidden="true" className="size-4" />
-            Wishlist
+            Wishlist {wishlistCount}
           </Button>
         </Link>
       </div>

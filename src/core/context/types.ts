@@ -52,16 +52,10 @@ export interface Category {
 export interface CategoryContextType {
   categories: Category[];
   parentCategories: Category[];
+  products: any[];
   getChildren: (parentId: number) => Category[];
   getProductsByCategory: (
     categoryId: number | null,
     limit?: number,
-  ) => {
-    id: number;
-    title: string;
-    price: string;
-    image: string;
-    href: string;
-    categoryIds: number[];
-  }[];
+  ) => any[];
 }

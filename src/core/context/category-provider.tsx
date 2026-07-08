@@ -79,6 +79,7 @@ export function CategoryProvider({
       value={{
         categories: safeCategories,
         parentCategories,
+        products: normalizedProducts,
         getChildren,
         getProductsByCategory,
       }}
