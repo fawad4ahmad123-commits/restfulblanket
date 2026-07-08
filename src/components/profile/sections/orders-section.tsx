@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { OrderStatus } from '../types/profile';
-import { ORDERS } from '../constants/profile-data';
+import { Order, OrderStatus } from '../types/profile';
 import { profileClasses } from '../constants/profile-theme';
 import { OrderRow } from '../order-row';
+import { Loader2 } from 'lucide-react';
 
 type Filter = 'all' | OrderStatus;
 
@@ -16,13 +16,18 @@ const FILTERS: { id: Filter; label: string }[] = [
   { id: 'regretted', label: 'Regretted' },
 ];
 
-export function OrdersSection() {
+interface OrdersSectionProps {
+  orders: Order[];
+  loading: boolean;
+}
+
+export function OrdersSection({ orders, loading }: OrdersSectionProps) {
   const [filter, setFilter] = useState<Filter>('all');
 
   const filteredOrders =
     filter === 'all'
-      ? ORDERS
-      : ORDERS.filter((order) => order.status === filter);
+      ? orders
+      : orders.filter((order) => order.status === filter);
 
   return (
     <div>
@@ -52,21 +57,30 @@ export function OrdersSection() {
       </div>
 
       <div className={cn(profileClasses.surfaceCard, 'p-5')}>
-        <div className="flex flex-col divide-y divide-[#EAE1D3]">
-          {filteredOrders.map((order) => (
-            <OrderRow key={order.id} order={order} />
-          ))}
-          {filteredOrders.length === 0 && (
-            <p
-              className={cn(
-                'py-8 text-center text-sm',
-                profileClasses.textSecondary,
-              )}
-            >
-              No orders in this category yet.
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-[#2B2420]" />
+            <p className={cn('text-sm', profileClasses.textSecondary)}>
+              Loading your orders...
             </p>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="flex flex-col divide-y divide-[#EAE1D3]">
+            {filteredOrders.map((order) => (
+              <OrderRow key={order.id} order={order} />
+            ))}
+            {filteredOrders.length === 0 && (
+              <p
+                className={cn(
+                  'py-8 text-center text-sm',
+                  profileClasses.textSecondary,
+                )}
+              >
+                No orders in this category yet.
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

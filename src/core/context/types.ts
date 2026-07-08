@@ -54,8 +54,5 @@ export interface CategoryContextType {
   parentCategories: Category[];
   products: any[];
   getChildren: (parentId: number) => Category[];
-  getProductsByCategory: (
-    categoryId: number | null,
-    limit?: number,
-  ) => any[];
+  getProductsByCategory: (categoryId: number | null, limit?: number) => any[];
 }

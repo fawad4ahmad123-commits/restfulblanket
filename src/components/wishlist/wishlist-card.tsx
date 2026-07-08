@@ -34,7 +34,7 @@ const WishlistCard = ({
     (item) => String(item.id) === String(id),
   );
   const stars = Math.round(rating);
-  console.log("t2 bbbbbb", {})
+  console.log('t2 bbbbbb', {});
   return (
     <div
       className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"
@@ -47,8 +47,9 @@ const WishlistCard = ({
               src={image}
               alt={title}
               fill
-              className={`object-cover transition-all duration-500 ${hoverImage ? 'group-hover:opacity-0' : ''
-                }`}
+              className={`object-cover transition-all duration-500 ${
+                hoverImage ? 'group-hover:opacity-0' : ''
+              }`}
             />
           ) : (
             <div className="h-full w-full bg-[#F3EBE4]" />
@@ -133,8 +134,9 @@ const WishlistCard = ({
             <svg
               key={i}
               aria-hidden="true"
-              className={`h-4 w-4 ${i < stars ? 'text-[#A38575]' : 'text-gray-300'
-                }`}
+              className={`h-4 w-4 ${
+                i < stars ? 'text-[#A38575]' : 'text-gray-300'
+              }`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -185,10 +187,11 @@ const WishlistCard = ({
                 slug,
               });
             }}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 ${isCompared
-              ? 'border-[#3B281F] bg-[#3B281F] text-white'
-              : 'border-[#E9DDD4] bg-white text-[#3B281F]'
-              }`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-200 ${
+              isCompared
+                ? 'border-[#3B281F] bg-[#3B281F] text-white'
+                : 'border-[#E9DDD4] bg-white text-[#3B281F]'
+            }`}
           >
             {isCompared ? (
               <Check className="h-5 w-5 cursor-pointer" />

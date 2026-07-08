@@ -46,7 +46,9 @@ export function ProductCard({ product }: ProductCardProps) {
   } = product;
 
   const wished = isWishlisted(String(id));
-  const isCompared = compareItems.some((item) => String(item.id) === String(id));
+  const isCompared = compareItems.some(
+    (item) => String(item.id) === String(id),
+  );
   const stars = Math.round(rating);
 
   return (

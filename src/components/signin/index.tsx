@@ -11,10 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SignInFormValues, signInSchema } from './schema';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/src/core/context/auth-context';
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const router = useRouter();
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -24,7 +28,7 @@ export default function SignInForm() {
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
       keepLoggedIn: false,
     },
@@ -33,7 +37,17 @@ export default function SignInForm() {
   const keepLoggedIn = watch('keepLoggedIn');
 
   const onSubmit = async (values: SignInFormValues) => {
-    console.log(values);
+    setApiError(null);
+    try {
+      await login(values.username, values.password);
+      router.push('/');
+    } catch (err) {
+      setApiError(
+        err instanceof Error
+          ? err.message
+          : 'Login failed. Please check your credentials.',
+      );
+    }
   };
 
   return (
@@ -70,22 +84,28 @@ export default function SignInForm() {
             </div>
           </div>
 
+          {apiError && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+              {apiError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Email
+                Username or Email
               </label>
 
               <Input
-                type="email"
-                placeholder="Enter your email"
+                type="text"
+                placeholder="Enter your username or email"
                 className="h-12 rounded-xl border-[#E8E1DA]"
-                {...register('email')}
+                {...register('username')}
               />
 
-              {errors.email && (
+              {errors.username && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors.email.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>

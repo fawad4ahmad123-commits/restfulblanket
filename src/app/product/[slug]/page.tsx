@@ -25,7 +25,7 @@ export default async function ProductPage({
   const relatedProducts = allProducts.filter((item: any) =>
     relatedIds.some((id: number | string) => Number(id) === Number(item.id)),
   );
-
+  console.log('t1', { relatedProducts });
   return (
     <Suspense fallback={<Loader />}>
       <ProductContent

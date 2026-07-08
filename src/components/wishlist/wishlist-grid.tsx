@@ -9,7 +9,7 @@ interface WishlistGridProps {
 }
 
 export function WishlistGrid({ items }: WishlistGridProps) {
-  console.log("t2 : ", items)
+  console.log('t2 : ', items);
   const handleAddToCart = (id: string) => {
     console.log('Add to cart:', id);
   };
@@ -24,7 +24,6 @@ export function WishlistGrid({ items }: WishlistGridProps) {
 
   return (
     <>
-
       <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => (
           <WishlistCard

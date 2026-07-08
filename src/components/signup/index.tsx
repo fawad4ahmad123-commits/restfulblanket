@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 
 import { signUpSchema, type SignUpFormValues } from './schema';
+import { useAuth } from '@/src/core/context/auth-context';
+import { SuccessDialog } from '@/src/components/thank-you-popup';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +16,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const router = useRouter();
+  const { signup } = useAuth();
 
   const {
     register,
@@ -23,7 +30,9 @@ export default function SignUpForm() {
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: '',
+      firstname: '',
+      lastname: '',
+      username: '',
       email: '',
       password: '',
       keepLoggedIn: false,
@@ -33,7 +42,23 @@ export default function SignUpForm() {
   const keepLoggedIn = watch('keepLoggedIn');
 
   const onSubmit = async (values: SignUpFormValues) => {
-    console.log(values);
+    setApiError(null);
+    try {
+      await signup({
+        firstname: values.firstname,
+        lastname: values.lastname,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+      setShowSuccess(true);
+    } catch (err) {
+      setApiError(
+        err instanceof Error
+          ? err.message
+          : 'Registration failed. Please try again.',
+      );
+    }
   };
 
   return (
@@ -70,21 +95,59 @@ export default function SignUpForm() {
             </div>
           </div>
 
+          {apiError && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+              {apiError}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#211711]">
+                  First Name
+                </label>
+                <Input
+                  placeholder="First name"
+                  className="h-12 rounded-xl border-[#E8E1DA]"
+                  {...register('firstname')}
+                />
+                {errors.firstname && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.firstname.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#211711]">
+                  Last Name
+                </label>
+                <Input
+                  placeholder="Last name"
+                  className="h-12 rounded-xl border-[#E8E1DA]"
+                  {...register('lastname')}
+                />
+                {errors.lastname && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.lastname.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Name
+                Username
               </label>
-
               <Input
-                placeholder="Enter your name"
+                placeholder="Choose a username"
                 className="h-12 rounded-xl border-[#E8E1DA]"
-                {...register('name')}
+                {...register('username')}
               />
-
-              {errors.name && (
+              {errors.username && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors.name.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -169,12 +232,22 @@ export default function SignUpForm() {
 
         <button
           type="button"
+          onClick={() => router.push('/')}
           className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-[#211711]"
         >
           <ArrowLeft size={16} />
           Back to Shopping Cart
         </button>
       </div>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        heading="Thank You!"
+        description="Your account has been created successfully. You are now logged in."
+        redirectUrl="/"
+        buttonLabel="Continue Shopping"
+      />
     </div>
   );
 }

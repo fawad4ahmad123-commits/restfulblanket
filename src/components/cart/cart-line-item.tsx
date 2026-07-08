@@ -67,10 +67,7 @@ export default function CartLineItem({
             </button>
 
             {/* Remove button */}
-            <button
-              onClick={() => onRemove(item.id)}
-              className="p-1 -m-1"
-            >
+            <button onClick={() => onRemove(item.id)} className="p-1 -m-1">
               <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-stone-500 hover:text-stone-900" />
             </button>
           </div>

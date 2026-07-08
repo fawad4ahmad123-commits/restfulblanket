@@ -1,18 +1,28 @@
 'use client';
 
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
-  ORDERS,
   OVERVIEW_STATS,
   PROFILE_USER,
   SLEEP_EXPERT,
 } from '../constants/profile-data';
 import { profileClasses, profileTheme } from '../constants/profile-theme';
 import { OrderRow } from '../order-row';
+import { Order } from '../types/profile';
 
-export function OverviewSection() {
+interface OverviewSectionProps {
+  orders: Order[];
+  loading: boolean;
+  user: any;
+}
+
+export function OverviewSection({
+  orders,
+  loading,
+  user,
+}: OverviewSectionProps) {
   const nightsTarget = 365;
   const progress = Math.min(PROFILE_USER.nightsOwned / nightsTarget, 1);
   const radius = 46;
@@ -21,36 +31,40 @@ export function OverviewSection() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Hero */}
       <div
         className={cn(
           profileClasses.heroCard,
           'p-8 flex items-center justify-between gap-8',
         )}
       >
-        <div className="max-w-md">
+        <div
+          className="flex-1 p-8 rounded-2xl"
+          style={{ backgroundColor: '#f6eee7' }}
+        >
           <h2
             className={cn(
-              'text-3xl leading-tight mb-3',
+              'mb-3 text-3xl leading-tight',
               profileClasses.textPrimary,
             )}
           >
-            Sleep <span className={profileClasses.serifItalic}>peacefully</span>
-            .
+            Sov <span className={profileClasses.serifItalic}>fredeligt</span>.
             <br />
-            Live <span className={profileClasses.serifItalic}>awake</span>.
+            Lev <span className={profileClasses.serifItalic}>vågen</span>.
           </h2>
-          <p className={cn('text-sm mb-6', profileClasses.textSecondary)}>
-            Your {PROFILE_USER.duvetSize} has been with you for{' '}
-            {PROFILE_USER.nightsOwned} nights. Here&apos;s how to keep it soft
-            and fresh season after season.
+
+          <p className={cn('mb-6 text-sm', profileClasses.textSecondary)}>
+            Din {PROFILE_USER.duvetSize} har været hos dig i{' '}
+            {PROFILE_USER.nightsOwned} nætter. Her er, hvordan du holder den
+            blød og frisk sæson efter sæson.
           </p>
-          <div className="flex items-center gap-3">
+
+          <div className="flex flex-wrap items-center gap-3">
             <Button className={profileClasses.buttonDark}>
-              See care guide
+              Se plejevejledning
             </Button>
+
             <Button variant="outline" className={profileClasses.buttonOutline}>
-              Book a sleep expert
+              Book en søvnekspert
             </Button>
           </div>
         </div>
@@ -77,6 +91,7 @@ export function OverviewSection() {
               strokeDashoffset={dashOffset}
             />
           </svg>
+
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
             <span
               className={cn(
@@ -86,22 +101,26 @@ export function OverviewSection() {
             >
               {PROFILE_USER.nightsOwned}
             </span>
+
             <span
               className={cn(
                 'text-[10px] leading-tight',
                 profileClasses.textSecondary,
               )}
             >
-              nights of peace and freshness
+              nætter med ro og friskhed
             </span>
           </div>
         </div>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {OVERVIEW_STATS.map((stat) => {
           const Icon = stat.icon;
+          let value = stat.value;
+          if (stat.id === 'total-orders') {
+            value = loading ? '...' : String(orders.length);
+          }
           return (
             <div
               key={stat.id}
@@ -116,7 +135,7 @@ export function OverviewSection() {
                   profileClasses.textPrimary,
                 )}
               >
-                {stat.value}
+                {value}
               </p>
               <p className={cn('text-xs', profileClasses.textSecondary)}>
                 {stat.label}
@@ -132,11 +151,23 @@ export function OverviewSection() {
           <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
             Latest <span className={profileClasses.serifItalic}>orders</span>
           </h3>
-          <div className="flex flex-col divide-y divide-[#EAE1D3]">
-            {ORDERS.slice(0, 3).map((order) => (
-              <OrderRow key={order.id} order={order} compact />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-8 gap-2">
+              <Loader2 className="h-6 w-6 animate-spin text-[#2B2420]" />
+              <p className="text-xs text-[#2B2420]/60">Loading orders...</p>
+            </div>
+          ) : (
+            <div className="flex flex-col divide-y divide-[#EAE1D3]">
+              {orders.slice(0, 3).map((order) => (
+                <OrderRow key={order.id} order={order} compact />
+              ))}
+              {orders.length === 0 && (
+                <p className="py-6 text-center text-xs text-[#2B2420]/60">
+                  No orders found.
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className={cn(profileClasses.surfaceCard, 'p-5')}>

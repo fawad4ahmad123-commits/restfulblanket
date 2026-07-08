@@ -9,6 +9,8 @@ import {
   PROFILE_NAV_ITEMS,
   PROFILE_USER,
 } from './constants/profile-data';
+import { useAuth } from '@/src/core/context/auth-context';
+import { useRouter } from 'next/navigation';
 
 interface ProfileSidebarProps {
   activeSection: ProfileSectionId;
@@ -19,6 +21,18 @@ export function ProfileSidebar({
   activeSection,
   onSelect,
 }: ProfileSidebarProps) {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/signin');
+  };
+
+  const displayFirstName = user?.name
+    ? user.name.split(' ')[0]
+    : PROFILE_USER.firstName;
+
   return (
     <aside className="w-full max-w-[220px] shrink-0">
       <p
@@ -30,10 +44,8 @@ export function ProfileSidebar({
         My Account
       </p>
       <h1 className={cn('text-2xl mb-6', profileClasses.textPrimary)}>
-        Hi,{' '}
-        <span className={profileClasses.serifItalic}>
-          {PROFILE_USER.firstName}
-        </span>
+        Hej,{' '}
+        <span className={profileClasses.serifItalic}>{displayFirstName}</span>
       </h1>
 
       <nav className="flex flex-col gap-1">
@@ -77,11 +89,9 @@ export function ProfileSidebar({
         </button>
         <button
           type="button"
-          onClick={() => {
-            /* wire up to your sign-out logic */
-          }}
+          onClick={handleLogout}
           className={cn(
-            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left',
+            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left cursor-pointer',
             profileClasses.navItemInactive,
           )}
         >
