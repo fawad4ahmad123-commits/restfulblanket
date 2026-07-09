@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { buildFilters, getInitialFilters } from '@/src/utilty/buildFilters';
 import { filterProducts } from '@/src/utilty/filterProducts';
 import ProductGrid from './ProductGrid';
@@ -9,15 +9,26 @@ import { SelectedFilters } from './types';
 export default function Shop({
   data,
   searchQuery = '',
+  categorySlug = '',
 }: {
   data: any[];
   searchQuery?: string;
+  categorySlug?: string;
 }) {
   const filterOptions = useMemo(() => buildFilters(data), [data]);
 
   const [filters, setFilters] = useState<SelectedFilters>(() =>
     getInitialFilters(filterOptions.minPrice, filterOptions.maxPrice),
   );
+
+  useEffect(() => {
+    if (!categorySlug) return;
+    setFilters((f) =>
+      f.categories.includes(categorySlug)
+        ? f
+        : { ...f, categories: [...f.categories, categorySlug] },
+    );
+  }, [categorySlug]);
 
   const filteredProducts = useMemo(
     () => filterProducts(data, filters, searchQuery),

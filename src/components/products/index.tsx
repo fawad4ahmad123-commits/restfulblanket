@@ -12,7 +12,6 @@ import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
-import OthersAlsoBought from './related-product-slider';
 
 const ProductInfoPanel = ({ product }: any) => {
   const cart = useContext(CartContext);

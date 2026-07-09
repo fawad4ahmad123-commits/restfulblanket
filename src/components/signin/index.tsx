@@ -69,6 +69,7 @@ export default function SignInForm() {
               type="button"
               variant="outline"
               className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
+              onClick={() => router.push('/')}
             >
               Continue as Guest
             </Button>

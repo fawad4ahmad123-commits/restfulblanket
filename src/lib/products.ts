@@ -125,14 +125,39 @@ export async function getCategories() {
   return data ?? [];
 }
 
+// export async function getProductBySlug(slug: string) {
+//   const data = await safeJsonFetch(wcUrl('products', { slug }), {
+//     next: { revalidate: 300 },
+//   });
+
+//   if (data === null) return null;
+
+//   return Array.isArray(data) ? data[0] : data;
+// }
 export async function getProductBySlug(slug: string) {
-  const data = await safeJsonFetch(wcUrl('products', { slug }), {
-    next: { revalidate: 300 },
-  });
+  const data = await safeJsonFetch(
+    wcUrl('products', {
+      slug,
+      status: 'publish',
+    }),
+    {
+      next: { revalidate: 300 },
+    },
+  );
 
-  if (data === null) return null;
+  if (!data) return null;
 
-  return Array.isArray(data) ? data[0] : data;
+  const product = Array.isArray(data) ? data[0] : data;
+
+  if (!product) return null;
+
+  if (product.type === 'variable') {
+    const variations = await getProductVariations(product.id);
+
+    product.variationData = variations;
+  }
+
+  return product;
 }
 
 export async function getProductReviews(productId: number, isHome: boolean) {
@@ -203,4 +228,31 @@ export async function getPages() {
   }
 
   return data;
+}
+
+export async function getProductVariations(productId: number) {
+  const data = await safeJsonFetch(
+    wcUrl(`products/${productId}/variations`, {
+      per_page: 100,
+    }),
+    {
+      next: { revalidate: 300 },
+    },
+  );
+
+  return data ?? [];
+}
+
+export async function getProductWithVariations(productId: number) {
+  const product = await safeJsonFetch(wcUrl(`products/${productId}`), {
+    next: { revalidate: 300 },
+  });
+
+  if (!product) return null;
+
+  if (product.type === 'variable') {
+    product.variationData = await getProductVariations(productId);
+  }
+
+  return product;
 }

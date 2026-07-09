@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import ShopHero from '@/src/components/all-products/shop-Hero';
 import { getAllProducts } from '@/src/lib/products';
@@ -8,8 +9,10 @@ import { Loader } from '../loader';
 
 export default function ShopPageClient({
   initialData,
+  categorySlug,
 }: {
   initialData: any[];
+  categorySlug?: string;
 }) {
   const [data, setData] = useState<any[]>(initialData);
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,16 +23,23 @@ export default function ShopPageClient({
 
     async function fetchData() {
       setLoading(true);
+
       try {
         const allProductData = await getAllProducts({
           search: searchQuery,
         });
+
         const response = formatProducts(allProductData);
-        if (active) setData(response);
+
+        if (active) {
+          setData(response);
+        }
       } catch (err) {
         console.error('search fetch failed', err);
       } finally {
-        if (active) setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
 
@@ -43,8 +53,13 @@ export default function ShopPageClient({
   return (
     <>
       <ShopHero data={data} onSearch={setSearchQuery} />
+
       <div className="bg-[#FDF9F6]">
-        {loading ? <Loader /> : <Shop data={data} />}
+        {loading ? (
+          <Loader />
+        ) : (
+          <Shop data={data} categorySlug={categorySlug} />
+        )}
       </div>
     </>
   );

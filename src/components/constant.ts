@@ -176,8 +176,9 @@ export const HERO_SLIDES = [
 ];
 
 export const BOTTOM_BANNER_ITEMS = [
-  '30 DAGES SØVNPRØVE – INGEN SPØRGSMÅL STILLET',
-  'HÅNDLAVET I SMÅLAND, SVERIGE',
-  'OEKO-TEX®- OG CE-CERTIFICERET',
-  'GRATIS KLIMANEUTRAL LEVERING OVER €120',
+  'CE-kl. 1 + OEKO-TEX kl. 1',
+  'Vaskbar 60 °C',
+  'Rapsfyld – naturligt og stille',
+  '90 Nætters Tryghed',
+  'Håndsyet i Danmark',
 ];

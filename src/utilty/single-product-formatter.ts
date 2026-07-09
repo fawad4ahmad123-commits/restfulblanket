@@ -2,6 +2,7 @@ import getColorHex from '../helper/color-hexa';
 import ExtractFeaturesFromShortDescription from '../helper/product-feature';
 
 export const formatProduct = (product: any) => {
+  console.log('t1  actutal api value', { product });
   const getMetaValue = (key: string) =>
     product.meta_data?.find((item: any) => item.key === key)?.value;
 
@@ -287,6 +288,22 @@ export const formatProduct = (product: any) => {
         id: section.id || `section-${index}`,
         title: section.title,
         body: section.body,
+      })) || [],
+
+    variations:
+      product.variationData?.map((variation: any) => ({
+        id: variation.id,
+        price: Number(variation.price || 0),
+        regularPrice: Number(variation.regular_price || 0),
+        stockStatus: variation.stock_status,
+        stockQuantity: variation.stock_quantity,
+        image: variation.image?.src || '',
+        description: variation.description || '',
+        attributes:
+          variation.attributes?.map((attr: any) => ({
+            name: attr.name,
+            option: attr.option,
+          })) || [],
       })) || [],
 
     productInformation,
