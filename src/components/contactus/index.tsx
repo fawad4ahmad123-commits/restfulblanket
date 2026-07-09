@@ -1,155 +1,205 @@
-// app/contact/page.tsx
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { useState } from 'react';
+import { Mail, AtSign, ChevronRight, Loader2 } from 'lucide-react';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Mail, User, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { submitContactForm } from '@/src/lib/contactus';
+import { SuccessDialog } from '../thank-you-popup';
 
-export default function ContactPage() {
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const initialState: FormState = { name: '', email: '', message: '' };
+
+export function ContactSection() {
+  const [form, setForm] = useState<FormState>(initialState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError('Udfyld venligst alle felter.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await submitContactForm(form);
+      setForm(initialState);
+      setShowSuccess(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Noget gik galt. Prøv venligst igen.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-          <span>Home</span>
-          <span>/</span>
-          <span className="text-foreground font-medium">Contact Us</span>
-        </nav>
+    <section className="min-h-screen w-full bg-[#fff9f5] px-6 py-10 sm:px-12 lg:px-20">
+      <nav className="mb-16 flex items-center gap-1 text-xs text-[#8a7f74]">
+        <span>Hjem</span>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-[#2e241b]">Kontakt os</span>
+      </nav>
 
-        <Card className="border-0 shadow-xl shadow-slate-200/50 dark:shadow-slate-800/50">
-          <CardHeader className="space-y-2 pb-6">
-            <CardTitle className="text-3xl font-bold tracking-tight">
-              Contact Us
-            </CardTitle>
-            <CardDescription className="text-base">
-              Have questions? We&apos;d love to hear from you. Send us a message
-              and we&apos;ll respond as soon as possible.
-            </CardDescription>
-          </CardHeader>
+      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-16 lg:grid-cols-2">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-[#2e241b] sm:text-5xl">
+              Kontakt os
+            </h1>
+            <p className="max-w-sm text-sm leading-relaxed text-[#8a7f74]">
+              Har du spørgsmål om produkter eller din ordre? Kontakt vores
+              supportteam. Vi svarer inden for 24–48 timer.
+            </p>
+          </div>
 
-          <CardContent>
-            <form className="space-y-6">
-              {/* Name Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="name"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Your Name"
-                  className="h-11 transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2"
-                  required
-                />
-              </div>
+          <div className="flex w-fit items-center gap-2 rounded-full border border-[#e8ddd0] bg-white px-4 py-2.5 text-sm text-[#2e241b] shadow-sm">
+            <Mail className="h-4 w-4 text-[#2e241b]" />
+            <span>Kontakt os:</span>
+            <a
+              href="mailto:help@RestfulBlanket.inc"
+              className="font-medium hover:underline"
+            >
+              help@RestfulBlanket.inc
+            </a>
+          </div>
 
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Your Email"
-                  className="h-11 transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2"
-                  required
-                />
-              </div>
-
-              {/* Message Field */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="message"
-                  className="text-sm font-medium flex items-center gap-2"
-                >
-                  <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                  Message
-                </Label>
-                <Textarea
-                  id="message"
-                  placeholder="Your Message"
-                  className="min-h-[150px] resize-y transition-shadow focus-visible:ring-2 focus-visible:ring-offset-2"
-                  required
-                />
-              </div>
-
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full h-11 text-base font-medium bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40"
+          <div className="flex flex-col gap-3">
+            <h2 className="text-sm font-semibold text-[#2e241b]">
+              Sociale medier
+            </h2>
+            <div className="flex items-center gap-3">
+              <a
+                href="https://www.facebook.com/restfulblanket/"
+                aria-label="Facebook"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2e241b] text-white transition hover:opacity-90"
               >
-                Send Message
-                <svg
-                  className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </Button>
-            </form>
-          </CardContent>
-
-          <CardFooter className="border-t border-border/50 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-              <span>We typically respond within 24 hours</span>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href="#" className="hover:text-foreground transition-colors">
-                Privacy Policy
+                <FaFacebookF className="h-4 w-4" />
               </a>
-              <span className="text-border">|</span>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Terms of Service
+
+              <a
+                href="https://www.instagram.com/restfulblanket/"
+                aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8ddd0] bg-white text-[#2e241b] transition hover:bg-[#f5ece1]"
+              >
+                <FaInstagram className="h-4 w-4" />
+              </a>
+
+              <a
+                href="#"
+                aria-label="Threads"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8ddd0] bg-white text-[#2e241b] transition hover:bg-[#f5ece1]"
+              >
+                <AtSign className="h-4 w-4" />
               </a>
             </div>
-          </CardFooter>
-        </Card>
-
-        {/* Additional Info - Optional */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-4 text-center shadow-sm border border-border/50">
-            <div className="text-2xl mb-1">📧</div>
-            <p className="text-sm text-muted-foreground">Email</p>
-            <p className="text-sm font-medium">support@example.com</p>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-4 text-center shadow-sm border border-border/50">
-            <div className="text-2xl mb-1">📞</div>
-            <p className="text-sm text-muted-foreground">Phone</p>
-            <p className="text-sm font-medium">+1 (555) 123-4567</p>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-4 text-center shadow-sm border border-border/50">
-            <div className="text-2xl mb-1">🕐</div>
-            <p className="text-sm text-muted-foreground">Hours</p>
-            <p className="text-sm font-medium">9AM - 6PM EST</p>
           </div>
         </div>
+
+        <div className="rounded-2xl bg-white p-8 shadow-md">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-[#2e241b]"
+              >
+                Navn
+              </label>
+
+              <Input
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Dit navn"
+                className="rounded-full border-[#e8ddd0] bg-[#fdfaf6] px-4 py-5 text-sm placeholder:text-[#b3a89c] focus-visible:ring-[#2e241b]"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-[#2e241b]"
+              >
+                E-mail
+              </label>
+
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Din e-mail"
+                className="rounded-full border-[#e8ddd0] bg-[#fdfaf6] px-4 py-5 text-sm placeholder:text-[#b3a89c] focus-visible:ring-[#2e241b]"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="message"
+                className="text-sm font-medium text-[#2e241b]"
+              >
+                Besked
+              </label>
+
+              <Textarea
+                id="message"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Din besked"
+                rows={5}
+                className="resize-none rounded-2xl border-[#e8ddd0] bg-[#fdfaf6] px-4 py-3 text-sm placeholder:text-[#b3a89c] focus-visible:ring-[#2e241b]"
+              />
+            </div>
+
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-2 w-full rounded-full bg-[#3a2e22] py-6 text-sm font-medium text-white hover:bg-[#2e241b]"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                'Send besked'
+              )}
+            </Button>
+          </form>
+        </div>
       </div>
-    </div>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        heading="Besked sendt!"
+        description="Tak fordi du kontaktede os. Vores supportteam vender tilbage til dig inden for 24–48 timer."
+        redirectUrl="/"
+      />
+    </section>
   );
 }

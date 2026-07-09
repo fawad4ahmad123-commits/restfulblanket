@@ -12,6 +12,8 @@ import { useRouter, usePathname } from 'next/navigation';
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user'; // Backup key specifically to fix persistent hard refresh data loss
 const JWT_ENDPOINT = 'https://tapbookme.com/wp-json/jwt-auth/v1/token';
+const WP_API_URL =
+  process.env.NEXT_PUBLIC_WP_API_URL ?? 'https://tapbookme.com';
 
 interface User {
   id: string;
@@ -162,25 +164,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
 
     try {
-      const response = await fetch(
-        'https://tapbookme.com/wp-json/wc/v3/customers',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        },
-      );
+      const response = await fetch(`${WP_API_URL}/wp-json/custom/v1/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: payload.username,
+          email: payload.email,
+          password: payload.password,
+        }),
+      });
 
-      if (!response.ok) {
-        let message = 'Registration failed. Please check your information.';
-        try {
-          const err = await response.json();
-          if (err?.message) message = err.message;
-        } catch {}
-        throw new Error(message);
+      let data: { success?: boolean; message?: string } | undefined;
+      try {
+        data = await response.json();
+      } catch {
+        // ignore — handled by the !response.ok check below
       }
 
-      await login(payload.username, payload.password);
+      if (!response.ok || data?.success === false) {
+        throw new Error(
+          data?.message ??
+            'Registration failed. Please check your information.',
+        );
+      }
+
+      // Do NOT auto-login here — the account isn't verified yet.
+      // WordPress will block login until the user clicks the verification
+      // email link and hits /verify-email. Show a "check your email" state
+      // instead, e.g.:
+      //
+      //   setShowCheckEmail(true);
+      //
+      // in your component, rather than calling login(...) at this point.
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Registration failed';

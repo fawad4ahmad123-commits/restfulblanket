@@ -51,7 +51,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#fff9f5] p-4">
       <div className="w-full max-w-[528px]">
         <div className="flex flex-col gap-8 rounded-[24px] border border-[#F0EBE6] bg-white px-6 py-8 shadow-sm">
           <div>
