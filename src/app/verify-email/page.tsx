@@ -2,20 +2,20 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
+import { CheckCircle2, XCircle, Mail, Loader2 } from 'lucide-react';
+import { Loader } from '@/src/components/loader';
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Status states: 'initial' (check email screen), 'verifying', 'success', 'error'
   const [status, setStatus] = useState('initial');
   const [errorMessage, setErrorMessage] = useState('');
 
   const token = searchParams.get('token');
-  const userId = searchParams.get('user_id'); // Or 'id' / 'user' depending on your WP plugin URL
+  const userId = searchParams.get('user_id');
 
   useEffect(() => {
-    // If a token and user_id are found in the URL, trigger the verification backend call
     if (token && userId) {
       setStatus('verifying');
 
@@ -26,35 +26,36 @@ function VerifyEmailContent() {
         .then((data) => {
           if (data.success) {
             setStatus('success');
-            // Redirect to sign-in page after 3 seconds
             setTimeout(() => {
-              router.push('/login');
+              router.push('/signin');
             }, 3000);
           } else {
             setStatus('error');
             setErrorMessage(
-              data.message ||
-                'The verification link is invalid or has expired.',
+              data.message || 'Bekræftelseslinket er ugyldigt eller udløbet.',
             );
           }
         })
         .catch(() => {
           setStatus('error');
-          setErrorMessage('Something went wrong connecting to the server.');
+          setErrorMessage(
+            'Der opstod en fejl under forbindelsen til serveren.',
+          );
         });
     }
   }, [token, userId, router]);
 
-  // Render content based on the current verification state
   if (status === 'verifying') {
     return (
-      <div className="rounded-2xl bg-white p-8 text-center shadow-sm max-w-md mx-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#211711] mx-auto mb-4"></div>
-        <h1 className="text-2xl font-bold text-[#211711]">
-          Verifying your account
+      <div className="w-full max-w-md mx-4 transform overflow-hidden rounded-3xl bg-white p-8 text-center shadow-xl transition-all border border-neutral-100">
+        <div className="flex justify-center mb-6">
+          <Loader2 className="h-12 w-12 animate-spin text-[#211711]" />
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-[#211711]">
+          Bekræfter din konto
         </h1>
-        <p className="mt-3 text-[#70655E]">
-          Please wait while we secure your account...
+        <p className="mt-3 text-sm text-[#70655E] leading-relaxed">
+          Vent venligst et øjeblik, mens vi sikrer og godkender din konto...
         </p>
       </div>
     );
@@ -62,54 +63,78 @@ function VerifyEmailContent() {
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl bg-white p-8 text-center shadow-sm max-w-md mx-4">
-        <div className="text-4xl mb-3">✅</div>
-        <h1 className="text-2xl font-bold text-emerald-700">Email Verified!</h1>
-        <p className="mt-3 text-[#70655E]">
-          Your account is now ready. Redirecting you to sign in...
+      <div className="w-full max-w-md mx-4 transform overflow-hidden rounded-3xl bg-white p-8 text-center shadow-xl transition-all border border-emerald-50">
+        <div className="flex justify-center mb-6">
+          <div className="rounded-full bg-emerald-50 p-3 text-emerald-600 animate-bounce">
+            <CheckCircle2 className="h-12 w-12" />
+          </div>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-emerald-800">
+          E-mail bekræftet!
+        </h1>
+        <p className="mt-3 text-sm text-[#70655E] leading-relaxed">
+          Din konto er nu klar. Du bliver viderestillet til login om et
+          øjeblik...
         </p>
+        <div className="mt-6 h-1 w-full bg-emerald-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-emerald-600 animate-[loading_3s_ease-in-out]"
+            style={{ width: '100%' }}
+          ></div>
+        </div>
       </div>
     );
   }
 
   if (status === 'error') {
     return (
-      <div className="rounded-2xl bg-white p-8 text-center shadow-sm max-w-md mx-4">
-        <div className="text-4xl mb-3">❌</div>
-        <h1 className="text-2xl font-bold text-rose-700">
-          Verification Failed
+      <div className="w-full max-w-md mx-4 transform overflow-hidden rounded-3xl bg-white p-8 text-center shadow-xl transition-all border border-rose-50">
+        <div className="flex justify-center mb-6">
+          <div className="rounded-full bg-rose-50 p-3 text-rose-600">
+            <XCircle className="h-12 w-12" />
+          </div>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-rose-900">
+          Bekræftelse mislykkedes
         </h1>
-        <p className="mt-3 text-[#70655E]">{errorMessage}</p>
+        <p className="mt-3 text-sm text-[#70655E] leading-relaxed">
+          {errorMessage}
+        </p>
         <button
-          onClick={() => router.push('/login')}
-          className="mt-6 px-4 py-2 bg-[#211711] text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition"
+          onClick={() => router.push('/signin')}
+          className="mt-6 w-full inline-flex justify-center items-center px-5 py-3 bg-[#211711] text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-opacity-90 hover:shadow-md active:scale-[0.98] transition-all duration-150"
         >
-          Go to Sign In
+          Gå til login
         </button>
       </div>
     );
   }
 
-  // DEFAULT 'INITIAL' STATE (When they register and are told to check inbox)
   return (
-    <div className="rounded-2xl bg-white p-8 text-center shadow-sm max-w-md mx-4">
-      <h1 className="text-2xl font-bold text-[#211711]">Check your email</h1>
-      <p className="mt-3 text-[#70655E]">
-        We have sent a verification link to your email address. Please verify
-        your account before signing in.
+    <div className="w-full max-w-md mx-4 transform overflow-hidden rounded-3xl bg-white p-8 text-center shadow-xl transition-all border border-neutral-100">
+      <div className="flex justify-center mb-6">
+        <div className="rounded-full bg-amber-50 p-4 text-[#211711]">
+          <Mail className="h-10 w-10" />
+        </div>
+      </div>
+      <h1 className="text-2xl font-bold tracking-tight text-[#211711]">
+        Tjek din e-mail
+      </h1>
+      <p className="mt-3 text-sm text-[#70655E] leading-relaxed">
+        Vi har sendt et bekræftelseslink til din e-mailadresse. Venligst bekræft
+        din konto via linket, før du logger ind.
       </p>
     </div>
   );
 }
 
-// Next.js App Router requires searchParams hooks to be wrapped in a Suspense boundary
 export default function VerifyEmailPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6]">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FAF8F6] to-[#EFECE9]">
       <Suspense
         fallback={
-          <div className="rounded-2xl bg-white p-8 text-center shadow-sm max-w-md mx-4">
-            <p className="text-[#70655E]">Loading...</p>
+          <div className="w-full max-w-md mx-4 rounded-3xl bg-white p-12 text-center shadow-xl border border-neutral-100 flex flex-col items-center justify-center">
+            <Loader />
           </div>
         }
       >

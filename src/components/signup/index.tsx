@@ -39,7 +39,9 @@ export default function SignUpForm() {
     },
   });
 
+  // Dynamically watch both 'keepLoggedIn' and 'email' fields from the form state
   const keepLoggedIn = watch('keepLoggedIn');
+  const userEmail = watch('email');
 
   const onSubmit = async (values: SignUpFormValues) => {
     setApiError(null);
@@ -239,14 +241,19 @@ export default function SignUpForm() {
           Back to Shopping Cart
         </button>
       </div>
-
       <SuccessDialog
         open={showSuccess}
         onOpenChange={setShowSuccess}
-        heading="Thank You!"
-        description="Your account has been created successfully. You are now logged in."
-        redirectUrl="/"
-        buttonLabel="Continue Shopping"
+        heading="Tjek din e-mail"
+        description={
+          <>
+            Du er nu registreret! Venligst bekræft din e-mailadresse{' '}
+            <span className="font-semibold text-[#211711]">{userEmail}</span>{' '}
+            for at logge ind.
+          </>
+        }
+        redirectUrl="/signin"
+        buttonLabel="Gå til login"
       />
     </div>
   );
