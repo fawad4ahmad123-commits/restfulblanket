@@ -39,7 +39,6 @@ export default function SignUpForm() {
     },
   });
 
-  // Dynamically watch both 'keepLoggedIn' and 'email' fields from the form state
   const keepLoggedIn = watch('keepLoggedIn');
   const userEmail = watch('email');
 
@@ -58,7 +57,7 @@ export default function SignUpForm() {
       setApiError(
         err instanceof Error
           ? err.message
-          : 'Registration failed. Please try again.',
+          : 'Registrering mislykkedes. Prøv venligst igen.',
       );
     }
   };
@@ -69,11 +68,11 @@ export default function SignUpForm() {
         <div className="flex flex-col gap-8 rounded-[24px] border border-[#F0EBE6] bg-white px-6 py-8 shadow-sm">
           <div>
             <h1 className="text-[32px] font-bold leading-tight text-[#211711]">
-              Create an Account
+              Opret en konto
             </h1>
 
             <p className="mt-2 text-sm text-[#70655E]">
-              Provide your details to create a new account
+              Indtast dine oplysninger for at oprette en ny konto
             </p>
           </div>
 
@@ -82,8 +81,9 @@ export default function SignUpForm() {
               type="button"
               variant="outline"
               className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
+              onClick={() => router.push('/')}
             >
-              Continue as Guest
+              Fortsæt som gæst
             </Button>
           </div>
 
@@ -93,7 +93,9 @@ export default function SignUpForm() {
             </div>
 
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-sm text-[#8B817A]">or</span>
+              <span className="bg-white px-3 text-sm text-[#8B817A]">
+                eller
+              </span>
             </div>
           </div>
 
@@ -107,10 +109,10 @@ export default function SignUpForm() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="mb-2 block text-sm font-medium text-[#211711]">
-                  First Name
+                  Fornavn
                 </label>
                 <Input
-                  placeholder="First name"
+                  placeholder="Fornavn"
                   className="h-12 rounded-xl border-[#E8E1DA]"
                   {...register('firstname')}
                 />
@@ -123,10 +125,10 @@ export default function SignUpForm() {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-[#211711]">
-                  Last Name
+                  Efternavn
                 </label>
                 <Input
-                  placeholder="Last name"
+                  placeholder="Efternavn"
                   className="h-12 rounded-xl border-[#E8E1DA]"
                   {...register('lastname')}
                 />
@@ -140,10 +142,10 @@ export default function SignUpForm() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Username
+                Brugernavn
               </label>
               <Input
-                placeholder="Choose a username"
+                placeholder="Vælg et brugernavn"
                 className="h-12 rounded-xl border-[#E8E1DA]"
                 {...register('username')}
               />
@@ -156,12 +158,12 @@ export default function SignUpForm() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Email
+                E-mail
               </label>
 
               <Input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Indtast din e-mailadresse"
                 className="h-12 rounded-xl border-[#E8E1DA]"
                 {...register('email')}
               />
@@ -175,13 +177,13 @@ export default function SignUpForm() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Password
+                Adgangskode
               </label>
 
               <div className="relative">
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder="Indtast din adgangskode"
                   className="h-12 rounded-xl border-[#E8E1DA] pr-10"
                   {...register('password')}
                 />
@@ -209,9 +211,8 @@ export default function SignUpForm() {
                   setValue('keepLoggedIn', !!checked)
                 }
               />
-
               <label className="text-sm text-[#70655E]">
-                Keep me logged in
+                Forbliv logget ind
               </label>
             </div>
 
@@ -220,14 +221,14 @@ export default function SignUpForm() {
               disabled={isSubmitting}
               className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
             >
-              {isSubmitting ? 'Loading...' : 'Sign Up'}
+              {isSubmitting ? 'Indlæser...' : 'Opret konto'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-[#70655E]">
-            Already have an account?{' '}
+            Har du allerede en konto?{' '}
             <a href="/signin" className="font-semibold text-[#211711]">
-              Sign In
+              Log ind
             </a>
           </p>
         </div>
@@ -238,9 +239,10 @@ export default function SignUpForm() {
           className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-[#211711]"
         >
           <ArrowLeft size={16} />
-          Back to Shopping Cart
+          Tilbage til indkøbskurven
         </button>
       </div>
+
       <SuccessDialog
         open={showSuccess}
         onOpenChange={setShowSuccess}

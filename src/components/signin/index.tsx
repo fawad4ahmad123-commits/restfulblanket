@@ -1,23 +1,23 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/src/core/context/auth-context';
+import { SuccessDialog } from '@/src/components/thank-you-popup';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { SignInFormValues, signInSchema } from './schema';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/src/core/context/auth-context';
+import { SignUpFormValues, signUpSchema } from '../signup/schema';
 
-export default function SignInForm() {
+export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { signup } = useAuth();
 
   const {
     register,
@@ -25,42 +25,52 @@ export default function SignInForm() {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
+      firstname: '',
+      lastname: '',
       username: '',
+      email: '',
       password: '',
       keepLoggedIn: false,
     },
   });
 
   const keepLoggedIn = watch('keepLoggedIn');
+  const userEmail = watch('email');
 
-  const onSubmit = async (values: SignInFormValues) => {
+  const onSubmit = async (values: SignUpFormValues) => {
     setApiError(null);
     try {
-      await login(values.username, values.password);
-      router.push('/');
+      await signup({
+        firstname: values.firstname,
+        lastname: values.lastname,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+      setShowSuccess(true);
     } catch (err) {
       setApiError(
         err instanceof Error
           ? err.message
-          : 'Login failed. Please check your credentials.',
+          : 'Registrering mislykkedes. Prøv venligst igen.',
       );
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#fff9f5] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6] p-4">
       <div className="w-full max-w-[528px]">
         <div className="flex flex-col gap-8 rounded-[24px] border border-[#F0EBE6] bg-white px-6 py-8 shadow-sm">
           <div>
             <h1 className="text-[32px] font-bold leading-tight text-[#211711]">
-              Welcome Back
+              Opret en konto
             </h1>
 
             <p className="mt-2 text-sm text-[#70655E]">
-              Sign in to continue to your account
+              Indtast dine oplysninger for at oprette en ny konto
             </p>
           </div>
 
@@ -71,7 +81,7 @@ export default function SignInForm() {
               className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
               onClick={() => router.push('/')}
             >
-              Continue as Guest
+              Fortsæt som gæst
             </Button>
           </div>
 
@@ -81,7 +91,9 @@ export default function SignInForm() {
             </div>
 
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-sm text-[#8B817A]">or</span>
+              <span className="bg-white px-3 text-sm text-[#8B817A]">
+                eller
+              </span>
             </div>
           </div>
 
@@ -92,18 +104,49 @@ export default function SignInForm() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#211711]">
+                  Fornavn
+                </label>
+                <Input
+                  placeholder="Fornavn"
+                  className="h-12 rounded-xl border-[#E8E1DA]"
+                  {...register('firstname')}
+                />
+                {errors.firstname && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.firstname.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#211711]">
+                  Efternavn
+                </label>
+                <Input
+                  placeholder="Efternavn"
+                  className="h-12 rounded-xl border-[#E8E1DA]"
+                  {...register('lastname')}
+                />
+                {errors.lastname && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.lastname.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Username or Email
+                Brugernavn
               </label>
-
               <Input
-                type="text"
-                placeholder="Enter your username or email"
+                placeholder="Vælg et brugernavn"
                 className="h-12 rounded-xl border-[#E8E1DA]"
                 {...register('username')}
               />
-
               {errors.username && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.username.message}
@@ -113,13 +156,32 @@ export default function SignInForm() {
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Password
+                E-mail
+              </label>
+
+              <Input
+                type="email"
+                placeholder="Indtast din e-mailadresse"
+                className="h-12 rounded-xl border-[#E8E1DA]"
+                {...register('email')}
+              />
+
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-[#211711]">
+                Adgangskode
               </label>
 
               <div className="relative">
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder="Indtast din adgangskode"
                   className="h-12 rounded-xl border-[#E8E1DA] pr-10"
                   {...register('password')}
                 />
@@ -138,28 +200,18 @@ export default function SignInForm() {
                   {errors.password.message}
                 </p>
               )}
+            </div>
 
-              <div className="mt-3 flex items-center justify-between">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm font-medium text-[#211711] hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    checked={keepLoggedIn}
-                    onCheckedChange={(checked) =>
-                      setValue('keepLoggedIn', !!checked)
-                    }
-                  />
-
-                  <label className="text-sm text-[#70655E]">
-                    Keep me logged in
-                  </label>
-                </div>
-              </div>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                checked={keepLoggedIn}
+                onCheckedChange={(checked) =>
+                  setValue('keepLoggedIn', !!checked)
+                }
+              />
+              <label className="text-sm text-[#70655E]">
+                Forbliv logget ind
+              </label>
             </div>
 
             <Button
@@ -167,27 +219,42 @@ export default function SignInForm() {
               disabled={isSubmitting}
               className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
             >
-              {isSubmitting ? 'Loading...' : 'Sign In'}
+              {isSubmitting ? 'Indlæser...' : 'Opret konto'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-[#70655E]">
-            Don't have an account?{' '}
-            <Link href="/signup" className="font-semibold text-[#211711]">
-              Sign Up
-            </Link>
+            Har du allerede en konto?{' '}
+            <a href="/signin" className="font-semibold text-[#211711]">
+              Log ind
+            </a>
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => router.push('/')}
-          className="mt-6 flex self-start items-center gap-2 text-sm font-medium text-[#35281E] transition-opacity hover:opacity-80 cursor-pointer"
+          className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-[#211711]"
         >
           <ArrowLeft size={16} />
-          Back to Shopping Cart
+          Tilbage til indkøbskurven
         </button>
       </div>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        heading="Tjek din e-mail"
+        description={
+          <>
+            Du er nu registreret! Venligst bekræft din e-mailadresse{' '}
+            <span className="font-semibold text-[#211711]">{userEmail}</span>{' '}
+            for at logge ind.
+          </>
+        }
+        redirectUrl="/signin"
+        buttonLabel="Gå til login"
+      />
     </div>
   );
 }
