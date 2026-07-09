@@ -17,7 +17,6 @@ import {
 import { useAuth } from '@/src/core/context/auth-context';
 import { getUserOrders } from '@/src/lib/orders';
 
-// Helper to map WooCommerce REST API order object to UI Order shape
 function mapWooOrderToProfileOrder(wooOrder: any): Order {
   let status: OrderStatus = 'on-the-way';
   if (wooOrder.status === 'completed') {
@@ -27,7 +26,7 @@ function mapWooOrderToProfileOrder(wooOrder: any): Order {
   }
 
   const firstItem = wooOrder.line_items?.[0];
-  const productName = firstItem?.name || 'Weighted Blanket';
+  const productName = firstItem?.name || 'Tyngdedyne';
 
   let productSubtitle = 'Standard';
   if (firstItem?.meta_data && Array.isArray(firstItem.meta_data)) {
@@ -95,27 +94,22 @@ export default function Profile() {
   const [ordersLoading, setOrdersLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch orders if user is authenticated and has an ID
-    if (user?.id) {
-      // Find numeric ID if present or parse string ID
-      const customerId = parseInt(user.id, 10);
-      if (!isNaN(customerId)) {
-        setOrdersLoading(true);
-        getUserOrders(customerId)
-          .then((data) => {
-            if (Array.isArray(data)) {
-              setOrders(data.map(mapWooOrderToProfileOrder));
-            }
-          })
-          .catch((err) => {
-            console.error('Failed to load user orders:', err);
-          })
-          .finally(() => {
-            setOrdersLoading(false);
-          });
-      }
+    if (user?.email) {
+      setOrdersLoading(true);
+      getUserOrders(user.email)
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setOrders(data.map(mapWooOrderToProfileOrder));
+          }
+        })
+        .catch((err) => {
+          console.error('Kunne ikke hente ordrer:', err);
+        })
+        .finally(() => {
+          setOrdersLoading(false);
+        });
     }
-  }, [user?.id]);
+  }, [user?.email, user?.id]);
 
   const ActiveComponent = SECTION_COMPONENTS[activeSection];
 

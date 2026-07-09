@@ -12,11 +12,9 @@ import {
 import {
   Address,
   NavItem,
-  Order,
   OverviewStat,
   ProfileUser,
   SleepExpert,
-  WishlistItem,
 } from '../types/profile';
 
 export const PROFILE_NAV_ITEMS: NavItem[] = [
@@ -62,99 +60,6 @@ export const SLEEP_EXPERT: SleepExpert = {
   email: 'zafir@sleepco.com',
   phone: '+45 22 11 44 55',
 };
-
-export const ORDERS: Order[] = [
-  {
-    id: 'ord-1',
-    orderNumber: '#RFB-10482',
-    date: 'June 24, 2026',
-    productName: 'Bedding set soft, 3-sided zipper',
-    productSubtitle: 'SlumringsRo',
-    image:
-      'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=200&q=80',
-    price: 300.99,
-    currency: '€',
-    status: 'on-the-way',
-  },
-  {
-    id: 'ord-2',
-    orderNumber: '#RFB-10482',
-    date: 'June 24, 2026',
-    productName: 'Bedding set soft, 3-sided zipper',
-    productSubtitle: 'SlumringsRo',
-    image:
-      'https://images.unsplash.com/photo-1584100936595-c0654b55a2e6?w=200&q=80',
-    price: 28.99,
-    currency: '€',
-    status: 'delivered',
-  },
-  {
-    id: 'ord-3',
-    orderNumber: '#RFB-10482',
-    date: 'June 24, 2026',
-    productName: 'Bedding set soft, 3-sided zipper',
-    productSubtitle: 'SlumringsRo',
-    image:
-      'https://images.unsplash.com/photo-1522771930-78848d9293e8?w=200&q=80',
-    price: 28.99,
-    currency: '€',
-    status: 'delivered',
-  },
-  {
-    id: 'ord-4',
-    orderNumber: '#RFB-10482',
-    date: 'June 24, 2026',
-    productName: 'Bedding set soft, 3-sided zipper',
-    productSubtitle: 'SlumringsRo',
-    image:
-      'https://images.unsplash.com/photo-1618221469555-7f3ad97540d6?w=200&q=80',
-    price: 28.99,
-    currency: '€',
-    status: 'regretted',
-  },
-];
-
-export const WISHLIST_ITEMS: WishlistItem[] = [
-  {
-    id: 'wish-1',
-    name: 'Nord Classic Weighted Blanket',
-    dimensions: '6 kg / 150 x 200 cm',
-    price: 249,
-    originalPrice: 299,
-    currency: '€',
-    rating: 4.8,
-    reviewCount: 1256,
-    image:
-      'https://images.unsplash.com/photo-1591088398332-8a7791972843?w=400&q=80',
-    bestSeller: true,
-  },
-  {
-    id: 'wish-2',
-    name: 'Nord Classic Weighted Blanket',
-    dimensions: '8 kg / 150 x 200 cm',
-    price: 249,
-    originalPrice: 299,
-    currency: '€',
-    rating: 4.7,
-    reviewCount: 1284,
-    image:
-      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80',
-    bestSeller: true,
-  },
-  {
-    id: 'wish-3',
-    name: 'Nord Classic Weighted Blanket',
-    dimensions: '9.4 kg / 200 x 200 cm',
-    price: 249,
-    originalPrice: 299,
-    currency: '€',
-    rating: 4.9,
-    reviewCount: 1284,
-    image:
-      'https://images.unsplash.com/photo-1509726360864-cf6cc84931f4?w=400&q=80',
-    bestSeller: true,
-  },
-];
 
 export const ADDRESSES: Address[] = [
   {

@@ -8,11 +8,11 @@ import { useRouter } from 'next/navigation';
 
 import { signUpSchema, type SignUpFormValues } from './schema';
 import { useAuth } from '@/src/core/context/auth-context';
-import { SuccessDialog } from '@/src/components/thank-you-popup';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
+import { SuccessDialog } from '../thank-you-popup';
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);

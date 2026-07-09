@@ -1,6 +1,7 @@
 'use client';
 
-import { LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { LogOut, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProfileSectionId } from './types/profile';
 import { profileClasses } from './constants/profile-theme';
@@ -11,6 +12,7 @@ import {
 } from './constants/profile-data';
 import { useAuth } from '@/src/core/context/auth-context';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 interface ProfileSidebarProps {
   activeSection: ProfileSectionId;
@@ -23,6 +25,8 @@ export function ProfileSidebar({
 }: ProfileSidebarProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -41,7 +45,7 @@ export function ProfileSidebar({
           profileClasses.textSecondary,
         )}
       >
-        My Account
+        Min konto
       </p>
       <h1 className={cn('text-2xl mb-6', profileClasses.textPrimary)}>
         Hej,{' '}
@@ -87,6 +91,7 @@ export function ProfileSidebar({
           <PROFILE_FOOTER_NAV_ITEM.icon className="h-4 w-4 shrink-0" />
           {PROFILE_FOOTER_NAV_ITEM.label}
         </button>
+
         <button
           type="button"
           onClick={handleLogout}
@@ -96,7 +101,7 @@ export function ProfileSidebar({
           )}
         >
           <LogOut className="h-4 w-4 shrink-0" />
-          Log out
+          Log ud
         </button>
       </nav>
     </aside>

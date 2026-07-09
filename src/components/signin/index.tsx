@@ -81,7 +81,9 @@ export default function SignInForm() {
             </div>
 
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-sm text-[#8B817A]">eller</span>
+              <span className="bg-white px-3 text-sm text-[#8B817A]">
+                eller
+              </span>
             </div>
           </div>
 
