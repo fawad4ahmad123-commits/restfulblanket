@@ -203,23 +203,10 @@ export default function SignUpForm() {
                 </p>
               )}
             </div>
-
-            <div className="flex items-center gap-3">
-              <Checkbox
-                checked={keepLoggedIn}
-                onCheckedChange={(checked) =>
-                  setValue('keepLoggedIn', !!checked)
-                }
-              />
-              <label className="text-sm text-[#70655E]">
-                Forbliv logget ind
-              </label>
-            </div>
-
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
+              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21] mt-[10px]"
             >
               {isSubmitting ? 'Indlæser...' : 'Opret konto'}
             </Button>

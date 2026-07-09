@@ -1,23 +1,23 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/src/core/context/auth-context';
-import { SuccessDialog } from '@/src/components/thank-you-popup';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { SignUpFormValues, signUpSchema } from '../signup/schema';
+import { SignInFormValues, signInSchema } from './schema';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/src/core/context/auth-context';
 
-export default function SignUpForm() {
+export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
-  const { signup } = useAuth();
+  const { login } = useAuth();
 
   const {
     register,
@@ -25,52 +25,42 @@ export default function SignUpForm() {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
+  } = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      firstname: '',
-      lastname: '',
       username: '',
-      email: '',
       password: '',
       keepLoggedIn: false,
     },
   });
 
   const keepLoggedIn = watch('keepLoggedIn');
-  const userEmail = watch('email');
 
-  const onSubmit = async (values: SignUpFormValues) => {
+  const onSubmit = async (values: SignInFormValues) => {
     setApiError(null);
     try {
-      await signup({
-        firstname: values.firstname,
-        lastname: values.lastname,
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      });
-      setShowSuccess(true);
+      await login(values.username, values.password);
+      router.push('/');
     } catch (err) {
       setApiError(
         err instanceof Error
           ? err.message
-          : 'Registrering mislykkedes. Prøv venligst igen.',
+          : 'Login mislykkedes. Kontroller venligst dine loginoplysninger.',
       );
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#fff9f5] p-4">
       <div className="w-full max-w-[528px]">
         <div className="flex flex-col gap-8 rounded-[24px] border border-[#F0EBE6] bg-white px-6 py-8 shadow-sm">
           <div>
             <h1 className="text-[32px] font-bold leading-tight text-[#211711]">
-              Opret en konto
+              Velkommen tilbage
             </h1>
 
             <p className="mt-2 text-sm text-[#70655E]">
-              Indtast dine oplysninger for at oprette en ny konto
+              Log ind for at fortsætte til din konto
             </p>
           </div>
 
@@ -91,9 +81,7 @@ export default function SignUpForm() {
             </div>
 
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-sm text-[#8B817A]">
-                eller
-              </span>
+              <span className="bg-white px-3 text-sm text-[#8B817A]">eller</span>
             </div>
           </div>
 
@@ -104,71 +92,21 @@ export default function SignUpForm() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-[#211711]">
-                  Fornavn
-                </label>
-                <Input
-                  placeholder="Fornavn"
-                  className="h-12 rounded-xl border-[#E8E1DA]"
-                  {...register('firstname')}
-                />
-                {errors.firstname && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.firstname.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-[#211711]">
-                  Efternavn
-                </label>
-                <Input
-                  placeholder="Efternavn"
-                  className="h-12 rounded-xl border-[#E8E1DA]"
-                  {...register('lastname')}
-                />
-                {errors.lastname && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.lastname.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Brugernavn
+                Brugernavn eller e-mail
               </label>
+
               <Input
-                placeholder="Vælg et brugernavn"
+                type="text"
+                placeholder="Indtast dit brugernavn eller e-mail"
                 className="h-12 rounded-xl border-[#E8E1DA]"
                 {...register('username')}
               />
+
               {errors.username && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.username.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-[#211711]">
-                E-mail
-              </label>
-
-              <Input
-                type="email"
-                placeholder="Indtast din e-mailadresse"
-                className="h-12 rounded-xl border-[#E8E1DA]"
-                {...register('email')}
-              />
-
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -200,18 +138,28 @@ export default function SignUpForm() {
                   {errors.password.message}
                 </p>
               )}
-            </div>
 
-            <div className="flex items-center gap-3">
-              <Checkbox
-                checked={keepLoggedIn}
-                onCheckedChange={(checked) =>
-                  setValue('keepLoggedIn', !!checked)
-                }
-              />
-              <label className="text-sm text-[#70655E]">
-                Forbliv logget ind
-              </label>
+              <div className="mt-3 flex items-center justify-between">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm font-medium text-[#211711] hover:underline"
+                >
+                  Glemt adgangskode?
+                </Link>
+
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    checked={keepLoggedIn}
+                    onCheckedChange={(checked) =>
+                      setValue('keepLoggedIn', !!checked)
+                    }
+                  />
+
+                  <label className="text-sm text-[#70655E]">
+                    Forbliv logget ind
+                  </label>
+                </div>
+              </div>
             </div>
 
             <Button
@@ -219,42 +167,27 @@ export default function SignUpForm() {
               disabled={isSubmitting}
               className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
             >
-              {isSubmitting ? 'Indlæser...' : 'Opret konto'}
+              {isSubmitting ? 'Indlæser...' : 'Log ind'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-[#70655E]">
-            Har du allerede en konto?{' '}
-            <a href="/signin" className="font-semibold text-[#211711]">
-              Log ind
-            </a>
+            Har du ikke en konto?{' '}
+            <Link href="/signup" className="font-semibold text-[#211711]">
+              Opret konto
+            </Link>
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => router.push('/')}
-          className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-[#211711]"
+          className="mt-6 flex self-start items-center gap-2 text-sm font-medium text-[#35281E] transition-opacity hover:opacity-80 cursor-pointer"
         >
           <ArrowLeft size={16} />
           Tilbage til indkøbskurven
         </button>
       </div>
-
-      <SuccessDialog
-        open={showSuccess}
-        onOpenChange={setShowSuccess}
-        heading="Tjek din e-mail"
-        description={
-          <>
-            Du er nu registreret! Venligst bekræft din e-mailadresse{' '}
-            <span className="font-semibold text-[#211711]">{userEmail}</span>{' '}
-            for at logge ind.
-          </>
-        }
-        redirectUrl="/signin"
-        buttonLabel="Gå til login"
-      />
     </div>
   );
 }
