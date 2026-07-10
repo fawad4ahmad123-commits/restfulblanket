@@ -125,15 +125,16 @@ export async function getCategories() {
   return data ?? [];
 }
 
-// export async function getProductBySlug(slug: string) {
-//   const data = await safeJsonFetch(wcUrl('products', { slug }), {
-//     next: { revalidate: 300 },
-//   });
+export async function getProductById(id: number | string) {
+  const data = await safeJsonFetch(wcUrl(`products/${id}`), {
+    next: { revalidate: 300 },
+  });
 
-//   if (data === null) return null;
+  if (data === null) return null;
 
-//   return Array.isArray(data) ? data[0] : data;
-// }
+  return data;
+}
+
 export async function getProductBySlug(slug: string) {
   const data = await safeJsonFetch(
     wcUrl('products', {

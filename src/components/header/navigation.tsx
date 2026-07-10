@@ -43,7 +43,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
     () => getProductsByCategory(activeCategoryId, 4),
     [activeCategoryId, getProductsByCategory],
   );
-  console.log('t23  1st nav', { shopDropdownProducts });
+
   const activeCategory = useMemo(
     () => visibleParentCategories.find((c: any) => c.id === activeCategoryId),
     [visibleParentCategories, activeCategoryId],
@@ -62,8 +62,8 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
 
   const tilbehoerCategories = sovevaerelseCategory
     ? getChildren(sovevaerelseCategory.id).filter(
-        (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
-      )
+      (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
+    )
     : [];
 
   function fixProductHref(href: string): string {
@@ -82,13 +82,13 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
           'whitespace-nowrap text-sm transition-colors',
           isHome
             ? cn(
-                'hover:text-white/70',
-                isActive ? 'text-white' : 'text-white/90',
-              )
+              'hover:text-white/70',
+              isActive ? 'text-white' : 'text-white/90',
+            )
             : cn(
-                'hover:text-[#392A22]/70',
-                isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
-              ),
+              'hover:text-[#392A22]/70',
+              isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
+            ),
         );
         if (item.href === '/shop') {
           return (
@@ -296,7 +296,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                   'flex w-full gap-12 px-6 py-8',
                   !hasProducts && 'inline-flex w-auto rounded-xl p-5',
                   !hasProducts &&
-                    (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
+                  (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
                 )}
               >
                 {item.groups.map((group: any) => (
