@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import CategoryCard from './category-card';
 import SliderControls from '../../generic/slider-control';
 import { PLACEHOLDER_IMAGE } from '../../constant';
@@ -28,11 +29,15 @@ const ProductCategories = ({
   response_categories,
   isCategory = false,
 }: ProductCategoriesProps) => {
+  const pathname = usePathname();
+  const isCollectionsPage = pathname === '/collections';
+
   const [start, setStart] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const categories = response_categories ?? [];
+
   const ALLOWED_CATEGORIES = [
     'Tyngdedyner',
     'Tyngdetæppe',
@@ -40,14 +45,20 @@ const ProductCategories = ({
     'Hovedpuder',
   ];
 
-  const filteredCategories = categories
-    .filter(
-      (item) => item.parent !== 0 && ALLOWED_CATEGORIES.includes(item.name),
-    )
-    .sort(
-      (a, b) =>
-        ALLOWED_CATEGORIES.indexOf(a.name) - ALLOWED_CATEGORIES.indexOf(b.name),
-    );
+  const filteredCategories = isCollectionsPage
+    ? categories
+        .filter((item) => item.parent === 0)
+        .filter((item) => item.name !== 'Ukategoriseret')
+    : categories
+        .filter(
+          (item) => item.parent !== 0 && ALLOWED_CATEGORIES.includes(item.name),
+        )
+        .sort(
+          (a, b) =>
+            ALLOWED_CATEGORIES.indexOf(a.name) -
+            ALLOWED_CATEGORIES.indexOf(b.name),
+        );
+
   useEffect(() => {
     const checkScreen = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -112,43 +123,61 @@ const ProductCategories = ({
             Vores <em>Produktkategorier</em>
           </h2>
 
-          <SliderControls prev={prev} next={next} />
+          {!isCollectionsPage && <SliderControls prev={prev} next={next} />}
         </div>
-        <div className="lg:hidden">
-          <div
-            ref={sliderRef}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2"
-            role="region"
-            aria-label="Product categories slider"
-          >
+
+        {isCollectionsPage ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {filteredCategories.map((item, i) => (
-              <div
-                key={item.id}
-                className="w-[85%] shrink-0 snap-center sm:w-[70%] md:w-[48%]"
-              >
-                <CategoryCard
-                  image={item.image?.src || PLACEHOLDER_IMAGE}
-                  title={item.name}
-                  subtitle={`${item.count} produkter`}
-                  index={`0${i + 1}`}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="hidden gap-5 lg:grid lg:grid-cols-4">
-          {filteredCategories
-            .slice(start, start + visibleCards)
-            .map((item, i) => (
               <CategoryCard
                 key={item.id}
                 image={item.image?.src || PLACEHOLDER_IMAGE}
                 title={item.name}
                 subtitle={`${item.count} produkter`}
-                index={`0${start + i + 1}`}
+                index={`0${i + 1}`}
               />
             ))}
-        </div>
+          </div>
+        ) : (
+          <>
+            <div className="lg:hidden">
+              <div
+                ref={sliderRef}
+                className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2"
+                role="region"
+                aria-label="Product categories slider"
+              >
+                {filteredCategories.map((item, i) => (
+                  <div
+                    key={item.id}
+                    className="w-[85%] shrink-0 snap-center sm:w-[70%] md:w-[48%]"
+                  >
+                    <CategoryCard
+                      image={item.image?.src || PLACEHOLDER_IMAGE}
+                      title={item.name}
+                      subtitle={`${item.count} produkter`}
+                      index={`0${i + 1}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden gap-5 lg:grid lg:grid-cols-4">
+              {filteredCategories
+                .slice(start, start + visibleCards)
+                .map((item, i) => (
+                  <CategoryCard
+                    key={item.id}
+                    image={item.image?.src || PLACEHOLDER_IMAGE}
+                    title={item.name}
+                    subtitle={`${item.count} produkter`}
+                    index={`0${start + i + 1}`}
+                  />
+                ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

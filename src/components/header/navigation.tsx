@@ -62,13 +62,27 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
 
   const tilbehoerCategories = sovevaerelseCategory
     ? getChildren(sovevaerelseCategory.id).filter(
-      (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
-    )
+        (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
+      )
     : [];
 
   function fixProductHref(href: string): string {
     return href.replace(/^\/products\//, '/product/');
   }
+
+  const slugify = (text?: string) => {
+    if (!text) return '';
+
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/æ/g, 'ae')
+      .replace(/ø/g, 'oe')
+      .replace(/å/g, 'aa')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
 
   return (
     <nav
@@ -82,13 +96,13 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
           'whitespace-nowrap text-sm transition-colors',
           isHome
             ? cn(
-              'hover:text-white/70',
-              isActive ? 'text-white' : 'text-white/90',
-            )
+                'hover:text-white/70',
+                isActive ? 'text-white' : 'text-white/90',
+              )
             : cn(
-              'hover:text-[#392A22]/70',
-              isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
-            ),
+                'hover:text-[#392A22]/70',
+                isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
+              ),
         );
         if (item.href === '/shop') {
           return (
@@ -296,7 +310,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                   'flex w-full gap-12 px-6 py-8',
                   !hasProducts && 'inline-flex w-auto rounded-xl p-5',
                   !hasProducts &&
-                  (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
+                    (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
                 )}
               >
                 {item.groups.map((group: any) => (
@@ -325,9 +339,10 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                         <Link
                           key={category.id || category.title}
                           href={
-                            category.slug
-                              ? `/collections/${category.slug}`
-                              : category.href
+                            category.href ||
+                            `/collections/${slugify(item.title)}/${slugify(
+                              category.title || category.name,
+                            )}`
                           }
                           role="menuitem"
                           title={category.name || category.title}
@@ -362,7 +377,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                     {dynamicProducts.map((product: any) => (
                       <Link
                         key={product.title}
-                        href={product.href}
+                        href={fixProductHref(product.href)}
                         title={product.title}
                         className="group/product flex flex-col gap-2"
                       >

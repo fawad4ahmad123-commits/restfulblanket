@@ -23,11 +23,11 @@ export const navigation = [
         links: [
           {
             title: 'Voksne',
-            href: '/collections/tyngdetaepper/voksne', // Level 2 Subcategory
+            href: '/voksne', // Level 2 Subcategory
           },
           {
             title: 'Børn',
-            href: '/collections/tyngdetaepper/boern', // Level 2 Subcategory
+            href: '/boern', // Level 2 Subcategory
           },
         ],
       },
@@ -46,11 +46,11 @@ export const navigation = [
         links: [
           {
             title: 'Hovedpuder',
-            href: '/collections/tilbehoer/hovedpuder', // Level 2 Subcategory
+            href: '/hovedpuder', // Level 2 Subcategory
           },
           {
             title: 'Sengesæt',
-            href: '/collections/tilbehoer/sengesaet', // Level 2 Subcategory
+            href: '/sengesaet', // Level 2 Subcategory
           },
         ],
       },

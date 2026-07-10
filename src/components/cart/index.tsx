@@ -17,8 +17,8 @@ export default function CartOffcanvas({
   upsellItems = [],
   onRemoveItem,
   onChangeQty,
-  onAddUpsell = () => { },
-  onContinueShopping = () => { },
+  onAddUpsell = () => {},
+  onContinueShopping = () => {},
 }: CartOffcanvasProps) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -37,7 +37,7 @@ export default function CartOffcanvas({
     setIsCheckingOut(true);
 
     try {
-      console.log("CART ITEMS:", items);
+      console.log('CART ITEMS:', items);
 
       const response = await fetch('/api/create-order', {
         method: 'POST',
@@ -69,29 +69,21 @@ export default function CartOffcanvas({
 
       const data = await response.json();
 
-      console.log("CREATE ORDER RESPONSE:", data);
+      console.log('CREATE ORDER RESPONSE:', data);
 
       if (!response.ok) {
-        throw new Error(
-          data?.message || 'Failed to create order'
-        );
+        throw new Error(data?.message || 'Failed to create order');
       }
 
       if (!data?.pay_url) {
-        throw new Error(
-          'Payment URL not returned'
-        );
+        throw new Error('Payment URL not returned');
       }
 
       window.location.href = data.pay_url;
-
     } catch (err: any) {
-
       console.error(err);
 
-      setCheckoutError(
-        err.message || 'Network error. Please try again.'
-      );
+      setCheckoutError(err.message || 'Network error. Please try again.');
 
       setIsCheckingOut(false);
     }

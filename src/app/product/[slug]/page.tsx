@@ -21,28 +21,17 @@ export default async function ProductPage({
     getCategories(),
   ]);
 
-
-  if (
-    product?.type === 'grouped' &&
-    product?.grouped_products?.length
-  ) {
+  if (product?.type === 'grouped' && product?.grouped_products?.length) {
     product.grouped_products_data = await Promise.all(
-      product.grouped_products.map((id: number) =>
-        getProductById(id),
-      ),
+      product.grouped_products.map((id: number) => getProductById(id)),
     );
   }
-
 
   const relatedIds = product?.related_ids || [];
 
   const relatedProducts = allProducts.filter((item: any) =>
-    relatedIds.some(
-      (id: number | string) =>
-        Number(id) === Number(item.id),
-    ),
+    relatedIds.some((id: number | string) => Number(id) === Number(item.id)),
   );
-
 
   return (
     <Suspense fallback={<Loader />}>

@@ -11,12 +11,26 @@ interface CategoryCardProps {
   index?: string;
 }
 
+const slugify = (text?: string) => {
+  if (!text) return '';
+
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'oe')
+    .replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
   const router = useRouter();
   return (
     <div
       className="group relative overflow-hidden rounded-[28px]"
-      onClick={() => router.push(`/categories`)}
+      onClick={() => router.push(`/collections/${slugify(title)}`)}
     >
       <div className="relative h-[420px] sm:h-[500px]">
         <Image
@@ -60,7 +74,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
             aria-hidden="true"
             size={22}
             className="absolute scale-0 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 cursor-pointer"
-            onClick={() => router.push(`/categories`)}
+            onClick={() => router.push(`/collections`)}
           />
         </button>
       </div>
