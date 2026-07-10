@@ -8,6 +8,8 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 import { CartOffcanvasProps } from './types';
 import CartLineItem from './cart-line-item';
 
+const WP_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+
 export default function CartOffcanvas({
   open,
   onOpenChange,
@@ -35,29 +37,57 @@ export default function CartOffcanvas({
     setIsCheckingOut(true);
 
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: items.map((item) => ({
-            product_id: item.productId,
-            variation_id: item.variationId,
-            quantity: item.quantity,
-          })),
-        }),
+      let nonce = '';
+      let cartToken = '';
+
+      const cartRes = await fetch(`${WP_URL}/wp-json/wc/store/v1/cart`, {
+        credentials: 'include',
       });
 
-      const data = await res.json();
+      if (!cartRes.ok) throw new Error('Could not reach store');
 
-      if (!res.ok) {
-        setCheckoutError(data.error || 'Checkout failed. Please try again.');
-        setIsCheckingOut(false);
-        return;
+      nonce = cartRes.headers.get('Nonce') || '';
+      cartToken = cartRes.headers.get('Cart-Token') || '';
+
+      if (!nonce) {
+        throw new Error(
+          'Store did not return a security token — check CORS setup on WordPress',
+        );
       }
 
-      window.location.href = data.checkoutUrl;
-    } catch (err) {
-      setCheckoutError('Network error. Please try again.');
+      for (const item of items) {
+        const requestHeaders: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (nonce) requestHeaders['Nonce'] = nonce;
+        if (cartToken) requestHeaders['Cart-Token'] = cartToken;
+
+        const addRes = await fetch(
+          `${WP_URL}/wp-json/wc/store/v1/cart/add-item`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: requestHeaders,
+            body: JSON.stringify({
+              id: item.variationId || item.productId,
+              quantity: item.quantity,
+            }),
+          },
+        );
+
+        if (!addRes.ok) {
+          const errData = await addRes.json().catch(() => null);
+          throw new Error(errData?.message || 'One item could not be added');
+        }
+
+        // Nonce and Cart-Token can rotate with every response — always use the latest
+        nonce = addRes.headers.get('Nonce') || nonce;
+        cartToken = addRes.headers.get('Cart-Token') || cartToken;
+      }
+
+      window.location.href = `${WP_URL}/checkout/`;
+    } catch (err: any) {
+      setCheckoutError(err.message || 'Network error. Please try again.');
       setIsCheckingOut(false);
     }
   }

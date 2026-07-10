@@ -156,12 +156,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="mb-5 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#3b281f]">
-                kr {price}
+                {price}
               </span>
 
               {originalPrice && (
                 <span className="text-sm text-[#35281E] line-through">
-                  kr {originalPrice}
+                  {originalPrice}
                 </span>
               )}
             </div>

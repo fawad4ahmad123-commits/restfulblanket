@@ -15,7 +15,7 @@ export default async function CategoryPage({ params }: Props) {
     getBestSellers(),
     getCategories(),
   ]);
-
+  console.log('taha ', { categories });
   return (
     <div className="bg-[#fdf9f6]">
       <Categories

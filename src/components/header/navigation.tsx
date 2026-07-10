@@ -43,7 +43,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
     () => getProductsByCategory(activeCategoryId, 4),
     [activeCategoryId, getProductsByCategory],
   );
-
+  console.log('t23  1st nav', { shopDropdownProducts });
   const activeCategory = useMemo(
     () => visibleParentCategories.find((c: any) => c.id === activeCategoryId),
     [visibleParentCategories, activeCategoryId],
@@ -65,6 +65,10 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
         (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
       )
     : [];
+
+  function fixProductHref(href: string): string {
+    return href.replace(/^\/products\//, '/product/');
+  }
 
   return (
     <nav
@@ -134,7 +138,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                         onMouseEnter={() => setHoveredCategoryId(category.id)}
                       >
                         <Link
-                          href={`/shop?slug=${category.slug}`}
+                          href={`/shop/${category.slug}`}
                           title={category.name}
                           className={cn(
                             'mb-2 block truncate text-xs font-medium uppercase tracking-wide',
@@ -150,7 +154,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           return (
                             <Link
                               key={child.id}
-                              href={`/shop?slug=${child.slug}`}
+                              href={`/shop/${child.slug}`}
                               role="menuitem"
                               aria-label={`Go to ${child.name}`}
                               title={child.name}
@@ -195,31 +199,33 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                         </div>
                       )}
                       <div className="grid flex-1 grid-cols-4 gap-6">
-                        {shopDropdownProducts.map((product) => (
-                          <Link
-                            key={product.id}
-                            href={product.href}
-                            title={product.title}
-                            className="group/product flex flex-col gap-2"
-                          >
-                            <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
-                              <Image
-                                src={product.image}
-                                alt={product.title}
-                                fill
-                                className="object-cover transition-transform group-hover/product:scale-105"
-                              />
-                            </div>
-                            <span
-                              className={cn(
-                                'truncate text-sm',
-                                isHome ? 'text-[#E9DDD4]' : 'text-[#392A22]',
-                              )}
+                        {shopDropdownProducts.map((product) => {
+                          return (
+                            <Link
+                              key={product.id}
+                              href={fixProductHref(product.href)}
+                              title={product.title}
+                              className="flex flex-col gap-2"
                             >
-                              {product.title}
-                            </span>
-                          </Link>
-                        ))}
+                              <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
+                                <Image
+                                  src={product.image}
+                                  alt={product.title}
+                                  fill
+                                  className="object-cover transition-transform group-hover/product:scale-105"
+                                />
+                              </div>
+                              <span
+                                className={cn(
+                                  'truncate text-sm',
+                                  isHome ? 'text-[#E9DDD4]' : 'text-[#392A22]',
+                                )}
+                              >
+                                {product.title}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -320,7 +326,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           key={category.id || category.title}
                           href={
                             category.slug
-                              ? `/categories/${category.slug}`
+                              ? `/collections/${category.slug}`
                               : category.href
                           }
                           role="menuitem"
