@@ -90,7 +90,7 @@ export default function OrderConfirmClient() {
 
   if (loading) return <OrderLoadingState />;
   if (!order) return <OrderNotFoundState />;
-
+  console.log("t12 order", { order, orderId, orderKey })
   return (
     <div className="min-h-screen bg-[#FAF3EC] px-4 py-12">
       <div className="mx-auto max-w-3xl">
