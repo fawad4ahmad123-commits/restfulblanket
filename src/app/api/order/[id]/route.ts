@@ -16,7 +16,7 @@ export async function GET(
     const key = searchParams.get('key');
 
     const response = await fetch(
-      `${process.env.WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}`,
+      `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wc/v3/orders/${orderId}`,
       {
         headers: {
           Authorization:
