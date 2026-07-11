@@ -73,27 +73,43 @@ const CheckoutPage: React.FC = () => {
     setOrderError(null);
 
     try {
+      const payload = {
+        items: cartItems.map((item: any) => ({
+          product_id: Number(item.product_id || item.id),
+
+          variation_id: Number(item.variation_id || 0),
+
+          quantity: Number(item.quantity || 1),
+        })),
+      };
+
+      console.log('Sending cart to WooCommerce:', payload);
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          shippingAddress,
-          shippingMethod,
-          paymentMethod: paymentDetails.paymentMethod, // ✅ FIXED
-          cartItems,
-        }),
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Order failed');
+        throw new Error(data.message || 'Checkout failed');
       }
 
-      window.location.href = data.payment_url;
+      if (!data.checkout_url) {
+        throw new Error('Checkout URL missing');
+      }
+
+      window.location.href = data.checkout_url;
     } catch (err: any) {
-      console.error(err);
-      setOrderError(err.message || 'Order failed. Please try again.');
+      console.error('Checkout error:', err);
+
+      setOrderError(err.message || 'Checkout failed');
     } finally {
       setIsPlacingOrder(false);
     }

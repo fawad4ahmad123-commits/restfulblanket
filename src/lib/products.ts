@@ -125,7 +125,7 @@ export async function getCategories() {
   return data ?? [];
 }
 
-export async function getProductById(id: number | string) {
+export async function getProductById(id: any) {
   const data = await safeJsonFetch(wcUrl(`products/${id}`), {
     next: { revalidate: 300 },
   });

@@ -5,6 +5,17 @@ import { CartContextType, CartItem, UpsellItem } from './types';
 
 export const CartContext = createContext<CartContextType | null>(null);
 
+// Helper to generate a unique cart item ID
+function generateCartItemId(product: Partial<CartItem>): string {
+  const parts = [
+    product.productId || product.id,
+    product.attributes?.color || '',
+    product.attributes?.weight || '',
+    product.attributes?.size || product.variant || '',
+  ].filter(Boolean);
+  return parts.join('-');
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [upsellItems, setUpsellItems] = useState<UpsellItem[]>([]);
@@ -12,7 +23,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
-
     if (savedCart) {
       setItems(JSON.parse(savedCart));
     }
@@ -23,35 +33,66 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const openCart = () => setIsOpen(true);
-
   const closeCart = () => setIsOpen(false);
-
-  const setCartOpen = (open: boolean) => {
-    setIsOpen(open);
-  };
+  const setCartOpen = (open: boolean) => setIsOpen(open);
 
   const addToCart = (product: Omit<CartItem, 'quantity'>) => {
     setItems((prev) => {
-      const existing = prev.find(
-        (i) =>
-          i.id === product.id &&
-          i.color === product.color &&
-          i.variant === product.variant &&
-          i.weight === product.weight,
-      );
+      // Generate a consistent ID for the product
+      const itemId = product.id || generateCartItemId(product);
 
-      if (existing) {
-        return prev.map((i) =>
-          i.id === product.id &&
+      // Find existing item by checking all attributes
+      const existing = prev.find((i) => {
+        // Check if IDs match
+        if (i.id !== itemId) return false;
+
+        // If attributes exist, check them
+        if (product.attributes && i.attributes) {
+          return (
+            i.attributes.color === product.attributes.color &&
+            i.attributes.size === product.attributes.size &&
+            i.attributes.weight === product.attributes.weight
+          );
+        }
+
+        // Fallback to old fields if attributes don't exist
+        return (
           i.color === product.color &&
           i.variant === product.variant &&
           i.weight === product.weight
-            ? { ...i, quantity: i.quantity + 1 }
-            : i,
         );
+      });
+
+      if (existing) {
+        return prev.map((i) => {
+          const isMatch =
+            i.id === itemId &&
+            i.attributes?.color === product.attributes?.color &&
+            i.attributes?.size === product.attributes?.size &&
+            i.attributes?.weight === product.attributes?.weight;
+
+          return isMatch ? { ...i, quantity: i.quantity + 1 } : i;
+        });
       }
 
-      return [...prev, { ...product, quantity: 1 }];
+      // Create new item with proper structure
+      const newItem: CartItem = {
+        ...product,
+        id: itemId,
+        quantity: 1,
+        // Ensure attributes are properly structured
+        attributes: product.attributes || {
+          color: product.color || '',
+          size: product.variant || '',
+          weight: product.weight || '',
+        },
+        // Keep old fields for backward compatibility
+        color: product.color || product.attributes?.color || '',
+        variant: product.variant || product.attributes?.size || '',
+        weight: product.weight || product.attributes?.weight || '',
+      };
+
+      return [...prev, newItem];
     });
 
     setIsOpen(true);
@@ -76,40 +117,45 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addUpsellToCart = (id: string) => {
     const upsell = upsellItems.find((u) => u.id === id);
-
     if (!upsell) return;
 
     setItems((prev) => {
-      const existing = prev.find(
-        (i) =>
-          i.id === upsell.id &&
-          i.variant === upsell.size &&
-          i.weight === upsell.weight,
-      );
+      const itemId = generateCartItemId({
+        productId: Number(upsell.id),
+        attributes: {
+          color: '',
+          size: upsell.size,
+          weight: upsell.weight,
+        },
+      });
+
+      const existing = prev.find((i) => i.id === itemId);
 
       if (existing) {
         return prev.map((i) =>
-          i.id === upsell.id &&
-          i.variant === upsell.size &&
-          i.weight === upsell.weight
-            ? { ...i, quantity: i.quantity + 1 }
-            : i,
+          i.id === itemId ? { ...i, quantity: i.quantity + 1 } : i,
         );
       }
 
-      return [
-        ...prev,
-        {
-          id: upsell.id,
-          name: upsell.name,
+      const newItem: CartItem = {
+        id: itemId,
+        productId: parseInt(upsell.id),
+        variationId: 0,
+        name: upsell.name,
+        color: '',
+        variant: upsell.size,
+        weight: upsell.weight,
+        price: upsell.price,
+        image: upsell.image,
+        quantity: 1,
+        attributes: {
           color: '',
-          variant: upsell.size,
+          size: upsell.size,
           weight: upsell.weight,
-          price: upsell.price,
-          image: upsell.image,
-          quantity: 1,
         },
-      ];
+      };
+
+      return [...prev, newItem];
     });
 
     setIsOpen(true);

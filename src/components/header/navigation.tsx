@@ -213,7 +213,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                         </div>
                       )}
                       <div className="grid flex-1 grid-cols-4 gap-6">
-                        {shopDropdownProducts.map((product) => {
+                        {shopDropdownProducts.map((product: any) => {
                           return (
                             <Link
                               key={product.id}

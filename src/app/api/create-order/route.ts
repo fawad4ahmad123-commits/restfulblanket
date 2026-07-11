@@ -4,10 +4,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log('SENT TO WP:', body);
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/create-order`,
+      `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/create-cart`,
       {
         method: 'POST',
         headers: {
@@ -18,17 +16,12 @@ export async function POST(req: Request) {
       },
     );
 
-    const text = await response.text();
+    const data = await response.json();
 
-    console.log('WP STATUS:', response.status);
-    console.log('WP RESPONSE:', text);
-
-    return NextResponse.json(JSON.parse(text), {
+    return NextResponse.json(data, {
       status: response.status,
     });
   } catch (error: any) {
-    console.log('API ERROR:', error.message);
-
     return NextResponse.json(
       {
         message: error.message,

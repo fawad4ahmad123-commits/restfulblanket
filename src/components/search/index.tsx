@@ -87,7 +87,7 @@ function SearchStart({
 
       <SectionLabel>Browse Categories</SectionLabel>
       <div className="border-t border-[#392A22]/10">
-        {parentCategories.slice(0, 4).map((category) => (
+        {parentCategories.slice(0, 4).map((category: any) => (
           <button
             key={category.id}
             type="button"

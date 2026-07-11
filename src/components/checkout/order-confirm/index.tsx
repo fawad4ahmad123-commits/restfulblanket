@@ -1,58 +1,76 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export default function OrderConfirmClient() {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('order_id');
+export default function OrderSuccessClient() {
+  const params = useSearchParams();
 
-  const [loading, setLoading] = useState(true);
+  const orderId = params.get('order_id');
+  const orderKey = params.get('key');
+
   const [order, setOrder] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!orderId) return;
+    if (!orderId || !orderKey) {
+      setLoading(false);
+      return;
+    }
 
-    const fetchOrder = async () => {
+    async function getOrder() {
       try {
-        const res = await fetch(`/api/order?order_id=${orderId}`);
+        const res = await fetch(`/api/order/${orderId}?key=${orderKey}`);
+
         const data = await res.json();
+
         setOrder(data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
-    fetchOrder();
-  }, [orderId]);
+    getOrder();
+  }, [orderId, orderKey]);
 
   if (loading) {
-    return <div className="p-10 text-center">Processing your order...</div>;
+    return <div className="p-10 text-center">Loading order...</div>;
+  }
+
+  if (!order) {
+    return <div className="p-10 text-center">Order not found</div>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-10 text-center">
-      <h1 className="text-3xl font-bold mb-4">🎉 Thank you for your order!</h1>
+    <div className="min-h-screen bg-[#FAF3EC] flex items-center justify-center">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center">
+        <h1 className="text-3xl font-bold text-[#35281E]">Thank You 🎉</h1>
 
-      <p className="text-gray-600 mb-6">
-        Your order has been successfully placed.
-      </p>
+        <p className="mt-3 text-gray-600">
+          Your order has been placed successfully.
+        </p>
 
-      {order && (
-        <div className="border p-6 rounded-lg text-left">
+        <div className="mt-6 text-left">
           <p>
-            <strong>Order ID:</strong> {order.id}
+            Order ID:
+            <strong>#{order.id}</strong>
           </p>
+
           <p>
-            <strong>Status:</strong> {order.status}
+            Status:
+            <strong>{order.status}</strong>
           </p>
+
           <p>
-            <strong>Total:</strong> {order.total}
+            Total:
+            <strong>
+              {order.total} {order.currency}
+            </strong>
           </p>
         </div>
-      )}
+      </div>
     </div>
   );
 }

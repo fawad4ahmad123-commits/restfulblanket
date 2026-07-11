@@ -24,7 +24,6 @@ export default function CartOffcanvas({
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [discountOpen, setDiscountOpen] = useState(true);
   const [discountCode, setDiscountCode] = useState('');
-
   const handleClose = () => onOpenChange(false);
 
   const subtotal = items.reduce(
@@ -32,74 +31,72 @@ export default function CartOffcanvas({
     0,
   );
 
+  // DEBUG: Log the items to see the structure
+  console.log('Cart items:', items);
   async function handleCheckout() {
     setCheckoutError(null);
     setIsCheckingOut(true);
 
     try {
-      console.log('CART ITEMS:', items);
+      const payload = {
+        items: items.map((item: any) => ({
+          product_id: Number(item.productId || item.id),
+          variation_id: Number(item.variationId || 0),
+          quantity: item.quantity,
+        })),
+      };
+
+      console.log('SEND TO NEXT API: t3', payload);
 
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          cartItems: items.map((item) => ({
-            id: item.id,
-            variation_id: item.variationId || 0,
-            quantity: item.quantity,
-          })),
-
-          shippingAddress: {
-            first_name: '',
-            last_name: '',
-            email: '',
-            phone: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-            country: 'US',
-          },
-
-          shippingMethod: 'free',
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
 
-      console.log('CREATE ORDER RESPONSE:', data);
+      console.log('NEXT API RESPONSE:', data);
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Failed to create order');
+        throw new Error(data.message || 'Checkout failed');
       }
 
-      if (!data?.pay_url) {
-        throw new Error('Payment URL not returned');
+      if (!data.checkout_url) {
+        throw new Error('Checkout URL missing');
       }
+      window.location.href = data.checkout_url;
+    } catch (error: any) {
+      console.error('CHECKOUT ERROR:', error);
 
-      window.location.href = data.pay_url;
-    } catch (err: any) {
-      console.error(err);
-
-      setCheckoutError(err.message || 'Network error. Please try again.');
-
+      setCheckoutError(error.message || 'Checkout failed');
+    } finally {
       setIsCheckingOut(false);
     }
   }
-
   async function handleApplyDiscount(code: string) {
     if (!code.trim()) return;
     try {
       const res = await fetch('/api/discount/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({
+          code,
+          cart_items: items.map((item) => ({
+            product_id: item.productId,
+            variation_id: item.variationId,
+            quantity: item.quantity,
+          })),
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
         setCheckoutError(data.error || 'Invalid discount code');
+      } else {
+        setCheckoutError(null);
+        onOpenChange(true);
       }
     } catch (err) {
       setCheckoutError('Could not apply discount code');

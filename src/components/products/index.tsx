@@ -51,11 +51,9 @@ const ProductInfoPanel = ({ product }: any) => {
     const selectedSize =
       sizes.find((s: any) => s.id === selectedSizeId)?.label ?? '';
 
-    const uniqueId = `${product.id}-${selectedColor}-${selectedWeight}-${selectedSize}`;
-
     for (let i = 0; i < quantity; i++) {
       addToCart({
-        id: uniqueId,
+        id: product.id,
         name: product.name,
         color: selectedColor,
         variant: selectedSize,

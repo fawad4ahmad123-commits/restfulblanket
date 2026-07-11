@@ -25,6 +25,8 @@ interface ProductCardProps {
   dimensions?: string;
   color?: string;
   size?: string;
+  stockQuantity?: number | null;
+  stockStatus?: string;
 }
 
 const ProductCard = ({
@@ -42,6 +44,8 @@ const ProductCard = ({
   dimensions,
   color,
   size,
+  stockQuantity = null,
+  stockStatus = 'outofstock',
 }: ProductCardProps) => {
   const [wished, setWished] = useState(false);
 
@@ -54,6 +58,7 @@ const ProductCard = ({
   );
 
   const stars = Math.round(rating);
+  const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
   const handleNavigate = () => {
     router.push(`/product/${slug}`);
@@ -98,6 +103,14 @@ const ProductCard = ({
           </div>
         )}
 
+        {isOutOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#35281E]">
+              Udsolgt
+            </span>
+          </div>
+        )}
+
         <button
           type="button"
           aria-label={
@@ -122,7 +135,6 @@ const ProductCard = ({
         </button>
       </div>
 
-      {/* flex-1 makes this stretch to fill remaining card height */}
       <div className="flex flex-1 flex-col p-4">
         <div
           className="mb-2 flex items-center gap-2"
@@ -165,7 +177,6 @@ const ProductCard = ({
           </p>
         )}
 
-        {/* mt-auto pins this block to the bottom regardless of content above */}
         <div className="mt-auto">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -226,10 +237,13 @@ const ProductCard = ({
 
           <button
             type="button"
-            aria-label={`Add ${name} to cart`}
-            title={`Add ${name} to cart`}
+            aria-label={
+              isOutOfStock ? `${name} is out of stock` : `Add ${name} to cart`
+            }
+            title={isOutOfStock ? 'Out of stock' : `Add ${name} to cart`}
             onClick={(e) => {
               e.stopPropagation();
+              if (isOutOfStock) return;
 
               addToCart({
                 id: String(id),
@@ -241,10 +255,15 @@ const ProductCard = ({
                 image,
               });
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FAF4EE] py-3 text-sm font-medium text-[#35281E] transition-all hover:bg-[#35281E] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#35281E]"
+            disabled={isOutOfStock}
+            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#35281E] ${
+              isOutOfStock
+                ? 'cursor-not-allowed bg-gray-200 text-gray-500'
+                : 'bg-[#FAF4EE] text-[#35281E] hover:bg-[#35281E] hover:text-white'
+            }`}
           >
             <ShoppingBag aria-hidden="true" size={16} />
-            Tilføj til kurv
+            {isOutOfStock ? 'Udsolgt' : 'Tilføj til kurv'}
           </button>
         </div>
       </div>

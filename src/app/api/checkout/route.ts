@@ -1,55 +1,44 @@
+import { NextResponse } from 'next/server';
+
 export async function POST(req: Request) {
   try {
-    const { items } = await req.json();
+    const body = await req.json();
 
-    if (!items || items.length === 0) {
-      return Response.json({ error: 'Cart is empty' }, { status: 400 });
-    }
+    console.log('SEND CART TO WP:', body);
 
-    const auth = Buffer.from(
-      `${process.env.WOOCOMMERCE_KEY}:${process.env.WOOCOMMERCE_SECRET}`,
-    ).toString('base64');
-
-    const orderRes = await fetch(
-      `${process.env.WORDPRESS_URL}/wp-json/wc/v3/orders`,
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/create-order`,
       {
         method: 'POST',
         headers: {
-          Authorization: `Basic ${auth}`,
           'Content-Type': 'application/json',
+          'x-headless-secret': process.env.HEADLESS_SHARED_SECRET || '',
         },
-        body: JSON.stringify({
-          status: 'pending',
-          line_items: items.map(
-            (item: {
-              product_id: number;
-              variation_id?: number;
-              quantity: number;
-            }) => ({
-              product_id: item.product_id,
-              ...(item.variation_id ? { variation_id: item.variation_id } : {}),
-              quantity: item.quantity,
-            }),
-          ),
-        }),
+        body: JSON.stringify(body),
       },
     );
 
-    if (!orderRes.ok) {
-      const errData = await orderRes.json();
-      return Response.json(
-        { error: errData.message || 'Failed to create order' },
-        { status: 500 },
-      );
-    }
+    const text = await response.text();
 
-    const order = await orderRes.json();
+    console.log('WP STATUS:', response.status);
+    console.log('WP RESPONSE:', text);
 
-    const checkoutUrl = `${process.env.WORDPRESS_URL}/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
+    return new NextResponse(text, {
+      status: response.status,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error: any) {
+    console.error(error);
 
-    return Response.json({ checkoutUrl, orderId: order.id });
-  } catch (err) {
-    console.error(err);
-    return Response.json({ error: 'Something went wrong' }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: error.message,
+      },
+      {
+        status: 500,
+      },
+    );
   }
 }

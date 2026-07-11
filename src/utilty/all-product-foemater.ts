@@ -87,6 +87,10 @@ export function formatProducts(products: any[]) {
                   100,
               )
             : 0,
+
+        stockQuantity: product.stock_quantity ?? null,
+
+        stockStatus: product.stock_status ?? 'outofstock',
       };
     });
 }

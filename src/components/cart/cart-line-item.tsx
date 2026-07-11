@@ -1,6 +1,9 @@
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { Trash2, Heart, Minus, Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { CartItem } from './types';
+import { getProductById } from '@/src/lib/products';
+import { formatProducts } from '@/src/utilty/all-product-foemater';
 
 export default function CartLineItem({
   item,
@@ -12,8 +15,45 @@ export default function CartLineItem({
   onChangeQty: (id: string, delta: number) => void;
 }) {
   const { toggleWishlist, isWishlisted } = useWishlist();
-  const wished = isWishlisted(item.id);
-  console.log('t12', { item });
+  const [showStockWarning, setShowStockWarning] = useState(false);
+  const [stockQuantity, setStockQuantity] = useState<number | null>(null);
+  const wished = isWishlisted(item.id || '');
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await getProductById({ id: item.id });
+        const data = formatProducts(response);
+        const quantity = data?.[0]?.stockQuantity ?? null;
+        setStockQuantity(quantity);
+        console.log('t12', { data });
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        setStockQuantity(null);
+      }
+    };
+
+    if (item.id) {
+      fetchProduct();
+    }
+  }, [item.id]);
+
+  const isOutOfStock = stockQuantity === 0 || stockQuantity === null;
+
+  const handleIncreaseQuantity = () => {
+    if (stockQuantity !== null && item.quantity >= stockQuantity) {
+      setShowStockWarning(true);
+      setTimeout(() => setShowStockWarning(false), 3000);
+      return;
+    }
+    onChangeQty(item.id || '', 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    setShowStockWarning(false);
+    onChangeQty(item.id || '', -1);
+  };
+
   return (
     <div className="flex gap-2 md:gap-3 border-b border-stone-200 px-4 py-3 md:px-6 md:py-4">
       {item.image ? (
@@ -37,7 +77,7 @@ export default function CartLineItem({
               type="button"
               onClick={() =>
                 toggleWishlist({
-                  id: item.id,
+                  id: item.id ?? '',
                   name: item.name,
                   price: item.price,
                   image: item.image,
@@ -58,7 +98,10 @@ export default function CartLineItem({
               />
             </button>
 
-            <button onClick={() => onRemove(item.id)} className="p-1 -m-1">
+            <button
+              onClick={() => onRemove(item.id || '')}
+              className="p-1 -m-1"
+            >
               <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-stone-500 hover:text-stone-900" />
             </button>
           </div>
@@ -76,6 +119,22 @@ export default function CartLineItem({
           </p>
         )}
 
+        {stockQuantity !== null && (
+          <p className="text-[10px] md:text-xs text-stone-500">
+            På lager: {stockQuantity}
+          </p>
+        )}
+
+        {showStockWarning && (
+          <p className="text-[10px] md:text-xs text-red-600 animate-pulse">
+            Kan ikke tilføje mere. Kun {stockQuantity} på lager.
+          </p>
+        )}
+
+        {isOutOfStock && (
+          <p className="text-[10px] md:text-xs text-red-600">Ikke på lager</p>
+        )}
+
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs md:text-sm font-medium">
             {item.price.toLocaleString('da-DK')} kr.
@@ -83,15 +142,30 @@ export default function CartLineItem({
 
           <div className="flex items-center gap-2 border border-stone-300 rounded-full px-2 py-1">
             <button
-              onClick={() => onChangeQty(item.id, -1)}
+              onClick={handleDecreaseQuantity}
               disabled={item.quantity <= 1}
+              className={
+                item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''
+              }
             >
               <Minus className="h-3 w-3 md:h-3.5 md:w-3.5 text-stone-600" />
             </button>
             <span className="text-xs md:text-sm w-4 text-center">
               {item.quantity}
             </span>
-            <button onClick={() => onChangeQty(item.id, 1)}>
+            <button
+              onClick={handleIncreaseQuantity}
+              disabled={
+                isOutOfStock ||
+                (stockQuantity !== null && item.quantity >= stockQuantity)
+              }
+              className={
+                isOutOfStock ||
+                (stockQuantity !== null && item.quantity >= stockQuantity)
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }
+            >
               <Plus className="h-3 w-3 md:h-3.5 md:w-3.5 text-stone-600" />
             </button>
           </div>

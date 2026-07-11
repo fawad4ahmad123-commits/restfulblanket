@@ -34,7 +34,7 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
   ];
 
   return (
-    <Card className="border shadow-sm">
+    <Card className="border shadow-sm border-[#E9DDD4]">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">Payment Method</CardTitle>
       </CardHeader>
@@ -47,7 +47,19 @@ export const PaymentMethodComponent: React.FC<PaymentMethodProps> = ({
                 key={option.id}
                 type="button"
                 variant={paymentMethod === option.id ? 'default' : 'outline'}
-                className="flex flex-col items-center gap-1 h-auto py-3 px-2"
+                className="
+  flex flex-col items-center gap-1 
+  h-auto py-3 px-2 
+  bg-[#E9DDD4] 
+  text-[#35281E]
+  hover:bg-[#E9DDD4]
+  hover:text-[#35281E]
+  focus:bg-[#E9DDD4]
+  focus:text-[#35281E]
+  focus:outline-none
+  focus:ring-0
+  active:bg-[#E9DDD4]
+"
                 onClick={() => onUpdate({ paymentMethod: option.id })}
               >
                 <Icon className="h-5 w-5" />

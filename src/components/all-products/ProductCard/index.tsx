@@ -20,6 +20,8 @@ interface Product {
   weight?: string;
   dimensions?: string;
   isNew?: boolean;
+  stockQuantity?: number | null;
+  stockStatus?: string;
 }
 
 interface ProductCardProps {
@@ -43,13 +45,15 @@ export function ProductCard({ product }: ProductCardProps) {
     weight,
     dimensions,
     isNew,
+    stockQuantity = null,
+    stockStatus = 'outofstock',
   } = product;
-
   const wished = isWishlisted(String(id));
   const isCompared = compareItems.some(
     (item) => String(item.id) === String(id),
   );
   const stars = Math.round(rating);
+  const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
@@ -66,6 +70,14 @@ export function ProductCard({ product }: ProductCardProps) {
         {isNew && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
             New
+          </div>
+        )}
+
+        {isOutOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#35281E]">
+              Udsolgt
+            </span>
           </div>
         )}
 
@@ -206,11 +218,14 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <button
             type="button"
-            aria-label={`Add ${title} to cart`}
-            title={`Add ${title} to cart`}
+            aria-label={
+              isOutOfStock ? `${title} is out of stock` : `Add ${title} to cart`
+            }
+            title={isOutOfStock ? 'Out of stock' : `Add ${title} to cart`}
             onClick={() => {
+              if (isOutOfStock) return;
               addToCart({
-                id: slug,
+                id: String(id),
                 name: title,
                 price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
                 image,
@@ -219,10 +234,15 @@ export function ProductCard({ product }: ProductCardProps) {
                 color: '',
               });
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+            disabled={isOutOfStock}
+            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition ${
+              isOutOfStock
+                ? 'cursor-not-allowed bg-gray-200 text-gray-500'
+                : 'bg-[#E9DDD4] text-[#35281E] hover:bg-[#35281E] hover:text-white'
+            }`}
           >
             <ShoppingBag aria-hidden="true" className="h-4 w-4" />
-            Add To Cart
+            {isOutOfStock ? 'Udsolgt' : 'Add To Cart'}
           </button>
         </div>
       </div>

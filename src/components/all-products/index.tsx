@@ -12,7 +12,7 @@ export default function ShopPageClient({
   categorySlug,
 }: {
   initialData: any[];
-  categorySlug?: string;
+  categorySlug?: any;
 }) {
   const [data, setData] = useState<any[]>(initialData);
   const [searchQuery, setSearchQuery] = useState('');
