@@ -2,12 +2,29 @@ import getColorHex from '../helper/color-hexa';
 import ExtractFeaturesFromShortDescription from '../helper/product-feature';
 
 export const formatProduct = (product: any) => {
-  console.log('t1  actutal api value', { product });
+  if (!product) {
+    return null;
+  }
+
+  // Some endpoints (e.g. the by-id lookup used when switching variants) can
+  // return fields in a different shape than the by-slug lookup. Coercing to
+  // an array here means a shape mismatch degrades gracefully instead of
+  // throwing.
+  const asArray = <T>(value: T): T extends any[] ? T : never[] =>
+    (Array.isArray(value) ? value : []) as any;
+
+  const meta = asArray(product.meta_data);
+  const attributes = asArray(product.attributes);
+  const categories = asArray(product.categories);
+  const tags = asArray(product.tags);
+  const images = asArray(product.images);
+  const variationData = asArray(product.variationData);
+
   const getMetaValue = (key: string) =>
-    product.meta_data?.find((item: any) => item.key === key)?.value;
+    meta.find((item: any) => item.key === key)?.value;
 
   const getAttributeOptions = (...names: string[]): string[] => {
-    const attribute = product.attributes?.find((attr: any) =>
+    const attribute = attributes.find((attr: any) =>
       names.some((name) => {
         const searchName = name.toLowerCase();
 
@@ -26,7 +43,7 @@ export const formatProduct = (product: any) => {
   };
 
   const getAttributeValue = (...names: string[]): string => {
-    const attribute = product.attributes?.find((attr: any) =>
+    const attribute = attributes.find((attr: any) =>
       names.some((name) => {
         const searchName = name.toLowerCase();
 
@@ -49,7 +66,6 @@ export const formatProduct = (product: any) => {
     if (!text) return '';
 
     const startIndex = text.indexOf(start);
-
     if (startIndex === -1) return '';
 
     const contentStart = startIndex + start.length;
@@ -59,7 +75,6 @@ export const formatProduct = (product: any) => {
     }
 
     const endIndex = text.indexOf(end, contentStart);
-
     if (endIndex === -1) {
       return text.substring(contentStart).trim();
     }
@@ -67,17 +82,17 @@ export const formatProduct = (product: any) => {
     return text.substring(contentStart, endIndex).trim();
   };
 
-  const COLOR_MAP: Record<string, string> = {
-    SalvieAften: '#A8B5A2',
-    AftenAske: '#6B6B6B',
-    Skovnat: '#1F3A2E',
-    MidnatsRo: '#2C3E50',
-    StrandRo: '#D8C3A5',
-    Morgensky: '#D6DCE5',
-    LavendelgråRo: '#B7AEC8',
-    HonningRo: '#D4A24C',
-    Nattestilhed: '#1A1A1A',
-  };
+  // Helper to pull a specific attribute (color / size / weight) out of the
+  // WooCommerce `attribute_links` array. Each link carries the id of the
+  // sibling product it should switch to when selected.
+  const attributeLinksRaw = Array.isArray(product.attribute_links)
+    ? product.attribute_links
+    : [];
+
+  const getAttributeLinks = (name: string) =>
+    attributeLinksRaw.filter(
+      (item: any) => item?.name?.toLowerCase() === name.toLowerCase(),
+    );
 
   const infoText = getAttributeValue('Info');
 
@@ -158,28 +173,12 @@ export const formatProduct = (product: any) => {
     ],
 
     attributesTitle: 'ATTRIBUTES',
-
     temperatureLabel: 'Temperature',
 
     temperatureOptions: [
-      {
-        id: 'cool',
-        label: 'Cool',
-        icon: 'cool',
-        active: false,
-      },
-      {
-        id: 'medium',
-        label: 'Medium',
-        icon: 'medium',
-        active: true,
-      },
-      {
-        id: 'warm',
-        label: 'Warm',
-        icon: 'warm',
-        active: false,
-      },
+      { id: 'cool', label: 'Cool', icon: 'cool', active: false },
+      { id: 'medium', label: 'Medium', icon: 'medium', active: true },
+      { id: 'warm', label: 'Warm', icon: 'warm', active: false },
     ],
   };
 
@@ -188,7 +187,7 @@ export const formatProduct = (product: any) => {
     name: product.name || '',
     slug: product.slug || '',
 
-    breadcrumbs: product.categories?.map((cat: any) => cat.name) || [],
+    breadcrumbs: categories.map((cat: any) => cat.name),
 
     badge: getMetaValue('badge') || '',
 
@@ -218,30 +217,28 @@ export const formatProduct = (product: any) => {
             text: item,
           }))
         : ExtractFeaturesFromShortDescription(product.short_description || ''),
-    colors: getAttributeOptions('Color', 'Farve', 'Colour', 'Farver').map(
-      (color: string, index: number) => ({
-        id: `${index + 1}`,
-        label: color.trim(),
-        value: color.trim().toLowerCase(),
-        hex: getColorHex(color),
-      }),
-    ),
 
-    weights: getAttributeOptions('Weight', 'Vægt').map(
-      (weight: string, index: number) => ({
-        id: `${index + 1}`,
-        label: weight,
-        inStock: true,
-      }),
-    ),
+    colors: getAttributeLinks('color').map((item: any, index: number) => ({
+      id: `${index + 1}`,
+      label: item.value,
+      value: item.value.toLowerCase(),
+      hex: getColorHex(item.value),
+      relatedProduct: Number(item.related_product || 0),
+    })),
 
-    sizes: getAttributeOptions('Size', 'Størrelse').map(
-      (size: string, index: number) => ({
-        id: `${index + 1}`,
-        label: size,
-        inStock: true,
-      }),
-    ),
+    sizes: getAttributeLinks('size').map((item: any, index: number) => ({
+      id: `${index + 1}`,
+      label: item.value,
+      inStock: true,
+      relatedProduct: Number(item.related_product || 0),
+    })),
+
+    weights: getAttributeLinks('weight').map((item: any, index: number) => ({
+      id: `${index + 1}`,
+      label: item.value,
+      inStock: true,
+      relatedProduct: Number(item.related_product || 0),
+    })),
 
     heights: getAttributeOptions('Height', 'Højde').map(
       (height: string, index: number) => ({
@@ -257,10 +254,7 @@ export const formatProduct = (product: any) => {
       }),
     ),
 
-    images:
-      product.images
-        ?.filter((img: any) => img?.src)
-        .map((img: any) => img.src) || [],
+    images: images.filter((img: any) => img?.src).map((img: any) => img.src),
 
     shortDescription: product.short_description || '',
     description: product.description || '',
@@ -269,19 +263,17 @@ export const formatProduct = (product: any) => {
     type: product.type || '',
     permalink: product.permalink || '',
 
-    categories:
-      product.categories?.map((cat: any) => ({
-        id: cat.id,
-        name: cat.name,
-        slug: cat.slug,
-      })) || [],
+    categories: categories.map((cat: any) => ({
+      id: cat.id,
+      name: cat.name,
+      slug: cat.slug,
+    })),
 
-    tags:
-      product.tags?.map((tag: any) => ({
-        id: tag.id,
-        name: tag.name,
-        slug: tag.slug,
-      })) || [],
+    tags: tags.map((tag: any) => ({
+      id: tag.id,
+      name: tag.name,
+      slug: tag.slug,
+    })),
 
     infoSections:
       getMetaValue('infoSections')?.map((section: any, index: number) => ({
@@ -290,21 +282,26 @@ export const formatProduct = (product: any) => {
         body: section.body,
       })) || [],
 
-    variations:
-      product.variationData?.map((variation: any) => ({
-        id: variation.id,
-        price: Number(variation.price || 0),
-        regularPrice: Number(variation.regular_price || 0),
-        stockStatus: variation.stock_status,
-        stockQuantity: variation.stock_quantity,
-        image: variation.image?.src || '',
-        description: variation.description || '',
-        attributes:
-          variation.attributes?.map((attr: any) => ({
-            name: attr.name,
-            option: attr.option,
-          })) || [],
-      })) || [],
+    variations: variationData.map((variation: any) => ({
+      id: variation.id,
+      price: Number(variation.price || 0),
+      regularPrice: Number(variation.regular_price || 0),
+      stockStatus: variation.stock_status,
+      stockQuantity: variation.stock_quantity,
+      image: variation.image?.src || '',
+      description: variation.description || '',
+      attributes: asArray(variation.attributes).map((attr: any) => ({
+        name: attr.name,
+        option: attr.option,
+      })),
+    })),
+
+    attributeLinks: attributeLinksRaw.map((item: any, index: number) => ({
+      id: `${index + 1}`,
+      name: item?.name || '',
+      value: item?.value || '',
+      relatedProduct: Number(item?.related_product || 0),
+    })),
 
     productInformation,
   };

@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { getProductReviews } from '@/src/lib/products';
@@ -10,29 +11,52 @@ import { Loader } from '../../loader';
 
 const Coments = ({ id }: { id: string }) => {
   const pathname = usePathname();
+
   const [showModal, setShowModal] = useState(false);
+  const [hasAuth, setHasAuth] = useState(false);
+
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<'left' | 'right'>('left');
   const [animating, setAnimating] = useState(false);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
   const isHome = ['/'].includes(pathname);
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+
+    if (token) {
+      setHasAuth(true);
+    }
+  }, []);
 
   const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
+
       const data = await getProductReviews(Number(id), isHome);
+
       setReviews(data);
     } catch (error) {
       console.error('Failed to load reviews:', error);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, isHome]);
 
   useEffect(() => {
     loadReviews();
   }, [loadReviews]);
+
+  const handleWriteReview = () => {
+    if (!hasAuth) {
+      setShowModal(false);
+      return;
+    }
+
+    setShowModal(true);
+  };
 
   if (loading) {
     return <Loader />;
@@ -43,7 +67,7 @@ const Coments = ({ id }: { id: string }) => {
       <div className="mx-auto max-w-[1200px]">
         <Info
           showModal={showModal}
-          setReview={setShowModal}
+          setReview={handleWriteReview}
           current={current}
           setCurrent={setCurrent}
           direction={direction}
@@ -53,6 +77,7 @@ const Coments = ({ id }: { id: string }) => {
           totalReviews={reviews.length}
           isHome={isHome}
         />
+
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="order-2 lg:order-1">
             {reviews.length > 0 && (
@@ -64,8 +89,9 @@ const Coments = ({ id }: { id: string }) => {
               />
             )}
           </div>
+
           <div className="order-1 lg:order-2 flex h-full flex-col justify-end">
-            {showModal ? (
+            {showModal && hasAuth ? (
               <ReviewForm
                 onClose={() => setShowModal(false)}
                 productId={Number(id)}
@@ -77,7 +103,7 @@ const Coments = ({ id }: { id: string }) => {
                 current={current}
                 animating={animating}
                 direction={direction}
-                onWriteReview={() => setShowModal(true)}
+                onWriteReview={handleWriteReview}
               />
             )}
           </div>
