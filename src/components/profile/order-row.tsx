@@ -20,7 +20,7 @@ export function OrderRow({ order, compact = false }: OrderRowProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-4',
+        'flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4',
         compact ? 'py-3 first:pt-0 last:pb-0' : 'py-4 first:pt-0 last:pb-0',
       )}
     >
@@ -62,7 +62,7 @@ export function OrderRow({ order, compact = false }: OrderRowProps) {
       <Button
         variant="outline"
         size="sm"
-        className="rounded-full border-[#2B2420] text-[#2B2420] hover:bg-[#2B2420]/5 whitespace-nowrap"
+        className="rounded-full border-[#2B2420] text-[#2B2420] hover:bg-[#2B2420]/5 whitespace-nowrap w-full sm:w-auto order-last sm:order-none"
       >
         {actionLabel(order)}
       </Button>

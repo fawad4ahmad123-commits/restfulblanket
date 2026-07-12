@@ -1,17 +1,34 @@
 'use client';
 
-import { useState } from 'react';
-import { Heart } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Heart, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { profileClasses } from '../constants/profile-theme';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import WishlistCard from '@/src/components/wishlist/wishlist-card';
+import Link from 'next/link';
 
 export function WishlistSection() {
   const { wishlistItems } = useWishlist();
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 6;
+
+  // Only treat the wishlist as "available" when the user actually has an
+  // auth_token. NOTE: the fetch itself happens inside useWishlist's provider —
+  // if that provider fetches unconditionally on mount, add the same
+  // `localStorage.getItem('auth_token')` check there before calling the API,
+  // e.g.:
+  //   useEffect(() => {
+  //     const token = localStorage.getItem('auth_token');
+  //     if (!token) return; // don't call the wishlist API when logged out
+  //     fetchWishlist();
+  //   }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('auth_token'));
+  }, []);
 
   const totalItems = wishlistItems.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -32,8 +49,31 @@ export function WishlistSection() {
         Saved for next time, when a little more peace needs to be created
       </p>
 
-      {wishlistItems.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-[#F0EBE6] p-8 shadow-sm">
+      {!isLoggedIn ? (
+        <div className="text-center py-16 bg-white rounded-2xl border border-[#F0EBE6] p-6 sm:p-8 shadow-sm">
+          <LogIn className="h-10 w-10 mx-auto text-[#8B7E70] mb-3 opacity-60" />
+          <h3
+            className={cn(
+              'text-lg font-semibold mb-1',
+              profileClasses.textPrimary,
+            )}
+          >
+            Log ind for at se din ønskeliste
+          </h3>
+          <p
+            className={cn(
+              'text-sm mb-6 max-w-xs mx-auto',
+              profileClasses.textSecondary,
+            )}
+          >
+            Du skal være logget ind for at gemme og se dine favoritter.
+          </p>
+          <Link href="/signin">
+            <Button className={profileClasses.buttonDark}>Log ind</Button>
+          </Link>
+        </div>
+      ) : wishlistItems.length === 0 ? (
+        <div className="text-center py-16 bg-white rounded-2xl border border-[#F0EBE6] p-6 sm:p-8 shadow-sm">
           <Heart className="h-10 w-10 mx-auto text-[#8B7E70] mb-3 opacity-60" />
           <h3
             className={cn(
@@ -54,7 +94,7 @@ export function WishlistSection() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {paginatedItems.map((item) => (
               <WishlistCard
                 key={item.id}
@@ -77,7 +117,7 @@ export function WishlistSection() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
               <Button
                 variant="outline"
                 size="sm"
@@ -88,7 +128,7 @@ export function WishlistSection() {
                 Previous
               </Button>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 flex-wrap justify-center">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (page) => (
                     <button

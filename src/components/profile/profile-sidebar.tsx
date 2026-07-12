@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { LogOut, Trash2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { LogOut, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProfileSectionId } from './types/profile';
 import { profileClasses } from './constants/profile-theme';
@@ -12,21 +12,22 @@ import {
 } from './constants/profile-data';
 import { useAuth } from '@/src/core/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 
 interface ProfileSidebarProps {
   activeSection: ProfileSectionId;
   onSelect: (section: ProfileSectionId) => void;
+  isMobileOpen: boolean;
+  onMobileClose: () => void;
 }
 
 export function ProfileSidebar({
   activeSection,
   onSelect,
+  isMobileOpen,
+  onMobileClose,
 }: ProfileSidebarProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
-
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -37,8 +38,25 @@ export function ProfileSidebar({
     ? user.name.split(' ')[0]
     : PROFILE_USER.firstName;
 
-  return (
-    <aside className="w-full max-w-[220px] shrink-0">
+  // Lock body scroll while the mobile drawer is open
+  useEffect(() => {
+    if (isMobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileOpen]);
+
+  function handleSelect(section: ProfileSectionId) {
+    onSelect(section);
+    onMobileClose();
+  }
+
+  const navContent = (
+    <>
       <p
         className={cn(
           'text-xs uppercase tracking-wide mb-1',
@@ -60,9 +78,9 @@ export function ProfileSidebar({
             <button
               key={item.id}
               type="button"
-              onClick={() => onSelect(item.id)}
+              onClick={() => handleSelect(item.id)}
               className={cn(
-                'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left',
+                'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left cursor-pointer',
                 isActive
                   ? profileClasses.navItemActive
                   : profileClasses.navItemInactive,
@@ -80,9 +98,9 @@ export function ProfileSidebar({
       <nav className="flex flex-col gap-1">
         <button
           type="button"
-          onClick={() => onSelect(PROFILE_FOOTER_NAV_ITEM.id)}
+          onClick={() => handleSelect(PROFILE_FOOTER_NAV_ITEM.id)}
           className={cn(
-            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left',
+            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left cursor-pointer',
             activeSection === PROFILE_FOOTER_NAV_ITEM.id
               ? profileClasses.navItemActive
               : profileClasses.navItemInactive,
@@ -104,6 +122,69 @@ export function ProfileSidebar({
           Log ud
         </button>
       </nav>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block w-full max-w-[220px] shrink-0">
+        {navContent}
+      </aside>
+
+      {/* Mobile top bar trigger lives in Profile's main wrapper (see index.tsx),
+          this component only renders the drawer/canvas itself on mobile */}
+      <div
+        className={cn(
+          'md:hidden fixed inset-0 z-50 transition-opacity duration-300',
+          isMobileOpen
+            ? 'pointer-events-auto opacity-100'
+            : 'pointer-events-none opacity-0',
+        )}
+        aria-hidden={!isMobileOpen}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          onClick={onMobileClose}
+        />
+
+        {/* Canvas / drawer */}
+        <div
+          className={cn(
+            'absolute inset-y-0 left-0 w-[85%] max-w-[320px] bg-[#FAF6F0] shadow-xl p-6 overflow-y-auto transition-transform duration-300 ease-out',
+            isMobileOpen ? 'translate-x-0' : '-translate-x-full',
+          )}
+        >
+          <button
+            type="button"
+            onClick={onMobileClose}
+            aria-label="Close menu"
+            className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full border border-[#EAE1D3] bg-white text-[#2B2420] cursor-pointer"
+          >
+            <X className="h-4 w-4" />
+          </button>
+          <div className="mt-8">{navContent}</div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ProfileMobileMenuButton({
+  onOpen,
+}: {
+  onOpen: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label="Open menu"
+      className="md:hidden flex items-center gap-2 rounded-full border border-[#EAE1D3] bg-white px-4 py-2 text-sm font-medium text-[#2B2420] shadow-sm cursor-pointer"
+    >
+      <Menu className="h-4 w-4" />
+      Menu
+    </button>
   );
 }

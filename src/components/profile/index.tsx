@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { profileClasses } from '@/src/components/profile/constants/profile-theme';
-import { ProfileSidebar } from '@/src/components/profile/profile-sidebar';
+import {
+  ProfileSidebar,
+  ProfileMobileMenuButton,
+} from '@/src/components/profile/profile-sidebar';
 import { AccountInformationSection } from '@/src/components/profile/sections/account-information-section';
 import { AddressesSection } from '@/src/components/profile/sections/addresses-section';
 import { CancellationReturnSection } from '@/src/components/profile/sections/cancellation-return-section';
@@ -86,9 +89,19 @@ const SECTION_COMPONENTS: Record<
   cancellation: CancellationReturnSection as any,
 };
 
+const SECTION_LABELS: Record<ProfileSectionId, string> = {
+  overview: 'Overview',
+  orders: 'My Orders',
+  wishlist: 'Wishlist',
+  addresses: 'Addresses',
+  account: 'Account Information',
+  cancellation: 'Cancellation & return',
+};
+
 export default function Profile() {
   const [activeSection, setActiveSection] =
     useState<ProfileSectionId>('overview');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
@@ -115,11 +128,22 @@ export default function Profile() {
 
   return (
     <div className={profileClasses.page}>
-      <div className="mx-auto max-w-6xl px-6 py-10 flex gap-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-10 flex flex-col md:flex-row gap-6 md:gap-10">
+        {/* Mobile top bar: current section label + hamburger toggle */}
+        <div className="flex md:hidden items-center justify-between">
+          <h1 className={profileClasses.textPrimary + ' text-xl font-medium'}>
+            {SECTION_LABELS[activeSection]}
+          </h1>
+          <ProfileMobileMenuButton onOpen={() => setIsMobileMenuOpen(true)} />
+        </div>
+
         <ProfileSidebar
           activeSection={activeSection}
           onSelect={setActiveSection}
+          isMobileOpen={isMobileMenuOpen}
+          onMobileClose={() => setIsMobileMenuOpen(false)}
         />
+
         <main className="flex-1 min-w-0">
           <ActiveComponent
             orders={orders}
