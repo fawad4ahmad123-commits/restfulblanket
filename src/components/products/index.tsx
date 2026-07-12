@@ -12,9 +12,8 @@ import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
-import OthersAlsoBought from './related-product-slider';
 
-const ProductInfoPanel = ({ product }: any) => {
+const ProductInfoPanel = ({ product, onProductChange }: any) => {
   const cart = useContext(CartContext);
 
   if (!cart) {
@@ -26,37 +25,57 @@ const ProductInfoPanel = ({ product }: any) => {
   const addToCartRef = useRef<HTMLDivElement>(null);
   const [showStickyCart, setShowStickyCart] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
+
+  // No color / size / weight is pre-selected — the shopper must choose.
+  const [selectedColorId, setSelectedColorId] = useState('');
+  const [selectedWeightId, setSelectedWeightId] = useState('');
+  const [selectedSizeId, setSelectedSizeId] = useState('');
+
   const colors = product?.colors ?? [];
   const weights = product?.weights ?? [];
   const sizes = product?.sizes ?? [];
-  const features = product?.features ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
-  const [selectedColorId, setSelectedColorId] = useState(colors[0]?.id ?? '');
-  const [selectedWeightId, setSelectedWeightId] = useState(
-    weights[1]?.id ?? weights[0]?.id ?? '',
-  );
-  const [selectedSizeId, setSelectedSizeId] = useState(
-    sizes[1]?.id ?? sizes[0]?.id ?? '',
-  );
-  const [quantity, setQuantity] = useState(1);
+
+  // Strip HTML and turn each line into a feature bullet, so a description
+  // like "<p><strong>• Foo</strong><br/><strong>• Bar</strong></p>" becomes
+  // ["Foo", "Bar"] in the same {id, text} shape FeatureList expects.
+  const featuresFromDescription = (html: string) =>
+    html
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/•/g, '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((text, index) => ({ id: `sd-${index}`, text }));
+
+  // Fall back to the short description whenever the product has no
+  // explicit features list.
+  const features =
+    product?.features?.length > 0
+      ? product.features
+      : featuresFromDescription(product?.shortDescription || '');
+
+  // Whenever the displayed product changes (e.g. after switching variant),
+  // clear the selectors again so nothing appears pre-selected.
+  useEffect(() => {
+    setSelectedColorId('');
+    setSelectedWeightId('');
+    setSelectedSizeId('');
+  }, [product?.id]);
 
   const handleAddToCart = () => {
     const selectedColor =
-      colors.find((c: any) => c.id === selectedColorId)?.label ||
-      colors.find((c: any) => c.id === selectedColorId)?.name ||
-      '';
-
+      colors.find((c: any) => c.id === selectedColorId)?.label || '';
     const selectedWeight =
-      weights.find((w: any) => w.id === selectedWeightId)?.label ?? '';
-
+      weights.find((w: any) => w.id === selectedWeightId)?.label || '';
     const selectedSize =
-      sizes.find((s: any) => s.id === selectedSizeId)?.label ?? '';
-
-    const uniqueId = `${product.id}-${selectedColor}-${selectedWeight}-${selectedSize}`;
+      sizes.find((s: any) => s.id === selectedSizeId)?.label || '';
 
     for (let i = 0; i < quantity; i++) {
       addToCart({
-        id: uniqueId,
+        id: product.id,
         name: product.name,
         color: selectedColor,
         variant: selectedSize,
@@ -67,14 +86,43 @@ const ProductInfoPanel = ({ product }: any) => {
     }
   };
 
+  // Looks up the sibling product linked to the chosen attribute
+  // (color / size / weight) and swaps it in as the active product.
+  const handleAttributeChange = async (type: string, value: string) => {
+    const matchedLink = product?.attributeLinks?.find(
+      (item: any) =>
+        item.name?.toLowerCase() === type.toLowerCase() && item.value === value,
+    );
+
+    if (!matchedLink?.relatedProduct) return;
+
+    try {
+      const response = await fetch(
+        `/api/product/${matchedLink.relatedProduct}`,
+      );
+
+      if (!response.ok) {
+        console.error(`Failed to load related product: ${response.status}`);
+        return;
+      }
+
+      const newProduct = await response.json();
+
+      if (!newProduct || newProduct.error) {
+        console.error('Related product response was empty or invalid');
+        return;
+      }
+
+      onProductChange(newProduct);
+    } catch (error) {
+      console.error('Failed to load related product:', error);
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowStickyCart(!entry.isIntersecting);
-      },
-      {
-        threshold: 0.1,
-      },
+      ([entry]) => setShowStickyCart(!entry.isIntersecting),
+      { threshold: 0.1 },
     );
 
     if (addToCartRef.current) {
@@ -117,7 +165,14 @@ const ProductInfoPanel = ({ product }: any) => {
         <ColorSelector
           colors={colors}
           selectedColorId={selectedColorId}
-          onSelect={setSelectedColorId}
+          onSelect={(id) => {
+            setSelectedColorId(id);
+
+            const selected = colors.find((c: any) => c.id === id);
+            if (selected) {
+              handleAttributeChange('color', selected.label);
+            }
+          }}
         />
       )}
 
@@ -126,7 +181,14 @@ const ProductInfoPanel = ({ product }: any) => {
           label="Vægtguide"
           options={weights}
           selectedId={selectedWeightId}
-          onSelect={setSelectedWeightId}
+          onSelect={(id) => {
+            setSelectedWeightId(id);
+
+            const selected = weights.find((w: any) => w.id === id);
+            if (selected) {
+              handleAttributeChange('weight', selected.label);
+            }
+          }}
         />
       )}
 
@@ -135,7 +197,14 @@ const ProductInfoPanel = ({ product }: any) => {
           label="Størrelse"
           options={sizes}
           selectedId={selectedSizeId}
-          onSelect={setSelectedSizeId}
+          onSelect={(id) => {
+            setSelectedSizeId(id);
+
+            const selected = sizes.find((s: any) => s.id === id);
+            if (selected) {
+              handleAttributeChange('size', selected.label);
+            }
+          }}
         />
       )}
 
@@ -149,7 +218,7 @@ const ProductInfoPanel = ({ product }: any) => {
           stockQuantity={stockQuantity}
         />
       </div>
-      {/* <OthersAlsoBought /> */}
+
       <ProductInfoAccordion
         activeAccordion={activeAccordion}
         setActiveAccordion={setActiveAccordion}

@@ -1,46 +1,49 @@
 import Image from 'next/image';
 
-const STATIC_CATEGORY_ORDER = [
-  {
-    slug: 'tyngdedyner',
-    label: 'Tyngdedyner',
-    image: '/categories/tyngdedyner.jpg',
-  },
-  {
-    slug: 'boern',
-    label: 'Børn',
-    image: '/categories/boern.jpg',
-  },
-  {
-    slug: 'voksne',
-    label: 'Voksne',
-    image: '/categories/voksne.jpg',
-  },
-];
-
 export function CategoryTabs({
   categories = [],
   activeCategories = [],
   onSelect,
 }: any) {
-  const mapped = STATIC_CATEGORY_ORDER.map((staticCat) => {
-    const apiCat = categories.find((c: any) => c.slug === staticCat.slug);
-    return {
-      id: apiCat?.id || staticCat.slug,
-      slug: staticCat.slug,
-      label: apiCat?.name || staticCat.label,
-      image: apiCat?.image?.src || staticCat.image,
-    };
-  });
+  const currentParent = activeCategories[activeCategories.length - 1];
+
+  const selectedCategory = categories.find(
+    (cat: any) => cat.slug === currentParent,
+  );
+
+  const mapped = categories
+    .filter((cat: any) => {
+      if (!selectedCategory) {
+        return cat.parent === 0;
+      }
+
+      return cat.parent === selectedCategory.id;
+    })
+    .map((cat: any) => ({
+      id: cat.id,
+      slug: cat.slug,
+      label: cat.name,
+      image: cat.image?.src || '/categories/default.jpg',
+      parent: cat.parent,
+    }));
 
   return (
     <div className="flex gap-2 overflow-x-auto cursor-pointer">
       {mapped.map((category: any) => {
-        const isActive = activeCategories.includes(category.slug);
+        const isActive = activeCategories.includes(category.slug.toLowerCase());
+
         return (
           <div
-            key={category.slug}
-            onClick={() => onSelect?.(category.slug)}
+            key={category.id}
+            onClick={() => {
+              const slug = String(category.slug).toLowerCase();
+
+              const updated = isActive
+                ? activeCategories.filter((s: string) => s !== slug)
+                : [...activeCategories, slug];
+
+              onSelect?.(updated);
+            }}
             className="flex flex-col items-center gap-2 min-w-[90px]"
           >
             <div
@@ -55,6 +58,7 @@ export function CategoryTabs({
                 className="object-cover"
               />
             </div>
+
             <span className="text-xs text-[#6B625B] whitespace-nowrap">
               {category.label}
             </span>

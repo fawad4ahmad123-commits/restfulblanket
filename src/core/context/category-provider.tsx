@@ -1,6 +1,5 @@
 'use client';
 import { createContext, useContext, useMemo, ReactNode } from 'react';
-import { Category, CategoryContextType } from './types';
 
 function normalizeProduct(p: any) {
   const image =
@@ -43,7 +42,7 @@ export function CategoryProvider({
   products = [],
 }: {
   children: ReactNode;
-  categories: Category[];
+  categories: any[];
   products?: any[];
 }) {
   const safeCategories = Array.isArray(categories) ? categories : [];
@@ -79,6 +78,7 @@ export function CategoryProvider({
       value={{
         categories: safeCategories,
         parentCategories,
+        products: normalizedProducts,
         getChildren,
         getProductsByCategory,
       }}
@@ -88,7 +88,7 @@ export function CategoryProvider({
   );
 }
 
-const CategoryContext = createContext<CategoryContextType | null>(null);
+const CategoryContext = createContext<any | null>(null);
 
 export function useCategories() {
   const context = useContext(CategoryContext);

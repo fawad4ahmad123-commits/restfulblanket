@@ -12,7 +12,7 @@ export default function ProductList({ products }: Props) {
       </p>
     );
   }
-
+  console.log('t5353', { products });
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {products.map((product, index) => (
@@ -32,6 +32,8 @@ export default function ProductList({ products }: Props) {
             rating: product.rating,
             reviewCount: product.reviewCount,
             isNew: product.isNewArrival,
+            stockQuantity: product.stockQuantity,
+            stockStatus: product.stockStatus,
           }}
         />
       ))}

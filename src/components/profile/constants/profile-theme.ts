@@ -1,6 +1,6 @@
 export const profileTheme = {
   colors: {
-    pageBackground: '#FAF6F0',
+    pageBackground: '#fff9f5',
     surface: '#FFFFFF',
     surfaceMuted: '#F3ECE1',
     heroBackground: '#F1E4D2',
@@ -33,13 +33,14 @@ export const profileTheme = {
 export const profileClasses = {
   page: 'bg-[#FAF6F0] min-h-screen',
   surfaceCard: 'bg-white border border-[#EAE1D3] rounded-2xl',
-  heroCard: 'bg-[#F1E4D2] rounded-2xl',
+  heroCard: 'bg-[#f6eee7] rounded-2xl',
   textPrimary: 'text-[#2B2420]',
   textSecondary: 'text-[#8B7E70]',
   serifItalic: 'font-serif italic font-normal',
-  buttonDark: 'bg-[#2B2420] text-white hover:bg-[#3D342C] rounded-full',
+  buttonDark:
+    'bg-[#35281E] text-white hover:bg-[#3D342C] rounded-full px-6 py-7',
   buttonOutline:
-    'border border-[#2B2420] text-[#2B2420] bg-transparent hover:bg-[#2B2420]/5 rounded-full',
+    'border border-[#2B2420] text-[#2B2420] bg-transparent hover:bg-[#2B2420]/5 rounded-full px-6 py-7',
   navItemActive: 'bg-[#2B2420] text-white',
   navItemInactive: 'text-[#2B2420]/80 hover:bg-[#F3ECE1]',
 };

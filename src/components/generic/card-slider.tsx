@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, Eye, ShoppingBag, Check, Scale } from 'lucide-react';
+import { Heart, Eye, ShoppingBag, Check } from 'lucide-react';
 import { SliderCard as SliderCardProps } from './types';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/src/helper/product-feature';
 import { useCart } from '@/src/core/context/card-Provider';
 import { useCompare } from '@/src/core/context/compare-provider';
 import { cn } from '@/lib/utils';
+import { useWishlist } from '@/src/core/context/wishlist-provider';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -31,11 +31,11 @@ const SliderCard = ({
   size,
   isProduct,
 }: ExtendedSliderCardProps) => {
-  const [wished, setWished] = useState(false);
   const { compareItems, toggleCompare } = useCompare();
   const { addToCart } = useCart();
   const router = useRouter();
-
+  const { toggleWishlist, isWishlisted } = useWishlist();
+  const wished = isWishlisted(String(id));
   const isCompared = compareItems.some(
     (item) => String(item.id) === String(id),
   );
@@ -48,15 +48,19 @@ const SliderCard = ({
     >
       <div className="relative overflow-hidden">
         <div className="relative h-[340px] md:h-[420px]">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className={`object-cover transition-all duration-500 ${
-              hoverImage ? 'group-hover:opacity-0' : ''
-            }`}
-          />
-          {hoverImage && (
+          {image ? (
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className={`object-cover transition-all duration-500 ${
+                hoverImage ? 'group-hover:opacity-0' : ''
+              }`}
+            />
+          ) : (
+            <div className="h-full w-full bg-[#F3EBE4]" />
+          )}
+          {hoverImage && image && (
             <Image
               src={hoverImage}
               alt={`${title} alternate view`}
@@ -74,19 +78,34 @@ const SliderCard = ({
           type="button"
           aria-label={
             wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
+              ? `Fjern ${title} fra ønskeliste`
+              : `Tilføj ${title} til ønskeliste`
           }
           title={
             wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
+              ? `Fjern ${title} fra ønskeliste`
+              : `Tilføj ${title} til ønskeliste`
           }
           onClick={(e) => {
             e.stopPropagation();
-            setWished((w) => !w);
+            toggleWishlist({
+              id: String(id),
+              name: title,
+              price: Number(price) || 0,
+              image,
+              slug,
+              hoverImage,
+              originalPrice: originalPrice ? Number(originalPrice) : undefined,
+              rating,
+              reviewCount,
+              weight,
+              dimensions,
+              color,
+              size,
+              badge,
+            });
           }}
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
+          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110 cursor-pointer"
         >
           <Heart
             aria-hidden="true"
@@ -99,8 +118,8 @@ const SliderCard = ({
         <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
           <button
             type="button"
-            aria-label={`Quick view ${title}`}
-            title={`Quick view ${title}`}
+            aria-label={`Hurtig visning af ${title}`}
+            title={`Hurtig visning af ${title}`}
             className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
             onClick={(e) => {
               e.stopPropagation();
@@ -196,8 +215,8 @@ const SliderCard = ({
 
         <button
           type="button"
-          aria-label={`Add ${title} to cart`}
-          title={`Add ${title} to cart`}
+          aria-label={`Tilføj ${title} til kurv`}
+          title={`Tilføj ${title} til kurv`}
           onClick={(e) => {
             e.stopPropagation();
 

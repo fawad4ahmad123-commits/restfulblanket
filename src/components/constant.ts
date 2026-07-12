@@ -12,45 +12,45 @@ export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 export const navigation = [
   {
     title: 'Alle Produkter',
-    href: '/shop',
+    href: '/shop', // Pointing to the main collections root
   },
   {
     title: 'Tyngdetæpper',
-    href: '/categories',
+    href: '/collections/tyngdetaepper',
     groups: [
       {
         heading: 'VORES TYNGDETÆPPER',
         links: [
           {
             title: 'Voksne',
-            href: '/categories',
+            href: '/voksne', // Level 2 Subcategory
           },
           {
             title: 'Børn',
-            href: '/categories',
+            href: '/boern', // Level 2 Subcategory
           },
         ],
       },
     ],
   },
   {
-    title: 'Tyngdetæppe',
-    href: '/categories',
+    title: 'Tyngdedyner', // Note: Adjusted title slightly to map neatly if this was meant to be different from Tyngdetæpper
+    href: '/collections/tyngdedyner',
   },
   {
     title: 'Tilbehør',
-    href: '/categories',
+    href: '/collections/tilbehoer', // Level 1 Category
     groups: [
       {
         heading: 'VORES TILBEHØR',
         links: [
           {
             title: 'Hovedpuder',
-            href: '/categories',
+            href: '/hovedpuder', // Level 2 Subcategory
           },
           {
             title: 'Sengesæt',
-            href: '/categories',
+            href: '/sengesaet', // Level 2 Subcategory
           },
         ],
       },
@@ -69,7 +69,6 @@ export const navigation = [
     href: '/blog',
   },
 ];
-
 export const slides = [
   {
     image: '/home/hero-img.jpg',
@@ -176,8 +175,9 @@ export const HERO_SLIDES = [
 ];
 
 export const BOTTOM_BANNER_ITEMS = [
-  '30 DAGES SØVNPRØVE – INGEN SPØRGSMÅL STILLET',
-  'HÅNDLAVET I SMÅLAND, SVERIGE',
-  'OEKO-TEX®- OG CE-CERTIFICERET',
-  'GRATIS KLIMANEUTRAL LEVERING OVER €120',
+  'CE-kl. 1 + OEKO-TEX kl. 1',
+  'Vaskbar 60 °C',
+  'Rapsfyld – naturligt og stille',
+  '90 Nætters Tryghed',
+  'Håndsyet i Danmark',
 ];

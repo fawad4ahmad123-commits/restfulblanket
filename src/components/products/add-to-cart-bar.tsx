@@ -13,10 +13,9 @@ const AddToCartBar = ({
 }: AddToCart) => {
   const total = price * quantity;
 
-  const isOutOfStock =
+  const isQuantityExceeded =
     stockQuantity !== null &&
     stockQuantity !== undefined &&
-    stockQuantity > 0 &&
     quantity > stockQuantity;
 
   return (
@@ -38,7 +37,12 @@ const AddToCartBar = ({
         <Button
           type="button"
           onClick={onAddToCart}
-          disabled={isOutOfStock}
+          disabled={isQuantityExceeded}
+          title={
+            isQuantityExceeded
+              ? 'Den valgte mængde overstiger den tilgængelige lagerbeholdning.'
+              : ''
+          }
           className="h-12 w-full sm:flex-1 rounded-full bg-[#3F3A36] px-4 text-sm font-medium text-white hover:bg-[#2E2A27] sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
           aria-label={`Tilføj ${quantity} vare(r) til kurven. Samlet pris ${currency}${total}`}
         >
@@ -58,15 +62,13 @@ const AddToCartBar = ({
         </Button>
       </div>
 
-      {stockQuantity !== null &&
-        stockQuantity !== undefined &&
-        stockQuantity > 0 &&
-        quantity >= stockQuantity && (
-          <p className="text-sm text-red-500">
-            Kun {stockQuantity} vare
-            {stockQuantity > 1 ? 'r' : ''} på lager.
-          </p>
-        )}
+      {isQuantityExceeded && (
+        <p className="text-sm text-red-500">
+          Den valgte mængde overstiger lagerbeholdningen. Kun {stockQuantity}{' '}
+          vare
+          {stockQuantity && stockQuantity > 1 ? 'r' : ''} er tilgængelig.
+        </p>
+      )}
     </div>
   );
 };

@@ -1,12 +1,14 @@
 export interface CartItem {
-  id: string;
+  id: string | undefined;
   name: string;
-  color: string;
-  variant: string;
-  weight: string;
+  color?: string;
+  variant?: string;
+  weight?: string;
   price: number;
   quantity: number;
   image: string;
+  productId?: number;
+  variationId?: number;
 }
 
 export interface UpsellItem {

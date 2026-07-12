@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { useCart } from '@/src/core/context/card-Provider';
 import { Courgette } from 'next/font/google';
 import { useAuth } from '@/src/core/context/auth-context';
+import { useWishlist } from '@/src/core/context/wishlist-provider';
 
 const courgette = Courgette({
   subsets: ['latin'],
@@ -32,11 +33,12 @@ const getInitials = (name?: string) =>
 
 const SiteHeader = () => {
   const pathname = usePathname();
-  const isHome = ['/', '/shop'].includes(pathname);
+  const isHome = pathname === '/' || pathname.startsWith('/shop');
   const router = useRouter();
-  const wishlistCount = 3;
+  const { wishlistIds } = useWishlist();
+  const wishlistCount = wishlistIds.length;
   const { user, isAuthenticated } = useAuth();
-
+  console.log('t56', { isHome });
   const {
     items,
     upsellItems,
@@ -95,11 +97,11 @@ const SiteHeader = () => {
                 title="Wishlist"
                 onClick={() => router.push('/wishlist')}
                 className={cn(
-                  'relative',
+                  'relative cursor-pointer',
                   !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
                 )}
               >
-                <Heart aria-hidden="true" className="size-4" />
+                <Heart aria-hidden="true" className="size-4 cursor-pointer" />
 
                 {wishlistCount > 0 && (
                   <span

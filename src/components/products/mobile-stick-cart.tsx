@@ -33,19 +33,19 @@ const MobileStickyCart = ({
   return (
     <div
       className={cn(
-        'fixed bottom-4 left-4 right-4 z-50 lg:hidden transition-all duration-300',
+        'fixed bottom-4 left-4 right-4 z-50 lg:hidden transition-all duration-300 bg-[#fdf9f6] rounded-[20px]',
         visible
           ? 'translate-y-0 opacity-100'
           : 'pointer-events-none translate-y-20 opacity-0',
       )}
     >
-      <div className="rounded-[28px] bg-[#FDF9F6] p-4 shadow-2xl">
-        <div className="mb-4">
+      <div className="rounded-[28px] bg-[#fdf9f6] p-4 shadow-2xl">
+        <div className="mb-2">
           <button
             type="button"
             onClick={() => setShowInfo((prev) => !prev)}
             aria-label={showInfo ? 'Hide information' : 'Show information'}
-            className="mb-2 flex w-full items-center justify-end text-[#35281E]"
+            className="mb-1 flex w-full items-center justify-center text-[#35281E]"
           >
             {showInfo ? (
               <ChevronUp className="h-5 w-5" />
@@ -53,7 +53,6 @@ const MobileStickyCart = ({
               <ChevronDown className="h-5 w-5" />
             )}
           </button>
-
           {showInfo && (
             <div className="grid grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
@@ -84,7 +83,7 @@ const MobileStickyCart = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
+          <div className="relative h-6 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
             {product.image && (
               <Image
                 src={product.image}

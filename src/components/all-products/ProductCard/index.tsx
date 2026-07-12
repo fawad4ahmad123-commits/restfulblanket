@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Heart, ShoppingBag, Eye, Check } from 'lucide-react';
 import { useCart } from '@/src/core/context/card-Provider';
-import { cn } from '@/lib/utils'; // adjust path if your cn() lives elsewhere
+import { useWishlist } from '@/src/core/context/wishlist-provider';
+import { useCompare } from '@/src/core/context/compare-provider';
+import { cn } from '@/lib/utils';
 
 interface Product {
   id: string | number;
@@ -19,28 +20,19 @@ interface Product {
   weight?: string;
   dimensions?: string;
   isNew?: boolean;
+  stockQuantity?: number | null;
+  stockStatus?: string;
 }
 
 interface ProductCardProps {
   product: Product;
-  isCompared?: boolean;
-  toggleCompare?: (item: {
-    id: string;
-    title: string;
-    image: string;
-    price: number;
-    slug: string;
-  }) => void;
 }
 
-export function ProductCard({
-  product,
-  isCompared = false,
-  toggleCompare,
-}: ProductCardProps) {
-  const [wished, setWished] = useState(false);
+export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const { addToCart } = useCart();
+  const { toggleWishlist, isWishlisted } = useWishlist();
+  const { compareItems, toggleCompare } = useCompare();
   const {
     id,
     image,
@@ -53,9 +45,15 @@ export function ProductCard({
     weight,
     dimensions,
     isNew,
+    stockQuantity = null,
+    stockStatus = 'outofstock',
   } = product;
-
+  const wished = isWishlisted(String(id));
+  const isCompared = compareItems.some(
+    (item) => String(item.id) === String(id),
+  );
   const stars = Math.round(rating);
+  const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
@@ -75,19 +73,37 @@ export function ProductCard({
           </div>
         )}
 
+        {isOutOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#35281E]">
+              Udsolgt
+            </span>
+          </div>
+        )}
+
         <button
           type="button"
           aria-label={
             wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
+              ? `Fjern ${title} fra ønskeliste`
+              : `Tilføj ${title} til ønskeliste`
           }
           title={
             wished
-              ? `Remove ${title} from wishlist`
-              : `Add ${title} to wishlist`
+              ? `Fjern ${title} fra ønskeliste`
+              : `Tilføj ${title} til ønskeliste`
           }
-          onClick={() => setWished((w) => !w)}
+          onClick={() =>
+            toggleWishlist({
+              id: String(id),
+              name: title,
+              price: Number(price) || 0,
+              image,
+              slug,
+              weight,
+              dimensions,
+            })
+          }
           className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
         >
           <Heart
@@ -115,9 +131,6 @@ export function ProductCard({
           </button>
         </div>
       </div>
-
-      {/* flex-1 makes this section stretch to fill remaining height,
-          so the bottom block always lands in the same place */}
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div
           className="mb-3 flex items-center gap-1"
@@ -151,19 +164,16 @@ export function ProductCard({
             {[weight, dimensions].filter(Boolean).join(' · ')}
           </p>
         )}
-
-        {/* mt-auto pushes this whole block to the bottom of the card,
-            regardless of how much (or how little) content is above it */}
         <div className="mt-auto">
           <div className="mb-5 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#3b281f]">
-                kr {price}
+                {price}
               </span>
 
               {originalPrice && (
                 <span className="text-sm text-[#35281E] line-through">
-                  kr {originalPrice}
+                  {originalPrice}
                 </span>
               )}
             </div>
@@ -178,8 +188,7 @@ export function ProductCard({
               }
               onClick={(e) => {
                 e.stopPropagation();
-
-                toggleCompare?.({
+                toggleCompare({
                   id: String(id),
                   title,
                   image,
@@ -209,11 +218,14 @@ export function ProductCard({
 
           <button
             type="button"
-            aria-label={`Add ${title} to cart`}
-            title={`Add ${title} to cart`}
+            aria-label={
+              isOutOfStock ? `${title} is out of stock` : `Add ${title} to cart`
+            }
+            title={isOutOfStock ? 'Out of stock' : `Add ${title} to cart`}
             onClick={() => {
+              if (isOutOfStock) return;
               addToCart({
-                id: slug,
+                id: String(id),
                 name: title,
                 price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
                 image,
@@ -222,10 +234,15 @@ export function ProductCard({
                 color: '',
               });
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#E9DDD4] py-3 text-sm font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
+            disabled={isOutOfStock}
+            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition ${
+              isOutOfStock
+                ? 'cursor-not-allowed bg-gray-200 text-gray-500'
+                : 'bg-[#E9DDD4] text-[#35281E] hover:bg-[#35281E] hover:text-white'
+            }`}
           >
             <ShoppingBag aria-hidden="true" className="h-4 w-4" />
-            Add To Cart
+            {isOutOfStock ? 'Udsolgt' : 'Add To Cart'}
           </button>
         </div>
       </div>

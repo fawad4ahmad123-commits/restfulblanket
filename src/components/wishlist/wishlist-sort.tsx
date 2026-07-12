@@ -18,7 +18,7 @@ export function WishlistSort({ value, onChange }: WishlistSortProps) {
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-[180px] rounded-full border-border bg-[#fff9f5] text-sm">
-        <SelectValue placeholder="Sort by" />
+        <SelectValue placeholder="Sortér efter" />
       </SelectTrigger>
       <SelectContent>
         {sortOptions.map((option) => (

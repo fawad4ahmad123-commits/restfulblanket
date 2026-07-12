@@ -6,6 +6,48 @@ import {
   getProductBySlug,
 } from '@/src/lib/products';
 import { Loader } from '@/src/components/loader';
+import { getRankMathSEO } from '@/src/lib/seo';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const product = await getProductBySlug(slug);
+
+  const seo = await getRankMathSEO(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/product/${slug}`,
+  );
+
+  const title =
+    seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
+    product?.name ||
+    'Product | Tap Book Me';
+
+  const description =
+    seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||
+    product?.description?.replace(/<[^>]+>/g, '').slice(0, 160) ||
+    'Premium sleep products';
+
+  return {
+    title,
+    description,
+
+    openGraph: {
+      title,
+      description,
+      images: product?.images?.[0]?.src
+        ? [
+            {
+              url: product.images[0].src,
+            },
+          ]
+        : [],
+    },
+  };
+}
 
 export default async function ProductPage({
   params,

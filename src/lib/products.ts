@@ -17,7 +17,7 @@ function wcUrl(path: string, params?: Record<string, string | number>) {
       url.searchParams.set(k, String(v));
     });
   }
-
+  console.log('t43 ', { url });
   return url.toString();
 }
 
@@ -125,14 +125,40 @@ export async function getCategories() {
   return data ?? [];
 }
 
-export async function getProductBySlug(slug: string) {
-  const data = await safeJsonFetch(wcUrl('products', { slug }), {
+export async function getProductById(id: any) {
+  const data = await safeJsonFetch(wcUrl(`products/${id}`), {
     next: { revalidate: 300 },
   });
 
   if (data === null) return null;
 
-  return Array.isArray(data) ? data[0] : data;
+  return data;
+}
+
+export async function getProductBySlug(slug: string) {
+  const data = await safeJsonFetch(
+    wcUrl('products', {
+      slug,
+      status: 'publish',
+    }),
+    {
+      next: { revalidate: 300 },
+    },
+  );
+
+  if (!data) return null;
+
+  const product = Array.isArray(data) ? data[0] : data;
+
+  if (!product) return null;
+
+  if (product.type === 'variable') {
+    const variations = await getProductVariations(product.id);
+
+    product.variationData = variations;
+  }
+
+  return product;
 }
 
 export async function getProductReviews(productId: number, isHome: boolean) {
@@ -203,4 +229,31 @@ export async function getPages() {
   }
 
   return data;
+}
+
+export async function getProductVariations(productId: number) {
+  const data = await safeJsonFetch(
+    wcUrl(`products/${productId}/variations`, {
+      per_page: 100,
+    }),
+    {
+      next: { revalidate: 300 },
+    },
+  );
+
+  return data ?? [];
+}
+
+export async function getProductWithVariations(productId: number) {
+  const product = await safeJsonFetch(wcUrl(`products/${productId}`), {
+    next: { revalidate: 300 },
+  });
+
+  if (!product) return null;
+
+  if (product.type === 'variable') {
+    product.variationData = await getProductVariations(productId);
+  }
+
+  return product;
 }

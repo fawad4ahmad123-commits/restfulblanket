@@ -8,7 +8,7 @@ interface SuccessDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   heading: string;
-  description: string;
+  description: string | React.ReactNode;
   redirectUrl: string;
   buttonLabel?: string;
 }

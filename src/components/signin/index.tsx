@@ -11,10 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SignInFormValues, signInSchema } from './schema';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/src/core/context/auth-context';
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const router = useRouter();
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -24,7 +28,7 @@ export default function SignInForm() {
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
       keepLoggedIn: false,
     },
@@ -33,20 +37,30 @@ export default function SignInForm() {
   const keepLoggedIn = watch('keepLoggedIn');
 
   const onSubmit = async (values: SignInFormValues) => {
-    console.log(values);
+    setApiError(null);
+    try {
+      await login(values.username, values.password);
+      router.push('/');
+    } catch (err) {
+      setApiError(
+        err instanceof Error
+          ? err.message
+          : 'Login mislykkedes. Kontroller venligst dine loginoplysninger.',
+      );
+    }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#fff9f5] p-4">
       <div className="w-full max-w-[528px]">
         <div className="flex flex-col gap-8 rounded-[24px] border border-[#F0EBE6] bg-white px-6 py-8 shadow-sm">
           <div>
             <h1 className="text-[32px] font-bold leading-tight text-[#211711]">
-              Welcome Back
+              Velkommen tilbage
             </h1>
 
             <p className="mt-2 text-sm text-[#70655E]">
-              Sign in to continue to your account
+              Log ind for at fortsætte til din konto
             </p>
           </div>
 
@@ -55,8 +69,9 @@ export default function SignInForm() {
               type="button"
               variant="outline"
               className="h-12 w-full rounded-full border-[#E8E1DA] bg-[#FFFBF9]"
+              onClick={() => router.push('/')}
             >
-              Continue as Guest
+              Fortsæt som gæst
             </Button>
           </div>
 
@@ -66,39 +81,47 @@ export default function SignInForm() {
             </div>
 
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-sm text-[#8B817A]">or</span>
+              <span className="bg-white px-3 text-sm text-[#8B817A]">
+                eller
+              </span>
             </div>
           </div>
+
+          {apiError && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+              {apiError}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Email
+                Brugernavn eller e-mail
               </label>
 
               <Input
-                type="email"
-                placeholder="Enter your email"
+                type="text"
+                placeholder="Indtast dit brugernavn eller e-mail"
                 className="h-12 rounded-xl border-[#E8E1DA]"
-                {...register('email')}
+                {...register('username')}
               />
 
-              {errors.email && (
+              {errors.username && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors.email.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
 
             <div>
               <label className="mb-2 block text-sm font-medium text-[#211711]">
-                Password
+                Adgangskode
               </label>
 
               <div className="relative">
                 <Input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder="Indtast din adgangskode"
                   className="h-12 rounded-xl border-[#E8E1DA] pr-10"
                   {...register('password')}
                 />
@@ -123,7 +146,7 @@ export default function SignInForm() {
                   href="/forgot-password"
                   className="text-sm font-medium text-[#211711] hover:underline"
                 >
-                  Forgot Password?
+                  Glemt adgangskode?
                 </Link>
 
                 <div className="flex items-center gap-2">
@@ -135,7 +158,7 @@ export default function SignInForm() {
                   />
 
                   <label className="text-sm text-[#70655E]">
-                    Keep me logged in
+                    Forbliv logget ind
                   </label>
                 </div>
               </div>
@@ -146,14 +169,14 @@ export default function SignInForm() {
               disabled={isSubmitting}
               className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
             >
-              {isSubmitting ? 'Loading...' : 'Sign In'}
+              {isSubmitting ? 'Indlæser...' : 'Log ind'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-[#70655E]">
-            Don't have an account?{' '}
+            Har du ikke en konto?{' '}
             <Link href="/signup" className="font-semibold text-[#211711]">
-              Sign Up
+              Opret konto
             </Link>
           </p>
         </div>
@@ -164,7 +187,7 @@ export default function SignInForm() {
           className="mt-6 flex self-start items-center gap-2 text-sm font-medium text-[#35281E] transition-opacity hover:opacity-80 cursor-pointer"
         >
           <ArrowLeft size={16} />
-          Back to Shopping Cart
+          Tilbage til indkøbskurven
         </button>
       </div>
     </div>
