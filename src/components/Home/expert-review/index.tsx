@@ -1,14 +1,17 @@
 'use client';
+
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 
 const ExpertCard = ({ expert, isExpert = false }: any) => {
-  const { name, image, role, position, tags = [] } = expert;
+  const { name, image, role, position, tags = [], slug } = expert;
+
   const router = useRouter();
   const pathname = usePathname();
 
-  const profileUrl = isExpert ? '/expert-detail' : '/expert';
+  const profileUrl = isExpert ? `/Ekspertprofil/${expert.slug}` : '/expert';
+
   const isHomePage = pathname === '/';
 
   return (
@@ -19,7 +22,7 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
     >
       <div
         className="flex flex-1 cursor-pointer flex-col"
-        onClick={() => router.push('/expert-detail')}
+        onClick={() => router.push(`/Ekspertprofil/${expert.slug}`)}
       >
         <div className="relative h-[280px]">
           <Image

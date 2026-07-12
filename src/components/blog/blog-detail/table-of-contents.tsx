@@ -1,6 +1,6 @@
-import { ARTICLE_DATA } from '../constants';
+export default function TableOfContents({ headings }: any) {
+  const toc = headings?.toc ?? [];
 
-export default function TableOfContents() {
   return (
     <div className="rounded-2xl border border-[#E5DDD7] bg-white p-5">
       <h3 className="mb-4 text-sm font-semibold text-[#35281E]">
@@ -8,7 +8,7 @@ export default function TableOfContents() {
       </h3>
 
       <div className="space-y-3">
-        {ARTICLE_DATA.toc.map((item) => (
+        {toc.map((item: any) => (
           <a
             key={item.id}
             href={`#${item.id}`}

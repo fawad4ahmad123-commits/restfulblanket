@@ -101,6 +101,7 @@ export const EXPERTS = [
       'Traumeinformeret Regulering',
       'Mindfulness-baserede Tilgange',
     ],
+    slug: 'liselotte-roenne',
   },
   {
     image: '/experts/nina-schioetz-psykoterapeut-tyngdedyne-terapi.jpg',
@@ -110,6 +111,7 @@ export const EXPERTS = [
     profession: 'Psykoterapeut',
     specialization: 'Traumer, Angst og Nervesystemregulering',
     tags: ['Stress og Angst', 'Traumeterapi', 'Regulering af Nervesystemet'],
+    slug: 'nina-schiotz',
   },
   {
     image: '/experts/Tina-Jenny-Kjeldsen3.webp',
@@ -119,6 +121,7 @@ export const EXPERTS = [
     profession: 'Demenskonsulent',
     specialization: 'Demens, Kognitive Udfordringer og Sanseregulering',
     tags: ['Demensomsorg', 'Sanseregulering', 'Støtte til Pårørende'],
+    slug: 'tina-jenny-kjeldsen',
   },
   {
     image: '/experts/expertavatar.png',
@@ -135,6 +138,7 @@ export const EXPERTS = [
       'Psykiatri',
       'Kognition',
     ],
+    slug: 'betina-lassen',
   },
   {
     image: '/experts/Silke-Enar.png',
@@ -151,6 +155,7 @@ export const EXPERTS = [
       'Skolevægring',
       'Sanseregulering',
     ],
+    slug: 'silke-ena',
   },
   {
     image: '/experts/om-zafir.webp',
@@ -167,6 +172,7 @@ export const EXPERTS = [
       'Angst',
       'Nervesystemregulering',
     ],
+    slug: 'zafir-baek',
   },
 ];
 

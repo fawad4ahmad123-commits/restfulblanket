@@ -1,6 +1,6 @@
 export async function getBlogs() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts`,
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?per_page=100`,
     {
       cache: 'no-store',
     },
@@ -10,7 +10,9 @@ export async function getBlogs() {
     throw new Error('Failed to fetch blogs');
   }
 
-  return res.json();
+  const data = await res.json();
+
+  return data;
 }
 
 export async function getBlogBySlug(slug: string) {

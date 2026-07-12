@@ -2,12 +2,12 @@ import TableOfContents from './table-of-contents';
 import ShareButtons from './share-buttons';
 import FeaturedProductCard from './featured-product-card';
 
-export default function ArticleSidebar() {
+export default function ArticleSidebar({ articleData }: any) {
   return (
     <aside className="sticky top-10 space-y-4">
-      <TableOfContents />
+      <TableOfContents headings={articleData} />
       <ShareButtons />
-      <FeaturedProductCard />
+      {/* <FeaturedProductCard /> */}
     </aside>
   );
 }
