@@ -1,6 +1,14 @@
 'use client';
 
-import { Mail, Phone, Loader2, ShoppingBag, Truck, Heart, ShieldCheck } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  Loader2,
+  ShoppingBag,
+  Truck,
+  Heart,
+  ShieldCheck,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { PROFILE_USER, SLEEP_EXPERT } from '../constants/profile-data';
@@ -90,9 +98,9 @@ export function OverviewSection({
           </h2>
 
           <p className={cn('mb-6 text-sm', profileClasses.textSecondary)}>
-            Din {PROFILE_USER.duvetSize} har været hos dig i{' '}
-            {nightsOwned} nætter. Her er, hvordan du holder den blød og
-            frisk sæson efter sæson.
+            Din {PROFILE_USER.duvetSize} har været hos dig i {nightsOwned}{' '}
+            nætter. Her er, hvordan du holder den blød og frisk sæson efter
+            sæson.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -160,7 +168,10 @@ export function OverviewSection({
               className={cn(profileClasses.surfaceCard, 'p-4')}
             >
               <Icon
-                className={cn('h-4 w-4 mb-4 sm:mb-6', profileClasses.textPrimary)}
+                className={cn(
+                  'h-4 w-4 mb-4 sm:mb-6',
+                  profileClasses.textPrimary,
+                )}
               />
               <p
                 className={cn(
@@ -180,7 +191,9 @@ export function OverviewSection({
 
       {/* Latest orders + sleep expert */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className={cn(profileClasses.surfaceCard, 'p-4 sm:p-5 lg:col-span-2')}>
+        <div
+          className={cn(profileClasses.surfaceCard, 'p-4 sm:p-5 lg:col-span-2')}
+        >
           <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
             Latest <span className={profileClasses.serifItalic}>orders</span>
           </h3>

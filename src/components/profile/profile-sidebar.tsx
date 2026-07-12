@@ -171,11 +171,7 @@ export function ProfileSidebar({
   );
 }
 
-export function ProfileMobileMenuButton({
-  onOpen,
-}: {
-  onOpen: () => void;
-}) {
+export function ProfileMobileMenuButton({ onOpen }: { onOpen: () => void }) {
   return (
     <button
       type="button"

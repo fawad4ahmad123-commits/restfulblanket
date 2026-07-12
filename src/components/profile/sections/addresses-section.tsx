@@ -85,9 +85,7 @@ export function AddressesSection() {
       }
 
       setAddresses((prev) =>
-        prev.map((a) =>
-          a.id === editingAddress.id ? { ...a, ...form } : a,
-        ),
+        prev.map((a) => (a.id === editingAddress.id ? { ...a, ...form } : a)),
       );
       closeEdit();
     } catch (err: any) {
@@ -108,7 +106,9 @@ export function AddressesSection() {
             Used for billing and delivery of your orders
           </p>
         </div>
-        <Button className={cn(profileClasses.buttonDark, 'gap-1.5 w-full sm:w-auto')}>
+        <Button
+          className={cn(profileClasses.buttonDark, 'gap-1.5 w-full sm:w-auto')}
+        >
           <Plus className="h-4 w-4" />
           Add new address
         </Button>

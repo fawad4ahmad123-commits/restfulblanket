@@ -27,10 +27,11 @@ export interface WishlistProduct {
 
 interface WishlistContextType {
   wishlistItems: WishlistProduct[];
-  /** Kept for backward compatibility — list of stored IDs */
   wishlistIds: string[];
   toggleWishlist: (product: WishlistProduct) => void;
   isWishlisted: (id: string) => boolean;
+  clearWishlist: () => void;
+  saveWishlistToServer: (token: string) => Promise<any>;
 }
 
 const WishlistContext = createContext<WishlistContextType | null>(null);
@@ -40,47 +41,92 @@ const STORAGE_KEY = 'wishlist';
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const [wishlistItems, setWishlistItems] = useState<WishlistProduct[]>([]);
 
-  // Load from localStorage (handles both old ID-only format and new object format)
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          if (parsed.length === 0 || typeof parsed[0] === 'object') {
-            setWishlistItems(parsed as WishlistProduct[]);
-          } else {
-            // Old format was just IDs — can't recover full data, start fresh
-            setWishlistItems([]);
-          }
-        }
+
+      if (!saved) return;
+
+      const parsed = JSON.parse(saved);
+
+      if (!Array.isArray(parsed)) return;
+
+      if (parsed.length === 0) {
+        setWishlistItems([]);
+        return;
       }
-    } catch {
+
+      if (typeof parsed[0] === 'object') {
+        setWishlistItems(parsed);
+      }
+    } catch (error) {
+      console.error('Wishlist load error:', error);
       setWishlistItems([]);
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(wishlistItems));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(wishlistItems));
+    } catch (error) {
+      console.error('Wishlist save error:', error);
+    }
   }, [wishlistItems]);
 
   const toggleWishlist = (product: WishlistProduct) => {
     const normalizedId = String(product.id);
+
     setWishlistItems((prev) => {
-      const exists = prev.some((item) => item.id === normalizedId);
+      const exists = prev.some((item) => String(item.id) === normalizedId);
+
       if (exists) {
-        return prev.filter((item) => item.id !== normalizedId);
+        return prev.filter((item) => String(item.id) !== normalizedId);
       }
-      return [...prev, { ...product, id: normalizedId }];
+
+      return [
+        ...prev,
+        {
+          ...product,
+          id: normalizedId,
+        },
+      ];
     });
   };
 
   const isWishlisted = (id: string) => {
-    return wishlistItems.some((item) => item.id === String(id));
+    return wishlistItems.some((item) => String(item.id) === String(id));
   };
 
-  // Derived list of IDs for backward compatibility
-  const wishlistIds = wishlistItems.map((item) => item.id);
+  const clearWishlist = () => {
+    setWishlistItems([]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
+  const saveWishlistToServer = async (token: string) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/wishlist`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: wishlistItems,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message || 'Failed to save wishlist');
+    }
+
+    return data;
+  };
+
+  const wishlistIds = wishlistItems.map((item) => String(item.id));
 
   return (
     <WishlistContext.Provider
@@ -89,6 +135,8 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
         wishlistIds,
         toggleWishlist,
         isWishlisted,
+        clearWishlist,
+        saveWishlistToServer,
       }}
     >
       {children}

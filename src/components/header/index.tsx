@@ -24,21 +24,21 @@ const courgette = Courgette({
 const getInitials = (name?: string) =>
   name
     ? name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase()
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
     : '';
 
 const SiteHeader = () => {
   const pathname = usePathname();
   const isHome = pathname === '/' || pathname.startsWith('/shop');
-   const router = useRouter();
+  const router = useRouter();
   const { wishlistIds } = useWishlist();
   const wishlistCount = wishlistIds.length;
   const { user, isAuthenticated } = useAuth();
-  console.log("t56", { isHome })
+  console.log('t56', { isHome });
   const {
     items,
     upsellItems,

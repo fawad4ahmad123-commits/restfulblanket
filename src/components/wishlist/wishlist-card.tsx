@@ -41,7 +41,7 @@ const WishlistCard = ({
       onClick={() => router.push(`/product/${slug}`)}
     >
       <div className="relative overflow-hidden">
-        <div className="relative h-[340px] md:h-[420px]">
+        <div className="relative aspect-[4/5]">
           {image ? (
             <Image
               src={image}
