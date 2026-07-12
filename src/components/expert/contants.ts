@@ -136,7 +136,6 @@ export const pageData = {
   ],
 };
 
-
 export const consultationData = {
   badge: 'In her own words',
   title: {

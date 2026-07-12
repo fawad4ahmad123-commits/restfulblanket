@@ -230,19 +230,21 @@ export function formatExpertData(page: any): any {
 
 export async function getExperts(slug?: string): Promise<any | null> {
   const base = 'https://tapbookme.com/wp-json/wp/v2/pages';
+
   const url = slug
     ? `${base}?slug=${encodeURIComponent(slug)}&_embed`
     : `${base}?_embed&per_page=100`;
 
   const res = await fetch(url);
+
   if (!res.ok) return null;
+
   const pages = await res.json();
 
-//   if (slug) {
-//     const page = Array.isArray(pages) ? pages[0] : pages;
-//     return page ? formatExpertData(page) : null;
-//   }
-  console.log('t12  bb', { pages });
-  return (pages as any[]);
-//   return (pages as any[]).map(formatExpertData);
+  if (slug) {
+    const page = pages[0];
+    return page ? formatExpertData(page) : null;
+  }
+
+  return pages.map(formatExpertData);
 }

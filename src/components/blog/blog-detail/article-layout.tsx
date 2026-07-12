@@ -9,7 +9,7 @@ export default function ArticleLayout({ data }: any) {
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
       <ArticleContent articleData={articleData} />
-      <ArticleSidebar />
+      <ArticleSidebar articleData={articleData} />
     </div>
   );
 }
