@@ -105,7 +105,7 @@ export default function OrderConfirmClient() {
 
     async function getOrder() {
       try {
-        const res = await fetch(`/api/order/${orderId}?key=${orderKey}`);
+        const res = await fetch(`/api/order/${orderId}`);
 
         const data = await res.json();
 

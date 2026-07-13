@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   const key = req.nextUrl.searchParams.get('key');
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/order-status?order_id=${orderId}&key=${key}`,
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/headless/v1/order-status?order_id=${orderId}`,
     {
       headers: {
         'x-headless-secret': process.env.HEADLESS_SHARED_SECRET || '',
