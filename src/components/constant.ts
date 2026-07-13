@@ -69,28 +69,6 @@ export const navigation = [
     href: '/blog',
   },
 ];
-export const slides = [
-  {
-    image: '/home/hero-img.jpg',
-    title: 'Sleep Better.',
-    subtitle: 'Live Better.',
-    description:
-      'Hand-crafted weighted blankets and duvets, shaped by Nordic calm.',
-  },
-  {
-    image: '/home/hero-img-2.jpg',
-    title: 'Feel Calm.',
-    subtitle: 'Every Night.',
-    description:
-      'Designed to reduce stress and help you drift into deeper sleep.',
-  },
-  {
-    image: '/home/hero-img-3.jpg',
-    title: 'Wake Refreshed.',
-    subtitle: 'Every Morning.',
-    description: 'Premium bedding inspired by Scandinavian simplicity.',
-  },
-];
 
 export const shopLinks = [
   {

@@ -4,35 +4,67 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, ChevronDown, User } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { navigation } from '../constant';
+
+import { useMergedNavigation } from '@/src/hooks/use-merged-navigation';
 import { useCategories } from '@/src/core/context/category-provider';
 import { useAuth } from '@/src/core/context/auth-context';
 
 const getInitials = (name?: string) =>
   name
-    ? name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase()
-    : '';
+    ?.split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || '';
+
+const slugify = (text?: string) => {
+  if (!text) return '';
+
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'oe')
+    .replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+// SAME FLOW AS DESKTOP NAVIGATION
+const getNavigationHref = (parentTitle: string, item: any) => {
+  if (item?.href) {
+    return item.href;
+  }
+
+  return `/collections/${slugify(parentTitle)}/${slugify(
+    item?.title || item?.name,
+  )}`;
+};
 
 const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
-  const pathname = usePathname();
   const [openItem, setOpenItem] = useState<string | null>(null);
-  const { user, isAuthenticated } = useAuth();
+
+  const navigation = useMergedNavigation();
+
   const { parentCategories, getChildren } = useCategories();
+
+  const { user, isAuthenticated } = useAuth();
 
   return (
     <nav
       aria-label="Mobile navigation"
-      className="flex flex-col flex-1 h-full min-h-0"
+      className="flex h-full min-h-0 flex-1 flex-col"
     >
       <div className="flex-1">
         {navigation.map((item: any) => {
           const isOpen = openItem === item.title;
+
+          /*
+            ALL PRODUCTS
+            Same as desktop:
+            /shop/category
+          */
           if (item.href === '/shop') {
             return (
               <div
@@ -42,25 +74,20 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                 <button
                   type="button"
                   aria-expanded={isOpen}
-                  aria-controls="submenu-all-products"
                   onClick={() => setOpenItem(isOpen ? null : item.title)}
-                  className="flex w-full items-center justify-between text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
+                  className="flex w-full items-center justify-between text-base font-medium text-[#35281E]"
                 >
                   {item.title}
 
                   <ChevronDown
-                    aria-hidden="true"
-                    className={`size-4 text-[#35281E] transition-transform duration-300 ${
+                    className={`size-4 transition-transform ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div
-                    id="submenu-all-products"
-                    className="mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] pl-4 ml-1 py-1"
-                  >
+                  <div className="ml-1 mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] py-1 pl-4">
                     {parentCategories.map((category: any) => {
                       const children = getChildren(category.id);
 
@@ -70,7 +97,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                           className="flex flex-col gap-2.5"
                         >
                           <Link
-                            href={`/shop?slug=${category.slug}`}
+                            href={`/shop/${category.slug}`}
                             className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40"
                           >
                             {category.name}
@@ -79,8 +106,8 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                           {children.map((child: any) => (
                             <Link
                               key={child.id}
-                              href={`/shop?slug=${child.slug}`}
-                              className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
+                              href={`/shop/${child.slug}`}
+                              className="text-sm text-[#6F6258]"
                             >
                               {child.name}
                             </Link>
@@ -93,121 +120,112 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
               </div>
             );
           }
-          const hasGroups = item.groups?.length > 0;
-          const hasChildren = item.children?.length > 0;
+
+          const hasGroups =
+            Array.isArray(item.groups) && item.groups.length > 0;
+
+          const hasChildren =
+            Array.isArray(item.children) && item.children.length > 0;
+
           const hasDropdown = hasGroups || hasChildren;
+
           if (!hasDropdown) {
             return (
               <Link
                 key={item.title}
                 href={item.href}
-                aria-label={`Go to ${item.title}`}
-                title={item.title}
-                className="flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
+                className="flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium text-[#35281E]"
               >
                 {item.title}
               </Link>
             );
           }
+
           return (
             <div key={item.title} className="border-b border-[#E9DDD4]/60 py-4">
               <button
                 type="button"
-                aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${item.title} menu`}
                 aria-expanded={isOpen}
-                aria-controls={`submenu-${item.title}`}
                 onClick={() => setOpenItem(isOpen ? null : item.title)}
-                className="flex w-full items-center justify-between text-base font-medium transition-colors text-[#35281E] hover:text-[#35281E]/70"
+                className="flex w-full items-center justify-between text-base font-medium text-[#35281E]"
               >
                 {item.title}
 
                 <ChevronDown
-                  aria-hidden="true"
-                  className={`size-4 text-[#35281E] transition-transform duration-300 ${
+                  className={`size-4 transition-transform ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                 />
               </button>
-              {isOpen && (
-                <div
-                  id={`submenu-${item.title}`}
-                  className="mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] pl-4 ml-1 py-1"
-                >
-                  {hasGroups
-                    ? item.groups.map((group: any) => (
-                        <div
-                          key={group.heading}
-                          className="flex flex-col gap-2.5"
-                        >
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40">
-                            {group.heading}
-                          </span>
 
-                          {group.links.map((link: any) => (
-                            <Link
-                              key={link.title}
-                              href={link.href}
-                              aria-label={`Go to ${link.title}`}
-                              title={link.title}
-                              className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
-                            >
-                              {link.title}
-                            </Link>
-                          ))}
-                        </div>
-                      ))
-                    : item.children.map((child: any) => (
-                        <Link
-                          key={child.title}
-                          href={child.href}
-                          aria-label={`Go to ${child.title}`}
-                          title={child.title}
-                          className="text-sm font-normal text-[#6F6258] hover:text-[#35281E]"
-                        >
-                          {child.title}
-                        </Link>
-                      ))}
+              {isOpen && (
+                <div className="ml-1 mt-3 flex flex-col gap-3 border-l border-[#E9DDD4] py-1 pl-4">
+                  {hasGroups &&
+                    item.groups.map((group: any) => (
+                      <div
+                        key={group.heading}
+                        className="flex flex-col gap-2.5"
+                      >
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#35281E]/40">
+                          {group.heading}
+                        </span>
+
+                        {group.links.map((link: any) => (
+                          <Link
+                            key={link.title}
+                            href={getNavigationHref(item.title, link)}
+                            className="text-sm text-[#6F6258]"
+                          >
+                            {link.title}
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+
+                  {!hasGroups &&
+                    item.children?.map((child: any) => (
+                      <Link
+                        key={child.title}
+                        href={getNavigationHref(item.title, child)}
+                        className="text-sm text-[#6F6258]"
+                      >
+                        {child.title}
+                      </Link>
+                    ))}
                 </div>
               )}
             </div>
           );
         })}
       </div>
-      <div className="mt-auto pt-6 shrink-0">
+
+      <div className="mt-auto shrink-0 pt-6">
         {isAuthenticated ? (
           <Link
             href="/profile"
-            aria-label={`${user?.name} profile`}
-            title="My profile"
-            className="flex items-center gap-3 rounded-full border border-[#E9DDD4] bg-white px-4 py-2.5 mb-3 transition-colors hover:bg-[#35281E]/5"
+            className="mb-3 flex items-center gap-3 rounded-full border border-[#E9DDD4] bg-white px-4 py-2.5"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#35281E] text-xs font-semibold text-white shrink-0">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#35281E] text-xs font-semibold text-white">
               {getInitials(user?.name)}
             </span>
-            <span className="flex flex-col leading-tight">
-              <span className="text-sm font-medium text-[#35281E]">
-                {user?.name}
-              </span>
-              <span className="text-xs text-[#6F6258]">Restful Member</span>
-            </span>
+
+            <span className="text-sm text-[#35281E]">{user?.name}</span>
           </Link>
         ) : (
-          <Link href="/signin" className="w-full block mb-3">
+          <Link href="/signin" className="mb-3 block">
             <Button
               variant="ghost"
-              aria-label="Sign in or manage account"
-              title="My account"
-              className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer"
+              className="h-12 w-full rounded-full border border-[#E9DDD4] text-[#35281E]"
             >
-              <User aria-hidden="true" className="size-4" />
+              <User className="size-4" />
               Sign In
             </Button>
           </Link>
         )}
 
-        <Link href="/wishlist" className="w-full block">
-          <Button className="w-full h-12 rounded-full border border-[#E9DDD4] bg-white text-[#35281E] hover:bg-[#35281E] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-none cursor-pointer">
-            <Heart aria-hidden="true" className="size-4" />
+        <Link href="/wishlist">
+          <Button className="h-12 w-full rounded-full border border-[#E9DDD4] bg-white text-[#35281E]">
+            <Heart className="size-4" />
             Wishlist {wishlistCount}
           </Button>
         </Link>

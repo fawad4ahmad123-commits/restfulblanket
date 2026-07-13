@@ -27,7 +27,12 @@ export default function Shop({
 
     setFilters((prev) => ({
       ...prev,
-      categories: [...new Set([...prev.categories, ...categorySlug])],
+      categories: [
+        ...new Set([
+          ...prev.categories,
+          ...categorySlug.map((item) => item.replaceAll('-', ' ')),
+        ]),
+      ],
     }));
   }, [categorySlug]);
 
