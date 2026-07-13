@@ -110,9 +110,9 @@ export default function OrderConfirmClient() {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${Buffer.from(
-              process.env.WC_CONSUMER_KEY +
-              ':' +
-              process.env.WC_CONSUMER_SECRET,
+              process.env.NEXT_PUBLIC_WC_CONSUMER_KEY +
+                ':' +
+                process.env.NEXT_PUBLIC_WC_CONSUMER_SECRET,
             ).toString('base64')}`,
           },
         });
