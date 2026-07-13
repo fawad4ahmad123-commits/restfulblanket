@@ -14,7 +14,7 @@ const Article = ({ blog }: any) => {
   const router = useRouter();
 
   return (
-    <main className="bg-[#F5F1EE]">
+    <main className="bg-[#fff9f5]">
       <div className="container mx-auto max-w-7xl px-6 py-12">
         {article?.hero && <ArticleHero data={article.hero} />}
 

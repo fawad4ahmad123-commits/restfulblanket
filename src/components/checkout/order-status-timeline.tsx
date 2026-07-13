@@ -6,12 +6,11 @@ interface OrderStatusTimelineProps {
 }
 
 const STEPS: { key: OrderStatus; label: string }[] = [
-  { key: 'placed', label: 'Order Placed' },
-  { key: 'processing', label: 'Processing' },
-  { key: 'shipped', label: 'Shipped' },
-  { key: 'delivered', label: 'Delivered' },
+  { key: 'placed', label: 'Ordre modtaget' },
+  { key: 'processing', label: 'Behandles' },
+  { key: 'shipped', label: 'Sendt' },
+  { key: 'delivered', label: 'Leveret' },
 ];
-
 export default function OrderStatusTimeline({
   order,
 }: OrderStatusTimelineProps) {
@@ -19,7 +18,7 @@ export default function OrderStatusTimeline({
 
   return (
     <div className="bg-white rounded-2xl border border-[#EEE3D6] p-8">
-      <h3 className="mb-8 font-serif text-lg text-[#2B2118]">Order Status</h3>
+      <h3 className="mb-8 font-serif text-lg text-[#2B2118]">Ordre Status</h3>
 
       <div className="flex items-start">
         {STEPS.map((step, index) => {

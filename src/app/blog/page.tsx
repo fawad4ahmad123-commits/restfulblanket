@@ -29,7 +29,7 @@ export default async function BlogPage() {
   const response = formatBlogs(blog);
 
   return (
-    <main className="min-h-screen bg-[#F7F3EF]">
+    <main className="min-h-screen bg-[#fff9f5]">
       <Blog blogs={response} />
     </main>
   );

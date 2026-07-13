@@ -19,14 +19,15 @@ const HeroSection = () => {
   }, [currentSlide]);
 
   return (
-    <section className="relative min-h-auto">
+    <section className="relative min-h-auto bg-gradient-to-r from-[#261D18] via-[#675B4E] to-[#261D18]/60">
+      {' '}
       <Image
         src={HERO_SLIDES[currentSlide].image}
         alt={HERO_SLIDES[currentSlide].title}
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[center_10%] md:object-[center_15%] pt-26"
+        className="object-cover object-[center_20%] md:object-[center_15%] pt-[9rem] md:pt-26 "
       />
       <div className="absolute inset-0 bg-[#2C2828]/50" />
       <div className="relative z-10 mx-auto flex min-h-auto w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">

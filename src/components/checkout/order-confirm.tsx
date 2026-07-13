@@ -18,70 +18,106 @@ import type { Order } from '@/src/types/order';
 
 import { useCart } from '@/src/core/context/card-Provider';
 
+function formatDate(date?: string) {
+  if (!date) return '';
+
+  return new Intl.DateTimeFormat('da-DK', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(new Date(date));
+}
+
 function mapApiOrderToOrder(data: any): Order {
+  const cardBrand =
+    data.meta_data?.find((m: any) => m.key === '_card_brand')?.value ?? '';
+
+  const last4 =
+    data.meta_data?.find((m: any) => m.key === 'last4')?.value ?? '';
+
+  const shippingTitle =
+    data.shipping_lines?.[0]?.method_title ?? 'Ingen levering valgt';
+
   return {
     id: data.id,
 
-    orderNumber: data.orderNumber ?? `#${data.id}`,
+    orderNumber: `#${data.number ?? data.id}`,
 
-    customerFirstName:
-      data.customerFirstName ?? data.customer?.firstName ?? 'there',
+    customerFirstName: data.billing?.first_name ?? 'kunde',
 
-    confirmationEmail: data.email ?? data.customer?.email ?? '',
+    confirmationEmail: data.billing?.email ?? '',
 
-    orderDate: data.orderDate ?? '',
+    orderDate: formatDate(data.date_created),
 
-    estimatedDeliveryRange: data.estimatedDeliveryRange ?? '',
+    estimatedDeliveryRange:
+      data.shipping_lines?.[0]?.method_title
+        ?.replace('Free shipping - ', '')
+        ?.replace('Estimated arrival: ', '') ?? '',
 
-    status: data.status ?? 'placed',
+    status:
+      data.status === 'processing'
+        ? 'processing'
+        : data.status === 'completed'
+          ? 'delivered'
+          : 'placed',
 
     statusDates: {
-      placed: data.statusDates?.placed ?? data.orderDate ?? '',
+      placed: formatDate(data.date_created),
 
-      processing: data.statusDates?.processing ?? '',
+      processing:
+        data.status === 'processing' ? formatDate(data.date_modified) : '',
 
-      shipped: data.statusDates?.shipped ?? '',
+      shipped: '',
 
-      delivered: data.statusDates?.delivered ?? '',
+      delivered:
+        data.status === 'completed' ? formatDate(data.date_completed) : '',
     },
 
-    items: (data.items ?? []).map((item: any) => ({
+    items: (data.line_items ?? []).map((item: any) => ({
       id: item.id,
+
       name: item.name,
-      variant: item.variant ?? '',
-      price: Number(item.price ?? 0),
+
+      variant: item.global_unique_id ? `Variant: ${item.global_unique_id}` : '',
+
+      price: Number(item.price ?? item.total ?? 0),
+
       quantity: item.quantity ?? 1,
-      imageUrl: item.imageUrl ?? item.image ?? '',
+
+      imageUrl: item.image?.src ?? '',
     })),
 
     totals: {
-      subtotal: Number(data.totals?.subtotal ?? 0),
-      shipping: Number(data.totals?.shipping ?? 0),
-      tax: Number(data.totals?.tax ?? 0),
-      totalPaid: Number(data.totals?.totalPaid ?? data.total ?? 0),
-      currency: data.currency ?? 'USD',
+      subtotal: Number(data.total - data.shipping_total),
+
+      shipping: Number(data.shipping_total ?? 0),
+
+      tax: Number(data.total_tax ?? 0),
+
+      totalPaid: Number(data.total ?? 0),
+
+      currency: data.currency ?? 'DKK',
     },
 
     shippingAddress: {
-      name: data.shippingAddress?.name ?? '',
+      name: `${data.shipping?.first_name ?? ''} ${data.shipping?.last_name ?? ''}`,
 
-      city: data.shippingAddress?.city ?? '',
+      city: data.shipping?.city ?? '',
 
-      region: data.shippingAddress?.region ?? '',
+      region: data.shipping?.state ?? '',
 
-      country: data.shippingAddress?.country ?? '',
+      country: data.shipping?.country ?? '',
     },
 
-    shippingMethod: data.shippingMethod ?? '',
+    shippingMethod: shippingTitle,
 
     payment: {
-      cardBrandLabel: data.payment?.cardBrandLabel ?? '',
+      cardBrandLabel: cardBrand,
 
-      last4: data.payment?.last4 ?? '0000',
+      last4: last4,
     },
   };
 }
-
 export default function OrderConfirmClient() {
   const params = useSearchParams();
 
@@ -154,7 +190,7 @@ export default function OrderConfirmClient() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FAF3EC] px-4 py-12">
+    <div className="min-h-screen bg-[#fff9f5] px-4 py-12">
       <div className="mx-auto max-w-3xl">
         <h1 className="mb-8 text-center font-serif text-3xl text-[#2B2118]">
           Order Confirmed

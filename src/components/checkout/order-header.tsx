@@ -13,19 +13,20 @@ export default function OrderHeader({ order }: OrderHeaderProps) {
       </div>
 
       <h2 className="font-serif text-xl text-[#2B2118]">
-        Thank you, {order.customerFirstName}
+        Tak for din ordre, {order.customerFirstName}
       </h2>
 
       <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#8A7F73]">
-        Your order has been placed successfully. We&apos;ve sent a confirmation
-        to {order.confirmationEmail} and we&apos;ll notify you as it ships.
+        Din ordre er blevet gennemført. Vi har sendt en bekræftelse til{' '}
+        {order.confirmationEmail}, og vi giver dig besked, når din ordre bliver
+        sendt.
       </p>
 
       <div className="mt-6 grid grid-cols-3 divide-x divide-[#E5D9C8] rounded-xl bg-[#F6EEE2] py-4">
-        <MetaField label="Order Number" value={order.orderNumber} />
-        <MetaField label="Order Date" value={order.orderDate} />
+        <MetaField label="Ordrenummer" value={order.orderNumber} />
+        <MetaField label="Ordredato" value={order.orderDate} />
         <MetaField
-          label="Estimated Delivery"
+          label="Forventet levering"
           value={order.estimatedDeliveryRange}
         />
       </div>
