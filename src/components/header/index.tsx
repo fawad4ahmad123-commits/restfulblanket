@@ -67,8 +67,8 @@ const SiteHeader = () => {
           className={cn(
             'relative z-[100] border-b backdrop-blur-md',
             isHome
-              ? 'border-white/10 bg-black/20'
-              : 'border-[#392A22]/10 bg-[#FFF9F5]',
+              ? 'border-white/10 bg-gradient-to-r from-[#261D18] via-[#675B4E] to-[#261D18]/60'
+              : 'border-[#f6eee7] bg-[#fdf9f6]',
           )}
         >
           <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-4 lg:px-6">

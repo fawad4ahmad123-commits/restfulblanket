@@ -28,12 +28,13 @@ const MobileStickyCart = ({
   product,
   onAddToCart,
 }: MobileStickyCartProps) => {
-  const [showInfo, setShowInfo] = useState(true);
+  // Accordion closed initially
+  const [showInfo, setShowInfo] = useState(false);
 
   return (
     <div
       className={cn(
-        'fixed bottom-4 left-4 right-4 z-50 lg:hidden transition-all duration-300 bg-[#fdf9f6] rounded-[20px]',
+        'fixed bottom-4 left-4 right-4 z-50 lg:hidden transition-all duration-300 bg-[#fdf9f6]/60 rounded-[20px]',
         visible
           ? 'translate-y-0 opacity-100'
           : 'pointer-events-none translate-y-20 opacity-0',
@@ -53,6 +54,7 @@ const MobileStickyCart = ({
               <ChevronDown className="h-5 w-5" />
             )}
           </button>
+
           {showInfo && (
             <div className="grid grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-[#E8DDD4] px-2 py-3 text-center">
@@ -83,7 +85,7 @@ const MobileStickyCart = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative h-6 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
             {product.image && (
               <Image
                 src={product.image}
@@ -98,6 +100,7 @@ const MobileStickyCart = ({
             <h3 className="truncate font-serif text-2xl text-[#35281E]">
               {product.name}
             </h3>
+
             <p className="text-xl text-[#6F6258]">
               {product.currency}
               {product.price}

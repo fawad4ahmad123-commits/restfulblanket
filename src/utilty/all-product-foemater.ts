@@ -1,5 +1,5 @@
-export function formatProducts(products: any[]) {
-  return products
+export function formatProducts(products: any[] | null | undefined) {
+  return (products ?? [])
     .filter(
       (product) =>
         product.status === 'publish' &&

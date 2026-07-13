@@ -9,15 +9,18 @@ import {
 
 export default function PaymentTrustBadge() {
   return (
-    <div className="flex w-full flex-wrap items-center justify-start gap-4 py-5">
-      <div className="flex flex-wrap items-center gap-3 pr-2">
+    <div className="flex w-full flex-wrap items-center gap-3 py-5">
+      <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
         <VisaIcon />
         <MastercardIcon />
         <QuickPayIcon />
         <ApplePayIcon />
         <VabillIcon />
       </div>
-      <TrustpilotBadge />
+
+      <div className="basis-full sm:basis-auto">
+        <TrustpilotBadge />
+      </div>
     </div>
   );
 }

@@ -99,7 +99,12 @@ const BestSellers = ({
         : prev - 1,
     );
   };
-
+  console.log('t123 selleer0 ', {
+    productData,
+    baseProducts,
+    bestsellerProducts,
+    filteredProducts,
+  });
   return (
     <section
       className={isProduct ? 'py-16' : 'bg-[#FAF4EE] py-16'}
@@ -153,22 +158,23 @@ const BestSellers = ({
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
               const hoverImage = item.images?.[1]?.src || mainImage;
+              const attributeLinks = item.attribute_links || [];
 
-              const colorAttribute = item.attributes?.find(
-                (attr: any) =>
-                  attr.slug === 'pa_color' ||
-                  attr.name?.toLowerCase() === 'color',
-              );
+              const colorOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'color')
+                .map((attr: any) => attr.value);
 
-              const sizeAttribute = item.attributes?.find(
-                (attr: any) =>
-                  attr.slug === 'pa_stoerrelse' ||
-                  attr.name?.toLowerCase().includes('size'),
-              );
+              const sizeOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'size')
+                .map((attr: any) => attr.value);
 
-              const color = colorAttribute?.options?.[0] || '';
-              const size = sizeAttribute?.options?.[0] || '';
+              const weightOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'weight')
+                .map((attr: any) => attr.value);
 
+              const color = colorOptions[0] || '';
+              const size = sizeOptions[0] || '';
+              const weight = weightOptions[0] || '';
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
                   ?.value || '';
@@ -188,11 +194,18 @@ const BestSellers = ({
                     originalPrice={item.regular_price}
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
+                    dimensions={item.dimensions || ''}
                     badge={badge}
                     color={color}
                     size={size}
-                    type="product"
+                    weight={weight}
+                    stockStatus={item.stock_status}
+                    stockQuantity={item.stock_quantity}
                     isProduct={isProduct}
+                    type="product"
+                    // availableColors={colorOptions}
+                    // availableSizes={sizeOptions}
+                    // availableWeights={weightOptions}
                   />
                 </div>
               );
@@ -209,6 +222,19 @@ const BestSellers = ({
             {filteredProducts.map((item: any) => {
               const mainImage = item.images?.[0]?.src || PLACEHOLDER_IMAGE;
               const hoverImage = item.images?.[1]?.src || mainImage;
+              const attributeLinks = item.attribute_links || [];
+
+              const colorOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'color')
+                .map((attr: any) => attr.value);
+
+              const sizeOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'size')
+                .map((attr: any) => attr.value);
+
+              const weightOptions = attributeLinks
+                .filter((attr: any) => attr.name === 'weight')
+                .map((attr: any) => attr.value);
 
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
@@ -227,10 +253,16 @@ const BestSellers = ({
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
                     badge={badge}
-                    color=""
-                    size=""
-                    type="product"
+                    stockStatus={item.stock_status}
+                    stockQuantity={item.stock_quantity}
+                    color={colorOptions[0] || ''}
+                    size={sizeOptions[0] || ''}
+                    weight={weightOptions[0] || ''}
                     isProduct={isProduct}
+                    type="product"
+                    // availableColors={colorOptions}
+                    // availableSizes={sizeOptions}
+                    // availableWeights={weightOptions}
                   />
                 </div>
               );

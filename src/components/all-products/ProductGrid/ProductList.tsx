@@ -34,6 +34,9 @@ export default function ProductList({ products }: Props) {
             isNew: product.isNewArrival,
             stockQuantity: product.stockQuantity,
             stockStatus: product.stockStatus,
+            // availableColors: product.colors,
+            // availableSizes: product.sizes,
+            // availableWeights: product.weights,
           }}
         />
       ))}

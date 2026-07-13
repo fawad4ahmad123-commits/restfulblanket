@@ -161,13 +161,13 @@ export const socialLinks = [
 
 export const HERO_SLIDES = [
   {
-    image: '/home/heroimage22.jpg',
+    image: '/home/imagehero1.webp',
     title: 'Tyngdedyner',
     description:
       'RestfulBlanket designer og producere tyngdedyner i naturlig OEKO-TEX bomuld i Odsherred, Danmark.',
   },
   {
-    image: '/home/hero-img.jpg',
+    image: '/home/hero-img.webp',
     title: 'Naturlig Tyngdetæpper',
     description:
       'RestfulBlanket designer og producerer Tyngdetæpper i naturlig OEKO-TEX bomuld i Odsherred, Danmark.',

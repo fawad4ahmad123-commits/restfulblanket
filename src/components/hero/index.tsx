@@ -26,22 +26,17 @@ const HeroSection = () => {
         fill
         priority
         sizes="100vw"
-        className="object-cover"
-        style={{
-          objectPosition: 'center 15%',
-        }}
+        className="object-cover object-[center_10%] md:object-[center_15%] pt-26"
       />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30" />
-
+      <div className="absolute inset-0 bg-[#2C2828]/50" />
       <div className="relative z-10 mx-auto flex min-h-auto w-full max-w-[1400px] flex-col justify-between px-5 pb-8 pt-[140px] sm:min-h-screen sm:pt-[160px] md:px-6 md:pb-10 md:pt-[220px]">
         <div className="flex flex-1 items-center md:items-start">
-          <div className="max-w-[720px] pt-[150px] text-[#fff9f5] sm:pt-0">
-            <h1 className="font-serif text-[44px] leading-[0.95] tracking-[-0.02em] md:text-[60px] lg:text-[72px]">
+          <div className="max-w-[720px] pt-[150px] text-white sm:pt-0">
+            <h1 className="font-serif text-[44px] leading-[0.95] tracking-[-0.02em] text-white md:text-[60px] lg:text-[72px]">
               {HERO_SLIDES[currentSlide].title}
             </h1>
 
-            <p className="mt-5 max-w-[460px] text-xs leading-6 text-[#fff9f5]/80 md:mt-8 md:text-sm md:leading-7">
+            <p className="mt-5 max-w-[460px] text-md leading-6 text-white md:mt-8 md:text-sm md:leading-7">
               {HERO_SLIDES[currentSlide].description}
             </p>
 

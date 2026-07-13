@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Heart, ShoppingBag, Eye, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Check } from 'lucide-react';
 import { useCart } from '@/src/core/context/card-Provider';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { useCompare } from '@/src/core/context/compare-provider';
@@ -18,12 +18,16 @@ interface Product {
   rating?: number;
   reviewCount?: number;
   weight?: string;
+  color?: string;
+  size?: string;
   dimensions?: string;
   isNew?: boolean;
   stockQuantity?: number | null;
   stockStatus?: string;
+  // availableColors?: string[];
+  // availableSizes?: string[];
+  // availableWeights?: string[];
 }
-
 interface ProductCardProps {
   product: Product;
 }
@@ -47,6 +51,11 @@ export function ProductCard({ product }: ProductCardProps) {
     isNew,
     stockQuantity = null,
     stockStatus = 'outofstock',
+    color,
+    size,
+    // availableColors = [],
+    // availableSizes = [],
+    // availableWeights = [],
   } = product;
   const wished = isWishlisted(String(id));
   const isCompared = compareItems.some(
@@ -54,6 +63,61 @@ export function ProductCard({ product }: ProductCardProps) {
   );
   const stars = Math.round(rating);
   const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
+  // const [showConfig, setShowConfig] = useState(false);
+  // const [selectedColor, setSelectedColor] = useState(color || '');
+  // const [selectedSize, setSelectedSize] = useState(size || '');
+  // const [selectedWeight, setSelectedWeight] = useState(weight || '');
+  // const hasOptions =
+  //   availableColors.length > 0 ||
+  //   availableSizes.length > 0 ||
+  //   availableWeights.length > 0;
+
+  // const confirmAddToCart = () => {
+  //   addToCart({
+  //     id: String(id),
+  //     name: title,
+  //     color: selectedColor,
+  //     variant: selectedSize,
+  //     weight: selectedWeight,
+  //     price: Number(price) || 0,
+  //     image,
+  //   });
+  //   setShowConfig(false);
+  // };
+
+  // const handleAddToCartClick = (e: React.MouseEvent) => {
+  //   e.stopPropagation();
+  //   if (isOutOfStock) return;
+  //   if (hasOptions) {
+  //     setShowConfig(true);
+  //     return;
+  //   }
+  //   addToCart({
+  //     id: String(id),
+  //     name: title,
+  //     color: color || '',
+  //     variant: size || '',
+  //     weight: weight || '',
+  //     price: Number(price) || 0,
+  //     image,
+  //   });
+  // };
+
+  const handleAddToCartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (isOutOfStock) return;
+
+    addToCart({
+      id: String(id),
+      name: title,
+      color: color || '',
+      variant: size || '',
+      weight: weight || '',
+      price: Number(price) || 0,
+      image,
+    });
+  };
 
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300">
@@ -66,7 +130,21 @@ export function ProductCard({ product }: ProductCardProps) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-
+        {/* {showConfig && (
+          <ProductConfigOverlay
+            availableColors={availableColors}
+            availableSizes={availableSizes}
+            availableWeights={availableWeights}
+            selectedColor={selectedColor}
+            selectedSize={selectedSize}
+            selectedWeight={selectedWeight}
+            setSelectedColor={setSelectedColor}
+            setSelectedSize={setSelectedSize}
+            setSelectedWeight={setSelectedWeight}
+            onClose={() => setShowConfig(false)}
+            onAddToCart={confirmAddToCart}
+          />
+        )} */}
         {isNew && (
           <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
             New
@@ -114,22 +192,6 @@ export function ProductCard({ product }: ProductCardProps) {
             }
           />
         </button>
-
-        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
-          <button
-            type="button"
-            aria-label={`Quick view ${title}`}
-            title={`Quick view ${title}`}
-            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/product/${slug}`);
-            }}
-          >
-            <Eye aria-hidden="true" size={14} />
-            Quick View
-          </button>
-        </div>
       </div>
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div
@@ -222,18 +284,7 @@ export function ProductCard({ product }: ProductCardProps) {
               isOutOfStock ? `${title} is out of stock` : `Add ${title} to cart`
             }
             title={isOutOfStock ? 'Out of stock' : `Add ${title} to cart`}
-            onClick={() => {
-              if (isOutOfStock) return;
-              addToCart({
-                id: String(id),
-                name: title,
-                price: Number(price.replace(/[^\d.,]/g, '').replace(',', '.')),
-                image,
-                variant: weight || '',
-                weight: weight || '',
-                color: '',
-              });
-            }}
+            onClick={handleAddToCartClick}
             disabled={isOutOfStock}
             className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition ${
               isOutOfStock

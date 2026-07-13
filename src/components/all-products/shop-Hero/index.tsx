@@ -16,7 +16,7 @@ const ShopHero = ({ onSearch }: any) => {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-[center_10%] md:object-[center_20%] "
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 flex h-full items-center justify-center pt-[180px]">
