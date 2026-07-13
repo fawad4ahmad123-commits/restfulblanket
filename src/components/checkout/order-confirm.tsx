@@ -105,7 +105,17 @@ export default function OrderConfirmClient() {
 
     async function getOrder() {
       try {
-        const res = await fetch(`/api/order/${orderId}`);
+        const url = `https://tapbookme.com/wp-json/wc/v3/orders/${orderId}`;
+        const res = await fetch(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${Buffer.from(
+              process.env.WC_CONSUMER_KEY +
+              ':' +
+              process.env.WC_CONSUMER_SECRET,
+            ).toString('base64')}`,
+          },
+        });
 
         const data = await res.json();
 
