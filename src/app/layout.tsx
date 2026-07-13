@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   title: 'RestfulBlanket',
   description:
     'Hand-crafted weighted blankets and duvets designed for deeper sleep and relaxation.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default async function RootLayout({

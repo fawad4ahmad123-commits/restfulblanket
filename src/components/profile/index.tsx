@@ -58,7 +58,7 @@ function mapWooOrderToProfileOrder(wooOrder: any): Order {
   const currency =
     currencySymbols[wooOrder.currency?.toUpperCase()] ||
     wooOrder.currency ||
-    '€';
+    'kr. ';
 
   return {
     id: String(wooOrder.id),
@@ -129,7 +129,6 @@ export default function Profile() {
   return (
     <div className={profileClasses.page}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-10 flex flex-col md:flex-row gap-6 md:gap-10">
-        {/* Mobile top bar: current section label + hamburger toggle */}
         <div className="flex md:hidden items-center justify-between">
           <h1 className={profileClasses.textPrimary + ' text-xl font-medium'}>
             {SECTION_LABELS[activeSection]}

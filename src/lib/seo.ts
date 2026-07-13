@@ -10,10 +10,15 @@ export async function getRankMathSEO(url: string) {
     );
 
     if (!response.ok) {
+      console.log('RankMath SEO fetch failed:', response.status, url);
       return null;
     }
 
     const data = await response.json();
+
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('RankMath head for', url, '→', data?.head);
+    }
 
     return data;
   } catch (error) {

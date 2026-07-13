@@ -12,7 +12,7 @@ const AuthLayout = () => {
   return (
     <>
       <h3
-        className={`${courgette.className} bg-[#FFF9F5] pt-3 text-center text-2xl leading-8 text-[#35281E]`}
+        className={`${courgette.className} bg-[#FFF9F5] pt-3 text-center text-2xl leading-8 text-[#35281E] cursor-pointer`}
         onClick={() => router.push('/')}
       >
         RestfulBlanket

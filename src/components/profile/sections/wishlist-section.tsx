@@ -10,21 +10,30 @@ import WishlistCard from '@/src/components/wishlist/wishlist-card';
 import Link from 'next/link';
 
 export function WishlistSection() {
-  const { wishlistItems } = useWishlist();
+  const { wishlistItems, clearWishlist } = useWishlist();
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 6;
 
-  // Only treat the wishlist as "available" when the user actually has an
-  // auth_token. NOTE: the fetch itself happens inside useWishlist's provider —
-  // if that provider fetches unconditionally on mount, add the same
-  // `localStorage.getItem('auth_token')` check there before calling the API,
-  // e.g.:
-  //   useEffect(() => {
-  //     const token = localStorage.getItem('auth_token');
-  //     if (!token) return; // don't call the wishlist API when logged out
-  //     fetchWishlist();
-  //   }, []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleRemoveWishlist = async (productId: string | number) => {
+    try {
+      const token = localStorage.getItem('auth_token');
+
+      if (token) {
+        await fetch(`/api/wishlist/${productId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
+      clearWishlist();
+    } catch (error) {
+      console.error('Failed to remove wishlist item', error);
+    }
+  };
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem('auth_token'));
@@ -112,6 +121,7 @@ export function WishlistSection() {
                 color={item.color}
                 size={item.size}
                 badge={item.badge}
+                onRemove={() => handleRemoveWishlist(item.id)}
               />
             ))}
           </div>
