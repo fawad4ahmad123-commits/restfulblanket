@@ -143,3 +143,28 @@ export const COMMENTS = [
       'I was skeptical until I actually used one for two weeks straight — genuinely sleep deeper now.',
   },
 ];
+
+export const BLOG_CATEGORIES = [
+  {
+    name: 'Hvad er en tyngdedyne?',
+    url: '/blog-detail/hvad-er-en-tyngdedyne-forbedre-din-sovn/',
+  },
+  {
+    name: 'Tyngdedyner – valg og typer',
+    url: '/collections/sovevaerelse/tyngdedyner/',
+  },
+  {
+    name: 'Tyngdedyne til børn',
+    url: '/collections/sovevaerelse/tyngdedyner/boern/',
+  },
+  {
+    name: 'Tyngdedyne til voksne',
+    url: '/collections/sovevaerelse/tyngdedyner/voksne/',
+  },
+  { name: 'Tyngdedyne og ADHD', url: '/blog-detail/adhd/' },
+  { name: 'Tyngdedyne mod angst', url: '/blog-detail/angst/' },
+  {
+    name: 'Kugledyne eller tyngdedyne?',
+    url: 'blog-detail/kugledyne-eller-tyngdedyne/',
+  },
+];

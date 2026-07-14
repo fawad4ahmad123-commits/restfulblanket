@@ -1,4 +1,5 @@
 export const formatBlogs = (blogs: any[]) => {
+  console.log('t76 ', { blogs });
   return blogs.map((blog, index) => ({
     id: blog.id,
     slug: blog.slug,

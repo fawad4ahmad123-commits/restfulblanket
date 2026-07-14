@@ -7,6 +7,7 @@ import { useCart } from '@/src/core/context/card-Provider';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { useCompare } from '@/src/core/context/compare-provider';
 import { cn } from '@/lib/utils';
+import { parsePrice } from '@/src/utilty/use-parse-price';
 
 interface Product {
   id: string | number;
@@ -107,14 +108,13 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
 
     if (isOutOfStock) return;
-
     addToCart({
       id: String(id),
       name: title,
       color: color || '',
       variant: size || '',
       weight: weight || '',
-      price: Number(price) || 0,
+      price: parsePrice(price),
       image,
     });
   };

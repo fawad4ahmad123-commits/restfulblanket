@@ -137,7 +137,7 @@ export default function CartLineItem({
 
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs md:text-sm font-medium">
-            {item.price.toLocaleString('da-DK')} kr.
+            {(Number(item.price) || 0).toLocaleString('da-DK')} kr.
           </span>
 
           <div className="flex items-center gap-2 border border-stone-300 rounded-full px-2 py-1">

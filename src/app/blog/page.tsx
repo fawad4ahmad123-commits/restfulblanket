@@ -26,6 +26,8 @@ export async function generateMetadata() {
 
 export default async function BlogPage() {
   const blog = await getBlogs();
+  console.log('t76 aaaaaaa ', { blog });
+
   const response = formatBlogs(blog);
 
   return (

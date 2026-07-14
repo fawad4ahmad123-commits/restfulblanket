@@ -6,32 +6,51 @@ import { BlogFilters } from './blog-filters';
 import { FeaturedArticle } from './featured-article';
 import BlogCard from '../Home/blog';
 import { Pagination } from '../all-products/Pagination';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 const Blog = ({ blogs }: any) => {
   const isSlider = false;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const postsPerPage = 8;
 
-  const totalPages = Math.ceil((blogs?.length || 0) / postsPerPage);
+  const filteredBlogs =
+    blogs?.filter((blog: any) =>
+      blog?.title?.toLowerCase().includes(searchTerm.toLowerCase()),
+    ) || [];
+
+  const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
 
   const startIndex = (currentPage - 1) * postsPerPage;
 
-  const currentBlogs =
-    blogs?.slice(startIndex, startIndex + postsPerPage) || [];
-
-  console.log('Blog Pagination:', {
-    totalBlogs: blogs?.length,
-    totalPages,
-    currentPage,
-    showing: currentBlogs.length,
-  });
+  const currentBlogs = filteredBlogs.slice(
+    startIndex,
+    startIndex + postsPerPage,
+  );
 
   return (
     <div className="container mx-auto max-w-7xl px-6 py-8">
-      <div className="mb-10 text-sm text-[#8B817A]">
-        Home <span className="mx-2">›</span> Blogs
+      <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="text-sm text-[#8B817A]">
+          Forside <span className="mx-2">›</span> Blogindlæg
+        </div>
+
+        <div className="relative w-full lg:w-[300px]">
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A79D96]" />
+
+          <Input
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder="Search articles..."
+            className="h-11 w-full rounded-full border-[#E4DAD1] bg-transparent pl-11"
+          />
+        </div>
       </div>
 
       <BlogHero />
@@ -44,11 +63,11 @@ const Blog = ({ blogs }: any) => {
 
       <div className="mb-8 flex items-center justify-between">
         <h3 className="text-[32px] font-serif text-[#35281E]">
-          More from the Journal
+          Flere artikler fra journalen
         </h3>
 
         <span className="text-sm text-[#736760]">
-          {blogs?.length || 0} articles
+          {filteredBlogs.length} artikler
         </span>
       </div>
 
@@ -75,13 +94,12 @@ const Blog = ({ blogs }: any) => {
         ))}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-10">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
+            onPageChange={setCurrentPage}
           />
         </div>
       )}

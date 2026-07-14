@@ -1,13 +1,13 @@
-import TableOfContents from './table-of-contents';
-import ShareButtons from './share-buttons';
-import FeaturedProductCard from './featured-product-card';
+'use client';
 
-export default function ArticleSidebar({ articleData }: any) {
+import ShareButtons from './share-buttons';
+import TableOfContents from './table-of-contents';
+
+export default function ArticleSidebar({ headings }: any) {
   return (
-    <aside className="sticky top-10 space-y-4">
-      <TableOfContents headings={articleData} />
+    <aside className="space-y-4 lg:sticky lg:top-10">
+      <TableOfContents headings={headings} />
       <ShareButtons />
-      {/* <FeaturedProductCard /> */}
     </aside>
   );
 }

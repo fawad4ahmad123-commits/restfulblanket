@@ -1,15 +1,26 @@
-import { formatArticleData } from '@/src/utilty/blog-detail-artical-formater';
+'use client';
+
+import { useMemo } from 'react';
 import ArticleContent from './article-content';
 import ArticleSidebar from './article-sidebar';
+import { injectHeadingIds } from '@/src/utilty/extract-headings';
 
 export default function ArticleLayout({ data }: any) {
-  const articleData = formatArticleData(data);
-  console.log('t7 prev', { test: data, articleData });
+  const { html, headings } = useMemo(
+    () => injectHeadingIds(data || ''),
+    [data],
+  );
+
+  const articleData = { rawHtml: html };
 
   return (
-    <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
-      <ArticleContent articleData={articleData} />
-      <ArticleSidebar articleData={articleData} />
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_300px] lg:gap-12">
+      <div className="order-2 min-w-0 lg:order-1">
+        <ArticleContent articleData={articleData} />
+      </div>
+      <div className="order-1 lg:order-2">
+        <ArticleSidebar headings={headings} />
+      </div>
     </div>
   );
 }

@@ -1,99 +1,43 @@
-export const formatArticleData = (html: string) => {
-  if (typeof window === 'undefined') {
+export const formatArticleData = (content: string) => {
+  // If content is already HTML, return it as rawHtml
+  if (content?.includes('<')) {
     return {
-      toc: [],
+      rawHtml: content,
       intro: [],
       sections: [],
     };
   }
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  const toc: any[] = [];
-  const intro: string[] = [];
+  // For plain text content, split by sections
+  const lines =
+    content?.split('\n').filter((line: string) => line.trim()) || [];
   const sections: any[] = [];
-
-  const nodes = Array.from(doc.body.children);
-
   let currentSection: any = null;
-  let foundFirstHeading = false;
+  let intro: string[] = [];
 
-  nodes.forEach((node) => {
-    const tag = node.tagName.toLowerCase();
-
-    if (tag === 'h2') {
-      foundFirstHeading = true;
-
-      const title = node.textContent?.trim() || '';
-
-      const id = title
-        .toLowerCase()
-        .replace(/[^\w\s]/g, '')
-        .replace(/\s+/g, '-');
-
-      toc.push({
-        id,
-        title,
-      });
-
+  lines.forEach((line: string) => {
+    if (line.startsWith('## ')) {
+      if (currentSection) {
+        sections.push(currentSection);
+      }
       currentSection = {
-        id,
-        title,
+        id: `section-${sections.length + 1}`,
+        title: line.replace('## ', '').trim(),
         content: [],
         list: [],
       };
-
-      sections.push(currentSection);
-      return;
-    }
-
-    if (!foundFirstHeading && tag === 'p') {
-      const text = node.textContent?.trim();
-
-      if (text) {
-        intro.push(text);
-      }
-
-      return;
-    }
-
-    if (!currentSection) return;
-
-    if (tag === 'p') {
-      const text = node.textContent?.trim();
-
-      if (!text) return;
-
-      if (text.startsWith('•')) {
-        currentSection.list.push(text.replace(/^•\s*/, ''));
-      } else {
-        currentSection.content.push(text);
-      }
+    } else if (currentSection && line.startsWith('•')) {
+      currentSection.list.push(line.replace('•', '').trim());
+    } else if (currentSection) {
+      currentSection.content.push(line.trim());
+    } else {
+      intro.push(line.trim());
     }
   });
 
-  return {
-    toc,
-    intro,
-    sections,
+  if (currentSection) {
+    sections.push(currentSection);
+  }
 
-    quote: {
-      text: '',
-      author: '',
-    },
-
-    highlight: {
-      title: '',
-      content: '',
-    },
-
-    featuredProduct: {
-      badge: 'BEST SELLER',
-      image: '/product/bestselller.png',
-      title: 'Nord Classic Weighted Blanket',
-      description:
-        'Our most-loved blanket, hand-finished with glass-bead fill.',
-    },
-  };
+  return { intro, sections };
 };

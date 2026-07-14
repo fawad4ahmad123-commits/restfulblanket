@@ -1,47 +1,35 @@
 'use client';
 
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-
-const categories = [
-  'All Articles',
-  'Sleep Science',
-  'Wellness Rituals',
-  'Product Care',
-  'Craft & Design',
-  'Customer Stories',
-];
+import { useRouter } from 'next/navigation';
+import { BLOG_CATEGORIES } from './constants';
 
 export function BlogFilters() {
-  const [active, setActive] = useState('All Articles');
+  const [active, setActive] = useState(BLOG_CATEGORIES[0].name);
+  const router = useRouter();
+
+  const handleClick = (item: { name: string; url: string }) => {
+    setActive(item.name);
+    router.push(item.url);
+  };
 
   return (
     <>
       <div className="mt-14 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap gap-3">
-          {categories.map((item) => (
+          {BLOG_CATEGORIES.map((item) => (
             <button
-              key={item}
-              onClick={() => setActive(item)}
-              className={`rounded-full border px-5 py-2 text-sm transition-all ${
-                active === item
+              key={item.name}
+              onClick={() => handleClick(item)}
+              className={`cursor-pointer flex items-center gap-2 rounded-full border px-5 py-2 text-sm transition-all ${
+                active === item.name
                   ? 'border-[#3A2A22] bg-[#3A2A22] text-white'
                   : 'border-[#E4DAD1] bg-transparent text-[#7A716B]'
               }`}
             >
-              {item}
+              {item.name}
             </button>
           ))}
-        </div>
-
-        <div className="relative w-full lg:w-[300px]">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A79D96]" />
-
-          <Input
-            placeholder="Search articles..."
-            className="h-11 rounded-full border-[#E4DAD1] bg-transparent pl-11"
-          />
         </div>
       </div>
 

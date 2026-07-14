@@ -29,9 +29,8 @@ export default function ShopPageClient({
           search: searchQuery,
         });
 
-        console.log('taha 88888   aaaaaa', allProductData);
         const response = formatProducts(allProductData);
-        console.log('taha 88888   bbbbbb', response);
+
         if (active) {
           setData(response);
         }

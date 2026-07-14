@@ -20,8 +20,6 @@ const Article = ({ blog }: any) => {
 
         {article?.content && <ArticleLayout data={article.content} />}
 
-        {/* <AuthorCard /> */}
-
         <div className="mb-8 mt-8 flex items-center justify-center">
           <h1 className="font-serif text-[32px] text-[#35281E]">
             Du vil måske også kunne lide

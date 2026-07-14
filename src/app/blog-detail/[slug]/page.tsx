@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-
   const blog = await getBlogBySlug(slug);
+  console.log('yasir 12', blog);
 
   return <Article blog={blog} />;
 }
