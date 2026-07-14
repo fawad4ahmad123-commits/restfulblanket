@@ -26,20 +26,14 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
   const [showStickyCart, setShowStickyCart] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
-
-  // No color / size / weight is pre-selected — the shopper must choose.
   const [selectedColorId, setSelectedColorId] = useState('');
   const [selectedWeightId, setSelectedWeightId] = useState('');
   const [selectedSizeId, setSelectedSizeId] = useState('');
-
   const colors = product?.colors ?? [];
   const weights = product?.weights ?? [];
   const sizes = product?.sizes ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
 
-  // Strip HTML and turn each line into a feature bullet, so a description
-  // like "<p><strong>• Foo</strong><br/><strong>• Bar</strong></p>" becomes
-  // ["Foo", "Bar"] in the same {id, text} shape FeatureList expects.
   const featuresFromDescription = (html: string) =>
     html
       .replace(/<br\s*\/?>/gi, '\n')
@@ -50,15 +44,11 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
       .filter(Boolean)
       .map((text, index) => ({ id: `sd-${index}`, text }));
 
-  // Fall back to the short description whenever the product has no
-  // explicit features list.
   const features =
     product?.features?.length > 0
       ? product.features
       : featuresFromDescription(product?.shortDescription || '');
 
-  // Whenever the displayed product changes (e.g. after switching variant),
-  // clear the selectors again so nothing appears pre-selected.
   useEffect(() => {
     setSelectedColorId('');
     setSelectedWeightId('');
@@ -86,8 +76,6 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
     }
   };
 
-  // Looks up the sibling product linked to the chosen attribute
-  // (color / size / weight) and swaps it in as the active product.
   const handleAttributeChange = async (type: string, value: string) => {
     const matchedLink = product?.attributeLinks?.find(
       (item: any) =>

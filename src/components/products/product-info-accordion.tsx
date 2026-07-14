@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ProductInfoSection } from './types';
+
 import { WhyRestfulBlanketContent } from './why-restful-blanket-content';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { sections } from './contants';
 
@@ -16,6 +15,7 @@ interface ProductInfoAccordionProps {
   activeAccordion: string | null;
   setActiveAccordion: (value: string | null) => void;
 }
+
 const trustItems = {
   icon: '/home/shieldIcon.png',
   alt: '90 night guarantee',
@@ -34,7 +34,14 @@ const ProductInfoAccordion = ({
       collapsible
       value={activeAccordion || ''}
       onValueChange={(value) => setActiveAccordion(value || null)}
-      className="rounded-2xl border border-[#E3DCCD] px-4"
+      className="
+        rounded-2xl 
+        border 
+        border-[#E3DCCD] 
+        px-3 
+        sm:px-4 
+        xl:px-5
+      "
     >
       {sections.map((section) => (
         <AccordionItem
@@ -43,13 +50,31 @@ const ProductInfoAccordion = ({
           className="border-b last:border-b-0"
         >
           <AccordionTrigger
-            className="py-5 text-left hover:no-underline"
-            aria-label={`Toggle ${section.title}`}
+            className="
+              py-4 
+              sm:py-5 
+              xl:py-6
+              text-left 
+              hover:no-underline
+            "
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 xl:gap-4">
+              {/* Icon */}
               <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F7F2EC]"
-                aria-hidden="true"
+                className="
+                  flex 
+                  h-10 
+                  w-10 
+                  sm:h-11 
+                  sm:w-11 
+                  xl:h-12 
+                  xl:w-12
+                  shrink-0 
+                  items-center 
+                  justify-center 
+                  rounded-full 
+                  bg-[#F7F2EC]
+                "
               >
                 <Image
                   src={trustItems.icon}
@@ -57,28 +82,58 @@ const ProductInfoAccordion = ({
                   width={20}
                   height={20}
                   className={cn(
-                    'h-5 w-5 md:h-[18px] md:w-[18px]',
+                    'h-4 w-4 xl:h-5 xl:w-5',
                     trustItems.monochrome && 'brightness-0',
                   )}
                 />
               </div>
 
-              <div className="">
-                <span className="block text-[18px] font-medium text-[#3F3A36]">
+              {/* Text */}
+              <div className="min-w-0">
+                <span
+                  className="
+                    block 
+                    text-base 
+                    xl:text-[18px]
+                    font-medium 
+                    text-[#3F3A36]
+                  "
+                >
                   {section.title}
                 </span>
 
-                <p className="text-[14px] font-normal leading-5 text-[#8A8377]">
+                <p
+                  className="
+                    text-xs 
+                    sm:text-sm 
+                    xl:text-[14px]
+                    leading-5 
+                    text-[#8A8377]
+                  "
+                >
                   Trusted quality. Made for your well-being.
                 </p>
               </div>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="pb-6">
+
+          <AccordionContent
+            className="
+              pb-5
+              xl:pb-7
+            "
+          >
             {section.id === sections[0]?.id ? (
               <WhyRestfulBlanketContent />
             ) : (
-              <div className="text-sm leading-6 text-[#6F6860]">
+              <div
+                className="
+                  text-sm
+                  xl:text-base
+                  leading-6
+                  text-[#6F6860]
+                "
+              >
                 {section.body}
               </div>
             )}
@@ -88,4 +143,5 @@ const ProductInfoAccordion = ({
     </Accordion>
   );
 };
+
 export default ProductInfoAccordion;

@@ -25,10 +25,20 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
   };
 
   return (
-    <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 md:px-8 lg:px-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_minmax(0,1fr)]">
-          <div className="lg:sticky lg:top-[10px]">
+    <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 sm:px-6 lg:px-10 2xl:px-20">
+      <div className="mx-auto max-w-[1400px]">
+        <div
+          className="
+            grid
+            grid-cols-1
+            items-start
+            gap-8
+            lg:grid-cols-[480px_minmax(0,1fr)]
+            xl:grid-cols-[540px_minmax(0,1fr)]
+            2xl:grid-cols-[636px_minmax(0,1fr)]
+          "
+        >
+          <div className="w-full lg:sticky lg:top-5">
             <ProductGallery
               images={product?.images}
               badge={product?.badge}
@@ -36,7 +46,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
             />
           </div>
 
-          <div className="min-w-0 p-3">
+          <div className="min-w-0 w-full">
             <ProductInfoPanel
               product={product}
               onProductChange={changeProduct}
@@ -45,7 +55,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
         </div>
       </div>
 
-      <section className="mt-6">
+      <section className="mt-8">
         <BestSellers isProduct={true} products={likeProducts} />
       </section>
 

@@ -19,13 +19,20 @@ const AddToCartBar = ({
     quantity > stockQuantity;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-3">
       <div
-        className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        className="
+          flex 
+          flex-col 
+          gap-3
+          xl:flex-row
+          xl:items-center
+        "
         role="group"
         aria-label="Tilføj til kurv-kontroller"
       >
-        <div className="w-full sm:w-auto">
+        {/* Quantity */}
+        <div className="w-full xl:w-auto">
           <QuantitySelector
             quantity={quantity}
             onChange={onQuantityChange}
@@ -34,6 +41,7 @@ const AddToCartBar = ({
           />
         </div>
 
+        {/* Add button */}
         <Button
           type="button"
           onClick={onAddToCart}
@@ -43,14 +51,30 @@ const AddToCartBar = ({
               ? 'Den valgte mængde overstiger den tilgængelige lagerbeholdning.'
               : ''
           }
-          className="h-12 w-full sm:flex-1 rounded-full bg-[#3F3A36] px-4 text-sm font-medium text-white hover:bg-[#2E2A27] sm:text-base disabled:cursor-not-allowed disabled:opacity-50"
+          className="
+            h-12
+            w-full
+            rounded-full
+            bg-[#3F3A36]
+            px-4
+            text-sm
+            font-medium
+            text-white
+            hover:bg-[#2E2A27]
+
+            xl:flex-1
+            xl:text-base
+
+            disabled:cursor-not-allowed
+            disabled:opacity-50
+          "
           aria-label={`Tilføj ${quantity} vare(r) til kurven. Samlet pris ${currency}${total}`}
         >
           <ShoppingBag className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
 
           <span className="whitespace-nowrap">Tilføj til kurv</span>
 
-          <span aria-hidden="true" className="ml-1 truncate whitespace-nowrap">
+          <span aria-hidden="true" className="ml-1 whitespace-nowrap">
             · {currency}
             {total}
           </span>
@@ -63,7 +87,7 @@ const AddToCartBar = ({
       </div>
 
       {isQuantityExceeded && (
-        <p className="text-sm text-red-500">
+        <p className="text-sm leading-5 text-red-500">
           Den valgte mængde overstiger lagerbeholdningen. Kun {stockQuantity}{' '}
           vare
           {stockQuantity && stockQuantity > 1 ? 'r' : ''} er tilgængelig.
