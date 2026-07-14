@@ -1,4 +1,4 @@
-import { getProductsColorHex } from '@/src/helper/color-hexa';
+import { getProductsColorHex } from '../helper/color-hexa';
 
 export function buildSidebarFilters(filterOptions: {
   categories: string[];
@@ -14,11 +14,13 @@ export function buildSidebarFilters(filterOptions: {
       label: 'All Product',
       type: 'category',
       count: [...new Set(filterOptions.categories)].length,
+
       children: [...new Set(filterOptions.categories)].map((category) => ({
-        id: category,
+        id: category.toLowerCase().trim(),
         label: category,
       })),
     },
+
     {
       id: 'colors',
       label: 'Colors',
@@ -29,18 +31,21 @@ export function buildSidebarFilters(filterOptions: {
         hex: getProductsColorHex(color),
       })),
     },
+
     {
       id: 'weights',
       label: 'Weights',
       type: 'weight',
       options: [...new Set(filterOptions.weights)],
     },
+
     {
       id: 'size',
       label: 'Size',
       type: 'size',
       options: [...new Set(filterOptions.sizes)],
     },
+
     {
       id: 'prices',
       label: 'Prices',

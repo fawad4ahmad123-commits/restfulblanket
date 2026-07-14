@@ -12,8 +12,7 @@ export default function ActiveFilters({ filters }: Props) {
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3">
-      <span className="text-sm font-medium text-[#6F6259]">Active Filter</span>
-
+      <span className="text-sm font-medium text-[#6F6259]">Aktive filtre</span>
       {filters.map((filter, index) => (
         <button
           key={`${filter.label}-${index}`}

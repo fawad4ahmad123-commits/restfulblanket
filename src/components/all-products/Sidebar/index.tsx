@@ -1,15 +1,19 @@
 'use client';
+
 import { Check } from 'lucide-react';
 import React, { useMemo } from 'react';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+
 import { buildSidebarFilters } from '@/src/utilty/sidebarFilters';
 import { toggleFilter } from '@/src/utilty/toggleFilter';
 import { isLight } from '@/src/utilty/isLight';
+
 import DualRangeSlider from '../DualRangeSlider';
 import { ProductSideCategory } from './types';
 
@@ -25,7 +29,7 @@ export default function ProductSidebar({
 
   return (
     <aside className="w-full lg:w-[260px]">
-      <h2 className="mb-6 text-[34px] font-serif text-[#35281E]">Category</h2>
+      <h2 className="mb-6 text-[34px] font-serif text-[#35281E]">Kategori</h2>
 
       <Accordion type="multiple" defaultValue={['all']} className="space-y-2">
         {filterCategories.map((item: any, itemIndex: number) => (
@@ -36,7 +40,17 @@ export default function ProductSidebar({
           >
             <AccordionTrigger className="py-4 text-sm font-medium text-[#35281E] hover:no-underline">
               <div className="flex items-center gap-3">
-                {item.label}
+                {item.label === 'All Product'
+                  ? 'Alle produkter'
+                  : item.label === 'Colors'
+                    ? 'Farver'
+                    : item.label === 'Weights'
+                      ? 'Vægte'
+                      : item.label === 'Size'
+                        ? 'Størrelse'
+                        : item.label === 'Prices'
+                          ? 'Priser'
+                          : item.label}
 
                 {item.id === 'all' && (
                   <span className="rounded bg-[#35281E] px-1.5 py-0.5 text-[10px] text-white">
@@ -49,25 +63,35 @@ export default function ProductSidebar({
             <AccordionContent className="cursor-pointer">
               {item.children?.length ? (
                 <div className="space-y-3 pb-4 pl-4">
-                  {item.children.map((child: any) => (
-                    <label
-                      key={child.id}
-                      className="flex cursor-pointer items-center gap-2 text-sm text-[#6F6259]"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={filters.categories.includes(child.id)}
-                        onChange={() =>
-                          setFilters((f) => ({
-                            ...f,
-                            categories: toggleFilter(f.categories, child.id),
-                          }))
-                        }
-                        className="h-4 w-4 rounded border-[#D9CCC3] text-[#35281E] accent-[#35281E]"
-                      />
-                      {child.label}
-                    </label>
-                  ))}
+                  {item.children.map((child: any) => {
+                    const categoryId = child.id.toLowerCase().trim();
+
+                    const isChecked = filters.categories.includes(categoryId);
+
+                    return (
+                      <label
+                        key={child.id}
+                        className="flex cursor-pointer items-center gap-2 text-sm text-[#6F6259]"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() =>
+                            setFilters((f) => ({
+                              ...f,
+                              categories: toggleFilter(
+                                f.categories,
+                                categoryId,
+                              ),
+                            }))
+                          }
+                          className="h-4 w-4 rounded border-[#D9CCC3] text-[#35281E] accent-[#35281E]"
+                        />
+
+                        {child.label}
+                      </label>
+                    );
+                  })}
                 </div>
               ) : null}
 
@@ -166,8 +190,9 @@ export default function ProductSidebar({
               {item.type === 'price' && (
                 <div className="pb-4">
                   <div className="mb-3 grid grid-cols-2 text-xs text-[#6F6259]">
-                    <span>{filters.minPrice}kr</span>
-                    <span className="text-right">{filters.maxPrice}kr</span>
+                    <span>{filters.minPrice} kr</span>
+
+                    <span className="text-right">{filters.maxPrice} kr</span>
                   </div>
 
                   <DualRangeSlider

@@ -22,14 +22,13 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       onSubmit={handleSubmit}
       className="flex items-center justify-between gap-8"
       role="search"
-      aria-label="Site-wide search"
+      aria-label="Søg på hele siden"
     >
-      {/* Hide on mobile */}
       <div
         className="hidden shrink-0 text-[18px] font-semibold text-[#392A22] lg:block"
         aria-hidden="true"
       >
-        Give All You Need
+        Giv alt hvad du behøver
       </div>
 
       <div className="flex h-[63px] w-full items-center gap-3 rounded-full border-[1.5px] border-[#E8E1DA] px-2 lg:w-[663px]">
@@ -42,9 +41,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <Input
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Search your item..."
+          placeholder="Søg efter dit produkt..."
           className="border-0 p-0 shadow-none focus-visible:ring-0"
-          aria-label="Search input"
+          aria-label="Søgefelt"
           id="search-input"
           type="search"
           autoComplete="off"
@@ -53,9 +52,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         <Button
           type="submit"
           className="h-[47px] rounded-full bg-[#392A22] px-6 sm:px-10"
-          aria-label="Submit search"
+          aria-label="Udfør søgning"
         >
-          Search
+          Søg
         </Button>
       </div>
     </form>

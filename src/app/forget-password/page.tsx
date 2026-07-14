@@ -1,7 +1,7 @@
 import ForgetPassword from '@/src/components/password';
 
 export const metadata = {
-  title: 'Forgot Password',
+  title: 'Forget Password',
   robots: {
     index: false,
     follow: false,

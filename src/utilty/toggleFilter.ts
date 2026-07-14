@@ -1,5 +1,7 @@
 export function toggleFilter(list: string[], value: string) {
-  return list.includes(value)
-    ? list.filter((v) => v !== value)
-    : [...list, value];
+  const normalizedValue = value.toLowerCase().trim();
+
+  return list.includes(normalizedValue)
+    ? list.filter((v) => v !== normalizedValue)
+    : [...list, normalizedValue];
 }

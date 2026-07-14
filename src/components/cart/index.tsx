@@ -31,7 +31,6 @@ export default function CartOffcanvas({
     0,
   );
 
-  // DEBUG: Log the items to see the structure
   console.log('Cart items:', items);
   async function handleCheckout() {
     setCheckoutError(null);

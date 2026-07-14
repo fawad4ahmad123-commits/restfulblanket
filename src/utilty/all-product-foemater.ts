@@ -19,46 +19,73 @@ export function formatProducts(products: any[] | null | undefined) {
         (attr: any) => attr.name?.toLowerCase() === 'weight',
       );
 
+      // SAFE ATTRIBUTE LINKS
+      const attributeLinks = Array.isArray(product.attribute_links)
+        ? product.attribute_links
+        : [];
+
+      // COLORS FROM ATTRIBUTE LINKS
+      const linkedColors = attributeLinks
+        .filter((item: any) => item.name?.toLowerCase() === 'color')
+        .map((item: any) => item.value);
+
+      // SIZES FROM ATTRIBUTE LINKS
+      const linkedSizes = attributeLinks
+        .filter((item: any) => item.name?.toLowerCase() === 'size')
+        .map((item: any) => item.value);
+
+      // WEIGHTS FROM ATTRIBUTE LINKS
+      const linkedWeights = attributeLinks
+        .filter((item: any) => item.name?.toLowerCase() === 'weight')
+        .map((item: any) => item.value);
+
       const offerBadge = product.meta_data?.find(
         (item: any) => item.key === '_cura_offer_badge',
       )?.value;
 
       return {
         id: String(product.id),
+
         slug: product.slug,
+
         name: product.name,
 
+        // CATEGORY
         categories:
-          product.categories?.map((category: any) => category.name) || [],
+          product.categories?.map((category: any) =>
+            category.name.toLowerCase().trim(),
+          ) || [],
 
-        color: colorAttribute?.options?.[0] || '',
+        // CURRENT COLOR
+        color: colorAttribute?.options?.[0] || linkedColors[0] || '',
 
-        colors: colorAttribute?.options || [],
+        // ALL COLORS
+        colors:
+          linkedColors.length > 0
+            ? linkedColors
+            : colorAttribute?.options || [],
 
         image: product.images?.[0]?.src || '/product/placeholder.png',
 
+        // CURRENT WEIGHT
         weight: weightAttribute?.options?.[0]
           ? `${weightAttribute.options[0].replace('kg', '')} kg`
-          : product.weight
-            ? `${product.weight} kg`
-            : '',
+          : linkedWeights[0] || '',
 
+        // ALL WEIGHTS
         weights:
-          weightAttribute?.options?.map(
-            (weight: string) => `${weight.replace('kg', '')} kg`,
-          ) || [],
+          linkedWeights.length > 0
+            ? linkedWeights
+            : weightAttribute?.options?.map(
+                (weight: string) => `${weight.replace('kg', '')} kg`,
+              ) || [],
 
-        dimensions:
-          sizeAttribute?.options?.[0] ||
-          (product.dimensions?.length && product.dimensions?.height
-            ? `${product.dimensions.length} × ${product.dimensions.height} cm`
-            : ''),
+        // CURRENT SIZE
+        dimensions: sizeAttribute?.options?.[0] || linkedSizes[0] || '',
 
+        // ALL SIZES
         sizes:
-          sizeAttribute?.options ||
-          (product.dimensions?.length && product.dimensions?.height
-            ? [`${product.dimensions.length} × ${product.dimensions.height} cm`]
-            : []),
+          linkedSizes.length > 0 ? linkedSizes : sizeAttribute?.options || [],
 
         price: Number(product.price || 0),
 
@@ -91,6 +118,9 @@ export function formatProducts(products: any[] | null | undefined) {
         stockQuantity: product.stock_quantity ?? null,
 
         stockStatus: product.stock_status ?? 'outofstock',
+
+        // KEEP ORIGINAL RELATION DATA
+        attributeLinks,
       };
     });
 }

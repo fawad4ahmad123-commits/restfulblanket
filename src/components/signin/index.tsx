@@ -143,7 +143,7 @@ export default function SignInForm() {
 
               <div className="mt-3 flex items-center justify-between">
                 <Link
-                  href="/forgot-password"
+                  href="/forget-password"
                   className="text-sm font-medium text-[#211711] hover:underline"
                 >
                   Glemt adgangskode?
