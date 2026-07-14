@@ -54,9 +54,9 @@ const ExpertSection = ({ isAllExpert = true }: ExpertSectionProps) => {
           onClick={() => router.push('/')}
           className="cursor-pointer transition hover:text-[#35281E]"
         >
-          Home
+          Hjem
         </button>
-        <span> &gt; Sleep experts</span>
+        <span> &gt; Søvneksperter</span>
       </div>
 
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -99,27 +99,6 @@ const ExpertSection = ({ isAllExpert = true }: ExpertSectionProps) => {
             onClick={() => router.push(`/Ekspertprofil/${expert.name}`)}
           />
         ))}
-      </div>
-
-      <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button
-          type="button"
-          aria-label="Not sure which blanket suits your needs"
-          className="rounded-full bg-[#e5d8cb] px-4 py-4 text-sm text-[#3b281f] hover:bg-[#e5d8cb] hover:text-[#3b281f] hover:shadow-none"
-        >
-          Ikke sikker på hvilken tyngdedyne der passer til dig?
-        </Button>
-
-        <p
-          aria-label="Book a free consultation"
-          title="Book a free consultation"
-          className="flex items-center gap-2 text-sm font-medium text-[#3b281f]"
-        >
-          Book en gratis konsultation
-          <span className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-[#3b281f]/20">
-            <ArrowRight aria-hidden="true" size={14} />
-          </span>
-        </p>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import ExpertCard from '.';
 import Heading from './heading';
@@ -8,14 +9,31 @@ import { EXPERTS } from '../constants';
 
 const ExpertsSection = () => {
   const router = useRouter();
+  const sliderRef = useRef<HTMLDivElement>(null);
+
   const shouldSlider = EXPERTS.length > 4;
+
+  const prev = () => {
+    sliderRef.current?.scrollBy({
+      left: -350,
+      behavior: 'smooth',
+    });
+  };
+
+  const next = () => {
+    sliderRef.current?.scrollBy({
+      left: 350,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <section className="bg-[#FAF4EE] py-20" aria-labelledby="experts-heading">
       <div className="mx-auto max-w-[1400px] px-5">
-        <Heading />
+        <Heading prev={prev} next={next} />
 
         <div
+          ref={sliderRef}
           className={
             shouldSlider
               ? 'flex gap-5 overflow-x-auto pb-4 scrollbar-hide'
@@ -52,7 +70,7 @@ const ExpertsSection = () => {
           type="button"
           onClick={() => router.push('/expert')}
           aria-label="Book a free consultation"
-          className="flex items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80 cursor-pointer"
+          className="flex cursor-pointer items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80"
         >
           <span>Book en gratis konsultation</span>
 

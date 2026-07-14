@@ -1,29 +1,39 @@
-import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-const Heading = () => {
-  const router = useRouter();
+interface HeadingProps {
+  prev: () => void;
+  next: () => void;
+}
+
+const Heading = ({ prev, next }: HeadingProps) => {
   return (
     <div>
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="font-serif text-[36px] md:text-[48px] leading-tight text-[#392A22]">
+        <h2 className="font-serif text-[36px] leading-tight text-[#392A22] md:text-[48px]">
           Mød vores
           <span className="italic font-normal"> søvneksperter</span>
         </h2>
 
         <div className="flex items-center gap-3">
-          <Button
+          <button
             type="button"
-            variant="outline"
-            aria-label="View all experts"
-            title="View all experts"
-            onClick={() => router.push('/expert')}
-            className="h-12 gap-2 rounded-full border-[#392A22]/20 bg-[#e5d8cb] px-5 text-sm text-[#392A22] hover:bg-[#392A22] hover:text-white cursor-pointer"
+            aria-label="Show previous experts"
+            title="Show previous experts"
+            onClick={prev}
+            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#3b281f]/20"
           >
-            <User aria-hidden="true" className="h-3.5 w-3.5" />
-            Se alle specialister
-          </Button>
+            <ArrowLeft size={20} />
+          </button>
+
+          <button
+            type="button"
+            aria-label="Show next experts"
+            title="Show next experts"
+            onClick={next}
+            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-[#3b281f]"
+          >
+            <ArrowRight size={20} color="white" />
+          </button>
         </div>
       </div>
     </div>
