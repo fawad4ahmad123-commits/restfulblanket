@@ -63,9 +63,7 @@ const WishlistPage = () => {
   }, [wishlistItems]);
 
   if (loading) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (

@@ -24,7 +24,6 @@ export const PROFILE_NAV_ITEMS: NavItem[] = [
   { id: 'addresses', label: 'Addresses', icon: MapPin },
   { id: 'account', label: 'Account Information', icon: UserRound },
 ];
-
 export const PROFILE_FOOTER_NAV_ITEM: NavItem = {
   id: 'cancellation',
   label: 'Cancellation & return',
@@ -41,9 +40,6 @@ export const PROFILE_USER: ProfileUser = {
 };
 
 export const OVERVIEW_STATS: OverviewStat[] = [
-  { id: 'total-orders', label: 'Total orders', value: '7', icon: ShoppingBag },
-  { id: 'active-delivery', label: 'Active delivery', value: '2', icon: Truck },
-  { id: 'wishlist', label: 'On Wishlist', value: '3', icon: Heart },
   {
     id: 'warranty',
     label: 'Warranty back',
@@ -60,28 +56,3 @@ export const SLEEP_EXPERT: SleepExpert = {
   email: 'zafir@sleepco.com',
   phone: '+45 22 11 44 55',
 };
-
-export const ADDRESSES: Address[] = [
-  {
-    id: 'addr-billing',
-    type: 'billing',
-    label: 'Billing Address',
-    fullName: 'Maria Jensen',
-    street: 'Norrebrogade 88, 2nd floor',
-    postalCode: '2200',
-    city: 'Copenhagen N',
-    country: 'Denmark',
-    phone: '+45 22 33 44 55',
-  },
-  {
-    id: 'addr-delivery',
-    type: 'delivery',
-    label: 'Delivery Address',
-    fullName: 'Maria Jensen',
-    street: 'Norrebrogade 88, 2nd floor',
-    postalCode: '2200',
-    city: 'Copenhagen N',
-    country: 'Denmark',
-    phone: '+45 22 33 44 55',
-  },
-];

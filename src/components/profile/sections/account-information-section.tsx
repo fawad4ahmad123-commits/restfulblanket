@@ -13,6 +13,7 @@ import {
   useDeleteProfile,
 } from '../../../hooks/use-account-information';
 import { useRankMathSeo } from '../../../hooks/use-rankmath-seo';
+import { useEffect } from 'react';
 
 interface AccountInformationSectionProps {
   user?: any;
@@ -24,19 +25,28 @@ export function AccountInformationSection({
   user: initialUser,
   pageUrl,
 }: AccountInformationSectionProps) {
-  const { userData, setUserData, form, setForm } = useAccountUser(initialUser);
-  const { isSaving: isSavingProfile, handleSubmit } = useProfileUpdate(form, setForm, setUserData);
+  const { userData, setUserData, form, setForm, refetchUser } =
+    useAccountUser(initialUser);
+
+  const { isSaving: isSavingProfile, handleSubmit } = useProfileUpdate(
+    form,
+    setForm,
+    setUserData,
+    refetchUser,
+  );
+
   const {
     passwordForm,
     setPasswordForm,
     isSaving: isSavingPassword,
     handleSubmit: handlePasswordSubmit,
   } = usePasswordUpdate();
+
   const { isConfirmOpen, setIsConfirmOpen, handleDelete } = useDeleteProfile();
 
-  // Applies RankMath's title/description/OG tags for this page. Robots
-  // index/noindex settings are left untouched — see hooks/use-rankmath-seo.ts.
-  useRankMathSeo(pageUrl ?? (typeof window !== 'undefined' ? window.location.href : ''));
+  useRankMathSeo(
+    pageUrl ?? (typeof window !== 'undefined' ? window.location.href : ''),
+  );
 
   function handleFieldChange(field: keyof typeof form) {
     return (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -67,7 +77,10 @@ export function AccountInformationSection({
       />
 
       {isConfirmOpen && (
-        <DeleteConfirmModal onCancel={() => setIsConfirmOpen(false)} onConfirm={handleDelete} />
+        <DeleteConfirmModal
+          onCancel={() => setIsConfirmOpen(false)}
+          onConfirm={handleDelete}
+        />
       )}
     </div>
   );
@@ -78,7 +91,8 @@ function AccountHeader({ onDeleteClick }: { onDeleteClick: () => void }) {
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
       <div>
         <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-          Account <span className={profileClasses.serifItalic}>Information</span>
+          Account{' '}
+          <span className={profileClasses.serifItalic}>Information</span>
         </h2>
         <p className={cn('text-sm', profileClasses.textSecondary)}>
           Keep your personal information up to date
@@ -101,12 +115,23 @@ function AccountHeader({ onDeleteClick }: { onDeleteClick: () => void }) {
 interface ProfileFormProps {
   form: { firstName: string; lastName: string; email: string; phone: string };
   isSaving: boolean;
-  onFieldChange: (field: keyof ProfileFormProps['form']) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFieldChange: (
+    field: keyof ProfileFormProps['form'],
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
-function ProfileForm({ form, isSaving, onFieldChange, onSubmit }: ProfileFormProps) {
-  const fields: { id: keyof ProfileFormProps['form']; label: string; type?: string }[] = [
+function ProfileForm({
+  form,
+  isSaving,
+  onFieldChange,
+  onSubmit,
+}: ProfileFormProps) {
+  const fields: {
+    id: keyof ProfileFormProps['form'];
+    label: string;
+    type?: string;
+  }[] = [
     { id: 'firstName', label: 'First name' },
     { id: 'lastName', label: 'Surname' },
     { id: 'email', label: 'Email address', type: 'email' },
@@ -114,7 +139,10 @@ function ProfileForm({ form, isSaving, onFieldChange, onSubmit }: ProfileFormPro
   ];
 
   return (
-    <form onSubmit={onSubmit} className={cn(profileClasses.surfaceCard, 'p-4 sm:p-6 mb-6')}>
+    <form
+      onSubmit={onSubmit}
+      className={cn(profileClasses.surfaceCard, 'p-4 sm:p-6 mb-6')}
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         {fields.map(({ id, label, type }) => (
           <div key={id} className="space-y-1.5">
@@ -132,7 +160,11 @@ function ProfileForm({ form, isSaving, onFieldChange, onSubmit }: ProfileFormPro
         ))}
       </div>
 
-      <Button type="submit" disabled={isSaving} className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}>
+      <Button
+        type="submit"
+        disabled={isSaving}
+        className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}
+      >
         {isSaving ? <SavingLabel text="Saving..." /> : 'Save changes'}
       </Button>
     </form>
@@ -143,20 +175,31 @@ interface PasswordFormProps {
   passwordForm: { currentPassword: string; newPassword: string };
   isSaving: boolean;
   onFieldChange: (
-    field: keyof PasswordFormProps['passwordForm']
+    field: keyof PasswordFormProps['passwordForm'],
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
-function PasswordForm({ passwordForm, isSaving, onFieldChange, onSubmit }: PasswordFormProps) {
+function PasswordForm({
+  passwordForm,
+  isSaving,
+  onFieldChange,
+  onSubmit,
+}: PasswordFormProps) {
   return (
-    <form onSubmit={onSubmit} className={cn(profileClasses.surfaceCard, 'p-4 sm:p-6')}>
+    <form
+      onSubmit={onSubmit}
+      className={cn(profileClasses.surfaceCard, 'p-4 sm:p-6')}
+    >
       <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
         Change <span className={profileClasses.serifItalic}>password</span>
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         <div className="space-y-1.5">
-          <Label htmlFor="currentPassword" className={profileClasses.textSecondary}>
+          <Label
+            htmlFor="currentPassword"
+            className={profileClasses.textSecondary}
+          >
             Current password
           </Label>
           <Input
@@ -182,7 +225,11 @@ function PasswordForm({ passwordForm, isSaving, onFieldChange, onSubmit }: Passw
         </div>
       </div>
 
-      <Button type="submit" disabled={isSaving} className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}>
+      <Button
+        type="submit"
+        disabled={isSaving}
+        className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}
+      >
         {isSaving ? <SavingLabel text="Updating..." /> : 'Update password'}
       </Button>
     </form>
@@ -197,7 +244,13 @@ function SavingLabel({ text }: { text: string }) {
   );
 }
 
-function DeleteConfirmModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
+function DeleteConfirmModal({
+  onCancel,
+  onConfirm,
+}: {
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200"
@@ -211,12 +264,14 @@ function DeleteConfirmModal({ onCancel, onConfirm }: { onCancel: () => void; onC
           <div className="p-2 bg-rose-50 rounded-full text-rose-600">
             <Trash2 className="h-6 w-6" />
           </div>
-          <h3 className="text-xl font-semibold text-neutral-900">Slet profil</h3>
+          <h3 className="text-xl font-semibold text-neutral-900">
+            Slet profil
+          </h3>
         </div>
 
         <p className="text-sm text-neutral-600 mb-6 leading-relaxed">
-          Er du sikker på, at du vil slette din konto? Hvis du sletter din profil, vil dine data
-          blive permanent slettet og kan ikke gendannes.
+          Er du sikker på, at du vil slette din konto? Hvis du sletter din
+          profil, vil dine data blive permanent slettet og kan ikke gendannes.
         </p>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">

@@ -13,6 +13,7 @@ export interface NavItem {
   label: string;
   italicPart?: string;
   icon: LucideIcon;
+  url?: string;
 }
 
 export type OrderStatus = 'on-the-way' | 'delivered' | 'regretted';

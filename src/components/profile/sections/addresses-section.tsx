@@ -1,38 +1,100 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { profileClasses } from '../constants/profile-theme';
-import { ADDRESSES } from '../constants/profile-data';
 import { Address } from '../types/profile';
 
-// NOTE: confirm this endpoint path against your actual backend — it follows
-// the same convention as the existing delete-profile call.
+const GET_ADDRESSES_ENDPOINT =
+  'https://tapbookme.com/wp-json/custom/v1/get-addresses';
 const UPDATE_ADDRESS_ENDPOINT =
   'https://tapbookme.com/wp-json/custom/v1/update-address';
+const ADD_ADDRESS_ENDPOINT =
+  'https://tapbookme.com/wp-json/custom/v1/add-address';
+
+type ModalMode = 'add' | 'edit' | null;
+
+const EMPTY_FORM: Omit<Address, 'id'> = {
+  type: 'delivery',
+  label: '',
+  fullName: '',
+  street: '',
+  postalCode: '',
+  city: '',
+  country: '',
+  phone: '',
+};
 
 export function AddressesSection() {
-  const [addresses, setAddresses] = useState<Address[]>(ADDRESSES);
-  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
-  const [form, setForm] = useState<Omit<Address, 'id' | 'type'>>({
-    label: '',
-    fullName: '',
-    street: '',
-    postalCode: '',
-    city: '',
-    country: '',
-    phone: '',
-  });
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [modalMode, setModalMode] = useState<ModalMode>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<Omit<Address, 'id'>>(EMPTY_FORM);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
+
+  async function fetchAddresses() {
+    setIsLoading(true);
+    setLoadError(null);
+
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setIsLoading(false);
+      setLoadError('You must be logged in to view addresses.');
+      return;
+    }
+
+    try {
+      const response = await fetch(GET_ADDRESSES_ENDPOINT, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Could not fetch addresses.');
+      }
+
+      let addressesData = data;
+      if (data.data && Array.isArray(data.data)) {
+        addressesData = data.data;
+      } else if (data.addresses && Array.isArray(data.addresses)) {
+        addressesData = data.addresses;
+      } else if (!Array.isArray(data)) {
+        addressesData = data.addresses || data.address || [];
+        if (!Array.isArray(addressesData)) {
+          addressesData = [];
+        }
+      }
+
+      setAddresses(addressesData);
+    } catch (err: any) {
+      console.error('Error fetching addresses:', err);
+      setLoadError(err.message || 'Failed to load addresses.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function openEdit(address: Address) {
-    setEditingAddress(address);
+    setModalMode('edit');
+    setEditingId(address.id);
     setForm({
+      type: address.type,
       label: address.label,
       fullName: address.fullName,
       street: address.street,
@@ -44,8 +106,15 @@ export function AddressesSection() {
     setError(null);
   }
 
-  function closeEdit() {
-    setEditingAddress(null);
+  function openAdd() {
+    setModalMode('add');
+    setEditingId(null);
+    setForm(EMPTY_FORM);
+    setError(null);
+  }
+
+  function closeModal() {
+    setModalMode(null);
     setError(null);
   }
 
@@ -54,45 +123,98 @@ export function AddressesSection() {
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
   }
 
+  function handleTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setForm((prev) => ({ ...prev, type: e.target.value as Address['type'] }));
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!editingAddress) return;
     setError(null);
 
     const token = localStorage.getItem('auth_token');
     if (!token) {
-      setError('You must be logged in to update an address.');
+      setError('You must be logged in to manage addresses.');
       return;
     }
 
     setIsSaving(true);
     try {
-      const response = await fetch(UPDATE_ADDRESS_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          type: editingAddress.type,
-          ...form,
-        }),
-      });
+      if (modalMode === 'edit' && editingId) {
+        const response = await fetch(UPDATE_ADDRESS_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: editingId, ...form }),
+        });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Could not update the address.');
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not update the address.');
+        }
+
+        setAddresses((prev) =>
+          prev.map((a) => (a.id === editingId ? { ...a, ...form } : a)),
+        );
+      } else {
+        const response = await fetch(ADD_ADDRESS_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(form),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not add the address.');
+        }
+
+        const newId =
+          data.id !== undefined && data.id !== null
+            ? String(data.id)
+            : `addr-${Date.now()}`;
+
+        let newAddress: Address;
+        if (data.address && typeof data.address === 'object') {
+          newAddress = { id: newId, ...data.address };
+        } else {
+          newAddress = { id: newId, ...form };
+        }
+
+        setAddresses((prev) => [...prev, newAddress]);
       }
 
-      setAddresses((prev) =>
-        prev.map((a) => (a.id === editingAddress.id ? { ...a, ...form } : a)),
-      );
-      closeEdit();
+      closeModal();
     } catch (err: any) {
-      setError(err.message || 'Could not update the address.');
+      setError(err.message || 'Something went wrong.');
     } finally {
       setIsSaving(false);
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-[#2B2420]" />
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-rose-600 text-sm mb-3">{loadError}</p>
+        <Button
+          onClick={fetchAddresses}
+          className={cn(profileClasses.buttonDark)}
+        >
+          Try again
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -107,6 +229,8 @@ export function AddressesSection() {
           </p>
         </div>
         <Button
+          type="button"
+          onClick={openAdd}
           className={cn(profileClasses.buttonDark, 'gap-1.5 w-full sm:w-auto')}
         >
           <Plus className="h-4 w-4" />
@@ -115,62 +239,112 @@ export function AddressesSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {addresses.map((address) => (
-          <div
-            key={address.id}
-            className={cn(profileClasses.surfaceCard, 'p-5')}
-          >
-            <h3
-              className={cn(
-                'text-sm font-semibold mb-3',
-                profileClasses.textPrimary,
-              )}
-            >
-              {address.label}
-            </h3>
+        {addresses.length > 0 ? (
+          addresses.map((address) => (
             <div
-              className={cn(
-                'text-sm space-y-0.5 mb-4',
-                profileClasses.textSecondary,
-              )}
+              key={address.id}
+              className={cn(profileClasses.surfaceCard, 'p-5')}
             >
-              <p className={profileClasses.textPrimary}>{address.fullName}</p>
-              <p>{address.street}</p>
-              <p>
-                {address.postalCode} {address.city}
-              </p>
-              <p>{address.country}</p>
-              <p>{address.phone}</p>
+              <h3
+                className={cn(
+                  'text-sm font-semibold mb-3',
+                  profileClasses.textPrimary,
+                )}
+              >
+                {address.label || address.type}
+              </h3>
+              <div
+                className={cn(
+                  'text-sm space-y-0.5 mb-4',
+                  profileClasses.textSecondary,
+                )}
+              >
+                <p className={profileClasses.textPrimary}>
+                  {address.fullName || 'No name'}
+                </p>
+                <p>{address.street || 'No street address'}</p>
+                <p>
+                  {address.postalCode || ''} {address.city || ''}
+                </p>
+                <p>{address.country || 'No country'}</p>
+                <p>{address.phone || 'No phone'}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openEdit(address)}
+                className={cn(
+                  'text-sm font-medium underline underline-offset-2 cursor-pointer',
+                  profileClasses.textPrimary,
+                )}
+              >
+                Edit address →
+              </button>
             </div>
-            <button
+          ))
+        ) : (
+          <div className="col-span-full py-8 text-center">
+            <p className={cn('text-sm mb-3', profileClasses.textSecondary)}>
+              You haven&apos;t added any addresses yet.
+            </p>
+            <Button
               type="button"
-              onClick={() => openEdit(address)}
-              className={cn(
-                'text-sm font-medium underline underline-offset-2 cursor-pointer',
-                profileClasses.textPrimary,
-              )}
+              onClick={openAdd}
+              variant="outline"
+              className="border-[#EAE1D3] text-[#2B2420]"
             >
-              Edit address →
-            </button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add your first address
+            </Button>
           </div>
-        ))}
+        )}
       </div>
 
-      {editingAddress && (
+      {modalMode && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-          onClick={closeEdit}
+          onClick={closeModal}
         >
           <div
             className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#EAE1D3] max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-semibold text-neutral-900 mb-4">
-              Edit {editingAddress.label}
+              {modalMode === 'add'
+                ? 'Add new address'
+                : `Edit ${form.label || 'address'}`}
             </h3>
 
             <form onSubmit={handleSave} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {modalMode === 'add' && (
+                  <>
+                    <div className="space-y-1.5">
+                      <Label className={profileClasses.textSecondary}>
+                        Address type
+                      </Label>
+                      <select
+                        value={form.type}
+                        onChange={handleTypeChange}
+                        className="w-full rounded-md border border-[#EAE1D3] bg-[#FAF6F0] px-3 py-2 text-sm text-[#2B2420]"
+                      >
+                        <option value="delivery">Delivery</option>
+                        <option value="billing">Billing</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className={profileClasses.textSecondary}>
+                        Label
+                      </Label>
+                      <Input
+                        placeholder="e.g. Home, Office"
+                        value={form.label}
+                        onChange={handleChange('label')}
+                        className="bg-[#FAF6F0] border-[#EAE1D3] placeholder:text-[#B7AB9C]"
+                      />
+                    </div>
+                  </>
+                )}
+
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label className={profileClasses.textSecondary}>
                     Full name
@@ -179,6 +353,7 @@ export function AddressesSection() {
                     value={form.fullName}
                     onChange={handleChange('fullName')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
@@ -189,6 +364,7 @@ export function AddressesSection() {
                     value={form.street}
                     onChange={handleChange('street')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -199,6 +375,7 @@ export function AddressesSection() {
                     value={form.postalCode}
                     onChange={handleChange('postalCode')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -207,6 +384,7 @@ export function AddressesSection() {
                     value={form.city}
                     onChange={handleChange('city')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -217,6 +395,7 @@ export function AddressesSection() {
                     value={form.country}
                     onChange={handleChange('country')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -227,6 +406,7 @@ export function AddressesSection() {
                     value={form.phone}
                     onChange={handleChange('phone')}
                     className="bg-[#FAF6F0] border-[#EAE1D3]"
+                    required
                   />
                 </div>
               </div>
@@ -237,7 +417,7 @@ export function AddressesSection() {
                 <Button
                   type="button"
                   variant="ghost"
-                  onClick={closeEdit}
+                  onClick={closeModal}
                   className="rounded-full px-5 text-sm font-medium text-neutral-500 hover:bg-neutral-100"
                 >
                   Cancel
@@ -251,6 +431,8 @@ export function AddressesSection() {
                     <span className="flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" /> Saving...
                     </span>
+                  ) : modalMode === 'add' ? (
+                    'Add address'
                   ) : (
                     'Save address'
                   )}

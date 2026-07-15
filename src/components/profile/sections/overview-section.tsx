@@ -41,8 +41,6 @@ export function OverviewSection({
     (o) => o.status === 'on-the-way',
   ).length;
 
-  // Values derived from real data instead of the old static OVERVIEW_STATS array.
-  // "warranty" has no backend field yet, so it stays as a fixed policy label.
   const stats = [
     {
       id: 'total-orders',
@@ -189,7 +187,6 @@ export function OverviewSection({
         })}
       </div>
 
-      {/* Latest orders + sleep expert */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div
           className={cn(profileClasses.surfaceCard, 'p-4 sm:p-5 lg:col-span-2')}

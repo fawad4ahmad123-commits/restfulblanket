@@ -1,20 +1,10 @@
-import Profile from '@/src/components/profile';
-import { ProtectedRoute } from '@/src/core/context/auth-context';
+import { Metadata } from 'next';
+import OverviewPageClient from './overview-client';
 
-export const metadata = {
-  title: 'My Account',
-  robots: {
-    index: false,
-    follow: false,
-  },
+export const metadata: Metadata = {
+  title: 'Overview | My Account',
 };
 
-const ProfilePage = () => {
-  return (
-    <ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>
-  );
-};
-
-export default ProfilePage;
+export default function ProfilePage() {
+  return <OverviewPageClient />;
+}

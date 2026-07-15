@@ -1,6 +1,5 @@
-// services/account-api.ts
-
-const WORDPRESS_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://tapbookme.com';
+const WORDPRESS_URL =
+  process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://tapbookme.com';
 
 export const API_ENDPOINTS = {
   updateProfile: `${WORDPRESS_URL}/wp-json/custom/v1/update-profile`,
@@ -22,7 +21,10 @@ function getAuthToken(): string | null {
   return localStorage.getItem('auth_token');
 }
 
-async function authorizedFetch<T = any>(url: string, options: RequestInit = {}): Promise<T> {
+async function authorizedFetch<T = any>(
+  url: string,
+  options: RequestInit = {},
+): Promise<T> {
   const token = getAuthToken();
   if (!token) {
     throw new AuthRequiredError();
@@ -71,5 +73,6 @@ export const accountApi = {
       }),
     }),
 
-  deleteProfile: () => authorizedFetch(API_ENDPOINTS.deleteProfile, { method: 'DELETE' }),
+  deleteProfile: () =>
+    authorizedFetch(API_ENDPOINTS.deleteProfile, { method: 'DELETE' }),
 };

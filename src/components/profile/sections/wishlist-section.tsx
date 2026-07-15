@@ -42,7 +42,6 @@ export function WishlistSection() {
   const totalItems = wishlistItems.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Safeguard currentPage if items are removed and page count shrinks
   const activePage = Math.min(currentPage, Math.max(totalPages, 1));
 
   const startIndex = (activePage - 1) * ITEMS_PER_PAGE;
