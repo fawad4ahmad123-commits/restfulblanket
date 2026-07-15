@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { LogOut, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProfileSectionId } from './types/profile';
 import { profileClasses } from './constants/profile-theme';
+import { SECTION_ROUTES } from './constants/profile-routes';
 import {
   PROFILE_FOOTER_NAV_ITEM,
   PROFILE_NAV_ITEMS,
@@ -15,14 +17,12 @@ import { useRouter } from 'next/navigation';
 
 interface ProfileSidebarProps {
   activeSection: ProfileSectionId;
-  onSelect: (section: ProfileSectionId) => void;
   isMobileOpen: boolean;
   onMobileClose: () => void;
 }
 
 export function ProfileSidebar({
   activeSection,
-  onSelect,
   isMobileOpen,
   onMobileClose,
 }: ProfileSidebarProps) {
@@ -38,22 +38,12 @@ export function ProfileSidebar({
     ? user.name.split(' ')[0]
     : PROFILE_USER.firstName;
 
-  // Lock body scroll while the mobile drawer is open
   useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = isMobileOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
   }, [isMobileOpen]);
-
-  function handleSelect(section: ProfileSectionId) {
-    onSelect(section);
-    onMobileClose();
-  }
 
   const navContent = (
     <>
@@ -75,12 +65,12 @@ export function ProfileSidebar({
           const Icon = item.icon;
           const isActive = activeSection === item.id;
           return (
-            <button
+            <Link
               key={item.id}
-              type="button"
-              onClick={() => handleSelect(item.id)}
+              href={SECTION_ROUTES[item.id]}
+              onClick={onMobileClose}
               className={cn(
-                'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left cursor-pointer',
+                'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors',
                 isActive
                   ? profileClasses.navItemActive
                   : profileClasses.navItemInactive,
@@ -88,7 +78,7 @@ export function ProfileSidebar({
             >
               <Icon className="h-4 w-4 shrink-0" />
               {item.label}
-            </button>
+            </Link>
           );
         })}
       </nav>
@@ -96,11 +86,11 @@ export function ProfileSidebar({
       <div className="my-4 h-px bg-[#EAE1D3]" />
 
       <nav className="flex flex-col gap-1">
-        <button
-          type="button"
-          onClick={() => handleSelect(PROFILE_FOOTER_NAV_ITEM.id)}
+        <Link
+          href={SECTION_ROUTES[PROFILE_FOOTER_NAV_ITEM.id]}
+          onClick={onMobileClose}
           className={cn(
-            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors text-left cursor-pointer',
+            'flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors',
             activeSection === PROFILE_FOOTER_NAV_ITEM.id
               ? profileClasses.navItemActive
               : profileClasses.navItemInactive,
@@ -108,7 +98,7 @@ export function ProfileSidebar({
         >
           <PROFILE_FOOTER_NAV_ITEM.icon className="h-4 w-4 shrink-0" />
           {PROFILE_FOOTER_NAV_ITEM.label}
-        </button>
+        </Link>
 
         <button
           type="button"
@@ -127,13 +117,10 @@ export function ProfileSidebar({
 
   return (
     <>
-      {/* Desktop sidebar */}
       <aside className="hidden md:block w-full max-w-[220px] shrink-0">
         {navContent}
       </aside>
 
-      {/* Mobile top bar trigger lives in Profile's main wrapper (see index.tsx),
-          this component only renders the drawer/canvas itself on mobile */}
       <div
         className={cn(
           'md:hidden fixed inset-0 z-50 transition-opacity duration-300',
@@ -143,13 +130,10 @@ export function ProfileSidebar({
         )}
         aria-hidden={!isMobileOpen}
       >
-        {/* Backdrop */}
         <div
           className="absolute inset-0 bg-black/40 backdrop-blur-sm"
           onClick={onMobileClose}
         />
-
-        {/* Canvas / drawer */}
         <div
           className={cn(
             'absolute inset-y-0 left-0 w-[85%] max-w-[320px] bg-[#FAF6F0] shadow-xl p-6 overflow-y-auto transition-transform duration-300 ease-out',
