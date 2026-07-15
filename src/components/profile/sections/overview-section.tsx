@@ -11,11 +11,12 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { PROFILE_USER, SLEEP_EXPERT } from '../constants/profile-data';
+import { EXPERTS, PROFILE_USER, SLEEP_EXPERT } from '../constants/profile-data';
 import { profileClasses, profileTheme } from '../constants/profile-theme';
 import { OrderRow } from '../order-row';
 import { Order } from '../types/profile';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
+import { useEffect, useState } from 'react';
 
 interface OverviewSectionProps {
   orders: Order[];
@@ -31,7 +32,7 @@ export function OverviewSection({
   const { wishlistItems } = useWishlist();
 
   const nightsTarget = 365;
-  const nightsOwned = PROFILE_USER.nightsOwned; // no backend field for this yet
+  const nightsOwned = PROFILE_USER.nightsOwned;
   const progress = Math.min(nightsOwned / nightsTarget, 1);
   const radius = 46;
   const circumference = 2 * Math.PI * radius;
@@ -67,6 +68,18 @@ export function OverviewSection({
       icon: ShieldCheck,
     },
   ];
+
+  const [activeExpert, setActiveExpert] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveExpert((prev) => (prev + 1) % EXPERTS.length);
+    }, 120000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const expert = EXPERTS[activeExpert];
 
   const displayFirstName = user?.name
     ? user.name.split(' ')[0]
@@ -218,13 +231,15 @@ export function OverviewSection({
             Your sleep{' '}
             <span className={profileClasses.serifItalic}>expert</span>
           </h3>
+
           <div className="flex items-start gap-3 mb-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={SLEEP_EXPERT.avatar}
-              alt={SLEEP_EXPERT.name}
+              src={expert.image}
+              alt={expert.name}
               className="h-11 w-11 rounded-full object-cover"
             />
+
             <div>
               <p
                 className={cn(
@@ -232,33 +247,57 @@ export function OverviewSection({
                   profileClasses.textPrimary,
                 )}
               >
-                {SLEEP_EXPERT.name}
+                {expert.name}
               </p>
+
               <p className={cn('text-xs', profileClasses.textSecondary)}>
-                {SLEEP_EXPERT.title}
+                {expert.profession}
               </p>
             </div>
           </div>
-          <p className={cn('text-xs mb-4', profileClasses.textSecondary)}>
-            {SLEEP_EXPERT.bio}
+
+          <p
+            className={cn(
+              'text-xs font-medium mb-2',
+              profileClasses.textPrimary,
+            )}
+          >
+            {expert.position}
           </p>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              aria-label={`Email ${SLEEP_EXPERT.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#EAE1D3] hover:bg-[#F3ECE1]"
-            >
-              <Mail className={cn('h-3.5 w-3.5', profileClasses.textPrimary)} />
-            </button>
-            <button
-              type="button"
-              aria-label={`Call ${SLEEP_EXPERT.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#EAE1D3] hover:bg-[#F3ECE1]"
-            >
-              <Phone
-                className={cn('h-3.5 w-3.5', profileClasses.textPrimary)}
-              />
-            </button>
+
+          <p className={cn('text-xs mb-4', profileClasses.textSecondary)}>
+            {expert.specialization}
+          </p>
+
+          <div className="flex flex-wrap gap-1 mb-4">
+            {expert.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-[#F3ECE1] px-2 py-1 text-[10px] text-[#2B2420]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex gap-1">
+              {EXPERTS.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setActiveExpert(index)}
+                  className={cn(
+                    'h-2 w-2 rounded-full transition-all',
+                    index === activeExpert ? 'bg-[#2B2420]' : 'bg-[#D8CBB9]',
+                  )}
+                />
+              ))}
+            </div>
+
+            <span className="text-[10px] text-[#8C8177]">
+              {activeExpert + 1} / {EXPERTS.length}
+            </span>
           </div>
         </div>
       </div>

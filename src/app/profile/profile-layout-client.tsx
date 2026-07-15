@@ -10,12 +10,12 @@ import {
 import { getSectionFromPathname } from '@/src/components/profile/constants/profile-routes';
 
 const SECTION_LABELS = {
-  overview: 'Overview',
-  orders: 'My Orders',
-  wishlist: 'Wishlist',
-  addresses: 'Addresses',
-  account: 'Account Information',
-  cancellation: 'Cancellation & return',
+  overview: 'Oversigt',
+  orders: 'Mine ordrer',
+  wishlist: 'Ønskeliste',
+  addresses: 'Adresser',
+  account: 'Kontooplysninger',
+  cancellation: 'Annullering & returnering',
 } as const;
 
 export default function ProfileLayoutClient({
