@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Heart, ShoppingBag, Star, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Star, Check, Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { formatPrice } from '@/src/helper/product-feature';
@@ -133,6 +133,21 @@ const ProductCard = ({
             }
           />
         </button>
+        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0 cursor-pointer">
+          <button
+            type="button"
+            aria-label={`Hurtig visning af ${name}`}
+            title={`Hurtig visning af ${name}`}
+            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/product/${slug}`);
+            }}
+          >
+            <Eye aria-hidden="true" size={14} />
+            Hurtig visning
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-4">

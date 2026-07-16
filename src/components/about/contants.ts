@@ -86,67 +86,90 @@ export const COMPANY_INFO = {
 
 export const IMPACT_PROJECTS = [
   {
-    title: 'The Medusa Project',
+    title: 'Medusa Project',
     description:
-      'A partnership with a crisis centre, offering calming tools to people rebuilding a sense of safety.',
+      'Supporting people in vulnerable situations through calm environments and practical sensory tools.',
   },
   {
-    title: 'The Lærke Project',
+    title: 'Lærke Project',
     description:
-      'Support for children with extra sensory needs, helping them feel steadier at home and at school.',
+      'Creating structure, safety and support for children and young people with additional needs.',
   },
   {
-    title: 'Ro i Innercirklen',
+    title: 'Ro, Tryghed & Retning',
     description:
-      "A quiet initiative bringing calm and safety to people's closest, most trusted circles.",
+      'Helping people take small steps forward through calm, clear frameworks and respectful support.',
   },
 ];
 
 export const CERTIFICATIONS = [
-  '/certifications/goodmarket.png',
-  '/certifications/peopleandplanetfirst.png',
-  '/certifications/socialeentreprenoereridanmark.png',
-  '/certifications/goodshoppingguide.png',
+  {
+    image: '/certifications/goodmarket.png',
+    href: 'https://www.goodmarket.global/restfulblanket',
+  },
+  {
+    image: '/certifications/peopleandplanetfirst.png',
+    href: 'https://verified.peopleandplanetfirst.org/directory/restfulblanket',
+  },
+  {
+    image: '/certifications/socialeentreprenoereridanmark.png',
+    href: 'https://socialeentreprenorer.dk/portfolio-item/restfulblanket/',
+  },
+  {
+    image: '/certifications/goodshoppingguide.png',
+    href: 'https://thegoodshoppingguide.com',
+  },
 ];
 
 export const DOCUMENT_LINKS = [
   {
     label: 'Press & Media Kit',
-    href: '#',
+    href: '/om-os/presse-og-mediekit',
   },
   {
     label: 'Expert Panel',
-    href: '#',
+    href: '/om-os/ekspertpanel',
   },
   {
     label: 'CE Documentation',
-    href: '#',
+    href: '/om-vores-dyner/ce-maerkning-og-dokumentation',
+  },
+  {
+    label: 'Social Projects',
+    href: '/social-projekter',
+  },
+  {
+    label: 'Zafir Bæk',
+    href: '/om-os/ekspertpanel/zafir-baek',
   },
 ];
 
 export const STATS = [
   {
-    value: '4.7',
-    label: 'Trustpilot · 33 reviews',
+    label: 'Founded',
+    value: '2022',
   },
   {
-    value: '90',
-    label: 'Nights guarantee',
+    label: 'Development Started',
+    value: '2019',
   },
   {
-    value: 'Free',
-    label: 'Shipping & returns',
+    label: 'Location',
+    value: 'Vig Erhvervspark',
   },
   {
-    value: 'CE',
-    label: 'Medically approved',
+    label: 'Founder',
+    value: 'Zafir Bæk',
   },
   {
-    value: '100%',
-    label: 'Hand-sewn in Denmark',
+    label: 'Company Type',
+    value: 'Registered Social Enterprise',
+  },
+  {
+    label: 'Core',
+    value: 'Natural Weighted Products',
   },
 ];
-
 export const FOUNDER_QUOTE = {
   eyebrow: 'FROM THE FOUNDER',
 

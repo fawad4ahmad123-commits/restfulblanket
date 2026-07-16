@@ -1,15 +1,15 @@
-// types.ts
 export interface CartItem {
-  id: string; // Unique ID: "10171-Blå Creme-3kg-140×200×5cm"
-  productId?: number; // The actual product ID: 10171
-  variationId?: number; // The variation ID if applicable
+  id: string;
+  productId?: number;
+  variationId?: number;
   name: string;
-  color?: string; // For backward compatibility
-  variant?: string; // For backward compatibility (size)
-  weight?: string; // For backward compatibility
+  color?: string;
+  variant?: string;
+  weight?: string;
   price: number;
   quantity: number;
   image: string;
+  stockQuantity?: number | string | null;
   attributes?: {
     color: string;
     size: string;

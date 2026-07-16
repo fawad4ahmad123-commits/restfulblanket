@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { CTA_DATA } from './contants';
+import Link from 'next/link';
 
 export function CTASection() {
   return (
@@ -13,10 +14,13 @@ export function CTASection() {
           {CTA_DATA.description}
         </p>
 
-        <button className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3A2A22] px-6 py-3 text-sm text-white">
+        <Link
+          href="/shop"
+          className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3A2A22] px-6 py-3 text-sm text-white"
+        >
           {CTA_DATA.buttonText}
           <ArrowRight className="h-4 w-4" />
-        </button>
+        </Link>
       </div>
     </section>
   );

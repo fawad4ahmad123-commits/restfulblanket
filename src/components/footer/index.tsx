@@ -32,8 +32,8 @@ const Footer = () => {
                 className="mt-1 shrink-0 text-[#F5F1EA]"
                 aria-hidden="true"
               />
-              <p className="font-serif text-[18px] leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-[16px] mt-[4px]">
-                Vig Erhvervspark Søndre Vænge 19E 4560 Vig
+              <p className=" text-[18px] leading-tight tracking-tight sm:text-[16px] md:text-[16px] lg:text-[16px] mt-[4px]">
+                Vig Erhvervspark Søndre Vænge 19K 4560 Vig
               </p>
             </div>
 
@@ -168,19 +168,25 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-wrap justify-start gap-4 text-xs text-[#F5F1EA]/80 lg:justify-end">
-            <Link href="#" aria-label="Privacy Policy">
+            <Link href="/privacy-policy" aria-label="Privacy Policy">
               Privacy
             </Link>
 
-            <Link href="#" aria-label="Terms and Conditions">
+            <Link
+              href="/terms-and-conditions"
+              aria-label="Terms and Conditions"
+            >
               Terms
             </Link>
 
-            <Link href="#" aria-label="Cookie Policy">
+            <Link href="/cookie-policy" aria-label="Cookie Policy">
               Cookies
             </Link>
 
-            <Link href="#" aria-label="Accessibility Statement">
+            <Link
+              href="/accessibility-statement"
+              aria-label="Accessibility Statement"
+            >
               Accessibility
             </Link>
           </div>

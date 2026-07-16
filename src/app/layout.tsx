@@ -10,6 +10,7 @@ import { getBestSellers, getCategories } from '../lib/products';
 import { CompareProvider } from '../core/context/compare-provider';
 import { AuthProvider } from '../core/context/auth-context';
 import { WishlistProvider } from '../core/context/wishlist-provider';
+import SignupPopup from '../components/signup-popup/signup-popup';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
   robots: {
     index: false,
     follow: false,
+  },
+  icons: {
+    icon: '/LogoJPG.webp',
+    shortcut: '/LogoJPG.webp',
+    apple: '/LogoJPG.webp',
   },
 };
 
@@ -50,6 +56,7 @@ export default async function RootLayout({
                 <CartProvider>
                   <MainLayout>
                     {children}
+                    <SignupPopup />
                     <Toaster />
                   </MainLayout>
                 </CartProvider>

@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'tapbookme.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'd3k81ch9hvuctc.cloudfront.net',
+      },
     ],
   },
 };

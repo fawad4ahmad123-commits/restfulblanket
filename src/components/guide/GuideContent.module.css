@@ -1,0 +1,182 @@
+.content :global(p) {
+  color: #736760;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.content :global(strong) {
+  color: #4a3f38;
+  font-weight: 600;
+}
+
+/* Headings */
+.content :global(h2),
+.content :global(h3),
+.content :global(h4) {
+  color: #4a3f38;
+  font-weight: 700;
+  scroll-margin-top: 6rem;
+}
+
+.content :global(h2) {
+  font-size: 1.5rem;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.content :global(h3) {
+  font-size: 1.125rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Bullet lists */
+.content :global(ul) {
+  margin: 1.25rem 0;
+  padding-left: 0.25rem;
+  list-style: none;
+}
+
+.content :global(ul li) {
+  position: relative;
+  padding-left: 1.5rem;
+  color: #736760;
+  line-height: 1.7;
+  margin-bottom: 0.65rem;
+}
+
+.content :global(ul li)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #392a22;
+}
+
+/* Numbered lists */
+.content :global(ol) {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+  color: #736760;
+}
+
+.content :global(ol li) {
+  line-height: 1.7;
+  margin-bottom: 0.65rem;
+  padding-left: 0.25rem;
+}
+
+.content :global(ol li)::marker {
+  color: #392a22;
+  font-weight: 600;
+}
+
+/* Links (button excluded below via its own, more specific rule) */
+.content :global(a):not(:global(.wp-block-button__link)) {
+  color: #392a22;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgba(57, 42, 34, 0.4);
+  text-underline-offset: 2px;
+}
+
+.content :global(a):not(:global(.wp-block-button__link)):hover {
+  text-decoration-color: #392a22;
+}
+
+/* CTA buttons - plain CSS instead of dynamic Tailwind, so it actually renders */
+.content :global(.wp-block-button__link) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #392a22;
+  color: #ffffff !important;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition:
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.content :global(.wp-block-button__link):hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  color: #ffffff !important;
+}
+
+/* Images */
+.content :global(img) {
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0;
+}
+
+/* Blockquotes / callouts */
+.content :global(blockquote) {
+  border-radius: 1rem;
+  border-left: 4px solid #392a22;
+  background-color: #faf7f4;
+  padding: 1.25rem 1.5rem;
+  color: #736760;
+  font-style: normal;
+  margin: 2rem 0;
+}
+
+/* Tables - matches your ComparisonTable design */
+.content :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 0.75rem;
+  border: 1px solid #e7ded6;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.content :global(thead tr) {
+  background-color: #34261d;
+}
+
+.content :global(th) {
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  border-right: 1px solid #4a3b31;
+}
+
+.content :global(th):last-child {
+  border-right: none;
+}
+
+.content :global(tbody tr) {
+  border-top: 1px solid #e7ded6;
+}
+
+.content :global(td) {
+  color: #4b4037;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  border-right: 1px solid #e7ded6;
+}
+
+.content :global(td):last-child {
+  border-right: none;
+}
+
+/* Section dividers: 1rem gap above and below */
+.content :global(hr) {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid #e5e5e5;
+}

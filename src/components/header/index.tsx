@@ -38,7 +38,6 @@ const SiteHeader = () => {
   const { wishlistIds } = useWishlist();
   const wishlistCount = wishlistIds.length;
   const { user, isAuthenticated } = useAuth();
-  console.log('t56', { isHome });
   const {
     items,
     upsellItems,
@@ -118,60 +117,6 @@ const SiteHeader = () => {
                 )}
               </Button>
 
-              {isAuthenticated ? (
-                <Link
-                  href="/profile"
-                  aria-label={`${user?.name} profile`}
-                  title="My profile"
-                  className={cn(
-                    'flex items-center gap-2 rounded-full px-2 py-1 transition-colors',
-                    !isHome && 'hover:bg-[#392A22]/10',
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold',
-                      isHome
-                        ? 'bg-white/20 text-white'
-                        : 'bg-[#392A22] text-[#FFF9F5]',
-                    )}
-                  >
-                    {getInitials(user?.name)}
-                  </span>
-                  <span className="hidden flex-col leading-tight xl:flex">
-                    <span
-                      className={cn(
-                        'text-sm font-medium',
-                        isHome ? 'text-white' : 'text-[#392A22]',
-                      )}
-                    >
-                      {user?.name}
-                    </span>
-                    <span
-                      className={cn(
-                        'text-xs',
-                        isHome ? 'text-white/60' : 'text-[#392A22]/50',
-                      )}
-                    >
-                      Restful Member
-                    </span>
-                  </span>
-                </Link>
-              ) : (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  aria-label="Sign in or manage account"
-                  title="My account"
-                  onClick={() => router.push('/signin')}
-                  className={cn(
-                    !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
-                  )}
-                >
-                  <User aria-hidden="true" className="size-4" />
-                </Button>
-              )}
-
               <Button
                 onClick={() => setCartOpen(true)}
                 aria-label={`Open shopping cart${cartCount > 0 ? ` with ${cartCount} items` : ''}`}
@@ -195,6 +140,62 @@ const SiteHeader = () => {
                   )}
                 </div>
               </Button>
+
+              {isAuthenticated ? (
+                <Link
+                  href="/profile"
+                  aria-label={`${user?.name} profile`}
+                  title="My profile"
+                  className={cn(
+                    'flex items-center gap-2 rounded-full px-2 py-1 transition-colors',
+                    !isHome && 'hover:bg-[#392A22]/10',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold',
+                      isHome
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#392A22] text-[#FFF9F5]',
+                    )}
+                  >
+                    {getInitials(user?.name)}
+                  </span>
+
+                  <span className="hidden flex-col leading-tight xl:flex">
+                    <span
+                      className={cn(
+                        'text-sm font-medium',
+                        isHome ? 'text-white' : 'text-[#392A22]',
+                      )}
+                    >
+                      {user?.name}
+                    </span>
+
+                    <span
+                      className={cn(
+                        'text-xs',
+                        isHome ? 'text-white/60' : 'text-[#392A22]/50',
+                      )}
+                    >
+                      Restful Member
+                    </span>
+                  </span>
+                </Link>
+              ) : (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  aria-label="Sign in"
+                  title="Sign in"
+                  onClick={() => router.push('/signin')}
+                  className={cn(
+                    !isHome && 'text-[#392A22] hover:bg-[#392A22]/10',
+                  )}
+                >
+                  <User className="size-4" />
+                </Button>
+              )}
             </div>
 
             <div className="flex items-center gap-1 lg:hidden">

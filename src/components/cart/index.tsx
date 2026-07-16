@@ -31,7 +31,6 @@ export default function CartOffcanvas({
     0,
   );
 
-  console.log('Cart items:', items);
   async function handleCheckout() {
     setCheckoutError(null);
     setIsCheckingOut(true);
@@ -45,8 +44,6 @@ export default function CartOffcanvas({
         })),
       };
 
-      console.log('SEND TO NEXT API: t3', payload);
-
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
@@ -56,8 +53,6 @@ export default function CartOffcanvas({
       });
 
       const data = await response.json();
-
-      console.log('NEXT API RESPONSE:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Checkout failed');
@@ -108,7 +103,7 @@ export default function CartOffcanvas({
         {items.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-4 bg-[#FAF3EC] px-6 text-center">
             <p className="text-sm md:text-base text-stone-600">
-              Your cart is empty
+              Din kurv er tom
             </p>
             <Button
               onClick={() => {
@@ -117,14 +112,14 @@ export default function CartOffcanvas({
               }}
               className="rounded-full bg-[#35281E] hover:bg-[#35281E] hover:opacity-100 text-white px-6 h-[44px]"
             >
-              Continue Shopping
+              Fortsæt med at handle
             </Button>
           </div>
         ) : (
           <div className="flex h-full flex-col bg-[#FAF3EC]">
             <div className="flex items-center justify-between border-b border-stone-200 px-4 py-3.5 md:px-6 md:py-4">
               <h2 className="text-sm md:text-base font-semibold text-stone-900">
-                Your Cart ({items.length})
+                Din kurv ({items.length})
               </h2>
             </div>
 
@@ -145,7 +140,7 @@ export default function CartOffcanvas({
                   onClick={() => setDiscountOpen(!discountOpen)}
                   className="flex w-full justify-between items-center text-sm md:text-base font-medium text-stone-900"
                 >
-                  Apply discount code
+                  Anvend rabatkode
                   <ChevronDown
                     className={`h-4 w-4 md:h-5 md:w-5 transition-transform ${discountOpen ? 'rotate-180' : ''}`}
                   />
@@ -163,7 +158,7 @@ export default function CartOffcanvas({
                       onClick={() => handleApplyDiscount(discountCode)}
                       className="rounded-full bg-[#35281E] hover:bg-[#35281E] hover:opacity-100 h-[38px] md:h-[48px] px-4 md:px-6 py-0 text-xs md:text-sm text-white"
                     >
-                      Apply
+                      Anvend
                     </Button>
                   </div>
                 )}
@@ -172,9 +167,9 @@ export default function CartOffcanvas({
               <div className="border-t border-stone-200 px-4 py-3.5 md:px-6 md:py-4">
                 <div className="flex items-start justify-between text-sm md:text-base">
                   <div className="flex flex-col min-w-0">
-                    <span className="font-medium text-stone-900">Subtotal</span>
+                    <span className="font-medium text-stone-900">Delsum</span>
                     <p className="mt-0.5 text-[10px] md:text-xs text-[#6B6B6B] leading-tight">
-                      Shipping & taxes may be re-calculated at checkout
+                      Fragt og moms kan blive genberegnet ved kassen
                     </p>
                   </div>
                   <span className="font-semibold text-stone-900 shrink-0 ml-4">
@@ -191,7 +186,7 @@ export default function CartOffcanvas({
                   disabled={isCheckingOut}
                   className="mt-3.5 md:mt-4 h-[44px] md:h-[56px] w-full cursor-pointer rounded-full bg-[#35281E] hover:bg-[#35281E] hover:opacity-100 text-xs md:text-base font-semibold text-white disabled:opacity-60"
                 >
-                  {isCheckingOut ? 'Redirecting...' : 'Proceed to Checkout'}
+                  {isCheckingOut ? 'Omdirigerer...' : 'Gå til kassen'}
                   {!isCheckingOut && (
                     <ArrowRight className="ml-2 h-3.5 w-3.5 md:h-4 md:w-4" />
                   )}

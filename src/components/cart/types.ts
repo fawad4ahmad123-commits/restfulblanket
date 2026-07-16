@@ -9,6 +9,7 @@ export interface CartItem {
   image: string;
   productId?: number;
   variationId?: number;
+  stockQuantity?: number | string | null;
 }
 
 export interface UpsellItem {

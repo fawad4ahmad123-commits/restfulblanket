@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Heart, ShoppingBag, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Check, Eye } from 'lucide-react';
 import { useCart } from '@/src/core/context/card-Provider';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { useCompare } from '@/src/core/context/compare-provider';
@@ -192,6 +192,21 @@ export function ProductCard({ product }: ProductCardProps) {
             }
           />
         </button>
+        <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
+          <button
+            type="button"
+            aria-label={`Quick view ${title}`}
+            title={`Quick view ${title}`}
+            className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/product/${slug}`);
+            }}
+          >
+            <Eye aria-hidden="true" size={14} />
+            Hurtig visning
+          </button>
+        </div>
       </div>
       <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
         <div

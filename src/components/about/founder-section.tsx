@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { FOUNDER_INFO } from './contants';
+import Link from 'next/link';
 
 export function FounderSection() {
   return (
@@ -29,10 +30,13 @@ export function FounderSection() {
             ))}
           </div>
 
-          <button className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3A2A22] px-6 py-3 text-sm text-white">
+          <Link
+            href="/om-os/ekspertpanel/zafir-baek"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3A2A22] px-6 py-3 text-sm text-white"
+          >
             {FOUNDER_INFO.buttonText}
             <ArrowRight className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

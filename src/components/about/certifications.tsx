@@ -11,8 +11,15 @@ export function Certifications() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-8">
-          {CERTIFICATIONS.map((logo) => (
-            <Image key={logo} src={logo} alt="" width={90} height={90} />
+          {CERTIFICATIONS.map((item) => (
+            <a
+              key={item.image}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={item.image} alt="" width={90} height={90} />
+            </a>
           ))}
         </div>
       </div>

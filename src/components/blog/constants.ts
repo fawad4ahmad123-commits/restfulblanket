@@ -161,8 +161,8 @@ export const BLOG_CATEGORIES = [
     name: 'Tyngdedyne til voksne',
     url: '/collections/sovevaerelse/tyngdedyner/voksne/',
   },
-  { name: 'Tyngdedyne og ADHD', url: '/blog-detail/adhd/' },
-  { name: 'Tyngdedyne mod angst', url: '/blog-detail/angst/' },
+  { name: 'Tyngdedyne og ADHD', url: '/guides/adhd' },
+  { name: 'Tyngdedyne mod angst', url: '/guides/angst' },
   {
     name: 'Kugledyne eller tyngdedyne?',
     url: 'blog-detail/kugledyne-eller-tyngdedyne/',

@@ -12,7 +12,7 @@ export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 export const navigation = [
   {
     title: 'Alle Produkter',
-    href: '/shop', // Pointing to the main collections root
+    href: '/shop',
   },
   {
     title: 'Tyngdetæpper',
@@ -23,34 +23,34 @@ export const navigation = [
         links: [
           {
             title: 'Voksne',
-            href: '/voksne', // Level 2 Subcategory
+            href: '/voksne',
           },
           {
             title: 'Børn',
-            href: '/boern', // Level 2 Subcategory
+            href: '/boern',
           },
         ],
       },
     ],
   },
   {
-    title: 'Tyngdedyner', // Note: Adjusted title slightly to map neatly if this was meant to be different from Tyngdetæpper
+    title: 'Tyngdedyner',
     href: '/collections/tyngdedyner',
   },
   {
     title: 'Tilbehør',
-    href: '/collections/tilbehoer', // Level 1 Category
+    href: '/collections/tilbehoer',
     groups: [
       {
         heading: 'VORES TILBEHØR',
         links: [
           {
             title: 'Hovedpuder',
-            href: '/hovedpuder', // Level 2 Subcategory
+            href: '/hovedpuder',
           },
           {
             title: 'Sengesæt',
-            href: '/sengesaet', // Level 2 Subcategory
+            href: '/sengesaet',
           },
         ],
       },
@@ -67,6 +67,27 @@ export const navigation = [
   {
     title: 'Blog',
     href: '/blog',
+  },
+  {
+    title: 'Guides',
+    href: '/guides',
+    groups: [
+      {
+        heading: 'Guides',
+        links: [
+          { title: 'ADHD', href: '/guides/adhd' },
+          { title: 'Sleep', href: '/guides/soevn' },
+          { title: 'PTSD', href: '/guides/ptsd' },
+          { title: 'Anxiety', href: '/guides/angst' },
+          { title: 'Video Guides', href: '/video-guides' },
+          { title: 'Product finder', href: '/product-finder' },
+        ],
+      },
+      {
+        heading: 'Articles',
+        links: [{ title: 'Articles', href: '/blog' }],
+      },
+    ],
   },
 ];
 

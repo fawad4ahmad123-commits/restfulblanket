@@ -106,9 +106,9 @@ const SliderCard = ({
       weight: weight || '',
       price: Number(price) || 0,
       image,
+      stockQuantity,
     });
   };
-  console.log('t666777', { size });
   return (
     <>
       <div
@@ -224,7 +224,7 @@ const SliderCard = ({
               }}
             >
               <Eye aria-hidden="true" size={14} />
-              Quick View
+              Hurtig visning
             </button>
           </div>
           {isOutOfStock && (
