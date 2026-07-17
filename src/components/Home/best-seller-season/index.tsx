@@ -99,12 +99,7 @@ const BestSellers = ({
         : prev - 1,
     );
   };
-  console.log('t123 selleer0 ', {
-    productData,
-    baseProducts,
-    bestsellerProducts,
-    filteredProducts,
-  });
+
   return (
     <section
       className={isProduct ? 'py-16' : 'bg-[#FAF4EE] py-16'}

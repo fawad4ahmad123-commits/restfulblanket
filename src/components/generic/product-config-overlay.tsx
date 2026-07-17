@@ -32,7 +32,6 @@ const ProductConfigOverlay = ({
   onClose,
   onAddToCart,
 }: ProductConfigOverlayProps) => {
-  console.log('t123 hover cart');
   return (
     <div
       className="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm p-5 flex flex-col items-center justify-center"

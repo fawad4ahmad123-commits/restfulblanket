@@ -53,8 +53,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL!;
 // }
 
 export async function getExperts(slug: string) {
-  console.log('t1 Expert slug:', slug);
-
   const response = await fetch(
     `https://tapbookme.com/wp-json/wp/v2/pages?slug=${slug}`,
     // `${BASE_URL}/wp-json/wp/v2/pages?slug=${slug}`,

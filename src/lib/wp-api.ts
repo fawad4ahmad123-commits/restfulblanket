@@ -17,7 +17,6 @@ export async function fetchGuidePageBySlug(
   }
 
   const data = (await res.json()) as WPGuidePage[];
-  console.log('t90 aa', { data });
   return data[0] ?? null;
 }
 

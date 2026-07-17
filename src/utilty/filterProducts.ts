@@ -7,7 +7,6 @@ export function filterProducts(
 ) {
   return products.filter((product) => {
     // CATEGORY FILTER
-    console.log('y12', { aaa: product.categories });
     const productCategories = (product.categories || []).map((c: any) =>
       (typeof c === 'string' ? c : c.name || '').toLowerCase().trim(),
     );

@@ -27,7 +27,7 @@ const ExpertDetailPage = async ({
   const experts = await getExperts(slug);
 
   const expertData = experts;
-  console.log('t12', { expertData });
+
   if (!expertData) {
     return (
       <div className="min-h-screen flex items-center justify-center">

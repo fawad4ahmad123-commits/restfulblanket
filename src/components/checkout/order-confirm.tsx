@@ -183,12 +183,6 @@ export default function OrderConfirmClient() {
     return <OrderNotFoundState />;
   }
 
-  console.log('t12 order', {
-    order,
-    orderId,
-    orderKey,
-  });
-
   return (
     <div className="min-h-screen bg-[#fff9f5] px-4 py-12">
       <div className="mx-auto max-w-3xl">

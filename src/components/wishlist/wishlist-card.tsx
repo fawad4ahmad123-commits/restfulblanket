@@ -34,7 +34,7 @@ const WishlistCard = ({
     (item) => String(item.id) === String(id),
   );
   const stars = Math.round(rating);
-  console.log('t2 bbbbbb', {});
+
   return (
     <div
       className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"

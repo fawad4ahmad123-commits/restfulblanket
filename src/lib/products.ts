@@ -17,7 +17,6 @@ function wcUrl(path: string, params?: Record<string, string | number>) {
       url.searchParams.set(k, String(v));
     });
   }
-  console.log('t43 ', { url });
   return url.toString();
 }
 

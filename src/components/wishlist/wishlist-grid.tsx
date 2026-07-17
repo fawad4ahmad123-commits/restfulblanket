@@ -9,7 +9,6 @@ interface WishlistGridProps {
 }
 
 export function WishlistGrid({ items }: WishlistGridProps) {
-  console.log('t2 : ', items);
   const handleAddToCart = (id: string) => {
     console.log('Add to cart:', id);
   };

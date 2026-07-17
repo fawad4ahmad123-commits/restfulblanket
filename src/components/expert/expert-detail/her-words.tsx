@@ -1,6 +1,4 @@
 export function ConsultationCard({ professional }: any) {
-  console.log('t23', professional);
-
   const professionalList = Array.isArray(professional) ? professional : [];
 
   return (
