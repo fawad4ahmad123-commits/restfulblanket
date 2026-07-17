@@ -23,15 +23,13 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await fetch(
-      `${wordpressUrl}/wp-json/wc/store/v1/cart/coupons`,
+      `${wordpressUrl}/wp-json/custom/v1/apply-coupon`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          code,
-        }),
+        body: JSON.stringify({ code }),
       },
     );
 
