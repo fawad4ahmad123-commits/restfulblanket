@@ -70,7 +70,7 @@ const Footer = () => {
           </div>
 
           <FooterLinks title="Shop" links={shopLinks} />
-          <FooterLinks title="Support" links={supportLinks} />
+          <FooterLinks title="Guides" links={supportLinks} />
 
           <div className="w-full max-w-[370px]">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-[#fff9f5]/15 sm:px-5 sm:py-2">

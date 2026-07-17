@@ -22,17 +22,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // const response = await fetch(
+    //   `${wordpressUrl}/wp-json/custom/v1/apply-coupon`,
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ code }),
+    //   },
+    // );
     const response = await fetch(
-      `${wordpressUrl}/wp-json/custom/v1/apply-coupon`,
+      `${wordpressUrl}/wp-json/jetpack/v4/site/discount`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({
+          code,
+        }),
       },
     );
-
     const data = await response.json();
 
     if (!response.ok) {

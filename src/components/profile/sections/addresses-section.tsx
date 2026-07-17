@@ -133,7 +133,7 @@ export function AddressesSection() {
 
     const token = localStorage.getItem('auth_token');
     if (!token) {
-      setError('You must be logged in to manage addresses.');
+      setError('Du skal være logget ind for at administrere adresser.');
       return;
     }
 
@@ -211,7 +211,7 @@ export function AddressesSection() {
           onClick={fetchAddresses}
           className={cn(profileClasses.buttonDark)}
         >
-          Try again
+          Prøv igen
         </Button>
       </div>
     );
@@ -222,10 +222,10 @@ export function AddressesSection() {
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
           <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-            Your <span className={profileClasses.serifItalic}>Addresses</span>
+            Dine <span className={profileClasses.serifItalic}>adresser</span>
           </h2>
           <p className={cn('text-sm', profileClasses.textSecondary)}>
-            Used for billing and delivery of your orders
+            Bruges til fakturering og levering af dine ordrer
           </p>
         </div>
         <Button
@@ -234,7 +234,7 @@ export function AddressesSection() {
           className={cn(profileClasses.buttonDark, 'gap-1.5 w-full sm:w-auto')}
         >
           <Plus className="h-4 w-4" />
-          Add new address
+          Tilføj ny adresse
         </Button>
       </div>
 
@@ -277,14 +277,14 @@ export function AddressesSection() {
                   profileClasses.textPrimary,
                 )}
               >
-                Edit address →
+                Rediger adresse →
               </button>
             </div>
           ))
         ) : (
           <div className="col-span-full py-8 text-center">
             <p className={cn('text-sm mb-3', profileClasses.textSecondary)}>
-              You haven&apos;t added any addresses yet.
+              Du har ikke tilføjet nogen adresser endnu.
             </p>
             <Button
               type="button"
@@ -293,7 +293,7 @@ export function AddressesSection() {
               className="border-[#EAE1D3] text-[#2B2420]"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add your first address
+              Tilføj din første adresse
             </Button>
           </div>
         )}
@@ -310,8 +310,8 @@ export function AddressesSection() {
           >
             <h3 className="text-xl font-semibold text-neutral-900 mb-4">
               {modalMode === 'add'
-                ? 'Add new address'
-                : `Edit ${form.label || 'address'}`}
+                ? 'Tilføj ny adresse'
+                : `Rediger ${form.label || 'adresse'}`}
             </h3>
 
             <form onSubmit={handleSave} className="space-y-4">
@@ -320,15 +320,15 @@ export function AddressesSection() {
                   <>
                     <div className="space-y-1.5">
                       <Label className={profileClasses.textSecondary}>
-                        Address type
+                        Adresse type
                       </Label>
                       <select
                         value={form.type}
                         onChange={handleTypeChange}
                         className="w-full rounded-md border border-[#EAE1D3] bg-[#FAF6F0] px-3 py-2 text-sm text-[#2B2420]"
                       >
-                        <option value="delivery">Delivery</option>
-                        <option value="billing">Billing</option>
+                        <option value="delivery">Levering</option>
+                        <option value="billing">Fakturering</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
@@ -347,7 +347,7 @@ export function AddressesSection() {
 
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label className={profileClasses.textSecondary}>
-                    Full name
+                    Fulde navn
                   </Label>
                   <Input
                     value={form.fullName}
@@ -358,7 +358,7 @@ export function AddressesSection() {
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label className={profileClasses.textSecondary}>
-                    Street address
+                    Gadeadresse
                   </Label>
                   <Input
                     value={form.street}
@@ -369,7 +369,7 @@ export function AddressesSection() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className={profileClasses.textSecondary}>
-                    Postal code
+                    Postnummer
                   </Label>
                   <Input
                     value={form.postalCode}
@@ -379,7 +379,7 @@ export function AddressesSection() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className={profileClasses.textSecondary}>City</Label>
+                  <Label className={profileClasses.textSecondary}>By</Label>
                   <Input
                     value={form.city}
                     onChange={handleChange('city')}
@@ -388,9 +388,7 @@ export function AddressesSection() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className={profileClasses.textSecondary}>
-                    Country
-                  </Label>
+                  <Label className={profileClasses.textSecondary}>Land</Label>
                   <Input
                     value={form.country}
                     onChange={handleChange('country')}
@@ -400,7 +398,7 @@ export function AddressesSection() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className={profileClasses.textSecondary}>
-                    Phone number
+                    Telefonnummer
                   </Label>
                   <Input
                     value={form.phone}
@@ -420,7 +418,7 @@ export function AddressesSection() {
                   onClick={closeModal}
                   className="rounded-full px-5 text-sm font-medium text-neutral-500 hover:bg-neutral-100"
                 >
-                  Cancel
+                  Annuller
                 </Button>
                 <Button
                   type="submit"
@@ -429,12 +427,12 @@ export function AddressesSection() {
                 >
                   {isSaving ? (
                     <span className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" /> Saving...
+                      <Loader2 className="h-4 w-4 animate-spin" /> Gemmer...
                     </span>
                   ) : modalMode === 'add' ? (
-                    'Add address'
+                    'Tilføj adresse'
                   ) : (
-                    'Save address'
+                    'Gem adresse'
                   )}
                 </Button>
               </div>

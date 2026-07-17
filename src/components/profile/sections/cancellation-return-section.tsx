@@ -87,7 +87,7 @@ export function CancellationReturnSection() {
         type: 'success',
         message:
           data.message ||
-          'Your order has been cancelled successfully. You will receive a confirmation email shortly.',
+          'Din ordre er blevet annulleret. Du vil snart modtage en bekræftelsesmail.',
       });
 
       setOrderNumber('');
@@ -110,20 +110,22 @@ export function CancellationReturnSection() {
   return (
     <div>
       <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-        Cancellation &amp;{' '}
-        <span className={profileClasses.serifItalic}>return</span>
+        Annullering &{' '}
+        <span className={profileClasses.serifItalic}>returnering</span>
       </h2>
       <p className={cn('text-sm mb-6', profileClasses.textSecondary)}>
-        You have a 30-day right of withdrawal on all orders.
+        Du har 30 dages ret til at trække sig tilbage fra alle ordrer.
       </p>
 
       <div className={cn(profileClasses.surfaceCard, 'p-6 max-w-2xl')}>
         <h3 className={cn('text-lg mb-1', profileClasses.textPrimary)}>
-          Start an <span className={profileClasses.serifItalic}>undo</span>
+          Start en
+          <span className={profileClasses.serifItalic}>returnering</span>
         </h3>
         <p className={cn('text-sm mb-5', profileClasses.textSecondary)}>
-          Select the order you wish to cancel. We will refund via your original
-          payment method within 14 days of receiving the returned item.
+          Vælg den ordre, du ønsker at annullere. Vi vil refundere via din
+          originale betalingsmetode inden for 14 dage efter modtagelse af det
+          returnerede produkt.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -133,7 +135,7 @@ export function CancellationReturnSection() {
                 htmlFor="orderNumber"
                 className={profileClasses.textSecondary}
               >
-                Order number
+                Ordrenummer
               </Label>
               <Input
                 id="orderNumber"
@@ -150,12 +152,12 @@ export function CancellationReturnSection() {
                 htmlFor="returnEmail"
                 className={profileClasses.textSecondary}
               >
-                Email address
+                E-mailadresse
               </Label>
               <Input
                 id="returnEmail"
                 type="email"
-                placeholder={PROFILE_USER.email || 'your-email@example.com'}
+                placeholder={PROFILE_USER.email || 'din-email@example.com'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-[#FAF6F0] border-[#EAE1D3] placeholder:text-[#B7AB9C]"
@@ -196,10 +198,10 @@ export function CancellationReturnSection() {
             {isLoading ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Processing...
+                Behandler...
               </span>
             ) : (
-              'Start undo'
+              'Start returnering'
             )}
           </Button>
         </form>

@@ -53,3 +53,19 @@ export interface ParsedGuidePage {
   authorBio: AuthorBio | null;
   contentHtml: string;
 }
+
+export interface GuideCard {
+  slug: string;
+  title: string;
+  description: string;
+  bullets: string[];
+  href: string;
+}
+
+export interface GuidesHubPage {
+  title: string;
+  heroImage: { src: string; alt: string } | null;
+  cards: GuideCard[];
+  beforeGridHtml: string;
+  afterGridHtml: string;
+}

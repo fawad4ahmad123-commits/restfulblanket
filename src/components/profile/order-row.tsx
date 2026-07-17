@@ -41,7 +41,7 @@ export function OrderRow({ order, compact = false }: OrderRowProps) {
           {order.productName} — {order.productSubtitle}
         </p>
         <p className={cn('text-xs', profileClasses.textSecondary)}>
-          Order {order.orderNumber} · {order.date}
+          Ordre {order.orderNumber} · {order.date}
         </p>
       </div>
 

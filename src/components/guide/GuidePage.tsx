@@ -10,7 +10,6 @@ interface GuidePageProps {
 }
 
 export function GuidePage({ guide }: GuidePageProps) {
-  console.log('t90', { guide });
   return (
     <article className="bg-[#fdf9f6] pb-20">
       <GuideHero title={guide.title} heroImage={guide.heroImage} />

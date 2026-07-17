@@ -51,10 +51,10 @@ export function WishlistSection() {
   return (
     <div>
       <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-        Your <span className={profileClasses.serifItalic}>Wishlist</span>
+        Din <span className={profileClasses.serifItalic}>ønskeliste</span>
       </h2>
       <p className={cn('text-sm mb-6', profileClasses.textSecondary)}>
-        Saved for next time, when a little more peace needs to be created
+        Gemt til næste gang, når der skal skabes lidt mere ro
       </p>
 
       {!isLoggedIn ? (
@@ -134,7 +134,7 @@ export function WishlistSection() {
                 disabled={activePage === 1}
                 className="rounded-full border-[#EAE1D3] text-[#2B2420] hover:bg-[#F3ECE1] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
-                Previous
+                Forrige
               </Button>
 
               <div className="flex items-center gap-1 flex-wrap justify-center">
@@ -166,7 +166,7 @@ export function WishlistSection() {
                 disabled={activePage === totalPages}
                 className="rounded-full border-[#EAE1D3] text-[#2B2420] hover:bg-[#F3ECE1] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
-                Next
+                Næste
               </Button>
             </div>
           )}

@@ -2,6 +2,8 @@ import * as cheerio from 'cheerio';
 import type {
   AuthorBio,
   FaqItem,
+  GuideCard,
+  GuidesHubPage,
   ParsedGuidePage,
   TocItem,
   WPGuidePage,
@@ -172,4 +174,105 @@ function extractAuthorBio($: cheerio.CheerioAPI): AuthorBio | null {
 
 function stripHtml(html: string): string {
   return cheerio.load(html).text().trim();
+}
+
+const HUB_SLUG_PATTERNS: { pattern: RegExp; slug: string }[] = [
+  { pattern: /angst/i, slug: 'angst' },
+  { pattern: /ptsd/i, slug: 'ptsd' },
+  { pattern: /adhd/i, slug: 'adhd' },
+  { pattern: /søvn|sovn/i, slug: 'soevn' },
+];
+
+export function parseGuidesHubPage(hubPage: WPGuidePage): GuidesHubPage {
+  const $ = cheerio.load(hubPage.content.rendered);
+  const $container = $('body');
+
+  $container.find('a').each((_, el) => {
+    const $el = $(el);
+    const href = $el.attr('href');
+    if (href?.startsWith(OLD_DOMAIN)) {
+      $el.attr('href', href.replace(OLD_DOMAIN, NEW_DOMAIN));
+    }
+
+    if ($el.hasClass('wp-block-button__link')) {
+      $el.removeAttr('style');
+      $el.attr('class', 'wp-block-button__link');
+      return;
+    }
+
+    const existing = $el.attr('class') ?? '';
+    $el.attr(
+      'class',
+      `${existing} text-[${LINK_COLOR}] underline underline-offset-2 hover:opacity-80`.trim(),
+    );
+  });
+
+  const h1 = $container.find('h1').first();
+  const title =
+    h1.length > 0 ? h1.text().trim() : stripHtml(hubPage.title.rendered);
+  h1.remove();
+
+  const heroImg = $container.find('img').first();
+  let heroImage: GuidesHubPage['heroImage'] = null;
+  if (heroImg.length > 0) {
+    heroImage = {
+      src: heroImg.attr('src') ?? '',
+      alt: heroImg.attr('alt') ?? '',
+    };
+    heroImg.closest('figure').remove();
+  }
+
+  const columns = $container.find('.wp-block-columns').first();
+  const cards: GuideCard[] = [];
+
+  if (columns.length > 0) {
+    columns.find('h2, h3').each((_, heading) => {
+      const $heading = $(heading);
+      const headingTitle = $heading.text().trim();
+      const match = HUB_SLUG_PATTERNS.find(({ pattern }) =>
+        pattern.test(headingTitle),
+      );
+      if (!match) return;
+
+      const $following = $heading.nextUntil('h2, h3');
+
+      let description = '';
+      $following.filter('p').each((_, p) => {
+        const text = $(p).text().trim();
+        if (!description && text && !/lærer du/i.test(text)) {
+          description = text;
+        }
+      });
+
+      const bullets: string[] = [];
+      $following.find('li').each((_, li) => {
+        bullets.push($(li).text().trim());
+      });
+      cards.push({
+        slug: match.slug,
+        title: headingTitle,
+        description,
+        bullets,
+        href: `/guides/${match.slug}`,
+      });
+    });
+  }
+
+  const allNodes = $container.contents().toArray();
+  const columnsNode = columns.get(0);
+  const splitIndex = columnsNode ? allNodes.indexOf(columnsNode) : -1;
+
+  let beforeGridHtml = '';
+  let afterGridHtml = '';
+
+  if (splitIndex === -1) {
+    beforeGridHtml = $container.html() ?? '';
+  } else {
+    const beforeNodes = allNodes.slice(0, splitIndex);
+    const afterNodes = allNodes.slice(splitIndex + 1);
+    beforeGridHtml = beforeNodes.map((el) => $.html(el)).join('');
+    afterGridHtml = afterNodes.map((el) => $.html(el)).join('');
+  }
+
+  return { title, heroImage, cards, beforeGridHtml, afterGridHtml };
 }

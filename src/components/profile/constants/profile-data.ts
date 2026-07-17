@@ -5,17 +5,9 @@ import {
   MapPin,
   UserRound,
   Undo2,
-  ShoppingBag,
-  Truck,
   ShieldCheck,
 } from 'lucide-react';
-import {
-  Address,
-  NavItem,
-  OverviewStat,
-  ProfileUser,
-  SleepExpert,
-} from '../types/profile';
+import { NavItem, OverviewStat, ProfileUser } from '../types/profile';
 
 export const PROFILE_NAV_ITEMS: NavItem[] = [
   { id: 'overview', label: 'Oversigt', icon: LayoutGrid },
@@ -42,20 +34,11 @@ export const PROFILE_USER: ProfileUser = {
 export const OVERVIEW_STATS: OverviewStat[] = [
   {
     id: 'warranty',
-    label: 'Warranty back',
-    value: '2 years',
+    label: 'Garanti',
+    value: '2 år',
     icon: ShieldCheck,
   },
 ];
-
-export const SLEEP_EXPERT: SleepExpert = {
-  name: 'Zafir Creek',
-  title: 'Sleep & comfort curator',
-  avatar: 'https://i.pravatar.cc/120?img=13',
-  bio: "Do you have any questions about weight, washing, or how to get the most comfort out of your duvet? I'll be happy to answer them personally.",
-  email: 'zafir@sleepco.com',
-  phone: '+45 22 11 44 55',
-};
 
 export const EXPERTS = [
   {

@@ -11,12 +11,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { EXPERTS, PROFILE_USER, SLEEP_EXPERT } from '../constants/profile-data';
+import { EXPERTS, PROFILE_USER } from '../constants/profile-data';
 import { profileClasses, profileTheme } from '../constants/profile-theme';
 import { OrderRow } from '../order-row';
 import { Order } from '../types/profile';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { useEffect, useState } from 'react';
+import { Loader } from '../../loader';
 
 interface OverviewSectionProps {
   orders: Order[];
@@ -45,26 +46,26 @@ export function OverviewSection({
   const stats = [
     {
       id: 'total-orders',
-      label: 'Total orders',
+      label: 'Samlede ordrer',
       value: loading ? '...' : String(orders.length),
       icon: ShoppingBag,
     },
     {
       id: 'active-delivery',
-      label: 'Active delivery',
+      label: 'Aktive leveringer',
       value: loading ? '...' : String(activeDeliveryCount),
       icon: Truck,
     },
     {
       id: 'wishlist',
-      label: 'On Wishlist',
+      label: 'På ønskelisten',
       value: String(wishlistItems.length),
       icon: Heart,
     },
     {
       id: 'warranty',
-      label: 'Warranty back',
-      value: '2 years',
+      label: 'Garanti',
+      value: '2 år',
       icon: ShieldCheck,
     },
   ];
@@ -205,12 +206,11 @@ export function OverviewSection({
           className={cn(profileClasses.surfaceCard, 'p-4 sm:p-5 lg:col-span-2')}
         >
           <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
-            Latest <span className={profileClasses.serifItalic}>orders</span>
+            Seneste <span className={profileClasses.serifItalic}>ordrer</span>
           </h3>
           {loading ? (
             <div className="flex flex-col items-center justify-center py-8 gap-2">
-              <Loader2 className="h-6 w-6 animate-spin text-[#2B2420]" />
-              <p className="text-xs text-[#2B2420]/60">Loading orders...</p>
+              <Loader />
             </div>
           ) : (
             <div className="flex flex-col divide-y divide-[#EAE1D3]">
@@ -219,7 +219,7 @@ export function OverviewSection({
               ))}
               {orders.length === 0 && (
                 <p className="py-6 text-center text-xs text-[#2B2420]/60">
-                  No orders found.
+                  Ingen ordrer fundet.
                 </p>
               )}
             </div>
@@ -228,8 +228,7 @@ export function OverviewSection({
 
         <div className={cn(profileClasses.surfaceCard, 'p-4 sm:p-5')}>
           <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
-            Your sleep{' '}
-            <span className={profileClasses.serifItalic}>expert</span>
+            Din søvn <span className={profileClasses.serifItalic}>ekspert</span>
           </h3>
 
           <div className="flex items-start gap-3 mb-4">

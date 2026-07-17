@@ -91,11 +91,10 @@ function AccountHeader({ onDeleteClick }: { onDeleteClick: () => void }) {
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
       <div>
         <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-          Account{' '}
-          <span className={profileClasses.serifItalic}>Information</span>
+          Kontooplysninger
         </h2>
         <p className={cn('text-sm', profileClasses.textSecondary)}>
-          Keep your personal information up to date
+          Hold din personlige information opdateret
         </p>
       </div>
 
@@ -132,10 +131,10 @@ function ProfileForm({
     label: string;
     type?: string;
   }[] = [
-    { id: 'firstName', label: 'First name' },
-    { id: 'lastName', label: 'Surname' },
-    { id: 'email', label: 'Email address', type: 'email' },
-    { id: 'phone', label: 'Phone number', type: 'tel' },
+    { id: 'firstName', label: 'Fornavn' },
+    { id: 'lastName', label: 'Efternavn' },
+    { id: 'email', label: 'E-mailadresse', type: 'email' },
+    { id: 'phone', label: 'Telefonnummer', type: 'tel' },
   ];
 
   return (
@@ -165,7 +164,7 @@ function ProfileForm({
         disabled={isSaving}
         className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}
       >
-        {isSaving ? <SavingLabel text="Saving..." /> : 'Save changes'}
+        {isSaving ? <SavingLabel text="Gemmer..." /> : 'Gem ændringer'}
       </Button>
     </form>
   );
@@ -192,7 +191,7 @@ function PasswordForm({
       className={cn(profileClasses.surfaceCard, 'p-4 sm:p-6')}
     >
       <h3 className={cn('text-lg mb-4', profileClasses.textPrimary)}>
-        Change <span className={profileClasses.serifItalic}>password</span>
+        Ændre <span className={profileClasses.serifItalic}>password</span>
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
         <div className="space-y-1.5">
@@ -200,7 +199,7 @@ function PasswordForm({
             htmlFor="currentPassword"
             className={profileClasses.textSecondary}
           >
-            Current password
+            Nuværende password
           </Label>
           <Input
             id="currentPassword"
@@ -212,12 +211,12 @@ function PasswordForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="newPassword" className={profileClasses.textSecondary}>
-            New password
+            Nyt password
           </Label>
           <Input
             id="newPassword"
             type="password"
-            placeholder="At least 8 characters"
+            placeholder="Mindst 8 tegn"
             value={passwordForm.newPassword}
             onChange={onFieldChange('newPassword')}
             className="bg-[#FAF6F0] border-[#EAE1D3] placeholder:text-[#B7AB9C]"
@@ -230,7 +229,7 @@ function PasswordForm({
         disabled={isSaving}
         className={cn(profileClasses.buttonDark, 'w-full sm:w-auto')}
       >
-        {isSaving ? <SavingLabel text="Updating..." /> : 'Update password'}
+        {isSaving ? <SavingLabel text="Opdaterer..." /> : 'Opdater password'}
       </Button>
     </form>
   );

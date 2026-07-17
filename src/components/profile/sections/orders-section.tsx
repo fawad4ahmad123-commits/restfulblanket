@@ -6,16 +6,16 @@ import { Order, OrderStatus } from '../types/profile';
 import { profileClasses } from '../constants/profile-theme';
 import { OrderRow } from '../order-row';
 import { Loader2 } from 'lucide-react';
+import { Loader } from '../../loader';
 
 type Filter = 'all' | OrderStatus;
 
 const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'on-the-way', label: 'On the way' },
-  { id: 'delivered', label: 'Delivered' },
-  { id: 'regretted', label: 'Regretted' },
+  { id: 'all', label: 'Alle' },
+  { id: 'on-the-way', label: 'På vej' },
+  { id: 'delivered', label: 'Leveret' },
+  { id: 'regretted', label: 'Fortrudt' },
 ];
-
 interface OrdersSectionProps {
   orders: Order[];
   loading: boolean;
@@ -32,10 +32,10 @@ export function OrdersSection({ orders, loading }: OrdersSectionProps) {
   return (
     <div>
       <h2 className={cn('text-2xl mb-1', profileClasses.textPrimary)}>
-        My <span className={profileClasses.serifItalic}>Orders</span>
+        Mine <span className={profileClasses.serifItalic}>ordrer</span>
       </h2>
       <p className={cn('text-sm mb-6', profileClasses.textSecondary)}>
-        Overview of all your purchases and deliveries
+        Oversigt over alle dine køb og leveringer
       </p>
 
       <div className="flex items-center gap-2 mb-6">
@@ -59,10 +59,7 @@ export function OrdersSection({ orders, loading }: OrdersSectionProps) {
       <div className={cn(profileClasses.surfaceCard, 'p-5')}>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12 gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-[#2B2420]" />
-            <p className={cn('text-sm', profileClasses.textSecondary)}>
-              Loading your orders...
-            </p>
+            <Loader />
           </div>
         ) : (
           <div className="flex flex-col divide-y divide-[#EAE1D3]">
@@ -76,7 +73,7 @@ export function OrdersSection({ orders, loading }: OrdersSectionProps) {
                   profileClasses.textSecondary,
                 )}
               >
-                No orders in this category yet.
+                Ingen ordrer i denne kategori endnu.
               </p>
             )}
           </div>

@@ -97,31 +97,123 @@ export const shopLinks = [
     href: '/shop',
   },
   {
-    title: 'Voksne Tyngdetæpper',
-    href: '/categories',
+    title: 'Tyngdedyner',
+    href: '/tyngdedyner',
   },
   {
-    title: 'Eksperter',
-    href: '/expert',
+    title: 'Om RestfulBlanket',
+    href: '/om-restfulblanket',
   },
   {
-    title: 'Om Os',
-    href: '/about',
+    title: 'Om Socialøkonomi RSV',
+    href: '/om-socialokonomi-rsv',
   },
   {
-    title: 'Blog',
+    title: 'Om Zafir Bæk',
+    href: '/om-zafir-baek',
+  },
+  {
+    title: 'Ekspertpanel',
+    href: '/ekspertpanel',
+  },
+  {
+    title: 'FAQs',
+    href: '/faqs',
+  },
+  {
+    title: 'RestfulNerd Blog',
     href: '/blog',
+  },
+  {
+    title: 'Foredragsbilletter',
+    href: '/foredragsbilletter',
+  },
+  {
+    title: 'Book et Foredrag',
+    href: '/book-et-foredrag',
+  },
+  {
+    title: 'ESG/CSR',
+    href: '/esg-csr',
+  },
+  {
+    title: 'Tak til Fond og Sponsor',
+    href: '/tak-til-fond-og-sponsor',
+  },
+  {
+    title: 'Lån en tyngdedyne',
+    href: '/laan-en-tyngdedyne',
   },
 ];
 
 export const supportLinks = [
   {
-    title: 'Om Os',
-    href: '/about',
+    title: 'Guides',
+    href: '/guides',
   },
   {
-    title: 'Kontakt',
-    href: '/contact',
+    title: 'Tyngdedyner',
+    href: '/guides/tyngdedyner',
+  },
+  {
+    title: 'Vask & pleje',
+    href: '/guides/vask-pleje',
+  },
+  {
+    title: 'Video Guides',
+    href: '/guides/video-guides',
+  },
+  {
+    title: 'Medusa-projektet',
+    href: '/guides/medusa-projektet',
+  },
+  {
+    title: 'Lærke-projektet',
+    href: '/guides/laerke-projektet',
+  },
+  {
+    title: 'Ro i Indercirklen-projektet',
+    href: '/guides/ro-i-indercirklen-projektet',
+  },
+  {
+    title: 'FNs Verdensmål',
+    href: '/guides/fns-verdensmaal',
+  },
+  {
+    title: 'CE-Mærkning',
+    href: '/guides/ce-maerkning',
+  },
+  {
+    title: 'Privatlivspolitik',
+    href: '/privatlivspolitik',
+  },
+  {
+    title: 'Handelsbetingelser',
+    href: '/handelsbetingelser',
+  },
+  {
+    title: 'Brugervejledning',
+    href: '/brugervejledning',
+  },
+  {
+    title: 'Medicinsk gennemgang og sundhedsfaglig politik',
+    href: '/medicinsk-gennemgang-og-sundhedsfaglig-politik',
+  },
+  {
+    title: 'Redaktionelle retningslinjer',
+    href: '/redaktionelle-retningslinjer',
+  },
+  {
+    title: 'Presse og mediekit',
+    href: '/presse-og-mediekit',
+  },
+  {
+    title: 'Sikkerhed og kontraindikationer',
+    href: '/sikkerhed-og-kontraindikationer',
+  },
+  {
+    title: 'Forskningsoversigt og faglige kilder',
+    href: '/forskningsoversigt-og-faglige-kilder',
   },
 ];
 

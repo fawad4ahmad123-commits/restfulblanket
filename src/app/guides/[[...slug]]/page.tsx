@@ -1,6 +1,7 @@
+import { GuidesHub } from '@/src/components/guide/guide-hub-page';
 import { GuidePage } from '@/src/components/guide/GuidePage';
 import { fetchGuidePageBySlug } from '@/src/lib/wp-api';
-import { parseGuidePage } from '@/src/lib/wp-parser';
+import { parseGuidePage, parseGuidesHubPage } from '@/src/lib/wp-parser';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -13,27 +14,21 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  const pageSlug = slug?.length ? slug.join('/') : 'guides';
+  if (!slug?.length) {
+    return { title: 'Vores Guides — RestfulBlanket' };
+  }
 
+  const pageSlug = slug.join('/');
   const page = await fetchGuidePageBySlug(pageSlug);
 
   if (!page) {
-    return {
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
+    return { robots: { index: false, follow: false } };
   }
 
   const guide = parseGuidePage(page);
 
   return {
     title: guide.title,
-    robots: {
-      index: false,
-      follow: false,
-    },
     openGraph: {
       title: guide.title,
       images: guide.heroImage ? [guide.heroImage.src] : undefined,
@@ -44,8 +39,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { slug } = await params;
 
-  const pageSlug = slug?.length ? slug.join('/') : 'guides';
+  if (!slug?.length) {
+    const hubPage = await fetchGuidePageBySlug('guides');
+    if (!hubPage) notFound();
 
+    const hub = parseGuidesHubPage(hubPage);
+    return <GuidesHub hub={hub} />;
+  }
+
+  const pageSlug = slug.join('/');
   const page = await fetchGuidePageBySlug(pageSlug);
 
   if (!page) {
