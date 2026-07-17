@@ -51,7 +51,7 @@ export default function ResetPasswordForm() {
     const verify = async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/verify-reset-token?token=${encodeURIComponent(token)}&login=${encodeURIComponent(login)}`,
+          `${API_BASE}/wp-json/custom/v1/verify-reset-token?token=${encodeURIComponent(token)}&login=${encodeURIComponent(login)}`,
         );
         const data = await res.json();
 
