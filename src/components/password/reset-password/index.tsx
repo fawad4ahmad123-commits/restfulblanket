@@ -79,7 +79,7 @@ export default function ResetPasswordForm() {
     setApiError(null);
 
     try {
-      const res = await fetch(`${API_BASE}/reset-password`, {
+      const res = await fetch(`${API_BASE}/wp-json/custom/v1/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
