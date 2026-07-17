@@ -12,7 +12,7 @@ interface ProductGalleryProps {
   productName?: string;
 }
 
-const SWIPE_THRESHOLD = 50; // px needed to trigger a slide change
+const SWIPE_THRESHOLD = 50;
 
 const ProductGallery = ({
   images = [],
@@ -30,7 +30,6 @@ const ProductGallery = ({
   const goNext = () =>
     setActiveIndex((prev) => (prev === safeImages.length - 1 ? 0 : prev + 1));
 
-  // --- Swipe / drag handling ---
   const pointerStartX = React.useRef<number | null>(null);
   const pointerDeltaX = React.useRef(0);
   const isDragging = React.useRef(false);
@@ -68,7 +67,7 @@ const ProductGallery = ({
     return (
       <div className="relative flex aspect-[636/704] w-full items-center justify-center rounded-2xl bg-[#EFE7DA]">
         <span className="text-sm text-gray-500">
-          No product image available
+          Ingen produktbillede tilgængeligt
         </span>
       </div>
     );

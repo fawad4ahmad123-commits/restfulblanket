@@ -1,5 +1,7 @@
+'use client';
 import Image from 'next/image';
 import { ShieldCheck, Truck, BadgeCheck, RotateCcw, Award } from 'lucide-react';
+import { useProductMeta } from '@/src/core/context/product-meta-context';
 
 const benefits = [
   {
@@ -34,40 +36,12 @@ const benefits = [
   },
 ];
 
-export type Certification = {
-  src: string;
-  alt: string;
-};
+export function WhyRestfulBlanketContent() {
+  const { metaFields } = useProductMeta();
 
-const defaultCertifications: Certification[] = [
-  {
-    src: '/certifications/goodmarket.png',
-    alt: 'Good Market Approved',
-  },
-  {
-    src: '/certifications/peopleandplanetfirst.png',
-    alt: 'People Planet First',
-  },
-  {
-    src: '/certifications/socialeentreprenoereridanmark.png',
-    alt: 'Social Entrepreneur Denmark',
-  },
-  {
-    src: '/certifications/goodshoppingguide.png',
-    alt: 'Ethical Business Certification',
-  },
-];
-
-type WhyRestfulBlanketContentProps = {
-  certifications?: Certification[];
-};
-
-export function WhyRestfulBlanketContent({
-  certifications = defaultCertifications,
-}: WhyRestfulBlanketContentProps) {
+  const certifications = metaFields?.certificateImages?.filter(Boolean) ?? [];
   return (
     <div className="space-y-6">
-      {/* Benefits */}
       <div
         className="grid grid-cols-1 gap-4 xl:grid-cols-2"
         role="list"
@@ -80,7 +54,7 @@ export function WhyRestfulBlanketContent({
             <article
               key={benefit.title}
               role="listitem"
-              className="rounded-2xl border border-[#E3DCCD] p-4 xl:p-5"
+              className="rounded-2xl border border-[#E3DCCD] p-1 xl:p-5"
             >
               <div className="flex items-start gap-3 xl:gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F7F2EC]">
@@ -102,29 +76,30 @@ export function WhyRestfulBlanketContent({
         })}
       </div>
 
-      {/* Certifications */}
-      <div className="border-t border-[#E3DCCD] pt-4">
-        <p className="mb-4 text-sm text-[#6F6860]">
-          Anerkendt og verificeret socialøkonomisk virksomhed
-        </p>
+      {certifications.length > 0 && (
+        <div className="border-t border-[#E3DCCD] pt-4">
+          <p className="mb-4 text-sm text-[#6F6860]">
+            Anerkendt og verificeret socialøkonomisk virksomhed
+          </p>
 
-        <div className="flex flex-wrap items-center gap-3 xl:gap-4">
-          {certifications.map((certification) => (
-            <div
-              key={certification.src}
-              className="relative h-10 w-[90px] shrink-0 sm:h-12 sm:w-[120px] xl:h-14 xl:w-[140px]"
-            >
-              <Image
-                src={certification.src}
-                alt={certification.alt}
-                fill
-                sizes="140px"
-                className="object-contain"
-              />
-            </div>
-          ))}
+          <div className="flex flex-wrap items-center gap-1 xl:gap-2">
+            {certifications.map((src, index) => (
+              <div
+                key={`${src}-${index}`}
+                className="relative h-10 w-[65px] shrink-0 sm:h-12 sm:w-[85px] xl:h-14 xl:w-[100px]"
+              >
+                <Image
+                  src={src}
+                  alt={`Certification ${index + 1}`}
+                  fill
+                  sizes="100px"
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

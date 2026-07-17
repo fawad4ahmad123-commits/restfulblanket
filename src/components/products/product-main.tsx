@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BestSellers from '@/src/components/Home/best-seller-season';
 import Coments from '@/src/components/Home/comments';
 import RestfulBlanketVideo from '@/src/components/Home/video-descripton';
@@ -11,15 +11,40 @@ import TestimonialVideoSlider from '@/src/components/products/video-testimonals.
 import ProductCategories from '../Home/product-categories';
 import { formatProduct } from '@/src/utilty/single-product-formatter';
 import { formatProductInformation } from '@/src/utilty/info-accordianc-formater';
+import { useRouter } from 'next/navigation';
+import { useProductMeta } from '@/src/core/context/product-meta-context';
 
 const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
+  const router = useRouter();
+  const { setMetaFields } = useProductMeta();
   const [currentProduct, setCurrentProduct] = useState(productResponse);
   const product = formatProduct(currentProduct);
   const productInformation = formatProductInformation(currentProduct);
 
   const changeProduct = (newProduct: any) => {
     setCurrentProduct(newProduct);
+    if (newProduct?.slug) {
+      router.replace(`/product/${newProduct.slug}`, {
+        scroll: false,
+      });
+    }
   };
+
+  useEffect(() => {
+    const meta = product?.metaFields;
+
+    setMetaFields({
+      certificateImage: meta?.certificateImage,
+      certificateImages: meta?.certificateImages,
+      offerBadge: meta?.offerBadge,
+      offerText: meta?.offerText,
+      promoColor: meta?.promoColor,
+      promoText: meta?.promoText,
+      properties: meta?.properties,
+      temperature: meta?.temperature,
+      themeColor: meta?.themeColor,
+    });
+  }, [currentProduct, setMetaFields]);
 
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 sm:px-6 lg:px-10 2xl:px-20">

@@ -11,6 +11,7 @@ import { CompareProvider } from '../core/context/compare-provider';
 import { AuthProvider } from '../core/context/auth-context';
 import { WishlistProvider } from '../core/context/wishlist-provider';
 import SignupPopup from '../components/signup-popup/signup-popup';
+import { ProductMetaProvider } from '../core/context/product-meta-context';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -50,19 +51,21 @@ export default async function RootLayout({
     >
       <body suppressHydrationWarning>
         <AuthProvider>
-          <WishlistProvider>
-            <CategoryProvider categories={categories} products={products}>
-              <CompareProvider>
-                <CartProvider>
-                  <MainLayout>
-                    {children}
-                    <SignupPopup />
-                    <Toaster />
-                  </MainLayout>
-                </CartProvider>
-              </CompareProvider>
-            </CategoryProvider>
-          </WishlistProvider>
+          <ProductMetaProvider>
+            <WishlistProvider>
+              <CategoryProvider categories={categories} products={products}>
+                <CompareProvider>
+                  <CartProvider>
+                    <MainLayout>
+                      {children}
+                      <SignupPopup />
+                      <Toaster />
+                    </MainLayout>
+                  </CartProvider>
+                </CompareProvider>
+              </CategoryProvider>
+            </WishlistProvider>
+          </ProductMetaProvider>
         </AuthProvider>
       </body>
     </html>

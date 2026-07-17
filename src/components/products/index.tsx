@@ -49,12 +49,6 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
       ? product.features
       : featuresFromDescription(product?.shortDescription || '');
 
-  useEffect(() => {
-    setSelectedColorId('');
-    setSelectedWeightId('');
-    setSelectedSizeId('');
-  }, [product?.id]);
-
   const handleAddToCart = () => {
     const selectedColor =
       colors.find((c: any) => c.id === selectedColorId)?.label || '';
@@ -119,6 +113,45 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const defaultColorLink = product?.attributeLinks?.find(
+      (item: any) =>
+        item.name?.toLowerCase() === 'color' &&
+        Number(item.relatedProduct) === 0,
+    );
+
+    const defaultWeightLink = product?.attributeLinks?.find(
+      (item: any) =>
+        item.name?.toLowerCase() === 'weight' &&
+        Number(item.relatedProduct) === 0,
+    );
+
+    const defaultSizeLink = product?.attributeLinks?.find(
+      (item: any) =>
+        item.name?.toLowerCase() === 'size' &&
+        Number(item.relatedProduct) === 0,
+    );
+
+    const defaultColor = colors.find(
+      (c: any) =>
+        c.label === defaultColorLink?.value ||
+        c.value === defaultColorLink?.value ||
+        c.hex === defaultColorLink?.value,
+    );
+
+    const defaultWeight = weights.find(
+      (w: any) => w.label === defaultWeightLink?.value,
+    );
+
+    const defaultSize = sizes.find(
+      (s: any) => s.label === defaultSizeLink?.value,
+    );
+
+    setSelectedColorId(defaultColor?.id ?? '');
+    setSelectedWeightId(defaultWeight?.id ?? '');
+    setSelectedSizeId(defaultSize?.id ?? '');
+  }, [product?.id, colors, weights, sizes, product?.attributeLinks]);
 
   if (!product) {
     return null;
