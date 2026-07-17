@@ -76,7 +76,8 @@ function SearchStart({
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[#392A22]/10 bg-white">
-      <SectionLabel>Trending Searches</SectionLabel>
+      <SectionLabel>Populære søgninger</SectionLabel>
+
       <div className="flex flex-wrap gap-2 px-6 pb-5">
         {categories.slice(0, 5).map((category: any) => (
           <Pill key={category.id} onClick={() => onSelectTerm(category.name)}>
@@ -85,7 +86,8 @@ function SearchStart({
         ))}
       </div>
 
-      <SectionLabel>Browse Categories</SectionLabel>
+      <SectionLabel>Gennemse kategorier</SectionLabel>
+
       <div className="border-t border-[#392A22]/10">
         {parentCategories.slice(0, 4).map((category: any) => (
           <button
@@ -109,7 +111,7 @@ function SearchStart({
             </span>
 
             <span className="rounded-full border border-[#392A22]/10 px-3 py-1 text-xs text-[#392A22]/50">
-              {category.count} products
+              {category.count} produkter
             </span>
           </button>
         ))}
@@ -121,7 +123,7 @@ function SearchStart({
 function SearchResults({ products }: { products: WooProduct[] }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-[#392A22]/10 bg-white">
-      <SectionLabel>Results</SectionLabel>
+      <SectionLabel>Resultater</SectionLabel>
       <div className="border-t border-[#392A22]/10">
         {products.map((product) => (
           <Link
@@ -145,7 +147,7 @@ function SearchResults({ products }: { products: WooProduct[] }) {
             <span
               className="text-sm font-medium text-[#392A22]"
               dangerouslySetInnerHTML={{
-                __html: product.price ? `€${product.price}` : '',
+                __html: product.price ? `kr ${product.price}` : '',
               }}
             />
           </Link>

@@ -153,7 +153,7 @@ export const supportLinks = [
   },
   {
     title: 'Tyngdedyner',
-    href: '/guides/tyngdedyner',
+    href: '/collections/tyngdedyner',
   },
   {
     title: 'Vask & pleje',
@@ -165,15 +165,15 @@ export const supportLinks = [
   },
   {
     title: 'Medusa-projektet',
-    href: '/guides/medusa-projektet',
+    href: '/project/medusa-projektet',
   },
   {
     title: 'Lærke-projektet',
-    href: '/guides/laerke-projektet',
+    href: '/project/laerke-projektet',
   },
   {
     title: 'Ro i Indercirklen-projektet',
-    href: '/guides/ro-i-indercirklen-projektet',
+    href: '/project/ro-i-indercirklen-projektet',
   },
   {
     title: 'FNs Verdensmål',

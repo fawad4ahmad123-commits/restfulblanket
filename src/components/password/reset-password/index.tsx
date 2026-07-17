@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL; // e.g. https://yoursite.com/wp-json/custom/v1
+const API_BASE = process.env.NEXT_PUBLIC_WORDPRESS_URL;
 
 interface ResetPasswordFormValues {
   newPassword: string;
@@ -41,11 +41,10 @@ export default function ResetPasswordForm() {
 
   const password = watch('newPassword');
 
-  // Step 1: verify the token as soon as the page loads.
   useEffect(() => {
     if (!token || !login) {
       setTokenStatus('invalid');
-      setTokenMessage('This reset link is missing required information.');
+      setTokenMessage('Dette nulstillingslink mangler nødvendige oplysninger.');
       return;
     }
 
@@ -61,19 +60,21 @@ export default function ResetPasswordForm() {
         } else {
           setTokenStatus('invalid');
           setTokenMessage(
-            data.message || 'This reset link is invalid or has expired.',
+            data.message ||
+              'Dette nulstillingslink er ugyldigt eller er udløbet.',
           );
         }
       } catch {
         setTokenStatus('invalid');
-        setTokenMessage('Something went wrong while checking your reset link.');
+        setTokenMessage(
+          'Der opstod en fejl under kontrollen af dit nulstillingslink.',
+        );
       }
     };
 
     verify();
   }, [token, login]);
 
-  // Step 2: submit the new password.
   const onSubmit = async (values: ResetPasswordFormValues) => {
     setApiError(null);
 
@@ -109,22 +110,22 @@ export default function ResetPasswordForm() {
           {tokenStatus === 'checking' && (
             <div className="flex flex-col items-center gap-3 py-8 text-[#70655E]">
               <Loader2 className="animate-spin" size={24} />
-              <p className="text-sm">Checking your reset link…</p>
+              <p className="text-sm">Kontrollerer dit nulstillingslink…</p>
             </div>
           )}
 
           {tokenStatus === 'invalid' && (
             <div className="flex flex-col gap-4">
               <h1 className="text-[28px] font-bold leading-tight text-[#211711]">
-                Link not valid
+                Link ikke gyldigt
               </h1>
               <p className="text-sm text-[#70655E]">
                 {tokenMessage ||
-                  'This password reset link is invalid or has expired.'}
+                  'Dette nulstillingslink er ugyldigt eller er udløbet.'}
               </p>
               <Link href="/forgot-password">
                 <Button className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]">
-                  Request a new link
+                  Anmod om et nyt link
                 </Button>
               </Link>
             </div>
@@ -134,10 +135,10 @@ export default function ResetPasswordForm() {
             <>
               <div>
                 <h1 className="text-[32px] font-bold leading-tight text-[#211711]">
-                  Reset Password
+                  Nulstil adgangskode
                 </h1>
                 <p className="mt-2 text-sm text-[#70655E]">
-                  Please enter your new password below.
+                  Indtast din nye adgangskode nedenfor.
                 </p>
               </div>
 
@@ -150,18 +151,18 @@ export default function ResetPasswordForm() {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#211711]">
-                    New Password
+                    Ny adgangskode
                   </label>
                   <div className="relative">
                     <Input
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter new password"
+                      placeholder="Indtast ny adgangskode"
                       className="h-12 rounded-xl border-[#E8E1DA] pr-12"
                       {...register('newPassword', {
-                        required: 'New password is required',
+                        required: 'Ny adgangskode er påkrævet',
                         minLength: {
                           value: 8,
-                          message: 'Password must be at least 8 characters',
+                          message: 'Adgangskoden skal være mindst 8 tegn',
                         },
                       })}
                     />
@@ -182,17 +183,17 @@ export default function ResetPasswordForm() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#211711]">
-                    Confirm Password
+                    Bekræft adgangskode
                   </label>
                   <div className="relative">
                     <Input
                       type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder="Confirm password"
+                      placeholder="Bekræft adgangskode"
                       className="h-12 rounded-xl border-[#E8E1DA] pr-12"
                       {...register('confirmPassword', {
-                        required: 'Confirm password is required',
+                        required: 'Bekræft adgangskode er påkrævet',
                         validate: (value) =>
-                          value === password || 'Passwords do not match',
+                          value === password || 'Adgangskoderne matcher ikke',
                       })}
                     />
                     <button
@@ -221,16 +222,16 @@ export default function ResetPasswordForm() {
                   disabled={isSubmitting}
                   className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
                 >
-                  {isSubmitting ? 'Updating...' : 'Reset Password'}
+                  {isSubmitting ? 'Opdaterer...' : 'Nulstil adgangskode'}
                 </Button>
               </form>
             </>
           )}
 
           <p className="text-center text-sm text-[#70655E]">
-            If you need further assistance{' '}
+            Hvis du har brug for yderligere hjælp{' '}
             <Link href="/contact-us" className="font-semibold text-[#211711]">
-              contact us
+              kontakt os
             </Link>
           </p>
         </div>
@@ -241,7 +242,7 @@ export default function ResetPasswordForm() {
           className="mt-6 flex items-center gap-2 text-sm font-medium text-[#35281E] transition-opacity hover:opacity-80 cursor-pointer"
         >
           <ArrowLeft size={16} />
-          Back to Shopping Cart
+          Tilbage til indkøbskurven
         </button>
       </div>
     </div>
