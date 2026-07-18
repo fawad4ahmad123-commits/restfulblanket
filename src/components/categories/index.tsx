@@ -12,7 +12,7 @@ import { Pagination } from '../all-products/Pagination';
 import ActiveFilters from '../all-products/ProductGrid/ActiveFilters';
 import { FAQS } from './faqs';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 
 export default function Categories({ products, categories, initialSlug }: any) {
   const router = useRouter();
