@@ -1,7 +1,11 @@
+'use client';
+
+import { useAboutContext } from '@/src/core/context/about-context';
 import Link from 'next/link';
-import { DOCUMENT_LINKS } from './contants';
 
 export function DocumentationSection() {
+  const { documentLinks } = useAboutContext();
+
   return (
     <section className="py-24">
       <div className="mx-auto max-w-3xl text-center">
@@ -16,7 +20,7 @@ export function DocumentationSection() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-8">
-          {DOCUMENT_LINKS.map((link) => (
+          {documentLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}

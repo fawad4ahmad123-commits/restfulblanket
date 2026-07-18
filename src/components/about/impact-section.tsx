@@ -1,7 +1,11 @@
-import { IMPACT_PROJECTS } from './contants';
+'use client';
+
+import { useAboutContext } from '@/src/core/context/about-context';
 import { ImpactCard } from './impact-card';
 
 export function ImpactSection() {
+  const { impactProjects } = useAboutContext();
+
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -11,7 +15,7 @@ export function ImpactSection() {
         </h2>
 
         <div className="grid gap-4 md:grid-cols-3">
-          {IMPACT_PROJECTS.map((project) => (
+          {impactProjects.map((project) => (
             <ImpactCard key={project.title} {...project} />
           ))}
         </div>

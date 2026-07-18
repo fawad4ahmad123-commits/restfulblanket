@@ -1,7 +1,11 @@
+'use client';
+
+import { useAboutContext } from '@/src/core/context/about-context';
 import Image from 'next/image';
-import { CERTIFICATIONS } from './contants';
 
 export function Certifications() {
+  const { certifications } = useAboutContext();
+
   return (
     <section className="py-10">
       <div className="mx-auto max-w-6xl rounded-[28px] bg-[#F5F0EA] px-8 py-12">
@@ -11,14 +15,20 @@ export function Certifications() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-8">
-          {CERTIFICATIONS.map((item) => (
+          {certifications.map((item) => (
             <a
               key={item.image}
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Image src={item.image} alt="" width={90} height={90} />
+              <Image
+                src={item.image}
+                alt=""
+                width={90}
+                height={90}
+                unoptimized
+              />
             </a>
           ))}
         </div>

@@ -63,10 +63,54 @@ export const navigation = [
   {
     title: 'Om Os',
     href: '/about',
+    groups: [
+      {
+        heading: 'om-os',
+        links: [
+          {
+            title: 'About Social Economics (RSV)',
+            href: '/about/restfulblanket-rsv',
+          },
+          { title: 'Projects', href: '/project' },
+          { title: 'Press and media kit', href: '/about/presse-og-mediekit' },
+          {
+            title: 'Global Goals and Sustainability',
+            href: '/about/verdensmaal-baeredygtighed',
+          },
+        ],
+      },
+    ],
   },
   {
-    title: 'Blog',
-    href: '/blog',
+    title: 'Projekter',
+    href: '/project',
+    groups: [
+      {
+        heading: 'projects',
+        links: [
+          {
+            title: 'Lærke',
+            href: '/project/laerke',
+          },
+          // {
+          //   title: 'Medusa',
+          //   href: '/project/krisecenter',
+          // },
+          {
+            title: 'Ro i Indercirklen',
+            href: '/project/ro-i-innercirklen',
+          },
+          // {
+          //   title: 'ESG/CSR-partnere',
+          //   href: '/project/csr-partnere',
+          // },
+          {
+            title: 'Tak til fonde, legatgivere og sponsorer',
+            href: '/project/fonde-og-legatgivere',
+          },
+        ],
+      },
+    ],
   },
   {
     title: 'Guides',
@@ -79,8 +123,8 @@ export const navigation = [
           { title: 'Sleep', href: '/guides/soevn' },
           { title: 'PTSD', href: '/guides/ptsd' },
           { title: 'Anxiety', href: '/guides/angst' },
-          { title: 'Video Guides', href: '/video-guides' },
-          { title: 'Product finder', href: '/product-finder' },
+          { title: 'Video Guides', href: '/guides/video-guides' },
+          { title: 'Product finder', href: '/guides/product-finder' },
         ],
       },
       {
@@ -88,6 +132,10 @@ export const navigation = [
         links: [{ title: 'Articles', href: '/blog' }],
       },
     ],
+  },
+  {
+    title: 'Blog',
+    href: '/blog',
   },
 ];
 
