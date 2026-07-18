@@ -11,7 +11,7 @@ const ExpertsSection = () => {
   const router = useRouter();
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const shouldSlider = EXPERTS.length > 4;
+  const shouldSlider = EXPERTS.length > 3;
 
   const prev = () => {
     sliderRef.current?.scrollBy({
@@ -36,7 +36,7 @@ const ExpertsSection = () => {
           ref={sliderRef}
           className={
             shouldSlider
-              ? 'flex gap-5 overflow-x-auto pb-4 scrollbar-hide'
+              ? 'flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide'
               : 'grid gap-5 xl:grid-cols-4'
           }
           role="region"
@@ -47,7 +47,7 @@ const ExpertsSection = () => {
               key={`${expert.name}-${index}`}
               className={
                 shouldSlider
-                  ? 'w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-[32%]'
+                  ? 'snap-start flex-none basis-[90%] sm:basis-[70%] md:basis-[48%] xl:basis-[32%]'
                   : 'w-full'
               }
             >

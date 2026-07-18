@@ -66,10 +66,42 @@ export const navigation = [
           {
             title: 'Guides',
             href: '/guides',
+            children: [
+              {
+                title: 'ADHD',
+                href: '/guides/adhd',
+              },
+              {
+                title: 'Søvn',
+                href: '/guides/soevn',
+              },
+              {
+                title: 'Stress',
+                href: '/guides/stress',
+              },
+              {
+                title: 'Angst',
+                href: '/guides/angst',
+              },
+            ],
           },
           {
             title: 'Artikler',
             href: '/blog',
+            children: [
+              {
+                title: 'Seneste Artikler',
+                href: '/blog',
+              },
+              {
+                title: 'Søvn Artikler',
+                href: '/blog/soevn',
+              },
+              {
+                title: 'ADHD Artikler',
+                href: '/blog/adhd',
+              },
+            ],
           },
         ],
       },

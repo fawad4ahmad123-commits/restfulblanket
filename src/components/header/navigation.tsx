@@ -319,26 +319,22 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                 {item.groups.map((group: any) => (
                   <div
                     key={group.heading}
-                    className="flex min-w-[180px] max-w-[200px] flex-col gap-1"
+                    className="flex min-w-[280px] max-w-[350px] flex-col gap-1"
                   >
                     <span
                       title={group.heading}
                       className={cn(
-                        'mb-2 block truncate text-xs font-medium uppercase tracking-wide',
+                        'mb-2 block text-xs font-medium uppercase tracking-wide whitespace-normal break-words',
                         isHome ? 'text-[#E9DDD4]/60' : 'text-[#392A22]/50',
                       )}
                     >
                       {group.heading}
                     </span>
 
-                    {(item.title === 'Tyngdetæpper'
-                      ? tyngdedynerChildren.slice(0, MAX_SUB_CATEGORIES)
-                      : item.title === 'Tilbehør'
-                        ? tilbehoerCategories.slice(0, MAX_SUB_CATEGORIES)
-                        : group.links
-                    ).map((category: any) => {
+                    {group.links.map((category: any) => {
                       const hasSubChildren =
                         category.children && category.children.length > 0;
+
                       return (
                         <div
                           key={category.id || category.title}
@@ -354,13 +350,13 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                             role="menuitem"
                             title={category.name || category.title}
                             className={cn(
-                              'flex items-center gap-3 rounded-lg py-2 text-sm transition-colors justify-between pr-2',
+                              'flex items-start gap-3 rounded-lg py-2 text-sm transition-colors justify-between pr-2',
                               isHome
                                 ? 'text-[#E9DDD4] hover:bg-white/10'
                                 : 'text-[#392A22] hover:bg-[#392A22]/10',
                             )}
                           >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-start gap-3 flex-1 min-w-0">
                               {(category?.image?.src || category?.image) && (
                                 <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
                                   <Image
@@ -374,19 +370,20 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                                 </span>
                               )}
 
-                              <span className="truncate">
+                              <span className="whitespace-normal break-words leading-snug">
                                 {category.name || category.title}
                               </span>
                             </div>
+
                             {hasSubChildren && (
-                              <ChevronDown className="-rotate-90 size-3.5 transition-transform" />
+                              <ChevronDown className="-rotate-90 mt-1 shrink-0 size-3.5 transition-transform" />
                             )}
                           </Link>
 
                           {hasSubChildren && (
                             <div
                               className={cn(
-                                'absolute left-full top-0 ml-1 invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 transition-all z-[10000] rounded-xl p-3 min-w-[200px]',
+                                'absolute left-full top-0 ml-1 invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 transition-all z-[10000] rounded-xl p-3 min-w-[280px] max-w-[350px]',
                                 isHome
                                   ? 'bg-[#392A22] border border-white/10'
                                   : 'bg-[#fff9f5] shadow-lg border border-[#392A22]/10',
@@ -398,13 +395,13 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                                     key={child.title || child.name}
                                     href={child.href || '#'}
                                     className={cn(
-                                      'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                                      'flex items-start gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                                       isHome
                                         ? 'text-[#E9DDD4] hover:bg-white/10'
                                         : 'text-[#392A22] hover:bg-[#392A22]/10',
                                     )}
                                   >
-                                    <span className="truncate">
+                                    <span className="whitespace-normal break-words leading-snug">
                                       {child.title || child.name}
                                     </span>
                                   </Link>
