@@ -1,19 +1,16 @@
 'use client';
 
 import { Check } from 'lucide-react';
-import React, { useMemo } from 'react';
-
+import { useMemo } from 'react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
 import { buildSidebarFilters } from '@/src/utilty/sidebarFilters';
 import { toggleFilter } from '@/src/utilty/toggleFilter';
 import { isLight } from '@/src/utilty/isLight';
-
 import DualRangeSlider from '../DualRangeSlider';
 import { ProductSideCategory } from './types';
 

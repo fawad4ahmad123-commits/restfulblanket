@@ -76,7 +76,7 @@ const ProductCard = ({
           handleNavigate();
         }
       }}
-      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-white transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#35281E] focus:ring-offset-2"
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[20px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#35281E] focus:ring-offset-2"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-[#F7F2ED]">
         <Image

@@ -20,7 +20,7 @@ export default function ProductSort({ sort, setSort }: Props) {
         aria-label="Sorter produkter"
         value={sort}
         onChange={(e) => setSort(e.target.value)}
-        className="h-11 w-full appearance-none rounded-full border border-[#E9DDD4] bg-[#FDF9F6] px-6 pr-12 text-sm text-[#35281E] outline-none"
+        className="h-11 w-full  rounded-full border border-[#fdf9f6] bg-[#FDF9F6] px-6 pr-12 text-sm text-[#35281E] outline-none  appearance-none focus:border-[#35281E] focus:ring-1 focus:ring-[#35281E] sm:text-base"
       >
         {sortOptions.map((option) => (
           <option key={option.id} value={option.value}>

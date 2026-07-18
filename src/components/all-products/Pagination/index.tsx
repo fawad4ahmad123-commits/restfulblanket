@@ -23,7 +23,7 @@ export function Pagination({
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <PaginationRoot className="justify-end">
+    <PaginationRoot className="justify-end pb-6">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

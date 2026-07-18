@@ -23,10 +23,10 @@ export async function generateMetadata() {
     },
   };
 }
-
 export default async function BlogPage() {
   const blog = await getBlogs();
-  const response = formatBlogs(blog);
+
+  const response = await formatBlogs(blog);
 
   return (
     <main className="min-h-screen bg-[#fff9f5]">

@@ -15,27 +15,27 @@ export const navigation = [
     href: '/shop',
   },
   {
-    title: 'Tyngdetæpper',
-    href: '/collections/tyngdetaepper',
+    title: 'Tyngdedyner',
+    href: '/collections/tyngdedyner',
     groups: [
       {
-        heading: 'VORES TYNGDETÆPPER',
+        heading: 'VORES TYNGDEDYNER',
         links: [
           {
             title: 'Voksne',
-            href: '/voksne',
+            href: '/collections/tyngdedyner/voksne',
           },
           {
             title: 'Børn',
-            href: '/boern',
+            href: '/collections/tyngdedyner/boern',
           },
         ],
       },
     ],
   },
   {
-    title: 'Tyngdedyner',
-    href: '/collections/tyngdedyner',
+    title: 'Tyngdetæpper',
+    href: '/collections/tyngdetaepper',
   },
   {
     title: 'Tilbehør',
@@ -46,35 +46,64 @@ export const navigation = [
         links: [
           {
             title: 'Hovedpuder',
-            href: '/hovedpuder',
+            href: '/collections/tilbehoer/hovedpuder',
           },
           {
             title: 'Sengesæt',
-            href: '/sengesaet',
+            href: '/collections/tilbehoer/sengesaet',
           },
         ],
       },
     ],
   },
   {
-    title: 'Eksperter',
-    href: '/expert',
+    title: 'Søvn og ro',
+    href: '/soevn-og-ro',
+    groups: [
+      {
+        heading: 'SØVN OG RO',
+        links: [
+          {
+            title: 'Guides',
+            href: '/guides',
+          },
+          {
+            title: 'Artikler',
+            href: '/blog',
+          },
+        ],
+      },
+    ],
   },
   {
     title: 'Om Os',
     href: '/about',
     groups: [
       {
-        heading: 'om-os',
+        heading: 'OM OS',
         links: [
           {
-            title: 'About Social Economics (RSV)',
+            title: 'Om Socialøkonomi (RSV)',
             href: '/about/restfulblanket-rsv',
           },
-          { title: 'Projects', href: '/project' },
-          { title: 'Press and media kit', href: '/about/presse-og-mediekit' },
           {
-            title: 'Global Goals and Sustainability',
+            title: 'Ekspertpanel',
+            href: '/expert',
+          },
+          {
+            title: 'Projekter',
+            href: '/project',
+          },
+          {
+            title: 'Anmeldelser',
+            href: '/about/anmeldelser',
+          },
+          {
+            title: 'Presse og mediekit',
+            href: '/about/presse-og-mediekit',
+          },
+          {
+            title: 'Verdensmål og bæredygtighed',
             href: '/about/verdensmaal-baeredygtighed',
           },
         ],
@@ -82,60 +111,51 @@ export const navigation = [
     ],
   },
   {
-    title: 'Projekter',
-    href: '/project',
+    title: 'Om vores dyner',
+    href: '/om-vores-dyner',
     groups: [
       {
-        heading: 'projects',
+        heading: 'OM VORES DYNER',
         links: [
           {
-            title: 'Lærke',
-            href: '/project/laerke',
+            title: 'Brugervejledning',
+            href: '/guides/brugervejledning',
           },
-          // {
-          //   title: 'Medusa',
-          //   href: '/project/krisecenter',
-          // },
           {
-            title: 'Ro i Indercirklen',
-            href: '/project/ro-i-innercirklen',
+            title: 'Sikkerhed og kontraindikationer',
+            href: '/guides/sikkerhed-og-kontraindikationer',
           },
-          // {
-          //   title: 'ESG/CSR-partnere',
-          //   href: '/project/csr-partnere',
-          // },
           {
-            title: 'Tak til fonde, legatgivere og sponsorer',
-            href: '/project/fonde-og-legatgivere',
+            title: 'CE-Mærkning og Dokumentation',
+            href: '/guides/ce-maerkning',
+          },
+          {
+            title: 'Forskningsbibliotek og kildesamling',
+            href: '/guides/forskningsbibliotek',
+          },
+          {
+            title: 'Forskningsoversigt og faglige kilder',
+            href: '/guides/forskningsoversigt',
+          },
+          {
+            title: 'Redaktionelle retningslinjer',
+            href: '/guides/redaktionelle-retningslinjer',
+          },
+          {
+            title: 'Medicinsk gennemgang og sundhedsfaglig politik',
+            href: '/guides/medicinsk-gennemgang',
+          },
+          {
+            title: 'Vask & pleje',
+            href: '/guides/vask-pleje',
+          },
+          {
+            title: 'Ofte stillede spørgsmål',
+            href: '/guides/faq',
           },
         ],
       },
     ],
-  },
-  {
-    title: 'Guides',
-    href: '/guides',
-    groups: [
-      {
-        heading: 'Guides',
-        links: [
-          { title: 'ADHD', href: '/guides/adhd' },
-          { title: 'Sleep', href: '/guides/soevn' },
-          { title: 'PTSD', href: '/guides/ptsd' },
-          { title: 'Anxiety', href: '/guides/angst' },
-          { title: 'Video Guides', href: '/guides/video-guides' },
-          { title: 'Product finder', href: '/guides/product-finder' },
-        ],
-      },
-      {
-        heading: 'Articles',
-        links: [{ title: 'Articles', href: '/blog' }],
-      },
-    ],
-  },
-  {
-    title: 'Blog',
-    href: '/blog',
   },
 ];
 

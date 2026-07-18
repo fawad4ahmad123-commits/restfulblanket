@@ -5,11 +5,9 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import BlogCard from '.';
 import SliderControls from '../../generic/slider-control';
-import { formatBlogs } from '@/src/utilty/blog-formater';
 
-const BlogsSection = ({ blog }: any) => {
+const BlogsSection = ({ blogs = [] }: any) => {
   const router = useRouter();
-  const response = formatBlogs(blog);
 
   const [start, setStart] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -39,7 +37,7 @@ const BlogsSection = ({ blog }: any) => {
     }
 
     setStart((prev) =>
-      prev >= Math.max(response.length - visibleCards, 0) ? 0 : prev + 1,
+      prev >= Math.max(blogs.length - visibleCards, 0) ? 0 : prev + 1,
     );
   };
 
@@ -53,11 +51,11 @@ const BlogsSection = ({ blog }: any) => {
     }
 
     setStart((prev) =>
-      prev === 0 ? Math.max(response.length - visibleCards, 0) : prev - 1,
+      prev === 0 ? Math.max(blogs.length - visibleCards, 0) : prev - 1,
     );
   };
 
-  if (!response?.length) {
+  if (!blogs?.length) {
     return null;
   }
 
@@ -75,7 +73,6 @@ const BlogsSection = ({ blog }: any) => {
           <SliderControls prev={prev} next={next} />
         </div>
 
-        {/* Mobile / Tablet Slider */}
         <div className="xl:hidden">
           <div
             ref={sliderRef}
@@ -83,7 +80,7 @@ const BlogsSection = ({ blog }: any) => {
             role="region"
             aria-label="Blog articles slider"
           >
-            {response.map((item: any, index: number) => (
+            {blogs.map((item: any, index: number) => (
               <div
                 key={item.id || index}
                 className="w-[85%] shrink-0 snap-center sm:w-[65%] md:w-[48%]"
@@ -94,9 +91,8 @@ const BlogsSection = ({ blog }: any) => {
           </div>
         </div>
 
-        {/* Desktop Slider */}
         <div className="hidden gap-6 xl:grid xl:grid-cols-4">
-          {response
+          {blogs
             .slice(start, start + visibleCards)
             .map((item: any, index: number) => (
               <BlogCard key={item.id || index} {...item} />
@@ -112,8 +108,8 @@ const BlogsSection = ({ blog }: any) => {
             type="button"
             aria-label="View all blog articles"
             title="View all blog articles"
-            onClick={() => router.push('/blogs')}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white cursor-pointer"
+            onClick={() => router.push('/blog')}
+            className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#3b281f] text-[#3b281f] transition hover:bg-[#3b281f] hover:text-white"
           >
             <ArrowRight size={18} />
           </button>

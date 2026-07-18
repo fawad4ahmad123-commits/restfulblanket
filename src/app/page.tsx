@@ -2,6 +2,7 @@ import Landing from '../components/Home';
 import { getBestSellers, getCategories } from '@/src/lib/products';
 import { getBlogs } from '../lib/blog';
 import { getRankMathSEO } from '@/src/lib/seo';
+import { formatBlogs } from '../utilty/blog-formater';
 
 export async function generateMetadata() {
   const seo = await getRankMathSEO(`${process.env.NEXT_PUBLIC_SITE_URL}/`);
@@ -31,12 +32,12 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const [products, categories, blogs] = await Promise.all([
+  const [products, categories, blog] = await Promise.all([
     getBestSellers(),
     getCategories(),
     getBlogs(),
   ]);
-
+  const blogs = await formatBlogs(blog);
   return (
     <Landing
       products={products}

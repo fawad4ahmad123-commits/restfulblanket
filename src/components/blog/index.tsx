@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 
 const Blog = ({ blogs }: any) => {
   const isSlider = false;
-
+  console.log('taha blog bbbb', { blogs });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
 

@@ -127,13 +127,13 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                 className={cn(
                   'invisible absolute inset-x-0 top-full z-[9999] opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100',
                   'flex justify-start',
-                  isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg',
+                  isHome ? 'bg-[#392A22]' : 'bg-[#fff9f5] shadow-lg',
                 )}
               >
                 <div
                   className={cn(
                     'flex w-full gap-12 px-10 py-8',
-                    isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg',
+                    isHome ? 'bg-[#392A22]' : 'bg-[#fff9f5] shadow-lg',
                   )}
                 >
                   {visibleParentCategories.map((category: any) => {
@@ -183,7 +183,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                               )}
                             >
                               {childImageSrc ? (
-                                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
+                                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#fff9f5]">
                                   <Image
                                     src={childImageSrc}
                                     alt={child.name}
@@ -279,7 +279,10 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
         const hasProducts = dynamicProducts.length > 0;
 
         return (
-          <div key={item.title} className="group static">
+          <div
+            key={item.title}
+            className={cn('group', hasProducts ? 'static' : 'relative')}
+          >
             <Link
               href={item.href}
               aria-label={`${item.title} menu`}
@@ -293,24 +296,24 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                 className="size-3.5 transition-transform group-hover:rotate-180"
               />
             </Link>
-
             <div
               role="menu"
               aria-label={`${item.title} submenu`}
               className={cn(
-                'invisible absolute inset-x-0 top-full z-[9999] opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100',
-                hasProducts ? 'border-t' : 'flex justify-start',
+                'invisible absolute top-full left-0 z-[9999] opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100',
+                hasProducts ? 'inset-x-0 border-t' : 'rounded-xl',
                 isHome
                   ? 'border-white/10 bg-[#392A22]'
-                  : 'border-[#392A22]/10 bg-white shadow-lg',
+                  : 'border-[#392A22]/10 bg-[#fff9f5] shadow-lg',
               )}
             >
               <div
                 className={cn(
-                  'flex w-full gap-12 px-6 py-8',
-                  !hasProducts && 'inline-flex w-auto rounded-xl p-5',
+                  hasProducts
+                    ? 'flex w-full gap-12 px-6 py-8'
+                    : 'inline-flex min-w-[280px] flex-col rounded-xl p-5',
                   !hasProducts &&
-                    (isHome ? 'bg-[#392A22]' : 'bg-white shadow-lg'),
+                    (isHome ? 'bg-[#392A22]' : 'bg-[#fff9f5] shadow-lg'),
                 )}
               >
                 {item.groups.map((group: any) => (
@@ -329,46 +332,44 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                     </span>
 
                     {(item.title === 'Tyngdetæpper'
-                      ? tyngdedynerChildren
+                      ? tyngdedynerChildren.slice(0, MAX_SUB_CATEGORIES)
                       : item.title === 'Tilbehør'
-                        ? tilbehoerCategories
+                        ? tilbehoerCategories.slice(0, MAX_SUB_CATEGORIES)
                         : group.links
-                    )
-                      .slice(0, MAX_SUB_CATEGORIES)
-                      .map((category: any) => (
-                        <Link
-                          key={category.id || category.title}
-                          href={
-                            category.href ||
-                            `/collections/${slugify(item.title)}/${slugify(
-                              category.title || category.name,
-                            )}`
-                          }
-                          role="menuitem"
-                          title={category.name || category.title}
-                          className={cn(
-                            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-                            isHome
-                              ? 'text-[#E9DDD4] hover:bg-white/10'
-                              : 'text-[#392A22] hover:bg-[#392A22]/10',
-                          )}
-                        >
-                          {(category?.image?.src || category?.image) && (
-                            <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
-                              <Image
-                                src={category?.image?.src || category?.image}
-                                alt={category.name || category.title}
-                                fill
-                                className="object-cover"
-                              />
-                            </span>
-                          )}
-
-                          <span className="truncate">
-                            {category.name || category.title}
+                    ).map((category: any) => (
+                      <Link
+                        key={category.id || category.title}
+                        href={
+                          category.href ||
+                          `/collections/${slugify(item.title)}/${slugify(
+                            category.title || category.name,
+                          )}`
+                        }
+                        role="menuitem"
+                        title={category.name || category.title}
+                        className={cn(
+                          'flex items-center gap-3 rounded-lg  py-2 text-sm transition-colors',
+                          isHome
+                            ? 'text-[#E9DDD4] hover:bg-white/10'
+                            : 'text-[#392A22] hover:bg-[#392A22]/10',
+                        )}
+                      >
+                        {(category?.image?.src || category?.image) && (
+                          <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
+                            <Image
+                              src={category?.image?.src || category?.image}
+                              alt={category.name || category.title}
+                              fill
+                              className="object-cover"
+                            />
                           </span>
-                        </Link>
-                      ))}
+                        )}
+
+                        <span className="truncate">
+                          {category.name || category.title}
+                        </span>
+                      </Link>
+                    ))}
                   </div>
                 ))}
 

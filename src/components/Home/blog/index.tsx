@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { CalendarDays, Eye } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { BlogCard as BlogCardProps } from '../types';
 
@@ -12,7 +12,6 @@ const BlogCard = ({
   title,
   excerpt,
   date,
-  views,
   slug,
 }: BlogCardProps) => {
   const router = useRouter();
@@ -28,18 +27,6 @@ const BlogCard = ({
             className="object-cover transition duration-700 group-hover:scale-105"
           />
         </div>
-
-        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#f7f2ee] px-3 py-2 shadow-md">
-          <Image
-            src={authorImage}
-            alt={`${author} profile photo`}
-            width={34}
-            height={34}
-            className="rounded-full"
-          />
-
-          <span className="text-sm text-[#3b281f]">{author}</span>
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col px-2 pt-5">
@@ -51,22 +38,28 @@ const BlogCard = ({
           {excerpt}
         </p>
 
-        <div className="mt-5 border-t border-[#d9cec5] pb-3 pt-4">
-          <div className="flex items-center gap-6 text-sm text-[#85776d]">
+        <div className="mt-5 border-t border-[#d9cec5] pt-4">
+          <div className="flex items-center justify-between">
             <div
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-sm text-[#85776d]"
               aria-label={`Published on ${date}`}
             >
               <CalendarDays size={16} />
-              {date}
+              <span>{date}</span>
             </div>
 
             <div
               className="flex items-center gap-2"
-              aria-label={`${views} views`}
+              aria-label={`Author: ${author}`}
             >
-              <Eye size={16} />
-              {views}
+              <Image
+                src={authorImage}
+                alt={`${author} profile photo`}
+                width={34}
+                height={34}
+                className="rounded-full"
+              />
+              <span className="text-sm text-[#3b281f]"> {author}</span>
             </div>
           </div>
         </div>
