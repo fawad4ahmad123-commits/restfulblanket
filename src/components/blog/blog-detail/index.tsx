@@ -2,15 +2,12 @@
 
 import { ArrowRight } from 'lucide-react';
 import BlogCard from '../../Home/blog';
-import { BLOGS } from '../../Home/constants';
 import ArticleHero from './article-hero';
 import ArticleLayout from './article-layout';
 import AuthorCard from './author-card';
 import { useRouter } from 'next/navigation';
-import { formatBlogDetail } from '@/src/utilty/blog-detail-formater';
 
-const Article = ({ blog }: any) => {
-  const article = formatBlogDetail(blog);
+const Article = ({ article, relatedBlogs = [] }: any) => {
   const router = useRouter();
 
   return (
@@ -20,26 +17,30 @@ const Article = ({ blog }: any) => {
 
         {article?.content && <ArticleLayout data={article.content} />}
 
-        <div className="mb-8 mt-8 flex items-center justify-center">
-          <h1 className="font-serif text-[32px] text-[#35281E]">
-            Du vil måske også kunne lide
-          </h1>
-        </div>
-
-        <div
-          className="flex gap-6 overflow-x-auto pb-4 xl:grid xl:grid-cols-4 xl:overflow-visible"
-          role="region"
-          aria-label="Blog articles"
-        >
-          {BLOGS.map((blog, index) => (
-            <div
-              key={`${blog.title}-${index}`}
-              className="w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-auto"
-            >
-              <BlogCard {...blog} />
+        {relatedBlogs.length > 0 && (
+          <>
+            <div className="mb-8 mt-8 flex items-center justify-center">
+              <h1 className="font-serif text-[32px] text-[#35281E]">
+                Du vil måske også kunne lide
+              </h1>
             </div>
-          ))}
-        </div>
+
+            <div
+              className="flex gap-6 overflow-x-auto pb-4 xl:grid xl:grid-cols-4 xl:overflow-visible"
+              role="region"
+              aria-label="Blog articles"
+            >
+              {relatedBlogs.map((b: any, index: number) => (
+                <div
+                  key={`${b.title}-${index}`}
+                  className="w-[85%] shrink-0 sm:w-[65%] md:w-[48%] xl:w-auto"
+                >
+                  <BlogCard {...b} />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <p

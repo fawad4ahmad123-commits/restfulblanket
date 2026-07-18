@@ -21,7 +21,7 @@ const Landing = ({ products, response_categories, blogs }: any) => {
       <Coments id={''} />
       <RestfulBlanketVideo />
       <CommonQuestions />
-      <BlogsSection blog={blogs} />
+      <BlogsSection blogs={blogs} />
     </div>
   );
 };

@@ -1,15 +1,19 @@
-export const formatBlogDetail = (blog: any) => {
-  const embeddedAuthor = blog?._embedded?.author?.[0];
+import { getauthorbyId } from '../lib/blog';
+
+export const formatBlogDetail = async (blog: any) => {
+  let authorData = null;
+  try {
+    authorData = await getauthorbyId(blog.author);
+  } catch (e) {
+    console.error('Failed to fetch author', e);
+  }
 
   const authorImage =
-    embeddedAuthor?.avatar_urls?.['96'] ||
-    embeddedAuthor?.avatar_urls?.['48'] ||
-    blog?.author_avatar ||
-    blog?.author_image ||
+    authorData?.avatar_urls?.['96'] ||
+    authorData?.avatar_urls?.['48'] ||
     '/blog/blog-avatar.jpg';
 
-  const authorName =
-    embeddedAuthor?.name || blog.author_name || 'Restful Blanket';
+  const authorName = authorData?.name || 'Restful Blanket';
 
   return {
     hero: {

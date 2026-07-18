@@ -336,40 +336,85 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                       : item.title === 'Tilbehør'
                         ? tilbehoerCategories.slice(0, MAX_SUB_CATEGORIES)
                         : group.links
-                    ).map((category: any) => (
-                      <Link
-                        key={category.id || category.title}
-                        href={
-                          category.href ||
-                          `/collections/${slugify(item.title)}/${slugify(
-                            category.title || category.name,
-                          )}`
-                        }
-                        role="menuitem"
-                        title={category.name || category.title}
-                        className={cn(
-                          'flex items-center gap-3 rounded-lg  py-2 text-sm transition-colors',
-                          isHome
-                            ? 'text-[#E9DDD4] hover:bg-white/10'
-                            : 'text-[#392A22] hover:bg-[#392A22]/10',
-                        )}
-                      >
-                        {(category?.image?.src || category?.image) && (
-                          <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
-                            <Image
-                              src={category?.image?.src || category?.image}
-                              alt={category.name || category.title}
-                              fill
-                              className="object-cover"
-                            />
-                          </span>
-                        )}
+                    ).map((category: any) => {
+                      const hasSubChildren =
+                        category.children && category.children.length > 0;
+                      return (
+                        <div
+                          key={category.id || category.title}
+                          className="group/sub relative"
+                        >
+                          <Link
+                            href={
+                              category.href ||
+                              `/collections/${slugify(item.title)}/${slugify(
+                                category.title || category.name,
+                              )}`
+                            }
+                            role="menuitem"
+                            title={category.name || category.title}
+                            className={cn(
+                              'flex items-center gap-3 rounded-lg py-2 text-sm transition-colors justify-between pr-2',
+                              isHome
+                                ? 'text-[#E9DDD4] hover:bg-white/10'
+                                : 'text-[#392A22] hover:bg-[#392A22]/10',
+                            )}
+                          >
+                            <div className="flex items-center gap-3">
+                              {(category?.image?.src || category?.image) && (
+                                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
+                                  <Image
+                                    src={
+                                      category?.image?.src || category?.image
+                                    }
+                                    alt={category.name || category.title}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                </span>
+                              )}
 
-                        <span className="truncate">
-                          {category.name || category.title}
-                        </span>
-                      </Link>
-                    ))}
+                              <span className="truncate">
+                                {category.name || category.title}
+                              </span>
+                            </div>
+                            {hasSubChildren && (
+                              <ChevronDown className="-rotate-90 size-3.5 transition-transform" />
+                            )}
+                          </Link>
+
+                          {hasSubChildren && (
+                            <div
+                              className={cn(
+                                'absolute left-full top-0 ml-1 invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 transition-all z-[10000] rounded-xl p-3 min-w-[200px]',
+                                isHome
+                                  ? 'bg-[#392A22] border border-white/10'
+                                  : 'bg-[#fff9f5] shadow-lg border border-[#392A22]/10',
+                              )}
+                            >
+                              <div className="flex flex-col gap-1">
+                                {category.children.map((child: any) => (
+                                  <Link
+                                    key={child.title || child.name}
+                                    href={child.href || '#'}
+                                    className={cn(
+                                      'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                                      isHome
+                                        ? 'text-[#E9DDD4] hover:bg-white/10'
+                                        : 'text-[#392A22] hover:bg-[#392A22]/10',
+                                    )}
+                                  >
+                                    <span className="truncate">
+                                      {child.title || child.name}
+                                    </span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 ))}
 

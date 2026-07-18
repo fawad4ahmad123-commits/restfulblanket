@@ -147,7 +147,7 @@ export const COMMENTS = [
 export const BLOG_CATEGORIES = [
   {
     name: 'Hvad er en tyngdedyne?',
-    url: '/blog-detail/hvad-er-en-tyngdedyne-forbedre-din-sovn/',
+    url: '/blog/hvad-er-en-tyngdedyne-forbedre-din-sovn/',
   },
   {
     name: 'Tyngdedyner – valg og typer',

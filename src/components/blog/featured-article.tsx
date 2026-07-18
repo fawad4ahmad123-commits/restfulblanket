@@ -27,13 +27,13 @@ export const FeaturedArticle = ({ blogs }: any) => {
         />
 
         <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-[#4A403B]">
-          Featured
+          Fremhævet
         </div>
       </div>
 
       <div className="flex-1">
         <span className="rounded-full border border-[#E4DAD1] px-3 py-1 text-[11px] uppercase tracking-wide text-[#857B74]">
-          Latest Article
+          Seneste artikel
         </span>
 
         <h2 className="mt-6 max-w-xl font-serif text-[32px] leading-tight text-[#3A2A22]">
@@ -75,10 +75,10 @@ export const FeaturedArticle = ({ blogs }: any) => {
         </div>
 
         <Button
-          onClick={() => router.push(`/blog-detail/${slug}`)}
+          onClick={() => router.push(`/blog/${slug}`)}
           className="mt-8 h-12 rounded-full bg-[#3A2A22] px-8 hover:bg-[#3A2A22] cursor-pointer"
         >
-          Read Full Article
+          Læs hele artiklen
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>

@@ -68,7 +68,7 @@ const BlogCard = ({
           type="button"
           aria-label={`Read more about ${title}`}
           title={`Read more about ${title}`}
-          onClick={() => router.push(`/blog-detail/${slug}`)}
+          onClick={() => router.push(`/blog/${slug}`)}
           className="mt-6 w-full cursor-pointer rounded-full bg-[#E9DDD4] py-4 text-sm font-medium text-[#35281E] transition hover:bg-[#2a1c15] hover:text-white"
         >
           Læs mere

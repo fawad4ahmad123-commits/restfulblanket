@@ -2,16 +2,94 @@
 
 import ArticleQuote from './article-quote';
 import ArticleHighlight from './article-highlight';
+import { useEffect, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Minus, Plus } from 'lucide-react';
+
+const BlogFaqAccordion = ({
+  question,
+  answerHTML,
+}: {
+  question: string;
+  answerHTML: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="overflow-hidden rounded-xl border border-stone-200 bg-white transition-shadow duration-200 hover:shadow-sm my-6">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        className="group flex w-full items-center justify-between px-5 py-4 text-left md:px-6 md:py-5 cursor-pointer bg-transparent border-none"
+      >
+        <span className="pr-4 text-[17px] font-semibold leading-snug tracking-wide text-[#35281e]">
+          {question}
+        </span>
+        <span className="flex-shrink-0 text-stone-500 transition-colors duration-150 group-hover:text-stone-800">
+          {isOpen ? (
+            <Minus className="h-4 w-4" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
+        </span>
+      </button>
+
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="px-5 pb-5 md:px-6 md:pb-6">
+          <div className="mb-4 h-px bg-stone-100" />
+          <div
+            className="text-[15px] leading-[25px] text-[#4a4039] prose"
+            dangerouslySetInnerHTML={{ __html: answerHTML }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function ArticleContent({ articleData }: any) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const paragraphClass = 'text-[15px] leading-[25px] text-[#4A4039]';
   const renderHTML = (html: string) =>
     html ? { __html: html } : { __html: '' };
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const faqItems = containerRef.current.querySelectorAll(
+      '.rank-math-faq-item',
+    );
+
+    faqItems.forEach((item) => {
+      if (item.hasAttribute('data-faq-rendered')) return;
+      item.setAttribute('data-faq-rendered', 'true');
+
+      const questionEl = item.querySelector('.rank-math-question');
+      const answerEl = item.querySelector('.rank-math-answer');
+
+      if (questionEl && answerEl) {
+        const questionText = questionEl.textContent || '';
+        const answerHTML = answerEl.innerHTML || '';
+
+        const mountNode = document.createElement('div');
+        item.parentNode?.replaceChild(mountNode, item);
+
+        const root = createRoot(mountNode);
+        root.render(
+          <BlogFaqAccordion question={questionText} answerHTML={answerHTML} />,
+        );
+      }
+    });
+  }, [articleData?.rawHtml]);
 
   if (articleData?.rawHtml) {
     return (
       <article className="w-full max-w-[760px] overflow-x-hidden px-4 sm:px-0">
         <div
+          ref={containerRef}
           className="article-content"
           dangerouslySetInnerHTML={renderHTML(articleData.rawHtml)}
         />
@@ -105,18 +183,6 @@ export default function ArticleContent({ articleData }: any) {
             line-height: 25px;
             color: #4a4039;
             list-style: disc;
-          }
-          .article-content .rank-math-faq-item {
-            margin: 1.5rem 0;
-            border: 1px solid #e5dcd6;
-            border-radius: 12px;
-            padding: 1.25rem;
-          }
-          .article-content .rank-math-question {
-            font-weight: 600;
-            font-size: 17px;
-            color: #35281e;
-            margin-bottom: 0.5rem;
           }
 
           /* 📱 Small devices */

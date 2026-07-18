@@ -47,7 +47,7 @@ const Blog = ({ blogs }: any) => {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            placeholder="Search articles..."
+            placeholder="Søg efter artikler..."
             className="h-11 w-full rounded-full border-[#E4DAD1] bg-transparent pl-11"
           />
         </div>

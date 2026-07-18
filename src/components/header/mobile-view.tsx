@@ -161,18 +161,51 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                         <div className="mt-2 flex flex-col gap-2">
                           {group.links
                             .slice(0, MAX_SUB_CATEGORIES)
-                            .map((link: any) => (
-                              <Link
-                                key={link.title}
-                                href={
-                                  link.href ||
-                                  `/collections/${slugify(item.title)}/${slugify(link.title)}`
-                                }
-                                className="text-sm text-[#35281E]"
-                              >
-                                {link.title}
-                              </Link>
-                            ))}
+                            .map((link: any) => {
+                              const hasSubChildren =
+                                link.children && link.children.length > 0;
+                              return (
+                                <div
+                                  key={link.title}
+                                  className="flex flex-col gap-2"
+                                >
+                                  {hasSubChildren ? (
+                                    <div className="flex flex-col gap-2">
+                                      <Link
+                                        href={
+                                          link.href ||
+                                          `/collections/${slugify(item.title)}/${slugify(link.title)}`
+                                        }
+                                        className="text-sm text-[#35281E]"
+                                      >
+                                        {link.title}
+                                      </Link>
+                                      <div className="ml-3 flex flex-col gap-2 border-l border-[#E9DDD4] pl-3">
+                                        {link.children.map((child: any) => (
+                                          <Link
+                                            key={child.title}
+                                            href={child.href || '#'}
+                                            className="text-sm text-[#35281E]"
+                                          >
+                                            {child.title}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      href={
+                                        link.href ||
+                                        `/collections/${slugify(item.title)}/${slugify(link.title)}`
+                                      }
+                                      className="text-sm text-[#35281E]"
+                                    >
+                                      {link.title}
+                                    </Link>
+                                  )}
+                                </div>
+                              );
+                            })}
                         </div>
                       </div>
                     ))}

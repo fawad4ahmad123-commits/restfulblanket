@@ -20,7 +20,7 @@ export default function ArticleHero({ data }: any) {
         <span className="mx-2">›</span>
         Blogs
         <span className="mx-2">›</span>
-        <span>{title}</span>
+        <span dangerouslySetInnerHTML={{ __html: title }} />
       </div>
 
       <div className="mx-auto max-w-3xl text-center">
@@ -28,13 +28,15 @@ export default function ArticleHero({ data }: any) {
           {category}
         </span>
 
-        <h1 className="mt-6 font-serif text-[56px] leading-[1.1] text-[#35281E]">
-          {title}
-        </h1>
+        <h1
+          className="mt-6 font-serif text-[56px] leading-[1.1] text-[#35281E]"
+          dangerouslySetInnerHTML={{ __html: title }}
+        />
 
-        <p className="mx-auto mt-6 max-w-2xl text-[15px] leading-7 text-[#736760]">
-          {description}
-        </p>
+        <p
+          className="mx-auto mt-6 max-w-2xl text-[15px] leading-7 text-[#736760]"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
 
         <div className="mt-8 flex items-center justify-center gap-6 text-sm text-[#736760]">
           <div className="flex items-center gap-2">
@@ -54,11 +56,6 @@ export default function ArticleHero({ data }: any) {
           <div className="flex items-center gap-2">
             <Calendar size={14} />
             <span>{date}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Eye size={14} />
-            <span>{views}</span>
           </div>
         </div>
       </div>
