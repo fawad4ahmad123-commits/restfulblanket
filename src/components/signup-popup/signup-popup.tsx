@@ -44,7 +44,7 @@ export default function SignupPopup() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] group flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] group flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105 cursor-pointer"
       >
         <div className="flex flex-col items-center">
           <p className="text-[8px] sm:text-[10px] font-bold text-[#392A22] drop-shadow-sm bg-white/80 px-2 py-0.5 rounded-full whitespace-nowrap">
@@ -81,7 +81,7 @@ export default function SignupPopup() {
       <div className="relative w-full max-w-lg md:max-w-3xl lg:max-w-4xl rounded-2xl bg-[#C7AF94] shadow-[0_25px_80px_rgba(0,0,0,0.30)] max-h-[90vh] overflow-hidden">
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute right-3 top-3 sm:right-4 sm:top-4 z-20 rounded-full bg-white/90 p-1.5 sm:p-2 text-[#392A22] transition hover:bg-white"
+          className="absolute right-3 top-3 sm:right-4 sm:top-4 z-20 rounded-full bg-white/90 p-1.5 sm:p-2 text-[#392A22] transition hover:bg-white cursor-pointer"
         >
           <X className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
@@ -119,7 +119,7 @@ export default function SignupPopup() {
 
             <Button
               onClick={handleSignup}
-              className="w-full rounded-none bg-white px-4 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold text-black hover:bg-white/90 whitespace-normal leading-snug"
+              className="w-full rounded-none bg-white px-4 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold text-black hover:bg-white/90 whitespace-normal leading-snug cursor-pointer"
             >
               Hent din rabat og søvnguide
             </Button>
