@@ -23,7 +23,7 @@ export default function SignupPopup() {
     '/profile',
     '/checkout',
     '/order-success',
-    '/contact-us'
+    '/contact-us',
   ];
 
   useEffect(() => {
@@ -54,6 +54,7 @@ export default function SignupPopup() {
             Gratis søvnguide
           </p>
         </div>
+
         <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full border-2 border-[#392A22] bg-[#C7AF94] shadow-lg overflow-hidden group-hover:shadow-2xl transition-all duration-300">
           <div className="flex items-center justify-center h-full w-full p-1 sm:p-1.5">
             <Image
@@ -70,15 +71,14 @@ export default function SignupPopup() {
     );
   }
 
-  // Full popup view
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center overflow-y-auto p-0 sm:p-6 md:p-8">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={() => setIsOpen(false)}
       />
 
-      <div className="relative w-full sm:max-w-lg md:max-w-3xl lg:max-w-4xl mx-auto my-0 sm:my-auto rounded-none sm:rounded-2xl bg-[#C7AF94] shadow-[0_25px_80px_rgba(0,0,0,0.30)] min-h-screen sm:min-h-0">
+      <div className="relative w-full max-w-lg md:max-w-3xl lg:max-w-4xl rounded-2xl bg-[#C7AF94] shadow-[0_25px_80px_rgba(0,0,0,0.30)] max-h-[90vh] overflow-hidden">
         <button
           onClick={() => setIsOpen(false)}
           className="absolute right-3 top-3 sm:right-4 sm:top-4 z-20 rounded-full bg-white/90 p-1.5 sm:p-2 text-[#392A22] transition hover:bg-white"
@@ -87,21 +87,7 @@ export default function SignupPopup() {
         </button>
 
         <div className="flex flex-col md:grid md:grid-cols-2">
-          {/* Image */}
-          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[420px] lg:min-h-[480px] order-1">
-            <Image
-              src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/7e0d61b1-6b9d-4ac5-95c0-efa090a0ec57.jpeg"
-              alt="Sovende kvinde"
-              fill
-              priority
-              unoptimized
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-[#C7AF94]/40 md:hidden" />
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-col justify-center px-5 py-6 sm:px-8 sm:py-8 md:p-10 lg:p-14 order-2">
+          <div className="flex flex-col justify-center px-5 py-6 sm:px-8 sm:py-8 md:p-10 lg:p-14 md:order-1">
             <div className="mb-4 sm:mb-6">
               <Image
                 src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/1b62656c-395d-43ab-b3a1-90595c76ade8.png"
@@ -137,6 +123,18 @@ export default function SignupPopup() {
             >
               Hent din rabat og søvnguide
             </Button>
+          </div>
+
+          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[420px] lg:min-h-[480px] md:order-2">
+            <Image
+              src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/7e0d61b1-6b9d-4ac5-95c0-efa090a0ec57.jpeg"
+              alt="Sovende kvinde"
+              fill
+              priority
+              unoptimized
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-[#C7AF94]/40 md:hidden" />
           </div>
         </div>
       </div>
