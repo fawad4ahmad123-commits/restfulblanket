@@ -286,6 +286,10 @@ export const shopLinks = [
     title: 'Lån en tyngdedyne',
     href: '/laan-en-tyngdedyne',
   },
+  {
+    title: '10% rabat + Sleep guide',
+    href: '/sign-up-for-restfulblanket',
+  },
 ];
 
 export const supportLinks = [

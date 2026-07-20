@@ -54,15 +54,15 @@ interface HeroLike {
 
 export const formatArticleData = (
   content: string,
-  hero?: HeroLike
+  hero?: HeroLike,
 ): ArticleData => {
   const expert: ArticleExpert | undefined = hero
     ? {
-      name: hero.author,
-      image: hero.authorImage,
-      category: hero.category,
-      description: hero.description,
-    }
+        name: hero.author,
+        image: hero.authorImage,
+        category: hero.category,
+        description: hero.description,
+      }
     : undefined;
 
   if (!content) {
@@ -172,7 +172,7 @@ export const formatArticleData = (
 
       if (text.startsWith('•')) {
         (currentSection ? currentSection.list : intro).push(
-          text.replace('•', '').trim()
+          text.replace('•', '').trim(),
         );
       } else {
         (currentSection ? currentSection.content : intro).push(text);
@@ -180,7 +180,10 @@ export const formatArticleData = (
       return;
     }
 
-    if (tag === 'div' && node.classList.contains('wp-block-rank-math-faq-block')) {
+    if (
+      tag === 'div' &&
+      node.classList.contains('wp-block-rank-math-faq-block')
+    ) {
       pushCurrent();
       const faqItems = Array.from(node.querySelectorAll('.rank-math-faq-item'));
       const faq = faqItems

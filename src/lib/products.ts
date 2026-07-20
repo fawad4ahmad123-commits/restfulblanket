@@ -125,13 +125,19 @@ export async function getCategories() {
 }
 
 export async function getProductById(id: any) {
-  const data = await safeJsonFetch(wcUrl(`products/${id}`), {
-    next: { revalidate: 300 },
-  });
+  const data = await safeJsonFetch(
+    wcUrl('products', { include: id, per_page: 1 }),
+    { cache: 'no-store' },
+  );
+  const product = Array.isArray(data) ? data[0] : data;
 
-  if (data === null) return null;
+  if (!product) return null;
+  if (product.type === 'variable') {
+    const variations = await getProductVariations(product.id);
+    product.variationData = variations;
+  }
 
-  return data;
+  return product;
 }
 
 export async function getProductBySlug(slug: string) {
@@ -209,9 +215,7 @@ export async function getAllProducts(params?: {
   if (params?.maxPrice !== undefined) query.max_price = params.maxPrice;
 
   const data = await safeJsonFetch(wcUrl('products', query), {
-    ...(params?.search || params?.category
-      ? { cache: 'no-store' }
-      : { next: { revalidate: 300 } }),
+    cache: 'no-store',
   });
 
   return data ?? [];
@@ -245,7 +249,7 @@ export async function getProductVariations(productId: number) {
 
 export async function getProductWithVariations(productId: number) {
   const product = await safeJsonFetch(wcUrl(`products/${productId}`), {
-    next: { revalidate: 300 },
+    cache: 'no-store',
   });
 
   if (!product) return null;

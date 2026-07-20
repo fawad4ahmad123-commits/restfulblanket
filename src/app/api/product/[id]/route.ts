@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProductById } from '@/src/lib/products';
 
-// GET /api/product/[id]
-// Used by the product info panel to fetch the sibling product linked to a
-// color / size / weight selection.
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },

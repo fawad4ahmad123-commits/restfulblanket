@@ -28,7 +28,7 @@ export async function getBlogBySlug(slug: string) {
   }
 
   const data = await res.json();
-  console.log("t1 blog  api first", { data })
+  console.log('t1 blog  api first', { data });
 
   return data[0];
 }

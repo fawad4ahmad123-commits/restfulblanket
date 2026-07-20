@@ -12,8 +12,13 @@ import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
+import { getAllProducts } from '@/src/lib/products';
 
-const ProductInfoPanel = ({ product, onProductChange }: any) => {
+const ProductInfoPanel = ({
+  product,
+  onProductChange,
+  onLoadingChange,
+}: any) => {
   const cart = useContext(CartContext);
 
   if (!cart) {
@@ -71,31 +76,33 @@ const ProductInfoPanel = ({ product, onProductChange }: any) => {
   };
 
   const handleAttributeChange = async (type: string, value: string) => {
+    const normalize = (s: string) => (s ?? '').trim().toLowerCase();
+
     const matchedLink = product?.attributeLinks?.find(
       (item: any) =>
-        item.name?.toLowerCase() === type.toLowerCase() && item.value === value,
+        normalize(item.name) === normalize(type) &&
+        normalize(item.value) === normalize(value),
     );
 
     if (!matchedLink?.relatedProduct) return;
-
+    onLoadingChange?.(true);
     try {
-      const response = await fetch(
-        `/api/product/${matchedLink.relatedProduct}`,
+      const allProducts = await getAllProducts({
+        perPage: 100,
+      });
+
+      const relatedProduct = allProducts.find(
+        (p: any) => Number(p.id) === Number(matchedLink.relatedProduct),
       );
 
-      if (!response.ok) {
-        console.error(`Failed to load related product: ${response.status}`);
+      if (!relatedProduct) {
+        console.error(
+          `Related product ${matchedLink.relatedProduct} not found`,
+        );
         return;
       }
 
-      const newProduct = await response.json();
-
-      if (!newProduct || newProduct.error) {
-        console.error('Related product response was empty or invalid');
-        return;
-      }
-
-      onProductChange(newProduct);
+      onProductChange(relatedProduct);
     } catch (error) {
       console.error('Failed to load related product:', error);
     }
