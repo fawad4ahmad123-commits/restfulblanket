@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -36,6 +36,8 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
     null,
   );
 
+  const [subMenuFlip, setSubMenuFlip] = useState<Record<string, boolean>>({});
+
   const activeCategoryId =
     hoveredCategoryId ?? visibleParentCategories[0]?.id ?? null;
 
@@ -56,15 +58,15 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
     (c: any) => c.slug === 'sovevaerelse',
   );
 
-  const tyngdedynerChildren = tyngdedynerCategory
-    ? getChildren(tyngdedynerCategory.id)
-    : [];
+  // const tyngdedynerChildren = tyngdedynerCategory
+  //   ? getChildren(tyngdedynerCategory.id)
+  //   : [];
 
-  const tilbehoerCategories = sovevaerelseCategory
-    ? getChildren(sovevaerelseCategory.id).filter(
-        (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
-      )
-    : [];
+  // const tilbehoerCategories = sovevaerelseCategory
+  //   ? getChildren(sovevaerelseCategory.id).filter(
+  //     (c: any) => c.slug === 'hovedpuder' || c.slug === 'sengesaet',
+  //   )
+  //   : [];
 
   function fixProductHref(href: string): string {
     return href.replace(/^\/products\//, '/product/');
@@ -82,6 +84,28 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
       .replace(/å/g, 'aa')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
+  };
+
+  const resolveCategoryImage = (category: any): string | null => {
+    const direct = category?.image?.src || category?.image;
+    if (direct) return direct;
+
+    const href: string = category?.href || '';
+    const slug = href.split('/').filter(Boolean).pop();
+    if (!slug) return null;
+
+    const match = categories.find((c: any) => c.slug === slug);
+    return match?.image?.src || match?.image || null;
+  };
+
+  const handleSubMenuEnter = (key: string, e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const SUBMENU_WIDTH = 300;
+    const wouldOverflow = rect.right + SUBMENU_WIDTH > window.innerWidth;
+
+    setSubMenuFlip((prev) =>
+      prev[key] === wouldOverflow ? prev : { ...prev, [key]: wouldOverflow },
+    );
   };
 
   return (
@@ -270,7 +294,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
         }
 
         const dynamicProducts =
-          item.title === 'Tyngdetæpper'
+          item.title === 'Tyngdedyner'
             ? getProductsByCategory(tyngdedynerCategory?.id ?? null, 4)
             : item.title === 'Tilbehør'
               ? getProductsByCategory(sovevaerelseCategory?.id ?? null, 4)
@@ -335,10 +359,18 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                       const hasSubChildren =
                         category.children && category.children.length > 0;
 
+                      const linkImageSrc = resolveCategoryImage(category);
+
+                      const flipKey = category.id || category.title;
+                      const shouldFlip = subMenuFlip[flipKey];
+
                       return (
                         <div
-                          key={category.id || category.title}
+                          key={flipKey}
                           className="group/sub relative"
+                          onMouseEnter={(e) =>
+                            hasSubChildren && handleSubMenuEnter(flipKey, e)
+                          }
                         >
                           <Link
                             href={
@@ -357,12 +389,10 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                             )}
                           >
                             <div className="flex items-start gap-3 flex-1 min-w-0">
-                              {(category?.image?.src || category?.image) && (
+                              {linkImageSrc && (
                                 <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-[#F5F0EB]">
                                   <Image
-                                    src={
-                                      category?.image?.src || category?.image
-                                    }
+                                    src={linkImageSrc}
                                     alt={category.name || category.title}
                                     fill
                                     className="object-cover"
@@ -383,7 +413,10 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           {hasSubChildren && (
                             <div
                               className={cn(
-                                'absolute left-full top-0 ml-1 invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 transition-all z-[10000] rounded-xl p-3 min-w-[280px] max-w-[350px]',
+                                'absolute top-0 invisible opacity-0 group-hover/sub:visible group-hover/sub:opacity-100 transition-all z-[10000] rounded-xl p-3 min-w-[280px] max-w-[350px]',
+                                shouldFlip
+                                  ? 'right-full mr-1'
+                                  : 'left-full ml-1',
                                 isHome
                                   ? 'bg-[#392A22] border border-white/10'
                                   : 'bg-[#fff9f5] shadow-lg border border-[#392A22]/10',

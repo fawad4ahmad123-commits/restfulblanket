@@ -76,32 +76,26 @@ export const navigation = [
                 href: '/guides/soevn',
               },
               {
-                title: 'Stress',
-                href: '/guides/stress',
+                title: 'PTSD',
+                href: '/guides/ptsd',
               },
               {
                 title: 'Angst',
                 href: '/guides/angst',
+              },
+              {
+                title: 'Video Guides',
+                href: '/guides/video-guides',
+              },
+              {
+                title: 'Produktfinder',
+                href: '/guides/produktfinder-quiz',
               },
             ],
           },
           {
             title: 'Artikler',
             href: '/blog',
-            children: [
-              {
-                title: 'Seneste Artikler',
-                href: '/blog',
-              },
-              {
-                title: 'Søvn Artikler',
-                href: '/blog/soevn',
-              },
-              {
-                title: 'ADHD Artikler',
-                href: '/blog/adhd',
-              },
-            ],
           },
         ],
       },
@@ -121,10 +115,58 @@ export const navigation = [
           {
             title: 'Ekspertpanel',
             href: '/expert',
+            children: [
+              {
+                title: 'Zafir Bæk',
+                href: '/ekspertpanel/zafir-baek',
+              },
+              {
+                title: 'Betina Lassen',
+                href: '/ekspertpanel/betina-lassen',
+              },
+              {
+                title: 'Silke Enemark',
+                href: '/ekspertpanel/silke-enemark',
+              },
+              {
+                title: 'Liselotte Rønne',
+                href: '/ekspertpanel/liselotte-roenne',
+              },
+              {
+                title: 'Nina Schiøtz',
+                href: '/ekspertpanel/nina-schiotz',
+              },
+              {
+                title: 'Tina Jenny Kjeldsen',
+                href: '/ekspertpanel/tina-jenny-kjeldsen',
+              },
+            ],
           },
           {
             title: 'Projekter',
             href: '/project',
+            children: [
+              {
+                title: 'Lærke',
+                href: '/social-projekter/laerke',
+              },
+              {
+                title: 'Medusa',
+                href: '/social-projekter/krisecenter',
+              },
+              {
+                title: 'Ro i Indercirklen',
+                href: '/social-projekter/ro-i-indercirklen-projektet',
+              },
+              {
+                title: 'ESG/CSR-partnere',
+                href: '/social-projekter/csr-partnere',
+              },
+              {
+                title: 'Tak til fonde, legatgivere og sponsorer',
+                href: '/social-projekter/fonde-og-legatgivere',
+              },
+            ],
           },
           {
             title: 'Anmeldelser',

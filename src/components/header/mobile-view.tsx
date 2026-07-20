@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronDown, Heart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -38,6 +39,10 @@ const fixProductHref = (href: string) =>
 
 const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
+  const [openSubItem, setOpenSubItem] = useState<string | null>(null);
+  const [openParentCategory, setOpenParentCategory] = useState<number | null>(
+    null,
+  );
 
   const navigation = useMergedNavigation();
 
@@ -52,6 +57,22 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
 
   const sovevaerelseCategory = categories.find(
     (c: any) => c.slug === 'sovevaerelse',
+  );
+
+  const resolveCategoryImage = (link: any): string | null => {
+    const direct = link?.image?.src || link?.image;
+    if (direct) return direct;
+
+    const href: string = link?.href || '';
+    const slug = href.split('/').filter(Boolean).pop();
+    if (!slug) return null;
+
+    const match = categories.find((c: any) => c.slug === slug);
+    return match?.image?.src || match?.image || null;
+  };
+
+  const visibleParentCategories = parentCategories.filter(
+    (category: any) => getChildren(category.id).length > 0,
   );
 
   return (
@@ -79,32 +100,58 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                 </button>
 
                 {isOpen && (
-                  <div className="mt-4 ml-3 flex flex-col gap-4 border-l border-[#E9DDD4] pl-4">
-                    {parentCategories.map((category: any) => {
+                  <div className="mt-4 ml-3 flex flex-col gap-1 border-l border-[#E9DDD4] pl-4">
+                    {visibleParentCategories.map((category: any) => {
                       const children = getChildren(category.id);
+                      const isCategoryOpen = openParentCategory === category.id;
 
                       return (
-                        <div key={category.id}>
-                          <Link
-                            href={`/shop/${category.slug}`}
-                            className="text-xs font-semibold uppercase text-[#35281E]/50"
+                        <div key={category.id} className="flex flex-col">
+                          <button
+                            onClick={() =>
+                              setOpenParentCategory(
+                                isCategoryOpen ? null : category.id,
+                              )
+                            }
+                            className="flex w-full items-center justify-between py-2 text-xs font-semibold uppercase text-[#35281E]/50"
                           >
                             {category.name}
-                          </Link>
+                            <ChevronDown
+                              className={`size-3.5 shrink-0 transition-transform ${
+                                isCategoryOpen ? 'rotate-180' : ''
+                              }`}
+                            />
+                          </button>
 
-                          <div className="mt-2 flex flex-col gap-2">
-                            {children
-                              .slice(0, MAX_SUB_CATEGORIES)
-                              .map((child: any) => (
-                                <Link
-                                  key={child.id}
-                                  href={`/shop/${child.slug}`}
-                                  className="text-sm text-[#35281E]"
-                                >
-                                  {child.name}
-                                </Link>
-                              ))}
-                          </div>
+                          {isCategoryOpen && (
+                            <div className="mb-2 flex flex-col gap-2">
+                              {children
+                                .slice(0, MAX_SUB_CATEGORIES)
+                                .map((child: any) => {
+                                  const childImageSrc = child?.image?.src;
+
+                                  return (
+                                    <Link
+                                      key={child.id}
+                                      href={`/shop/${child.slug}`}
+                                      className="flex items-center gap-3 text-sm text-[#35281E]"
+                                    >
+                                      {childImageSrc && (
+                                        <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-white">
+                                          <Image
+                                            src={childImageSrc}
+                                            alt={child.name}
+                                            fill
+                                            className="object-cover"
+                                          />
+                                        </span>
+                                      )}
+                                      {child.name}
+                                    </Link>
+                                  );
+                                })}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -118,7 +165,7 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
             Array.isArray(item.groups) && item.groups.length > 0;
 
           const dynamicProducts =
-            item.title === 'Tyngdetæpper'
+            item.title === 'Tyngdedyner'
               ? getProductsByCategory(tyngdedynerCategory?.id ?? null, 4)
               : item.title === 'Tilbehør'
                 ? getProductsByCategory(sovevaerelseCategory?.id ?? null, 4)
@@ -158,48 +205,79 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                         <span className="text-xs font-semibold uppercase text-[#35281E]/50">
                           {group.heading}
                         </span>
-                        <div className="mt-2 flex flex-col gap-2">
+                        <div className="mt-2 flex flex-col gap-1">
                           {group.links
                             .slice(0, MAX_SUB_CATEGORIES)
                             .map((link: any) => {
                               const hasSubChildren =
                                 link.children && link.children.length > 0;
+                              const subKey = `${item.title}-${link.title}`;
+                              const isSubOpen = openSubItem === subKey;
+                              const linkImageSrc = resolveCategoryImage(link);
+
                               return (
-                                <div
-                                  key={link.title}
-                                  className="flex flex-col gap-2"
-                                >
+                                <div key={link.title} className="flex flex-col">
                                   {hasSubChildren ? (
-                                    <div className="flex flex-col gap-2">
-                                      <Link
-                                        href={
-                                          link.href ||
-                                          `/collections/${slugify(item.title)}/${slugify(link.title)}`
+                                    <>
+                                      <button
+                                        onClick={() =>
+                                          setOpenSubItem(
+                                            isSubOpen ? null : subKey,
+                                          )
                                         }
-                                        className="text-sm text-[#35281E]"
+                                        className="flex w-full items-center justify-between gap-3 rounded-lg py-2 text-sm text-[#35281E]"
                                       >
-                                        {link.title}
-                                      </Link>
-                                      <div className="ml-3 flex flex-col gap-2 border-l border-[#E9DDD4] pl-3">
-                                        {link.children.map((child: any) => (
-                                          <Link
-                                            key={child.title}
-                                            href={child.href || '#'}
-                                            className="text-sm text-[#35281E]"
-                                          >
-                                            {child.title}
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    </div>
+                                        <span className="flex items-center gap-3">
+                                          {linkImageSrc && (
+                                            <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-white">
+                                              <Image
+                                                src={linkImageSrc}
+                                                alt={link.title}
+                                                fill
+                                                className="object-cover"
+                                              />
+                                            </span>
+                                          )}
+                                          {link.title}
+                                        </span>
+                                        <ChevronDown
+                                          className={`size-3.5 shrink-0 text-[#E9DDD4] transition-transform ${
+                                            isSubOpen ? 'rotate-180' : ''
+                                          }`}
+                                        />
+                                      </button>
+                                      {isSubOpen && (
+                                        <div className="ml-3 mt-1 flex flex-col gap-2 border-l border-[#E9DDD4] pl-3">
+                                          {link.children.map((child: any) => (
+                                            <Link
+                                              key={child.title}
+                                              href={child.href || '#'}
+                                              className="text-sm text-[#35281E]"
+                                            >
+                                              {child.title}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </>
                                   ) : (
                                     <Link
                                       href={
                                         link.href ||
                                         `/collections/${slugify(item.title)}/${slugify(link.title)}`
                                       }
-                                      className="text-sm text-[#35281E]"
+                                      className="flex items-center gap-3 rounded-lg py-2 text-sm text-[#35281E]"
                                     >
+                                      {linkImageSrc && (
+                                        <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-white">
+                                          <Image
+                                            src={linkImageSrc}
+                                            alt={link.title}
+                                            fill
+                                            className="object-cover"
+                                          />
+                                        </span>
+                                      )}
                                       {link.title}
                                     </Link>
                                   )}
@@ -212,16 +290,26 @@ const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
                   {hasProducts && (
                     <div>
                       <span className="text-xs font-semibold uppercase text-[#35281E]/50">
-                        Products
+                        Produkter
                       </span>
-                      <div className="mt-3 flex flex-col gap-3">
+                      <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
                         {dynamicProducts.map((product: any) => (
                           <Link
                             key={product.id || product.title}
                             href={fixProductHref(product.href)}
-                            className="text-sm text-[#35281E]"
+                            className="flex w-24 shrink-0 flex-col gap-2"
                           >
-                            {product.title}
+                            <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
+                              <Image
+                                src={product.image}
+                                alt={product.title}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                            <span className="line-clamp-2 text-xs text-[#35281E]">
+                              {product.title}
+                            </span>
                           </Link>
                         ))}
                       </div>
