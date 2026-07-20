@@ -17,11 +17,13 @@ export default function SignupPopup() {
   const authPages = [
     '/signup',
     '/signin',
-    '/login',
-    '/forgetpassword',
-    '/resetpassword',
-    '/email-verification',
+    '/forget-password',
+    '/reset-password',
+    '/verify-email',
     '/profile',
+    '/checkout',
+    '/order-success',
+    '/contact-us'
   ];
 
   useEffect(() => {
@@ -34,12 +36,10 @@ export default function SignupPopup() {
     router.push('/signup');
   };
 
-  // If user is authenticated, don't show anything
   if (isAuthenticated) {
     return null;
   }
 
-  // Minimized view (shown when isOpen is false)
   if (!isOpen) {
     return (
       <button
@@ -72,21 +72,36 @@ export default function SignupPopup() {
 
   // Full popup view
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8">
+    <div className="fixed inset-0 z-[9999] flex items-start sm:items-center justify-center overflow-y-auto p-0 sm:p-6 md:p-8">
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm"
         onClick={() => setIsOpen(false)}
       />
-      <div className="relative w-full max-w-4xl mx-auto rounded-2xl bg-[#C7AF94] shadow-[0_25px_80px_rgba(0,0,0,0.30)] overflow-hidden max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]">
+
+      <div className="relative w-full sm:max-w-lg md:max-w-3xl lg:max-w-4xl mx-auto my-0 sm:my-auto rounded-none sm:rounded-2xl bg-[#C7AF94] shadow-[0_25px_80px_rgba(0,0,0,0.30)] min-h-screen sm:min-h-0">
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute right-2 top-2 sm:right-4 sm:top-4 z-20 rounded-full bg-white/90 p-1.5 sm:p-2 text-[#392A22] transition hover:bg-white"
+          className="absolute right-3 top-3 sm:right-4 sm:top-4 z-20 rounded-full bg-white/90 p-1.5 sm:p-2 text-[#392A22] transition hover:bg-white"
         >
           <X className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-          <div className="flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-14 overflow-y-auto order-2 md:order-1">
+        <div className="flex flex-col md:grid md:grid-cols-2">
+          {/* Image */}
+          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[420px] lg:min-h-[480px] order-1">
+            <Image
+              src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/7e0d61b1-6b9d-4ac5-95c0-efa090a0ec57.jpeg"
+              alt="Sovende kvinde"
+              fill
+              priority
+              unoptimized
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-[#C7AF94]/40 md:hidden" />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col justify-center px-5 py-6 sm:px-8 sm:py-8 md:p-10 lg:p-14 order-2">
             <div className="mb-4 sm:mb-6">
               <Image
                 src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/1b62656c-395d-43ab-b3a1-90595c76ade8.png"
@@ -94,23 +109,23 @@ export default function SignupPopup() {
                 width={120}
                 height={40}
                 priority
-                className="bg-transparent w-24 sm:w-32 md:w-40"
+                className="bg-transparent w-24 sm:w-28 md:w-32 lg:w-40 h-auto"
               />
             </div>
 
-            <h3 className="mb-4 sm:mb-6 text-xl sm:text-2xl md:text-3xl font-semibold leading-snug text-white">
+            <h3 className="mb-3 sm:mb-5 md:mb-6 text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold leading-snug text-white">
               Klar til en dybere og
               <br />
               mere afslappende søvn?
             </h3>
 
-            <div className="mb-4 sm:mb-6 h-px w-16 sm:w-24 bg-white/70" />
+            <div className="mb-3 sm:mb-5 md:mb-6 h-px w-14 sm:w-20 md:w-24 bg-white/70" />
 
-            <p className="mb-3 sm:mb-4 text-sm sm:text-base md:text-lg text-[#1E1E1E]">
+            <p className="mb-2 sm:mb-4 text-sm sm:text-base md:text-lg text-[#1E1E1E]">
               Bliv en del af Restful-fællesskabet og få
             </p>
 
-            <h2 className="mb-6 sm:mb-8 font-serif text-[14px] sm:text-[16px] md:text-[20px] font-bold leading-tight text-white">
+            <h2 className="mb-5 sm:mb-7 md:mb-8 font-serif text-sm sm:text-base md:text-lg lg:text-xl font-bold leading-tight text-white">
               10% RABAT +
               <br />
               Gratis Søvnguide
@@ -118,33 +133,10 @@ export default function SignupPopup() {
 
             <Button
               onClick={handleSignup}
-              className="h-12 sm:h-14 w-full rounded-none bg-white text-sm sm:text-base md:text-lg font-semibold text-black hover:bg-white/90"
+              className="w-full rounded-none bg-white px-4 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold text-black hover:bg-white/90 whitespace-normal leading-snug"
             >
               Hent din rabat og søvnguide
             </Button>
-          </div>
-          <div className="relative min-h-[200px] sm:min-h-[250px] md:min-h-[400px] lg:min-h-full order-1 md:order-2">
-            <div className="absolute inset-0 md:hidden">
-              <Image
-                src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/7e0d61b1-6b9d-4ac5-95c0-efa090a0ec57.jpeg"
-                alt="Sovende kvinde"
-                fill
-                priority
-                unoptimized
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-[#C7AF94]/40" />
-            </div>
-            <div className="absolute inset-0 hidden md:block">
-              <Image
-                src="https://d3k81ch9hvuctc.cloudfront.net/company/RWnBzE/images/7e0d61b1-6b9d-4ac5-95c0-efa090a0ec57.jpeg"
-                alt="Sovende kvinde"
-                fill
-                priority
-                unoptimized
-                className="object-cover"
-              />
-            </div>
           </div>
         </div>
       </div>

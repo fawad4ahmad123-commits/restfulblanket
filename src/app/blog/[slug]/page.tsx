@@ -47,10 +47,10 @@ export default async function ArticlePage({ params }: PageProps) {
   const formattedBlogs = await formatBlogs(allBlogs);
   const formattedArticle = await formatBlogDetail(blog);
 
-  // Exclude current blog and show 4 max
   const relatedBlogs = formattedBlogs
     .filter((b: any) => b.slug !== slug)
     .slice(0, 4);
 
+  console.log("t1 blog  format 2", { formattedArticle })
   return <Article article={formattedArticle} relatedBlogs={relatedBlogs} />;
 }

@@ -11,7 +11,6 @@ export async function getBlogs() {
   }
 
   const data = await res.json();
-  console.log('taha blog aaa', { data });
 
   return data;
 }
@@ -29,6 +28,8 @@ export async function getBlogBySlug(slug: string) {
   }
 
   const data = await res.json();
+  console.log("t1 blog  api first", { data })
+
   return data[0];
 }
 
