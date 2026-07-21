@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useActiveFilters } from '@/src/hooks/useActiveFilters';
 import { paginateProducts } from '@/src/utilty/paginateProducts';
 import ActiveFilters from './ActiveFilters';
@@ -19,17 +20,48 @@ interface Props {
 }
 
 export default function ProductGrid({ products, filters, setFilters }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState('latest');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters, sort]);
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const sort = searchParams.get('sort') || 'latest';
 
   const activeFilters = useActiveFilters({
     filters,
     setFilters,
   });
+
+  const updateQuery = (updates: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    Object.entries(updates).forEach(([key, value]) => {
+      params.set(key, value);
+    });
+
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
+  };
+
+  const handleSortChange = (value: string) => {
+    updateQuery({
+      sort: value,
+      page: '1',
+    });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (params.get('page') !== '1') {
+      params.set('page', '1');
+
+      router.replace(`${pathname}?${params.toString()}`, {
+        scroll: false,
+      });
+    }
+  }, [filters]);
 
   const sortedProducts = useMemo(() => {
     const items = [...products];
@@ -64,6 +96,12 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
     [sortedProducts, currentPage],
   );
 
+  const handlePageChange = (page: number) => {
+    updateQuery({
+      page: page.toString(),
+    });
+  };
+
   return (
     <div className="flex-1">
       <p className="mb-6 text-sm text-[#6F6259]">
@@ -76,7 +114,7 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
         </div>
 
         <div className="shrink-0 lg:w-[220px]">
-          <ProductSort sort={sort} setSort={setSort} />
+          <ProductSort sort={sort} setSort={handleSortChange} />
         </div>
       </div>
 
@@ -88,7 +126,7 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>

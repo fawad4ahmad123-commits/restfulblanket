@@ -23,7 +23,7 @@ export const formatBlogDetail = async (blog: any) => {
       author: authorName,
       authorImage,
       date: new Date(blog.date).toLocaleDateString('en-US'),
-      views: '10k Viewers',
+      views: '',
       image: blog.jetpack_featured_media_url,
     },
     content: blog.content?.rendered || '',

@@ -156,7 +156,7 @@ export const navigation = [
               },
               {
                 title: 'Ro i Indercirklen',
-                href: '/social-projekter/ro-i-indercirklen-projektet',
+                href: '/social-projekter/ro-i-innercirklen',
               },
               {
                 title: 'ESG/CSR-partnere',

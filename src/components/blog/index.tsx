@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BlogHero } from './blog-hero';
 import { BlogFilters } from './blog-filters';
 import { FeaturedArticle } from './featured-article';
@@ -11,9 +12,17 @@ import { Input } from '@/components/ui/input';
 
 const Blog = ({ blogs }: any) => {
   const isSlider = false;
-  console.log('taha blog bbbb', { blogs });
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const pageFromUrl = Number(searchParams.get('page')) || 1;
+
+  const [currentPage, setCurrentPage] = useState(pageFromUrl);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    setCurrentPage(pageFromUrl);
+  }, [pageFromUrl]);
 
   const postsPerPage = 8;
 
@@ -31,6 +40,17 @@ const Blog = ({ blogs }: any) => {
     startIndex + postsPerPage,
   );
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', page.toString());
+
+    router.push(`?${params.toString()}`, {
+      scroll: false,
+    });
+  };
+
   return (
     <div className="container mx-auto max-w-7xl px-6 py-8">
       <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -46,6 +66,13 @@ const Blog = ({ blogs }: any) => {
             onChange={(e) => {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
+
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', '1');
+
+              router.push(`?${params.toString()}`, {
+                scroll: false,
+              });
             }}
             placeholder="Søg efter artikler..."
             className="h-11 w-full rounded-full border-[#E4DAD1] bg-transparent pl-11"
@@ -57,12 +84,12 @@ const Blog = ({ blogs }: any) => {
 
       <BlogFilters />
 
-      <div className="mt-16 mb-16">
+      <div className="mb-16 mt-16">
         <FeaturedArticle blogs={blogs} />
       </div>
 
       <div className="mb-8 flex items-center justify-between">
-        <h3 className="text-[32px] font-serif text-[#35281E]">
+        <h3 className="font-serif text-[32px] text-[#35281E]">
           Flere artikler fra journalen
         </h3>
 
@@ -99,7 +126,7 @@ const Blog = ({ blogs }: any) => {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         </div>
       )}

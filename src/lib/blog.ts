@@ -17,7 +17,7 @@ export async function getBlogs() {
 
 export async function getBlogBySlug(slug: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?slug=${slug}`,
+    `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/wp-json/wp/v2/posts?slug=${slug}&t=${Date.now()}`,
     {
       cache: 'no-store',
     },
@@ -28,8 +28,7 @@ export async function getBlogBySlug(slug: string) {
   }
 
   const data = await res.json();
-  console.log('t1 blog  api first', { data });
-
+  console.log('t1 blog format', { data });
   return data[0];
 }
 

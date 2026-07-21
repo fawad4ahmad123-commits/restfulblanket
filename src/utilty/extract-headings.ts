@@ -1,5 +1,3 @@
-// src/utilty/extract-headings.ts
-
 export interface HeadingItem {
   id: string;
   title: string;
@@ -14,10 +12,6 @@ const slugify = (text: string) =>
     .replace(/\s+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-/**
- * Injects a matching `id` attribute into every h2/h3/h4 inside the HTML
- * AND returns the list of headings for the TOC — so both always match.
- */
 export const injectHeadingIds = (
   html: string,
 ): { html: string; headings: HeadingItem[] } => {
@@ -34,8 +28,6 @@ export const injectHeadingIds = (
       if (!plainText) return match;
 
       let id = slugify(plainText) || `heading-${autoIndex++}`;
-
-      // avoid duplicate ids (e.g. two headings with same text)
       if (seen[id] !== undefined) {
         seen[id] += 1;
         id = `${id}-${seen[id]}`;
@@ -48,8 +40,6 @@ export const injectHeadingIds = (
         title: plainText,
         level: parseInt(tag.replace('h', ''), 10),
       });
-
-      // if heading already has an id attr, replace it; else add one
       const cleanedAttrs = attrs.replace(/\sid="[^"]*"/gi, '');
       return `<${tag}${cleanedAttrs} id="${id}">${innerHtml}</${tag}>`;
     },

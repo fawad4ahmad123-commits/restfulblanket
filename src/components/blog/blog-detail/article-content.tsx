@@ -50,6 +50,86 @@ const BlogFaqAccordion = ({
   );
 };
 
+// group >2 consecutive image figures into a gallery grid
+const wrapConsecutiveImageFigures = (container: HTMLElement) => {
+  const isPlainImageFigure = (el: Element) =>
+    el.tagName === 'FIGURE' &&
+    el.classList.contains('wp-block-image') &&
+    !el.closest('.wp-block-gallery') &&
+    !el.hasAttribute('data-gallery-wrapped');
+
+  const children = Array.from(container.children);
+  let i = 0;
+  while (i < children.length) {
+    if (isPlainImageFigure(children[i])) {
+      const run: Element[] = [];
+      let j = i;
+      while (j < children.length && isPlainImageFigure(children[j])) {
+        run.push(children[j]);
+        j++;
+      }
+      if (run.length > 2) {
+        const grid = document.createElement('div');
+        grid.className = 'image-gallery-grid';
+        const firstEl = run[0];
+        firstEl.parentNode?.insertBefore(grid, firstEl);
+        run.forEach((figure) => {
+          figure.setAttribute('data-gallery-wrapped', 'true');
+          grid.appendChild(figure);
+        });
+      } else {
+        run.forEach((figure) =>
+          figure.setAttribute('data-gallery-wrapped', 'true'),
+        );
+      }
+      i = j;
+    } else {
+      i++;
+    }
+  }
+};
+
+// wrap every table in a collapsible <details>, styled consistently
+const wrapTablesCollapsible = (container: HTMLElement) => {
+  const tables = container.querySelectorAll(
+    'table:not([data-collapsible-wrapped])',
+  );
+  tables.forEach((table) => {
+    table.setAttribute('data-collapsible-wrapped', 'true');
+    const target = table.closest('figure.wp-block-table') || table;
+
+    const details = document.createElement('details');
+    details.className = 'collapsible-table';
+    const summary = document.createElement('summary');
+    summary.textContent = 'Vis tabel';
+    details.appendChild(summary);
+
+    const scrollWrap = document.createElement('div');
+    scrollWrap.className = 'collapsible-table-scroll';
+
+    target.parentNode?.insertBefore(details, target);
+    scrollWrap.appendChild(target);
+    details.appendChild(scrollWrap);
+  });
+};
+
+// NEW: only rewrite <a href> links, never touch img src — fixes broken images
+const swapLinkDomains = (container: HTMLElement) => {
+  const anchors = container.querySelectorAll(
+    'a[href^="https://tapbookme.com/"]',
+  );
+  anchors.forEach((a) => {
+    const href = a.getAttribute('href') || '';
+    a.setAttribute(
+      'href',
+      href.replace(
+        'https://tapbookme.com/',
+        'https://restfulblanket.vercel.app/',
+      ),
+    );
+  });
+};
+
 export default function ArticleContent({ articleData }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paragraphClass = 'text-[15px] leading-[25px] text-[#4A4039]';
@@ -83,6 +163,10 @@ export default function ArticleContent({ articleData }: any) {
         );
       }
     });
+
+    wrapConsecutiveImageFigures(containerRef.current);
+    wrapTablesCollapsible(containerRef.current);
+    swapLinkDomains(containerRef.current);
   }, [articleData?.rawHtml]);
 
   if (articleData?.rawHtml) {
@@ -165,12 +249,6 @@ export default function ArticleContent({ articleData }: any) {
           .article-content embed {
             max-width: 100%;
           }
-          .article-content table {
-            display: block;
-            max-width: 100%;
-            overflow-x: auto;
-            border-collapse: collapse;
-          }
           .article-content ul,
           .article-content ol {
             margin-top: 0.75rem;
@@ -184,33 +262,200 @@ export default function ArticleContent({ articleData }: any) {
             color: #4a4039;
             list-style: disc;
           }
+          /* Author bio block */
+          .article-content .wp-block-columns {
+            display: flex !important;
+            align-items: flex-start;
+            gap: 24px;
+            margin: 32px 0;
+            max-width: 100%;
+          }
 
+          .article-content .wp-block-columns .wp-block-column:first-child {
+            flex: 0 0 280px !important;
+            width: 280px !important;
+            max-width: 280px !important;
+            height: 280px !important;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: -2rem;
+          }
+
+          .article-content .wp-block-columns .wp-block-column:first-child img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 16px;
+            margin: 0;
+          }
+
+          .article-content .wp-block-columns .wp-block-column:last-child {
+            flex: 1 1 0%;
+            min-width: 0;
+          }
+
+          .article-content .wp-block-columns .wp-block-column:last-child h3 {
+            margin: 0 0 12px 0 !important;
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            line-height: 1.35 !important;
+            color: #35281e;
+          }
+
+          .article-content .wp-block-columns .wp-block-column:last-child p {
+            margin: 0 !important;
+            font-size: 15px;
+            line-height: 25px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+          }
+
+          .article-content
+            .wp-block-columns
+            .wp-block-column:last-child
+            br:first-child {
+            display: none;
+          }
           /* 📱 Small devices */
           @media (max-width: 640px) {
-            .article-content h1,
-            .article-content h2,
-            .article-content .wp-block-heading {
-              font-size: 22px;
-              margin-top: 1.5rem;
-              margin-bottom: 1rem;
+            .article-content .wp-block-columns {
+              flex-direction: column;
+              gap: 16px;
             }
-            .article-content h3 {
-              font-size: 18px;
-              margin-top: 1.25rem;
+            .article-content .wp-block-columns .wp-block-column:first-child {
+              flex: 0 0 auto !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              height: 300px !important;
             }
-            .article-content h4 {
-              font-size: 16px;
+            .article-content .wp-block-columns .wp-block-column:last-child h3 {
+              font-size: 17px !important;
             }
-            .article-content p,
-            .article-content .wp-block-paragraph,
-            .article-content li {
-              font-size: 14px;
-              line-height: 22px;
+          }
+
+          /* image gallery grid (>2 consecutive images) */
+          .article-content .image-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 1.5rem 0;
+          }
+          .article-content .image-gallery-grid figure {
+            margin: 0;
+          }
+          .article-content .image-gallery-grid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+          }
+          @media (min-width: 640px) {
+            .article-content .image-gallery-grid {
+              grid-template-columns: repeat(3, 1fr);
             }
-            .article-content figure,
-            .article-content img {
-              border-radius: 12px;
+          }
+
+          .article-content .wp-block-gallery {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+          @media (min-width: 640px) {
+            .article-content .wp-block-gallery {
+              grid-template-columns: repeat(3, 1fr);
             }
+          }
+          .article-content .wp-block-gallery figure {
+            margin: 0;
+          }
+
+          /* collapsible tables — clean, responsive, dark header */
+          .article-content details.collapsible-table {
+            margin: 1.5rem 0;
+            border: 1px solid #e7e0d8;
+            border-radius: 16px;
+            padding: 1rem 1.25rem 1.25rem;
+            background: #fff;
+          }
+          .article-content details.collapsible-table summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #35281e;
+            font-size: 15px;
+            list-style: none;
+          }
+          .article-content
+            details.collapsible-table
+            summary::-webkit-details-marker {
+            display: none;
+          }
+          .article-content details.collapsible-table summary::before {
+            content: '+ ';
+          }
+          .article-content details.collapsible-table[open] summary::before {
+            content: '– ';
+          }
+          .article-content .collapsible-table-scroll {
+            margin-top: 1rem;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          .article-content .collapsible-table-scroll figure.wp-block-table {
+            margin: 0;
+          }
+          .article-content table {
+            width: 100%;
+            min-width: 420px;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+          }
+          .article-content table thead th {
+            background: #392a22;
+            color: #fdf9f6;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            padding: 14px 16px;
+            white-space: nowrap;
+          }
+          .article-content table tbody td {
+            text-align: center;
+            font-size: 14px;
+            color: #4a4039;
+            padding: 14px 16px;
+            border-bottom: 1px solid #efe8e0;
+            border-right: 1px solid #efe8e0;
+          }
+          .article-content table tbody td:last-child {
+            border-right: none;
+          }
+          .article-content table tbody tr:last-child td {
+            border-bottom: none;
+          }
+
+          /* button-style links (wp-block-button) */
+          .article-content .wp-block-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 1.5rem 0;
+          }
+          .article-content .wp-block-button__link {
+            display: inline-block;
+            background-color: #392a22;
+            color: #fdf9f6 !important;
+            text-decoration: none !important;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            transition: opacity 0.15s ease;
+          }
+          .article-content .wp-block-button__link:hover {
+            opacity: 0.9;
+            color: #fdf9f6 !important;
           }
         `}</style>
       </article>

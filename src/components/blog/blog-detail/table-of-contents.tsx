@@ -3,7 +3,36 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export default function TableOfContents({ headings }: any) {
+function decodeHtmlEntities(text: string): string {
+  if (!text) return '';
+
+  return text
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) =>
+      String.fromCodePoint(parseInt(hex, 16)),
+    )
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&hellip;/g, '…')
+    .replace(/&mdash;/g, '—')
+    .replace(/&ndash;/g, '–')
+    .replace(/&ldquo;/g, '“')
+    .replace(/&rdquo;/g, '”')
+    .replace(/&lsquo;/g, '‘')
+    .replace(/&rsquo;/g, '’');
+}
+
+interface Heading {
+  id: string;
+  title: string;
+  level: number;
+}
+
+export default function TableOfContents({ headings }: { headings: Heading[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   if (!headings || headings.length === 0) {
@@ -20,6 +49,7 @@ export default function TableOfContents({ headings }: any) {
         aria-controls="toc-list"
       >
         <h3 className="text-sm font-semibold text-[#35281E]">På denne side</h3>
+
         <ChevronDown
           size={16}
           className={`shrink-0 text-[#6F6259] transition-transform duration-200 lg:hidden ${
@@ -27,6 +57,7 @@ export default function TableOfContents({ headings }: any) {
           }`}
         />
       </button>
+
       <div
         id="toc-list"
         className={`grid overflow-hidden transition-all duration-300 ease-in-out lg:!grid-rows-[1fr] lg:!mt-4 lg:opacity-100 ${
@@ -36,7 +67,7 @@ export default function TableOfContents({ headings }: any) {
         }`}
       >
         <div className="space-y-3 overflow-hidden">
-          {headings.map((item: any) => (
+          {headings.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
@@ -44,7 +75,7 @@ export default function TableOfContents({ headings }: any) {
                 item.level === 3 ? 'pl-4' : ''
               } ${item.level === 4 ? 'pl-8' : ''}`}
             >
-              {item.title}
+              {decodeHtmlEntities(item.title)}
             </a>
           ))}
         </div>
