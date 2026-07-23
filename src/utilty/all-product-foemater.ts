@@ -19,22 +19,18 @@ export function formatProducts(products: any[] | null | undefined) {
         (attr: any) => attr.name?.toLowerCase() === 'weight',
       );
 
-      // SAFE ATTRIBUTE LINKS
       const attributeLinks = Array.isArray(product.attribute_links)
         ? product.attribute_links
         : [];
 
-      // COLORS FROM ATTRIBUTE LINKS
       const linkedColors = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'color')
         .map((item: any) => item.value);
 
-      // SIZES FROM ATTRIBUTE LINKS
       const linkedSizes = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'size')
         .map((item: any) => item.value);
 
-      // WEIGHTS FROM ATTRIBUTE LINKS
       const linkedWeights = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'weight')
         .map((item: any) => item.value);
@@ -50,16 +46,13 @@ export function formatProducts(products: any[] | null | undefined) {
 
         name: product.name,
 
-        // CATEGORY
         categories:
           product.categories?.map((category: any) =>
             category.name.toLowerCase().trim(),
           ) || [],
 
-        // CURRENT COLOR
         color: colorAttribute?.options?.[0] || linkedColors[0] || '',
 
-        // ALL COLORS
         colors:
           linkedColors.length > 0
             ? linkedColors
@@ -67,12 +60,10 @@ export function formatProducts(products: any[] | null | undefined) {
 
         image: product.images?.[0]?.src || '/product/placeholder.png',
 
-        // CURRENT WEIGHT
         weight: weightAttribute?.options?.[0]
           ? `${weightAttribute.options[0].replace('kg', '')} kg`
           : linkedWeights[0] || '',
 
-        // ALL WEIGHTS
         weights:
           linkedWeights.length > 0
             ? linkedWeights
@@ -80,10 +71,8 @@ export function formatProducts(products: any[] | null | undefined) {
                 (weight: string) => `${weight.replace('kg', '')} kg`,
               ) || [],
 
-        // CURRENT SIZE
         dimensions: sizeAttribute?.options?.[0] || linkedSizes[0] || '',
 
-        // ALL SIZES
         sizes:
           linkedSizes.length > 0 ? linkedSizes : sizeAttribute?.options || [],
 
@@ -119,7 +108,6 @@ export function formatProducts(products: any[] | null | undefined) {
 
         stockStatus: product.stock_status ?? 'outofstock',
 
-        // KEEP ORIGINAL RELATION DATA
         attributeLinks,
       };
     });

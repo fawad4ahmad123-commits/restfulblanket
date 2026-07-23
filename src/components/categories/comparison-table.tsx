@@ -1,6 +1,29 @@
-import { COMPARISON_DATA } from './constants';
+type ComparisonRow = {
+  label: string;
+  col1: string;
+  col2: string;
+};
 
-export default function ComparisonTable() {
+type ComparisonTableProps = {
+  headers?: string[];
+  rows?: ComparisonRow[];
+};
+
+export default function ComparisonTable({
+  headers,
+  rows,
+}: ComparisonTableProps) {
+  const [h0, h1, h2] =
+    headers && headers.length === 3
+      ? headers
+      : [
+          'Funktion',
+          'RestfulBlanket (Rapsfrø)',
+          'Traditionel Kugledyne (Glas/Plastik)',
+        ];
+
+  const data: ComparisonRow[] = rows && rows.length > 0 ? rows : [];
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[700px] overflow-hidden rounded-xl border border-[#E7DED6]">
@@ -8,32 +31,32 @@ export default function ComparisonTable() {
           <thead>
             <tr className="bg-[#34261D] text-white">
               <th className="border-r border-[#4A3B31] px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                Funktion
+                {h0}
               </th>
 
               <th className="border-r border-[#4A3B31] px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                RestfulBlanket (Rapsfrø)
+                {h1}
               </th>
 
               <th className="px-3 py-3 text-center text-xs font-medium md:px-6 md:py-4 md:text-sm">
-                Traditionel Kugledyne (Glas/Plastik)
+                {h2}
               </th>
             </tr>
           </thead>
 
           <tbody>
-            {COMPARISON_DATA.map((item) => (
-              <tr key={item.feature} className="border-t border-[#E7DED6]">
+            {data.map((item, index) => (
+              <tr key={index} className="border-t border-[#E7DED6]">
                 <td className="border-r border-[#E7DED6] px-3 py-3 text-center text-xs text-[#4B4037] md:px-6 md:py-4 md:text-sm">
-                  {item.feature}
+                  {item.label}
                 </td>
 
                 <td className="border-r border-[#E7DED6] px-3 py-3 text-center text-xs text-[#4B4037] md:px-6 md:py-4 md:text-sm">
-                  {item.restfull}
+                  {item.col1}
                 </td>
 
                 <td className="px-3 py-3 text-center text-xs text-[#4B4037] md:px-6 md:py-4 md:text-sm">
-                  {item.traditional}
+                  {item.col2}
                 </td>
               </tr>
             ))}

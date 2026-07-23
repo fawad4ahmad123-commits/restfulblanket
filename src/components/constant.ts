@@ -193,39 +193,39 @@ export const navigation = [
         links: [
           {
             title: 'Brugervejledning',
-            href: '/guides/brugervejledning',
+            href: '/om-vores-dyner/brugervejledning',
           },
           {
             title: 'Sikkerhed og kontraindikationer',
-            href: '/guides/sikkerhed-og-kontraindikationer',
+            href: '/om-vores-dyner/sikkerhed-og-kontraindikationer',
           },
           {
             title: 'CE-Mærkning og Dokumentation',
-            href: '/guides/ce-maerkning',
+            href: '/om-vores-dyner/ce-maerkning-og-dokumentation',
           },
           {
             title: 'Forskningsbibliotek og kildesamling',
-            href: '/guides/forskningsbibliotek',
+            href: '/om-vores-dyner/forskningsbibliotek-og-kildesamling',
           },
           {
             title: 'Forskningsoversigt og faglige kilder',
-            href: '/guides/forskningsoversigt',
+            href: '/om-vores-dyner/forskningsoversigt',
           },
           {
             title: 'Redaktionelle retningslinjer',
-            href: '/guides/redaktionelle-retningslinjer',
+            href: '/om-vores-dyner/redaktionelle-retningslinjer',
           },
           {
             title: 'Medicinsk gennemgang og sundhedsfaglig politik',
-            href: '/guides/medicinsk-gennemgang',
+            href: '/om-vores-dyner/medicinsk-gennemgang-og-sundhedsfaglig-politik',
           },
           {
             title: 'Vask & pleje',
-            href: '/guides/vask-pleje',
+            href: '/om-vores-dyner/vaske-tyngdedyne',
           },
           {
             title: 'Ofte stillede spørgsmål',
-            href: '/guides/faq',
+            href: '/om-vores-dyner/ofte-stillede-spoergsmaal',
           },
         ],
       },
@@ -244,15 +244,15 @@ export const shopLinks = [
   },
   {
     title: 'Om RestfulBlanket',
-    href: '/om-restfulblanket',
+    href: '/om-os',
   },
   {
     title: 'Om Socialøkonomi RSV',
-    href: '/om-socialokonomi-rsv',
+    href: '/om-os/restfulblanket-rsv',
   },
   {
     title: 'Om Zafir Bæk',
-    href: '/om-zafir-baek',
+    href: '/ekspertpanel/zafir-baek',
   },
   {
     title: 'Ekspertpanel',
@@ -260,7 +260,7 @@ export const shopLinks = [
   },
   {
     title: 'FAQs',
-    href: '/faqs',
+    href: '/om-vores-dyner/ofte-stillede-spoergsmaal',
   },
   {
     title: 'RestfulNerd Blog',
@@ -268,11 +268,11 @@ export const shopLinks = [
   },
   {
     title: 'Foredragsbilletter',
-    href: '/foredragsbilletter',
+    href: '/collections/foredragsbilletter',
   },
   {
     title: 'Book et Foredrag',
-    href: '/book-et-foredrag',
+    href: '/book-et-foredrag-restfulblanket',
   },
   {
     title: 'ESG/CSR',
@@ -299,11 +299,11 @@ export const supportLinks = [
   },
   {
     title: 'Tyngdedyner',
-    href: '/collections/tyngdedyner',
+    href: '/collections/sovevaerelse/tyngdedyner/',
   },
   {
     title: 'Vask & pleje',
-    href: '/guides/vask-pleje',
+    href: '/om-vores-dyner/vaske-tyngdedyne',
   },
   {
     title: 'Video Guides',
@@ -311,23 +311,23 @@ export const supportLinks = [
   },
   {
     title: 'Medusa-projektet',
-    href: '/project/medusa-projektet',
+    href: '/social-projekter/krisecenter',
   },
   {
     title: 'Lærke-projektet',
-    href: '/project/laerke-projektet',
+    href: '/social-projekter/laerke',
   },
   {
     title: 'Ro i Indercirklen-projektet',
-    href: '/project/ro-i-indercirklen-projektet',
+    href: '/social-projekter/ro-i-innercirklen',
   },
   {
     title: 'FNs Verdensmål',
-    href: '/guides/fns-verdensmaal',
+    href: '/om-os/verdensmaal-baeredygtighed',
   },
   {
     title: 'CE-Mærkning',
-    href: '/guides/ce-maerkning',
+    href: '/om-vores-dyner/ce-maerkning-og-dokumentation',
   },
   {
     title: 'Privatlivspolitik',
@@ -339,27 +339,27 @@ export const supportLinks = [
   },
   {
     title: 'Brugervejledning',
-    href: '/brugervejledning',
+    href: '/om-vores-dyner/brugervejledning',
   },
   {
     title: 'Medicinsk gennemgang og sundhedsfaglig politik',
-    href: '/medicinsk-gennemgang-og-sundhedsfaglig-politik',
+    href: '/om-vores-dyner/medicinsk-gennemgang-og-sundhedsfaglig-politik',
   },
   {
     title: 'Redaktionelle retningslinjer',
-    href: '/redaktionelle-retningslinjer',
+    href: '/om-vores-dyner/redaktionelle-retningslinjer',
   },
   {
     title: 'Presse og mediekit',
-    href: '/presse-og-mediekit',
+    href: '/om-os/presse-og-mediekit',
   },
   {
     title: 'Sikkerhed og kontraindikationer',
-    href: '/sikkerhed-og-kontraindikationer',
+    href: '/om-vores-dyner/sikkerhed-og-kontraindikationer',
   },
   {
     title: 'Forskningsoversigt og faglige kilder',
-    href: '/forskningsoversigt-og-faglige-kilder',
+    href: '/om-vores-dyner/forskningsoversigt',
   },
 ];
 

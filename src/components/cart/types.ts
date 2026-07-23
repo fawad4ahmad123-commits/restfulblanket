@@ -10,6 +10,7 @@ export interface CartItem {
   productId?: number;
   variationId?: number;
   stockQuantity?: number | string | null;
+  attribute_links?: { name: string; value: string }[];
 }
 
 export interface UpsellItem {

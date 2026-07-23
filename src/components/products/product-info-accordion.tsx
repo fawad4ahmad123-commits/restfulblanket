@@ -111,7 +111,7 @@ const ProductInfoAccordion = ({
                     text-[#8A8377]
                   "
                 >
-                  Trusted quality. Made for your well-being.
+                  Pålidelig kvalitet. Skabt til dit velvære.
                 </p>
               </div>
             </div>

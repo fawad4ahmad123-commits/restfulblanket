@@ -9,14 +9,12 @@ const SECRET = process.env.WC_CONSUMER_SECRET!;
 function wcUrl(path: string, params?: Record<string, string | number>) {
   const url = new URL(`${BASE_URL}/wp-json/wc/v3/${path}`);
 
-  url.searchParams.set('consumer_key', KEY);
-  url.searchParams.set('consumer_secret', SECRET);
-
   if (params) {
     Object.entries(params).forEach(([k, v]) => {
       url.searchParams.set(k, String(v));
     });
   }
+
   return url.toString();
 }
 
@@ -24,13 +22,17 @@ async function safeJsonFetch(url: string, options?: RequestInit) {
   let res: Response;
 
   try {
-    res = await fetch(url, options);
+    const auth = Buffer.from(`${KEY}:${SECRET}`).toString('base64');
+
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        ...(options?.headers ?? {}),
+        Authorization: `Basic ${auth}`,
+      },
+    });
   } catch (err) {
-    console.error(
-      'Network error fetching:',
-      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
-      err,
-    );
+    console.error('Network error fetching:', url, err);
     return null;
   }
 
@@ -46,7 +48,7 @@ async function safeJsonFetch(url: string, options?: RequestInit) {
 
     console.error(
       'WooCommerce/WP fetch failed:',
-      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
+      url,
       '\nStatus:',
       res.status,
       '\nContent-Type:',
@@ -54,17 +56,14 @@ async function safeJsonFetch(url: string, options?: RequestInit) {
       '\nBody (first 300 chars):',
       bodyText.slice(0, 300),
     );
+
     return null;
   }
 
   try {
     return await res.json();
   } catch (err) {
-    console.error(
-      'Failed to parse JSON from:',
-      url.replace(/consumer_secret=[^&]+/, 'consumer_secret=HIDDEN'),
-      err,
-    );
+    console.error('Failed to parse JSON from:', url, err);
     return null;
   }
 }
@@ -109,7 +108,7 @@ export async function createProductReview({
 export async function getBestSellers() {
   const data = await safeJsonFetch(
     wcUrl('products', { status: 'publish', per_page: 20 }),
-    { next: { revalidate: 300 } },
+    { cache: 'no-store' },
   );
 
   return data ?? [];
@@ -118,7 +117,7 @@ export async function getBestSellers() {
 export async function getCategories() {
   const data = await safeJsonFetch(
     wcUrl('products/categories', { per_page: 20 }),
-    { next: { revalidate: 300 } },
+    { cache: 'no-store' },
   );
 
   return data ?? [];

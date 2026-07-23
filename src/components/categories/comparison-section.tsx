@@ -1,14 +1,34 @@
 import ComparisonTable from './comparison-table';
 
-export default function ComparisonSection() {
+type ComparisonRow = {
+  label: string;
+  col1: string;
+  col2: string;
+};
+
+type ComparisonSectionProps = {
+  title?: string;
+  headers?: string[];
+  rows?: ComparisonRow[];
+  description?: string;
+};
+
+export default function ComparisonSection({
+  title,
+  headers,
+  rows,
+  description,
+}: ComparisonSectionProps) {
   return (
     <section className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#F7F3EE] py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="mb-10 text-center text-[44px] font-normal text-[#34261D]">
-          Forskningen bag:{' '}
-          <span className="font-serif italic">Hvorfor virker de?</span>
-        </h2>
-        <ComparisonTable />
+        {title && (
+          <h2 className="mb-10 text-center text-[44px] font-normal text-[#34261D]">
+            {title}
+          </h2>
+        )}
+
+        <ComparisonTable headers={headers} rows={rows} />
       </div>
     </section>
   );

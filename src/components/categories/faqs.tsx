@@ -2,9 +2,9 @@
 
 import { useState, Fragment, ReactNode, createElement } from 'react';
 import { Minus, Plus } from 'lucide-react';
-import { pageData } from './constants';
 
 type FaqLink = { label: string; url: string };
+type Faq = { question: string; answer: string; link?: FaqLink[] };
 
 function escapeRegExp(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -46,8 +46,16 @@ function renderAnswerWithLinks(
   return nodes;
 }
 
-export function FAQS() {
+type FAQSProps = {
+  faqs?: Faq[];
+};
+
+export function FAQS({ faqs }: FAQSProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const list = faqs && faqs.length > 0 ? faqs : [];
+
+  if (!list || list.length === 0) return null;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -63,7 +71,7 @@ export function FAQS() {
           lineHeight: '56px',
         }}
       >
-        Common{' '}
+        Ofte stillede{' '}
         <span
           style={{
             fontWeight: 300,
@@ -72,12 +80,12 @@ export function FAQS() {
             lineHeight: '56px',
           }}
         >
-          questions
+          spørgsmål
         </span>
       </h2>
 
       <div className="mx-auto max-w-4xl space-y-4">
-        {pageData.faqs.map((faq, index) => (
+        {list.map((faq: Faq, index: number) => (
           <div
             key={index}
             className="overflow-hidden rounded-[16px] border border-[#E9DDD4]"

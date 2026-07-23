@@ -1,9 +1,11 @@
 'use client';
 
-import { useWishlist } from '@/src/core/context/wishlist-provider';
+import { useEffect, useMemo, useState } from 'react';
 import { Trash2, Heart, Minus, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { CartItem } from './types';
+import { getProductById } from '@/src/lib/products';
+import getColorHex from '@/src/helper/color-hexa';
 
 export default function CartLineItem({
   item,
@@ -15,9 +17,26 @@ export default function CartLineItem({
   onChangeQty: (id: string, delta: number) => void;
 }) {
   const { toggleWishlist, isWishlisted } = useWishlist();
+
   const [showStockWarning, setShowStockWarning] = useState(false);
+  const [attributes, setAttributes] = useState<any[]>([]);
 
   const wished = isWishlisted(item.id || '');
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      if (!item.id) return;
+
+      try {
+        const product = await getProductById(item.id);
+        setAttributes(product?.attribute_links || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProduct();
+  }, [item.id]);
 
   const stockQuantity =
     item.stockQuantity !== undefined && item.stockQuantity !== null
@@ -25,6 +44,70 @@ export default function CartLineItem({
       : null;
 
   const isOutOfStock = stockQuantity === 0;
+
+  const colors = useMemo(
+    () =>
+      [
+        ...new Set(
+          attributes
+            .filter(
+              (attr) => attr?.name?.toLowerCase() === 'color' && attr?.value,
+            )
+            .map((attr) => attr.value),
+        ),
+      ] as string[],
+    [attributes],
+  );
+
+  const sizes = useMemo(
+    () =>
+      [
+        ...new Set(
+          attributes
+            .filter(
+              (attr) => attr?.name?.toLowerCase() === 'size' && attr?.value,
+            )
+            .map((attr) => attr.value),
+        ),
+      ] as string[],
+    [attributes],
+  );
+
+  const weights = useMemo(
+    () =>
+      [
+        ...new Set(
+          attributes
+            .filter(
+              (attr) => attr?.name?.toLowerCase() === 'weight' && attr?.value,
+            )
+            .map((attr) => attr.value),
+        ),
+      ] as string[],
+    [attributes],
+  );
+
+  const [selectedColor, setSelectedColor] = useState(item.color || '');
+  const [selectedSize, setSelectedSize] = useState(item.variant || '');
+  const [selectedWeight, setSelectedWeight] = useState(item.weight || '');
+
+  useEffect(() => {
+    if (!selectedColor && colors.length) {
+      setSelectedColor(colors[0]);
+    }
+  }, [colors, selectedColor]);
+
+  useEffect(() => {
+    if (!selectedSize && sizes.length) {
+      setSelectedSize(sizes[0]);
+    }
+  }, [sizes, selectedSize]);
+
+  useEffect(() => {
+    if (!selectedWeight && weights.length) {
+      setSelectedWeight(weights[0]);
+    }
+  }, [weights, selectedWeight]);
 
   const handleIncreaseQuantity = () => {
     if (stockQuantity !== null && item.quantity >= stockQuantity) {
@@ -52,14 +135,89 @@ export default function CartLineItem({
       ) : (
         <div className="h-14 w-14 shrink-0 rounded-md bg-[#F3EBE4] md:h-16 md:w-16" />
       )}
-
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5 md:gap-1">
+      <div className="flex flex-1 flex-col">
         <div className="flex items-start justify-between gap-2">
-          <p className="truncate text-xs font-medium text-stone-900 md:text-sm">
-            {item.name}
-          </p>
+          <div className="min-w-0 flex-1">
+            <p className="line-clamp-2 text-sm font-medium text-stone-900">
+              {item.name}
+            </p>
 
-          <div className="flex shrink-0 items-center gap-1">
+            <div className="mt-2 space-y-1.5">
+              {colors.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-14 text-xs text-stone-500">Farve</span>
+                  <div className="flex gap-1.5">
+                    {colors.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => setSelectedColor(color)}
+                        className={`h-5 w-5 rounded-full border ${
+                          selectedColor === color
+                            ? 'border-[#35281E] ring-1 ring-[#E7D6C7]'
+                            : 'border-stone-300'
+                        }`}
+                        style={{
+                          backgroundColor: getColorHex(color),
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {sizes.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-14 text-xs text-stone-500">Størrelse</span>
+                  <div className="flex gap-1">
+                    {sizes.map((size) => (
+                      <button
+                        key={size}
+                        type="button"
+                        onClick={() => setSelectedSize(size)}
+                        className={`rounded px-2 py-0.5 text-xs ${
+                          selectedSize === size
+                            ? 'border border-[#35281E] bg-[#E7D6C7]'
+                            : 'border border-stone-300 bg-white'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {weights.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="w-14 text-xs text-stone-500">Vægt</span>
+                  <div className="flex gap-1">
+                    {weights.map((weight) => {
+                      const weightNumber = weight
+                        .replace(/\s*kg\s*/i, '')
+                        .trim();
+                      return (
+                        <button
+                          key={weight}
+                          type="button"
+                          onClick={() => setSelectedWeight(weight)}
+                          className={`rounded px-2 py-0.5 text-xs ${
+                            selectedWeight === weight
+                              ? 'border border-[#35281E] bg-[#E7D6C7]'
+                              : 'border border-stone-300 bg-white'
+                          }`}
+                        >
+                          {weightNumber}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() =>
@@ -73,90 +231,43 @@ export default function CartLineItem({
                   size: item.variant,
                 })
               }
-              className="p-1 -m-1"
             >
               <Heart
-                size={14}
+                size={16}
                 className={
-                  wished
-                    ? 'fill-[#35281e] text-[#35281e]'
-                    : 'text-stone-400 transition-colors hover:text-[#35281e]'
+                  wished ? 'fill-[#35281e] text-[#35281e]' : 'text-stone-400'
                 }
               />
             </button>
 
-            <button
-              onClick={() => onRemove(item.id || '')}
-              className="p-1 -m-1"
-            >
-              <Trash2 className="h-3.5 w-3.5 text-stone-500 hover:text-stone-900 md:h-4 md:w-4" />
+            <button onClick={() => onRemove(item.id || '')}>
+              <Trash2 className="h-4 w-4 text-stone-500" />
             </button>
           </div>
         </div>
 
-        {item.color && (
-          <p className="text-[10px] text-stone-500 md:text-xs">
-            Farve: {item.color}
-          </p>
-        )}
-
-        {(item.variant || item.weight) && (
-          <p className="text-[10px] text-stone-500 md:text-xs">
-            {item.variant} {item.variant && item.weight ? '•' : ''}{' '}
-            {item.weight}
-          </p>
-        )}
-
-        {stockQuantity === 0 && (
-          <p className="text-[10px] text-stone-500 md:text-xs">
-            På lager: {stockQuantity}
-          </p>
-        )}
-
-        {showStockWarning && stockQuantity !== null && (
-          <p className="animate-pulse text-[10px] text-red-600 md:text-xs">
-            Kan ikke tilføje mere. Kun {stockQuantity} på lager.
-          </p>
-        )}
-
-        {isOutOfStock && (
-          <p className="text-[10px] text-red-600 md:text-xs">Ikke på lager</p>
-        )}
-
-        <div className="mt-1 flex items-center justify-between">
-          <span className="text-xs font-medium md:text-sm">
+        <div className="mt-3 flex items-center justify-between gap-3 md:mt-4">
+          <span className="text-base font-semibold text-black md:text-lg">
             {(Number(item.price) || 0).toLocaleString('da-DK')} kr.
           </span>
 
-          <div className="flex items-center gap-2 rounded-full border border-stone-300 px-2 py-1">
+          <div className="flex items-center gap-3 rounded-full border border-stone-300 px-3 py-1.5">
             <button
               onClick={handleDecreaseQuantity}
-              disabled={item.quantity <= 1}
-              className={
-                item.quantity <= 1 ? 'cursor-not-allowed opacity-50' : ''
-              }
+              className="flex items-center justify-center"
             >
-              <Minus className="h-3 w-3 text-stone-600 md:h-3.5 md:w-3.5" />
+              <Minus className="h-3.5 w-3.5" />
             </button>
 
-            <span className="w-4 text-center text-xs md:text-sm">
+            <span className="min-w-[20px] text-center text-sm">
               {item.quantity}
             </span>
 
             <button
               onClick={handleIncreaseQuantity}
-              disabled={
-                isOutOfStock ||
-                (stockQuantity !== null && item.quantity >= stockQuantity)
-              }
-              className={
-                isOutOfStock ||
-                (stockQuantity !== null && item.quantity >= stockQuantity)
-                  ? 'cursor-not-allowed opacity-50'
-                  : ''
-              }
+              className="flex items-center justify-center"
             >
-              <Plus className="h-3 w-3 text-stone-600 md:h-3.5 md:w-3.5" />
+              <Plus className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>

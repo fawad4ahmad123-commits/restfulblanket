@@ -27,16 +27,30 @@ export default function ProductList({ products }: Props) {
             originalPrice: product.originalPrice
               ? `${product.currency}${product.originalPrice}`
               : undefined,
-            weight: product.weight,
+
+            color:
+              product.attributeLinks?.find(
+                (attr: any) =>
+                  attr.name === 'color' && attr.related_product === 0,
+              )?.value || '',
+
+            size:
+              product.attributeLinks?.find(
+                (attr: any) =>
+                  attr.name === 'size' && attr.related_product === 0,
+              )?.value || '',
+
+            weight:
+              product.attributeLinks?.find(
+                (attr: any) =>
+                  attr.name === 'weight' && attr.related_product === 0,
+              )?.value || '',
             dimensions: product.dimensions,
             rating: product.rating,
             reviewCount: product.reviewCount,
             isNew: product.isNewArrival,
             stockQuantity: product.stockQuantity,
             stockStatus: product.stockStatus,
-            // availableColors: product.colors,
-            // availableSizes: product.sizes,
-            // availableWeights: product.weights,
           }}
         />
       ))}

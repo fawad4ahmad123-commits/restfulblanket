@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { BlanketHeader } from '@/src/components/categories/blanket-header';
+import ComparisonSection from '@/src/components/categories/comparison-section';
 import { ProductGrid } from '@/src/components/categories/product-grid';
 import ProductCategories from '@/src/components/Home/product-categories';
 import TestimonialVideoSlider from '@/src/components/products/video-testimonals.tsx';
@@ -14,7 +15,6 @@ import BenefitSection from './benefit-section';
 import CategoryFeatureCards from './category-feature-cards';
 import CategoryLearnMoreCards from './category-learn-more-cards';
 import { featureCards, guideCards } from './constants';
-import { CategoryTabs } from './category-tabs';
 
 const ITEMS_PER_PAGE = 8;
 
@@ -159,24 +159,10 @@ export default function Categories({ products, categories, initialSlug }: any) {
     [getActiveCat, categories],
   );
 
-  const hasBenefitsData =
-    activeCcf?.intro_text ||
-    (Array.isArray(activeCcf?.benefits) && activeCcf.benefits.length > 0) ||
-    (Array.isArray(activeCcf?.table) && activeCcf.table.length > 0) ||
-    (Array.isArray(activeCcf?.table_headers) &&
-      activeCcf.table_headers.length > 0) ||
-    activeCcf?.table_description;
-
-  const hasFaqsData =
-    Array.isArray(activeCcf?.faqs) && activeCcf.faqs.length > 0;
-
-  const hasCardsData =
-    Array.isArray(activeCcf?.cards) && activeCcf.cards.length > 0;
-
-  const hasExpertData = activeCcf?.expert_image_url || activeCcf?.expert_text;
-
-  const hasAnyCcfData =
-    hasBenefitsData || hasFaqsData || hasCardsData || hasExpertData;
+  // Tyngdedyner (has children Børn/Voksne) -> only research/table/FAQ.
+  // Børn / Voksne (leaf categories) -> also show cards + expert, at the end.
+  const showCardsAndExpert =
+    !!getActiveCat && !hasChildren(getActiveCat, categories);
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
@@ -186,13 +172,13 @@ export default function Categories({ products, categories, initialSlug }: any) {
         rating={overallRating.rating}
         reviewCount={overallRating.reviewCount}
       />
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <CategoryTabs
           categories={categories}
           activeCategories={activeCategories}
           onSelect={handleCategoryChange}
         />
-      </div>
+      </div> */}
       <div className="mt-10">
         <ActiveFilters filters={filters} />
 
@@ -211,40 +197,29 @@ export default function Categories({ products, categories, initialSlug }: any) {
         )}
       </div>
       <TestimonialVideoSlider isCategory={true} />
-      {hasAnyCcfData && (
-        <>
-          <BenefitSection
-            intro={activeCcf?.intro_text}
-            benefits={activeCcf?.benefits || []}
-            headers={activeCcf?.table_headers}
-            rows={activeCcf?.table}
-            description={activeCcf?.table_description}
-            isParentCategory={hasChildren(getActiveCat, categories)}
-          />
+      <BenefitSection
+        intro={activeCcf?.intro_text}
+        benefits={activeCcf?.benefits || []}
+        headers={activeCcf?.table_headers}
+        rows={activeCcf?.table}
+        description={activeCcf?.table_description}
+        isParentCategory={hasChildren(getActiveCat, categories)}
+      />
+      <CategoryFeatureCards heading="" description="" cards={featureCards} />
 
-          <CategoryFeatureCards
-            heading=""
-            description=""
-            cards={featureCards}
-          />
-
-          <CategoryLearnMoreCards
-            description="Læs vores guides og få svar på dine spørgsmål om dynen."
-            cards={guideCards}
-          />
-
-          <FAQS faqs={activeCcf?.faqs} />
-
-          <CategoryCcfSection
-            cards={activeCcf?.cards}
-            expert={{
-              imageUrl: activeCcf?.expert_image_url,
-              text: activeCcf?.expert_text,
-            }}
-          />
-        </>
-      )}
+      <CategoryLearnMoreCards
+        description="Læs vores guides og få svar på dine spørgsmål om dynen."
+        cards={guideCards}
+      />
+      <FAQS faqs={activeCcf?.faqs} />
       <ProductCategories response_categories={categories} isCategory={true} />
+      <CategoryCcfSection
+        cards={activeCcf?.cards}
+        expert={{
+          imageUrl: activeCcf?.expert_image_url,
+          text: activeCcf?.expert_text,
+        }}
+      />
     </main>
   );
 }

@@ -150,7 +150,15 @@ const Footer = () => {
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-xs text-[#F5F1EA]/80">
-            © 2026 RestfulBlanket AB · Hand-finished in Småland, Sweden
+            © 2026 RestfulBlanket Design By{' '}
+            <Link
+              href="https://starseo.agency"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[#fff9f5]/80 transition hover:text-[#fff9f5] underline"
+            >
+              Starseo.agency
+            </Link>
           </p>
 
           <div className="flex justify-start gap-3 lg:justify-center">
@@ -168,26 +176,16 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-wrap justify-start gap-4 text-xs text-[#F5F1EA]/80 lg:justify-end">
-            <Link href="/privacy-policy" aria-label="Privacy Policy">
-              Privacy
+            <Link href="/privatlivspolitik" aria-label="Privacy Policy">
+              Privatlivspolitik
             </Link>
 
-            <Link
-              href="/terms-and-conditions"
-              aria-label="Terms and Conditions"
-            >
-              Terms
+            <Link href="/handelsbetingelser" aria-label="Terms and Conditions">
+              Handelsbetingelser
             </Link>
 
             <Link href="/cookie-policy" aria-label="Cookie Policy">
               Cookies
-            </Link>
-
-            <Link
-              href="/accessibility-statement"
-              aria-label="Accessibility Statement"
-            >
-              Accessibility
             </Link>
           </div>
         </div>

@@ -9,8 +9,6 @@ import { useCart } from '@/src/core/context/card-Provider';
 import { useCompare } from '@/src/core/context/compare-provider';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
-import { useState } from 'react';
-import ProductConfigOverlay from './product-config-overlay';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
