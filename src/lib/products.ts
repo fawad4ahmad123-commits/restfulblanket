@@ -1,4 +1,5 @@
 'use server';
+import { cache } from 'react';
 import { WooProduct } from './types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL!;
@@ -111,9 +112,12 @@ export async function createProductReview({
 
 //   return data ?? [];
 // }
-export async function getBestSellers() {
+export const getBestSellers = cache(async () => {
   const data = await safeJsonFetch(
-    wcUrl('products', { status: 'publish', per_page: 20 }),
+    wcUrl('products', {
+      status: 'publish',
+      per_page: 20,
+    }),
     {
       next: {
         revalidate: 300,
@@ -122,7 +126,7 @@ export async function getBestSellers() {
   );
 
   return data ?? [];
-}
+});
 
 // export async function getCategories() {
 //   const data = await safeJsonFetch(
@@ -132,9 +136,11 @@ export async function getBestSellers() {
 
 //   return data ?? [];
 // }
-export async function getCategories() {
+export const getCategories = cache(async () => {
   const data = await safeJsonFetch(
-    wcUrl('products/categories', { per_page: 20 }),
+    wcUrl('products/categories', {
+      per_page: 20,
+    }),
     {
       next: {
         revalidate: 300,
@@ -143,7 +149,7 @@ export async function getCategories() {
   );
 
   return data ?? [];
-}
+});
 
 export async function getProductById(id: any) {
   const data = await safeJsonFetch(
