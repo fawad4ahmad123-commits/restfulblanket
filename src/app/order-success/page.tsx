@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import OrderConfirmClient from '@/src/components/checkout/order-confirm';
 import { Loader } from '@/src/components/loader';
+import OrderConfirmClient from '@/src/components/checkout/order-confirm';
 
 export const metadata = {
   title: 'Order Confirmation',
@@ -10,7 +10,16 @@ export const metadata = {
   },
 };
 
-export default function Page() {
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+interface PageProps {
+  searchParams: Promise<{ order_id?: string; key?: string }>;
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const { order_id: orderId, key: orderKey } = await searchParams;
+
   return (
     <Suspense
       fallback={
@@ -19,7 +28,7 @@ export default function Page() {
         </div>
       }
     >
-      <OrderConfirmClient />
+      <OrderConfirmClient orderId={orderId} orderKey={orderKey} />
     </Suspense>
   );
 }

@@ -18,7 +18,7 @@ export default function OrderStatusTimeline({
 
   return (
     <div className="bg-white rounded-2xl border border-[#EEE3D6] p-8">
-      <h3 className="mb-8 font-serif text-lg text-[#2B2118]">Ordre Status</h3>
+      <h3 className="mb-8 font-serif text-lg text-[#2B2118]">Ordrestatus</h3>
 
       <div className="flex items-start">
         {STEPS.map((step, index) => {
@@ -69,13 +69,7 @@ export default function OrderStatusTimeline({
   );
 }
 
-function StepDot({
-  completed,
-  isCurrent,
-}: {
-  completed: boolean;
-  isCurrent: boolean;
-}) {
+function StepDot({ completed }: { completed: boolean; isCurrent?: boolean }) {
   if (completed) {
     return (
       <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#2B2118]">

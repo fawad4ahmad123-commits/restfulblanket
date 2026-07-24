@@ -11,7 +11,7 @@ export default function OrderItems({ order }: OrderItemsProps) {
   return (
     <div className="bg-white rounded-2xl border border-[#EEE3D6] p-6">
       <h3 className="mb-4 font-serif text-lg text-[#2B2118]">
-        Items ({items.length})
+        Varer ({items.length})
       </h3>
 
       <div className="space-y-4">
@@ -35,7 +35,7 @@ export default function OrderItems({ order }: OrderItemsProps) {
             </div>
 
             <p className="shrink-0 text-sm font-semibold text-[#2B2118]">
-              ${item.price.toFixed(2)}
+              kr{item.price.toFixed(2)}
             </p>
           </div>
         ))}
@@ -44,18 +44,18 @@ export default function OrderItems({ order }: OrderItemsProps) {
       <div className="mt-5 space-y-2 border-t border-[#EEE3D6] pt-4 text-sm">
         <SummaryRow label="Subtotal" value={`$${totals.subtotal.toFixed(2)}`} />
         <SummaryRow
-          label="Shipping"
+          label="Levering"
           value={
-            totals.shipping === 0 ? 'Free' : `$${totals.shipping.toFixed(2)}`
+            totals.shipping === 0 ? 'Gratis' : `kr${totals.shipping.toFixed(2)}`
           }
         />
-        <SummaryRow label="Tax" value={`$${totals.tax.toFixed(2)}`} />
+        <SummaryRow label="Moms" value={`kr${totals.tax.toFixed(2)}`} />
       </div>
 
       <div className="mt-3 flex items-center justify-between border-t border-[#EEE3D6] pt-4">
-        <p className="font-serif text-base text-[#2B2118]">Total Paid</p>
+        <p className="font-serif text-base text-[#2B2118]">Betalt i alt</p>
         <p className="font-serif text-base font-semibold text-[#2B2118]">
-          ${totals.totalPaid.toFixed(2)}
+          kr{totals.totalPaid.toFixed(2)}
         </p>
       </div>
     </div>

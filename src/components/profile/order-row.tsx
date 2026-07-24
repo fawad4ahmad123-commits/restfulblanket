@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Order } from './types/profile';
@@ -6,17 +7,21 @@ import { StatusBadge } from './status-badge';
 
 interface OrderRowProps {
   order: Order;
-  /** compact = used inside the Overview "Latest orders" card */
   compact?: boolean;
 }
 
 function actionLabel(order: Order) {
-  if (order.status === 'on-the-way') return 'Track package';
-  if (order.status === 'regretted') return 'See details';
-  return 'View invoice';
+  if (order.status === 'on-the-way') return 'Spor ordre';
+  if (order.status === 'regretted') return 'Se detaljer';
+  return 'Se faktura';
 }
 
 export function OrderRow({ order, compact = false }: OrderRowProps) {
+  const href =
+    order.status === 'on-the-way'
+      ? `/track-order?id=${order.id}` // or order.orderId
+      : '#';
+
   return (
     <div
       className={cn(
@@ -40,6 +45,7 @@ export function OrderRow({ order, compact = false }: OrderRowProps) {
         >
           {order.productName} — {order.productSubtitle}
         </p>
+
         <p className={cn('text-xs', profileClasses.textSecondary)}>
           Ordre {order.orderNumber} · {order.date}
         </p>
@@ -59,13 +65,24 @@ export function OrderRow({ order, compact = false }: OrderRowProps) {
 
       <StatusBadge status={order.status} />
 
-      <Button
-        variant="outline"
-        size="sm"
-        className="rounded-full border-[#2B2420] text-[#2B2420] hover:bg-[#2B2420]/5 whitespace-nowrap w-full sm:w-auto order-last sm:order-none"
-      >
-        {actionLabel(order)}
-      </Button>
+      {order.status === 'on-the-way' ? (
+        <Button asChild variant="outline" size="sm">
+          <Link
+            href={`/track-order?id=${order.id}`}
+            className="rounded-full border-[#2B2420] text-[#2B2420] hover:bg-[#2B2420]/5 whitespace-nowrap w-full sm:w-auto"
+          >
+            {actionLabel(order)}
+          </Link>
+        </Button>
+      ) : (
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-full border-[#2B2420] text-[#2B2420] hover:bg-[#2B2420]/5 whitespace-nowrap w-full sm:w-auto order-last sm:order-none"
+        >
+          {actionLabel(order)}
+        </Button>
+      )}
     </div>
   );
 }

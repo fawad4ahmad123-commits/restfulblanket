@@ -13,22 +13,22 @@ export default function OrderShippingPayment({
   return (
     <div className="bg-white rounded-2xl border border-[#EEE3D6] p-6">
       <h3 className="mb-4 font-serif text-lg text-[#2B2118]">
-        Shipping & Payment
+        Levering & Betaling
       </h3>
 
       <div className="space-y-3">
-        <InfoBlock label="Shipping Address">
+        <InfoBlock label="Leveringsadresse">
           <p className="text-sm text-[#2B2118]">
             {shippingAddress.name} {shippingAddress.city},{' '}
             {shippingAddress.region} {shippingAddress.country}
           </p>
         </InfoBlock>
 
-        <InfoBlock label="Shipping Method">
+        <InfoBlock label="Leveringsmetode">
           <p className="text-sm text-[#2B2118]">{shippingMethod}</p>
         </InfoBlock>
 
-        <InfoBlock label="Payment">
+        <InfoBlock label="Betaling">
           <div className="flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-[#8A7F73]" />
             <p className="text-sm text-[#2B2118]">
