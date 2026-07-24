@@ -6,38 +6,37 @@ import { shopLinks, socialLinks, supportLinks } from '../constant';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#3a251c] text-[#fff9f5]">
+    <footer className="bg-[#3a251c] text-white">
       <div className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 md:py-16">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr]">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr]">
           <div className="text-left">
-            <h2 className="font-serif text-3xl italic sm:text-4xl">
-              <Link
-                href="/"
-                aria-label="RestfulBlanket Home"
-                title="RestfulBlanket Home"
-              >
-                <Image
-                  src="/home/span.font-heading.png"
-                  alt="RestfulBlanket"
-                  width={153}
-                  height={32}
-                  priority
-                />
-              </Link>
-            </h2>
+            <Link
+              href="/"
+              aria-label="RestfulBlanket Home"
+              title="RestfulBlanket Home"
+            >
+              <Image
+                src="/home/span.font-heading.png"
+                alt="RestfulBlanket"
+                width={153}
+                height={32}
+                loading="lazy"
+              />
+            </Link>
 
-            <div className="mt-6 flex items-start gap-3">
+            <div className="mt-6 flex min-h-[40px] items-start gap-3">
               <MapPin
                 size={20}
-                className="mt-1 shrink-0 text-[#F5F1EA]"
+                className="mt-1 shrink-0 text-white"
                 aria-hidden="true"
               />
-              <p className=" text-[18px] leading-tight tracking-tight sm:text-[16px] md:text-[16px] lg:text-[16px] mt-[4px]">
+
+              <p className="mt-[4px] text-[16px] leading-6 text-white">
                 Vig Erhvervspark Søndre Vænge 19K 4560 Vig
               </p>
             </div>
 
-            <div className="mt-5 max-w-[420px] text-sm leading-7 text-[#F5F1EA]">
+            <div className="mt-5 max-w-[420px] text-sm leading-7 text-white">
               <div className="flex items-center gap-3">
                 <Phone size={16} aria-hidden="true" />
                 <span>+45 29 82 29 4.73</span>
@@ -51,8 +50,8 @@ const Footer = () => {
               <div className="mt-2 pl-7">CVR: 43362674</div>
             </div>
 
-            <div className="mt-5 max-w-[420px] text-sm leading-7 text-[#F5F1EA]">
-              <div className="flex items-start gap-3">
+            <div className="mt-5 max-w-[420px] text-sm leading-7 text-white">
+              <div className="flex min-h-[100px] items-start gap-3">
                 <Clock3
                   size={16}
                   className="mt-1 shrink-0"
@@ -69,15 +68,18 @@ const Footer = () => {
             </div>
           </div>
 
+          {/* Links */}
           <FooterLinks title="Shop" links={shopLinks} />
+
           <FooterLinks title="Guides" links={supportLinks} />
 
+          {/* Newsletter */}
           <div className="w-full max-w-[370px]">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-[#fff9f5]/15 sm:px-5 sm:py-2">
-              <div className="flex items-center rounded-full border border-[#fff9f5]/15 px-4 py-3 sm:flex-1 sm:border-0 sm:px-0 sm:py-0">
+            <div className="flex min-h-[56px] flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-white/20 sm:px-5 sm:py-2">
+              <div className="flex h-[48px] items-center rounded-full border border-white/20 px-4 sm:flex-1 sm:border-0 sm:px-0">
                 <Mail
                   size={16}
-                  className="text-[#fff9f5]/40"
+                  className="shrink-0 text-white"
                   aria-hidden="true"
                 />
 
@@ -86,7 +88,7 @@ const Footer = () => {
                   placeholder="your@email.com"
                   aria-label="Email address"
                   autoComplete="email"
-                  className="ml-2 flex-1 bg-transparent text-sm outline-none placeholder:text-[#fff9f5]/35"
+                  className="ml-2 h-6 flex-1 bg-transparent text-sm leading-6 text-white outline-none placeholder:text-white/70"
                 />
               </div>
 
@@ -94,14 +96,15 @@ const Footer = () => {
                 type="button"
                 aria-label="Subscribe to newsletter"
                 title="Subscribe to newsletter"
-                className="rounded-full bg-[#fff9f5] px-5 py-3 text-xs font-medium tracking-wide text-[#3a251c] transition hover:bg-white"
+                className="rounded-full bg-white px-5 py-3 text-xs font-medium tracking-wide text-[#3a251c]"
               >
                 SUBSCRIBE
               </button>
             </div>
           </div>
 
-          <div className="mt-[-32px] flex items-center justify-center gap-5 lg:col-span-1 lg:col-start-2">
+          {/* Badges */}
+          <div className="flex min-h-[100px] items-center justify-center gap-5 lg:col-span-2">
             <Link
               target="_blank"
               rel="noopener noreferrer"
@@ -112,7 +115,7 @@ const Footer = () => {
                 alt="Good Shopping Guide"
                 width={100}
                 height={100}
-                className="h-auto w-[100px] object-contain"
+                className="h-[100px] w-[100px] object-contain"
               />
             </Link>
 
@@ -126,7 +129,7 @@ const Footer = () => {
                 alt="People + Planet First"
                 width={100}
                 height={100}
-                className="h-auto w-[100px] object-contain"
+                className="h-[100px] w-[100px] object-contain"
               />
             </Link>
 
@@ -140,53 +143,47 @@ const Footer = () => {
                 alt="Good Market Approved"
                 width={100}
                 height={100}
-                className="h-auto w-[100px] object-contain"
+                className="h-[100px] w-[100px] object-contain"
               />
             </Link>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-[#fff9f5]/10 md:mt-20" />
+        <div className="mt-12 border-t border-white/20 md:mt-20" />
 
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <p className="text-xs text-[#F5F1EA]/80">
+          <p className="text-xs text-white">
             © 2026 RestfulBlanket Design By{' '}
             <Link
               href="https://starseo.agency"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-[#fff9f5]/80 transition hover:text-[#fff9f5] underline"
+              className="font-semibold underline"
             >
               Starseo.agency
             </Link>
           </p>
 
-          <div className="flex justify-start gap-3 lg:justify-center">
+          <div className="flex justify-start gap-3">
             {socialLinks.map(({ icon: Icon, href, name }, index) => (
               <Link
                 key={index}
                 href={href}
                 aria-label={name}
                 title={name}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#fff9f5]/15 transition hover:border-[#fff9f5]/40"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20"
               >
-                <Icon aria-hidden="true" size={14} />
+                <Icon size={14} aria-hidden="true" />
               </Link>
             ))}
           </div>
 
-          <div className="flex flex-wrap justify-start gap-4 text-xs text-[#F5F1EA]/80 lg:justify-end">
-            <Link href="/privatlivspolitik" aria-label="Privacy Policy">
-              Privatlivspolitik
-            </Link>
+          <div className="flex flex-wrap gap-4 text-xs text-white">
+            <Link href="/privatlivspolitik">Privatlivspolitik</Link>
 
-            <Link href="/handelsbetingelser" aria-label="Terms and Conditions">
-              Handelsbetingelser
-            </Link>
+            <Link href="/handelsbetingelser">Handelsbetingelser</Link>
 
-            <Link href="/cookie-policy" aria-label="Cookie Policy">
-              Cookies
-            </Link>
+            <Link href="/cookie-policy">Cookies</Link>
           </div>
         </div>
       </div>
