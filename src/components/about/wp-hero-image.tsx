@@ -5,6 +5,7 @@ import { useWpPage } from '@/src/core/context/wp-page-context';
 
 export function WpHeroImage() {
   const page = useWpPage();
+
   if (!page?.heroImage?.src) return null;
 
   return (
@@ -14,11 +15,10 @@ export function WpHeroImage() {
         alt={page.heroImage.alt || page.title}
         width={1200}
         height={675}
-        className="h-full w-full object-cover"
         priority
         fetchPriority="high"
-        sizes="100vw"
-        unoptimized
+        sizes="(max-width: 768px) 100vw, 1104px"
+        className="h-full w-full object-cover"
       />
     </div>
   );
