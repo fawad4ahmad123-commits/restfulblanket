@@ -15,10 +15,14 @@ const ShopHero = ({ onSearch }: any) => {
           alt={hero.title}
           fill
           priority
-          sizes="100vw"
-          className="object-cover object-[center_10%] md:object-[center_20%] "
+          fetchPriority="high"
+          quality={70}
+          sizes="(max-width: 768px) 100vw, 1400px"
+          className="object-cover object-[center_10%] md:object-[center_20%]"
         />
+
         <div className="absolute inset-0 bg-black/40" />
+
         <div className="relative z-10 flex h-full items-center justify-center pt-[180px]">
           <h1
             className="text-center font-semibold text-white"
@@ -30,6 +34,7 @@ const ShopHero = ({ onSearch }: any) => {
           </h1>
         </div>
       </section>
+
       <section className="bg-[#F7F3EE]">
         <div className="mx-auto max-w-[1728px] px-6">
           <div className="relative z-10 -translate-y-19 rounded-t-[32px] bg-white px-3 py-2">
