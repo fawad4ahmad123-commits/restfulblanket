@@ -1,11 +1,11 @@
 'use client';
 
+import { toast } from 'sonner';
 import { createContext, useState, ReactNode, useMemo, useEffect } from 'react';
 import { CartContextType, CartItem, UpsellItem } from './types';
 
 export const CartContext = createContext<CartContextType | null>(null);
 
-// Helper to generate a unique cart item ID
 function generateCartItemId(product: Partial<CartItem>): string {
   const parts = [
     product.productId || product.id,
@@ -38,46 +38,73 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (product: Omit<CartItem, 'quantity'>) => {
     setItems((prev) => {
-      const itemId = product.id || generateCartItemId(product);
-      const existing = prev.find((i) => {
-        if (i.id !== itemId) return false;
-        if (product.attributes && i.attributes) {
-          return (
-            i.attributes.color === product.attributes.color &&
-            i.attributes.size === product.attributes.size &&
-            i.attributes.weight === product.attributes.weight
-          );
-        }
+      const getNormalizedAttributes = (item: any) => {
+        const color = item.color || item.attributes?.color || '';
+        const size = item.variant || item.attributes?.size || '';
+        const weight = item.weight || item.attributes?.weight || '';
+        return { color, size, weight };
+      };
+
+      const productAttrs = getNormalizedAttributes(product);
+
+      const existingIndex = prev.findIndex((item) => {
+        if (item.productId !== product.productId) return false;
+
+        const itemAttrs = getNormalizedAttributes(item);
         return (
-          i.color === product.color &&
-          i.variant === product.variant &&
-          i.weight === product.weight
+          itemAttrs.color === productAttrs.color &&
+          itemAttrs.size === productAttrs.size &&
+          itemAttrs.weight === productAttrs.weight
         );
       });
 
-      if (existing) {
-        return prev.map((i) => {
-          const isMatch =
-            i.id === itemId &&
-            i.attributes?.color === product.attributes?.color &&
-            i.attributes?.size === product.attributes?.size &&
-            i.attributes?.weight === product.attributes?.weight;
+      const stockQuantity = Number(product.stockQuantity) || 0;
+      const currentQuantity =
+        existingIndex !== -1 ? prev[existingIndex].quantity : 0;
+      const newQuantity = currentQuantity + 1;
 
-          return isMatch ? { ...i, quantity: i.quantity + 1 } : i;
+      if (stockQuantity > 0 && newQuantity > stockQuantity) {
+        let message = '';
+        if (stockQuantity === 0) {
+          message = 'Desværre, denne vare er ikke på lager.';
+        } else if (currentQuantity >= stockQuantity) {
+          message = `Du har allerede det maksimale antal (${stockQuantity}) af denne vare i kurven.`;
+        } else {
+          message = `Beklager, kun ${stockQuantity} stk. er tilgængelige på lager. Du har ${currentQuantity} i kurven.`;
+        }
+
+        toast.error(message, {
+          duration: 4000,
+          position: 'top-center',
         });
+
+        return prev;
       }
+
+      if (existingIndex !== -1) {
+        const updatedItems = [...prev];
+        updatedItems[existingIndex] = {
+          ...updatedItems[existingIndex],
+          quantity: newQuantity,
+        };
+        return updatedItems;
+      }
+
+      const uniqueId = `${product.productId}-${productAttrs.color}-${productAttrs.size}-${productAttrs.weight}`;
+
       const newItem: CartItem = {
         ...product,
-        id: itemId,
+        id: product.id || uniqueId,
         quantity: 1,
-        attributes: product.attributes || {
-          color: product.color || '',
-          size: product.variant || '',
-          weight: product.weight || '',
+        attributes: {
+          color: productAttrs.color,
+          size: productAttrs.size,
+          weight: productAttrs.weight,
         },
-        color: product.color || product.attributes?.color || '',
-        variant: product.variant || product.attributes?.size || '',
-        weight: product.weight || product.attributes?.weight || '',
+        color: productAttrs.color,
+        variant: productAttrs.size,
+        weight: productAttrs.weight,
+        stockQuantity: stockQuantity,
       };
 
       return [...prev, newItem];
@@ -85,7 +112,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     setIsOpen(true);
   };
-
   const removeFromCart = (id: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };

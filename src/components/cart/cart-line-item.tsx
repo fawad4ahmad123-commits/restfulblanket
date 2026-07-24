@@ -19,7 +19,7 @@ export default function CartLineItem({
   onChangeQty: (id: string, delta: number) => void;
 }) {
   const { toggleWishlist, isWishlisted } = useWishlist();
-  const { updateCartItem } = useCart();
+  const { updateCartItem, addToCart } = useCart();
   const [showStockWarning, setShowStockWarning] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [currentProduct, setCurrentProduct] = useState<any>(null);
@@ -35,6 +35,8 @@ export default function CartLineItem({
     setIsLoading(true);
     try {
       const product = await getProductById(productId);
+      console.log('t4 cart', { product });
+
       setCurrentProduct(product);
       setAttributes(product?.attribute_links || []);
 
@@ -97,22 +99,14 @@ export default function CartLineItem({
 
     if (!cartItemId) return;
 
-    updateCartItem(cartItemId, {
-      color: nextColor,
-      variant: nextSize,
-      weight: nextWeight,
-    });
-
     if (match.related_product && match.related_product !== 0) {
       try {
         const product = await getProductById(match.related_product);
 
         if (!product) return;
 
-        setCurrentProduct(product);
-        setAttributes(product.attribute_links || []);
-
-        updateCartItem(cartItemId, {
+        addToCart({
+          id: `cart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           productId: product.id,
           name: product.name,
           image: product.image || product.images?.[0]?.src || '',
@@ -120,10 +114,32 @@ export default function CartLineItem({
           color: nextColor,
           variant: nextSize,
           weight: nextWeight,
+          stockQuantity: product.stock_quantity || item.stockQuantity,
+          attributes: {
+            color: nextColor,
+            size: nextSize,
+            weight: nextWeight,
+          },
         });
+
+        onRemove(cartItemId);
+
+        setCurrentProduct(product);
+        setAttributes(product.attribute_links || []);
       } catch (error) {
         console.error('Failed to load related product', error);
       }
+    } else {
+      updateCartItem(cartItemId, {
+        color: nextColor,
+        variant: nextSize,
+        weight: nextWeight,
+        attributes: {
+          color: nextColor,
+          size: nextSize,
+          weight: nextWeight,
+        },
+      });
     }
   };
 

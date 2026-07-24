@@ -42,9 +42,7 @@ async function safeJsonFetch(url: string, options?: RequestInit) {
     let bodyText = '';
     try {
       bodyText = await res.text();
-    } catch {
-      // ignore
-    }
+    } catch {}
 
     console.error(
       'WooCommerce/WP fetch failed:',
@@ -105,19 +103,43 @@ export async function createProductReview({
   return data;
 }
 
+// export async function getBestSellers() {
+//   const data = await safeJsonFetch(
+//     wcUrl('products', { status: 'publish', per_page: 20 }),
+//     { cache: 'no-store' },
+//   );
+
+//   return data ?? [];
+// }
 export async function getBestSellers() {
   const data = await safeJsonFetch(
     wcUrl('products', { status: 'publish', per_page: 20 }),
-    { cache: 'no-store' },
+    {
+      next: {
+        revalidate: 300,
+      },
+    },
   );
 
   return data ?? [];
 }
 
+// export async function getCategories() {
+//   const data = await safeJsonFetch(
+//     wcUrl('products/categories', { per_page: 20 }),
+//     { cache: 'no-store' },
+//   );
+
+//   return data ?? [];
+// }
 export async function getCategories() {
   const data = await safeJsonFetch(
     wcUrl('products/categories', { per_page: 20 }),
-    { cache: 'no-store' },
+    {
+      next: {
+        revalidate: 300,
+      },
+    },
   );
 
   return data ?? [];
