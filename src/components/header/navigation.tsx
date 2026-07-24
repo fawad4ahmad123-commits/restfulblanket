@@ -37,24 +37,11 @@ const Navigation = ({
     categories.filter((cat: any) => cat.parent === parentId);
 
   const getProductsByCategory = (categoryId: number | null, limit = 4) => {
-    console.log('Searching category:', categoryId);
-
     if (!categoryId) return [];
 
     const filtered = products.filter((product: any) => {
-      console.log(
-        product.name,
-        product.categories?.map((c: any) => ({
-          id: c.id,
-          name: c.name,
-        })),
-      );
-
       return product.categories?.some((c: any) => c.id === categoryId);
     });
-
-    console.log('FOUND PRODUCTS', filtered);
-
     return filtered.slice(0, limit);
   };
 
@@ -335,7 +322,7 @@ const Navigation = ({
             : item.title === 'Tilbehør'
               ? getProductsByCategory(sovevaerelseCategory?.id ?? null, 4)
               : item.products || [];
-        console.log('t23', { dynamicProducts });
+
         const hasProducts = dynamicProducts.length > 0;
 
         return (

@@ -104,50 +104,34 @@ export async function createProductReview({
   return data;
 }
 
-// export async function getBestSellers() {
-//   const data = await safeJsonFetch(
-//     wcUrl('products', { status: 'publish', per_page: 20 }),
-//     { cache: 'no-store' },
-//   );
+export const getCategories = cache(async () => {
+  const data = await safeJsonFetch(
+    wcUrl('products/categories', { per_page: 20 }),
+    {
+      next: {
+        revalidate: 100,
+        tags: ['categories'],
+      },
+    },
+  );
+  return data ?? [];
+});
 
-//   return data ?? [];
-// }
 export const getBestSellers = cache(async () => {
   const data = await safeJsonFetch(
     wcUrl('products', {
       status: 'publish',
       per_page: 20,
+      orderby: 'popularity',
+      order: 'desc',
     }),
     {
       next: {
         revalidate: 300,
+        tags: ['best-sellers'],
       },
     },
   );
-
-  return data ?? [];
-});
-
-// export async function getCategories() {
-//   const data = await safeJsonFetch(
-//     wcUrl('products/categories', { per_page: 20 }),
-//     { cache: 'no-store' },
-//   );
-
-//   return data ?? [];
-// }
-export const getCategories = cache(async () => {
-  const data = await safeJsonFetch(
-    wcUrl('products/categories', {
-      per_page: 20,
-    }),
-    {
-      next: {
-        revalidate: 300,
-      },
-    },
-  );
-
   return data ?? [];
 });
 

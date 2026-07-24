@@ -3,15 +3,12 @@ import { Geist } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
 import './globals.css';
-
 import MainLayout from '../core/Mainlayouts';
-
 import { CartProvider } from '../core/context/cart-context';
 import { CompareProvider } from '../core/context/compare-provider';
 import { AuthProvider } from '../core/context/auth-context';
 import { WishlistProvider } from '../core/context/wishlist-provider';
 import { ProductMetaProvider } from '../core/context/product-meta-context';
-
 import ClientProviders from '../components/client-providers';
 import { getBestSellers, getCategories } from '../lib/products';
 

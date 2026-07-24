@@ -81,7 +81,7 @@ export function TrustBar({ isHome }: { isHome: boolean }) {
                 <p
                   className={cn(
                     'text-xs md:text-[10px]',
-                    isHome ? 'text-white/60' : 'text-[#392A22]/60',
+                    isHome ? 'text-white/60' : 'text-[#392A22]',
                   )}
                 >
                   {item.subtitle}
