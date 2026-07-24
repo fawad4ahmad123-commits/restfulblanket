@@ -15,8 +15,10 @@ export function WpHeroImage() {
         width={1200}
         height={675}
         className="h-full w-full object-cover"
-        unoptimized
         priority
+        fetchPriority="high"
+        sizes="100vw"
+        unoptimized
       />
     </div>
   );

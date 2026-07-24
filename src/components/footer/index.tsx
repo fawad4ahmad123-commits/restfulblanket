@@ -20,7 +20,6 @@ const Footer = () => {
                 alt="RestfulBlanket"
                 width={153}
                 height={32}
-                loading="lazy"
               />
             </Link>
 
@@ -68,14 +67,15 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links */}
           <FooterLinks title="Shop" links={shopLinks} />
 
           <FooterLinks title="Guides" links={supportLinks} />
 
-          {/* Newsletter */}
           <div className="w-full max-w-[370px]">
-            <div className="flex min-h-[56px] flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-white/20 sm:px-5 sm:py-2">
+            <form
+              aria-label="Newsletter signup"
+              className="flex min-h-[56px] flex-col gap-3 sm:flex-row sm:items-center sm:rounded-full sm:border sm:border-white/20 sm:px-5 sm:py-2"
+            >
               <div className="flex h-[48px] items-center rounded-full border border-white/20 px-4 sm:flex-1 sm:border-0 sm:px-0">
                 <Mail
                   size={16}
@@ -83,69 +83,74 @@ const Footer = () => {
                   aria-hidden="true"
                 />
 
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email address
+                </label>
+
                 <input
+                  id="newsletter-email"
                   type="email"
                   placeholder="your@email.com"
-                  aria-label="Email address"
                   autoComplete="email"
                   className="ml-2 h-6 flex-1 bg-transparent text-sm leading-6 text-white outline-none placeholder:text-white/70"
                 />
               </div>
 
               <button
-                type="button"
+                type="submit"
                 aria-label="Subscribe to newsletter"
-                title="Subscribe to newsletter"
                 className="rounded-full bg-white px-5 py-3 text-xs font-medium tracking-wide text-[#3a251c]"
               >
                 SUBSCRIBE
               </button>
+            </form>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-4 sm:justify-start">
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://thegoodshoppingguide.com/brand-directory/restfulblanket/"
+                aria-label="View Good Shopping Guide certification"
+              >
+                <Image
+                  src="/goodshopping.png"
+                  alt="Good Shopping Guide"
+                  width={90}
+                  height={90}
+                  className="h-[90px] w-[90px] object-contain"
+                />
+              </Link>
+
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://verified.peopleandplanetfirst.org/directory/restfulblanket"
+                aria-label="View People and Planet First certification"
+              >
+                <Image
+                  src="/people.png"
+                  alt="People and Planet First"
+                  width={90}
+                  height={90}
+                  className="h-[90px] w-[90px] object-contain"
+                />
+              </Link>
+
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.goodmarket.global/restfulblanket"
+                aria-label="View Good Market certification"
+              >
+                <Image
+                  src="/market.png"
+                  alt="Good Market Approved"
+                  width={90}
+                  height={90}
+                  className="h-[90px] w-[90px] object-contain"
+                />
+              </Link>
             </div>
-          </div>
-
-          {/* Badges */}
-          <div className="flex min-h-[100px] items-center justify-center gap-5 lg:col-span-2">
-            <Link
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://thegoodshoppingguide.com/brand-directory/restfulblanket/"
-            >
-              <Image
-                src="/goodshopping.png"
-                alt="Good Shopping Guide"
-                width={100}
-                height={100}
-                className="h-[100px] w-[100px] object-contain"
-              />
-            </Link>
-
-            <Link
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://verified.peopleandplanetfirst.org/directory/restfulblanket"
-            >
-              <Image
-                src="/people.png"
-                alt="People + Planet First"
-                width={100}
-                height={100}
-                className="h-[100px] w-[100px] object-contain"
-              />
-            </Link>
-
-            <Link
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.goodmarket.global/restfulblanket"
-            >
-              <Image
-                src="/market.png"
-                alt="Good Market Approved"
-                width={100}
-                height={100}
-                className="h-[100px] w-[100px] object-contain"
-              />
-            </Link>
           </div>
         </div>
 
@@ -158,16 +163,16 @@ const Footer = () => {
               href="https://starseo.agency"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold underline"
+              className="font-semibold"
             >
               Starseo.agency
             </Link>
           </p>
 
           <div className="flex justify-start gap-3">
-            {socialLinks.map(({ icon: Icon, href, name }, index) => (
+            {socialLinks.map(({ icon: Icon, href, name }) => (
               <Link
-                key={index}
+                key={name}
                 href={href}
                 aria-label={name}
                 title={name}
@@ -178,13 +183,14 @@ const Footer = () => {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-4 text-xs text-white">
+          <nav
+            aria-label="Legal links"
+            className="flex flex-wrap gap-4 text-xs text-white"
+          >
             <Link href="/privatlivspolitik">Privatlivspolitik</Link>
-
             <Link href="/handelsbetingelser">Handelsbetingelser</Link>
-
             <Link href="/cookie-policy">Cookies</Link>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>
