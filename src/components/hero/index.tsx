@@ -26,9 +26,10 @@ const HeroSection = () => {
         src={HERO_SLIDES[currentSlide].image}
         alt={HERO_SLIDES[currentSlide].title}
         fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
+        priority={currentSlide === 0}
+        fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+        quality={75}
+        sizes="(max-width: 768px) 100vw, 1400px"
         className="object-cover object-[center_20%] pt-[9rem] md:object-[center_15%] md:pt-26"
       />
 
