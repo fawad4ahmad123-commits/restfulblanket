@@ -7,7 +7,6 @@ import { ChevronDown, Heart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { useMergedNavigation } from '@/src/hooks/use-merged-navigation';
-import { useCategories } from '@/src/core/context/category-provider';
 import { useAuth } from '@/src/core/context/auth-context';
 
 const MAX_SUB_CATEGORIES = 4;
@@ -34,20 +33,45 @@ const slugify = (text?: string) => {
     .replace(/^-+|-+$/g, '');
 };
 
-const fixProductHref = (href: string) =>
-  href.replace(/^\/products\//, '/product/');
+const fixProductHref = (href?: string) => {
+  if (!href) return '#';
 
-const MobileView = ({ wishlistCount }: { wishlistCount: number }) => {
+  return href.replace(/^\/products\//, '/product/');
+};
+
+interface MobileViewProps {
+  wishlistCount: number;
+  categories: any[];
+  products: any[];
+}
+
+const MobileView = ({
+  wishlistCount,
+  categories,
+  products,
+}: MobileViewProps) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [openSubItem, setOpenSubItem] = useState<string | null>(null);
   const [openParentCategory, setOpenParentCategory] = useState<number | null>(
     null,
   );
 
-  const navigation = useMergedNavigation();
+  const navigation = useMergedNavigation(categories);
 
-  const { categories, parentCategories, getChildren, getProductsByCategory } =
-    useCategories();
+  const parentCategories = categories.filter((cat: any) => cat.parent === 0);
+
+  const getChildren = (parentId: number) =>
+    categories.filter((cat: any) => cat.parent === parentId);
+
+  const getProductsByCategory = (categoryId: number | null, limit = 4) => {
+    if (!categoryId) return [];
+
+    return products
+      .filter((product: any) =>
+        product.categories?.some((c: any) => c.id === categoryId),
+      )
+      .slice(0, limit);
+  };
 
   const { user, isAuthenticated } = useAuth();
 

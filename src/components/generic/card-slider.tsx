@@ -136,12 +136,13 @@ const SliderCard = ({
                 src={image}
                 alt={title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
                 className={`
-                  object-cover
-                  transition-all
-                  duration-500
-                  ${hoverImage ? 'group-hover:opacity-0' : ''}
-                `}
+    object-cover
+    transition-all
+    duration-500
+    ${hoverImage ? 'group-hover:opacity-0' : ''}
+  `}
               />
             ) : (
               <div className="h-full w-full bg-[#F3EBE4]" />
@@ -151,6 +152,7 @@ const SliderCard = ({
                 src={hoverImage}
                 alt={`${title} alternate image`}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
                 className="object-cover opacity-0 transition-all duration-500 group-hover:opacity-100"
               />
             )}

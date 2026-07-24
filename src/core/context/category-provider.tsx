@@ -1,101 +1,101 @@
-'use client';
-import { createContext, useContext, useMemo, ReactNode } from 'react';
+// 'use client';
+// import { createContext, useContext, useMemo, ReactNode } from 'react';
 
-function normalizeProduct(p: any) {
-  const image =
-    p.images?.[0]?.src ??
-    p.image?.src ??
-    (typeof p.image === 'string' ? p.image : null) ??
-    '/products/placeholder.jpg';
+// function normalizeProduct(p: any) {
+//   const image =
+//     p.images?.[0]?.src ??
+//     p.image?.src ??
+//     (typeof p.image === 'string' ? p.image : null) ??
+//     '/products/placeholder.jpg';
 
-  const rawPrice = p.price ?? p.regular_price ?? p.sale_price ?? '';
-  const price =
-    typeof rawPrice === 'number'
-      ? `€${rawPrice}`
-      : String(rawPrice).trim().startsWith('€')
-        ? rawPrice
-        : rawPrice
-          ? `€${rawPrice}`
-          : '';
+//   const rawPrice = p.price ?? p.regular_price ?? p.sale_price ?? '';
+//   const price =
+//     typeof rawPrice === 'number'
+//       ? `€${rawPrice}`
+//       : String(rawPrice).trim().startsWith('€')
+//         ? rawPrice
+//         : rawPrice
+//           ? `€${rawPrice}`
+//           : '';
 
-  const href = p.permalink
-    ? `/products/${p.slug ?? p.id}`
-    : `/products/${p.slug ?? p.id}`;
+//   const href = p.permalink
+//     ? `/products/${p.slug ?? p.id}`
+//     : `/products/${p.slug ?? p.id}`;
 
-  const categoryIds = (p.categories ?? []).map((c: any) =>
-    typeof c === 'object' ? c.id : c,
-  );
+//   const categoryIds = (p.categories ?? []).map((c: any) =>
+//     typeof c === 'object' ? c.id : c,
+//   );
 
-  return {
-    id: p.id,
-    title: p.name ?? p.title ?? '',
-    price,
-    image,
-    href,
-    categoryIds,
-  };
-}
+//   return {
+//     id: p.id,
+//     title: p.name ?? p.title ?? '',
+//     price,
+//     image,
+//     href,
+//     categoryIds,
+//   };
+// }
 
-export function CategoryProvider({
-  children,
-  categories,
-  products = [],
-}: {
-  children: ReactNode;
-  categories: any[];
-  products?: any[];
-}) {
-  const safeCategories = Array.isArray(categories) ? categories : [];
-  const safeProducts = Array.isArray(products) ? products : [];
+// export function CategoryProvider({
+//   children,
+//   categories,
+//   products = [],
+// }: {
+//   children: ReactNode;
+//   categories: any[];
+//   products?: any[];
+// }) {
+//   const safeCategories = Array.isArray(categories) ? categories : [];
+//   const safeProducts = Array.isArray(products) ? products : [];
 
-  const parentCategories = useMemo(
-    () =>
-      safeCategories.filter(
-        (category) =>
-          category.parent === 0 && category.slug !== 'ukategoriseret',
-      ),
-    [safeCategories],
-  );
+//   const parentCategories = useMemo(
+//     () =>
+//       safeCategories.filter(
+//         (category) =>
+//           category.parent === 0 && category.slug !== 'ukategoriseret',
+//       ),
+//     [safeCategories],
+//   );
 
-  const getChildren = (parentId: number) => {
-    return safeCategories.filter((category) => category.parent === parentId);
-  };
+//   const getChildren = (parentId: number) => {
+//     return safeCategories.filter((category) => category.parent === parentId);
+//   };
 
-  const normalizedProducts = useMemo(
-    () => safeProducts.map(normalizeProduct),
-    [safeProducts],
-  );
+//   const normalizedProducts = useMemo(
+//     () => safeProducts.map(normalizeProduct),
+//     [safeProducts],
+//   );
 
-  const getProductsByCategory = (categoryId: number | null, limit = 4) => {
-    if (categoryId == null) return normalizedProducts.slice(0, limit);
-    return normalizedProducts
-      .filter((p) => p.categoryIds.includes(categoryId))
-      .slice(0, limit);
-  };
+//   const getProductsByCategory = (categoryId: number | null, limit = 4) => {
+//     if (categoryId == null) return normalizedProducts.slice(0, limit);
+//     return normalizedProducts
+//       .filter((p) => p.categoryIds.includes(categoryId))
+//       .slice(0, limit);
+//   };
 
-  return (
-    <CategoryContext.Provider
-      value={{
-        categories: safeCategories,
-        parentCategories,
-        products: normalizedProducts,
-        getChildren,
-        getProductsByCategory,
-      }}
-    >
-      {children}
-    </CategoryContext.Provider>
-  );
-}
+//   return (
+//     <CategoryContext.Provider
+//       value={{
+//         categories: safeCategories,
+//         parentCategories,
+//         products: normalizedProducts,
+//         getChildren,
+//         getProductsByCategory,
+//       }}
+//     >
+//       {children}
+//     </CategoryContext.Provider>
+//   );
+// }
 
-const CategoryContext = createContext<any | null>(null);
+// const CategoryContext = createContext<any | null>(null);
 
-export function useCategories() {
-  const context = useContext(CategoryContext);
+// export function useCategories() {
+//   const context = useContext(CategoryContext);
 
-  if (!context) {
-    throw new Error('useCategories must be used within CategoryProvider');
-  }
+//   if (!context) {
+//     throw new Error('useCategories must be used within CategoryProvider');
+//   }
 
-  return context;
-}
+//   return context;
+// }

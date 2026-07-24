@@ -8,7 +8,17 @@ import {
 } from '@/components/ui/sheet';
 import MobileView from './mobile-view';
 
-const MobileViewMenuToggle = ({ wishlistCount }: { wishlistCount: number }) => {
+interface Props {
+  wishlistCount: number;
+  categories: any[];
+  products: any[];
+}
+
+const MobileViewMenuToggle = ({
+  wishlistCount,
+  categories,
+  products,
+}: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -44,7 +54,11 @@ const MobileViewMenuToggle = ({ wishlistCount }: { wishlistCount: number }) => {
         </div>
 
         <div className="flex-1 overflow-y-auto py-2 scrollbar-hide flex flex-col">
-          <MobileView wishlistCount={wishlistCount} />
+          <MobileView
+            wishlistCount={wishlistCount}
+            categories={categories}
+            products={products}
+          />
         </div>
       </SheetContent>
     </Sheet>

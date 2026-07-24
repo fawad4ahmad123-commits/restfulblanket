@@ -37,6 +37,7 @@ const CategoryCard = ({ image, title, subtitle, index }: CategoryCardProps) => {
           src={image}
           alt={`${title}${subtitle ? ` - ${subtitle}` : ''}`}
           fill
+          sizes="(max-width: 768px) 100vw, 500px"
           className="object-cover transition duration-700 group-hover:scale-105"
         />
 

@@ -52,14 +52,17 @@ const BlogCard = ({
               className="flex items-center gap-2"
               aria-label={`Author: ${author}`}
             >
-              <Image
-                src={authorImage}
-                alt={`${author} profile photo`}
-                width={34}
-                height={34}
-                className="rounded-full"
-              />
-              <span className="text-sm text-[#3b281f]"> {author}</span>
+              <div className="relative h-8 w-8 overflow-hidden rounded-full">
+                <Image
+                  src={authorImage || image}
+                  alt={author}
+                  fill
+                  sizes="32px"
+                  className="object-cover"
+                />
+              </div>
+
+              <span className="text-sm text-[#3b281f]">{author}</span>
             </div>
           </div>
         </div>

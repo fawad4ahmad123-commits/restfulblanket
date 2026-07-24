@@ -5,7 +5,6 @@ import { useState, useMemo, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useCategories } from '@/src/core/context/category-provider';
 import { useMergedNavigation } from '@/src/hooks/use-merged-navigation';
 
 const MAX_MAIN_CATEGORIES = 4;
@@ -18,12 +17,47 @@ const SUBCATEGORY_ORDER = [
   'Hovedpuder',
 ];
 
-const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
-  const pathname = usePathname();
-  const { categories, parentCategories, getChildren, getProductsByCategory } =
-    useCategories();
+interface NavigationProps {
+  isHome?: boolean;
+  categories: any[];
+  products: any[];
+}
 
-  const navigation = useMergedNavigation();
+const Navigation = ({
+  isHome = true,
+  categories,
+  products,
+}: NavigationProps) => {
+  const pathname = usePathname();
+
+  const navigation = useMergedNavigation(categories);
+  const parentCategories = categories.filter((cat: any) => cat.parent === 0);
+
+  const getChildren = (parentId: number) =>
+    categories.filter((cat: any) => cat.parent === parentId);
+
+  const getProductsByCategory = (categoryId: number | null, limit = 4) => {
+    console.log('Searching category:', categoryId);
+
+    if (!categoryId) return [];
+
+    const filtered = products.filter((product: any) => {
+      console.log(
+        product.name,
+        product.categories?.map((c: any) => ({
+          id: c.id,
+          name: c.name,
+        })),
+      );
+
+      return product.categories?.some((c: any) => c.id === categoryId);
+    });
+
+    console.log('FOUND PRODUCTS', filtered);
+
+    return filtered.slice(0, limit);
+  };
+
   const visibleParentCategories = useMemo(
     () =>
       parentCategories
@@ -68,7 +102,9 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
   //   )
   //   : [];
 
-  function fixProductHref(href: string): string {
+  function fixProductHref(href?: string): string {
+    if (!href) return '#';
+
     return href.replace(/^\/products\//, '/product/');
   }
 
@@ -241,7 +277,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
                           return (
                             <Link
                               key={product.id}
-                              href={fixProductHref(product.href)}
+                              href={`/product/${product.slug}`}
                               title={product.title}
                               className="flex flex-col gap-2"
                             >
@@ -299,7 +335,7 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
             : item.title === 'Tilbehør'
               ? getProductsByCategory(sovevaerelseCategory?.id ?? null, 4)
               : item.products || [];
-
+        console.log('t23', { dynamicProducts });
         const hasProducts = dynamicProducts.length > 0;
 
         return (
@@ -450,32 +486,27 @@ const Navigation = ({ isHome = true }: { isHome?: boolean }) => {
 
                 {hasProducts && (
                   <div className="grid flex-1 grid-cols-4 gap-6">
-                    {dynamicProducts.map((product: any) => (
-                      <Link
-                        key={product.title}
-                        href={fixProductHref(product.href)}
-                        title={product.title}
-                        className="group/product flex flex-col gap-2"
-                      >
-                        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
-                          <Image
-                            src={product.image}
-                            alt={product.title}
-                            fill
-                            className="object-cover transition-transform group-hover/product:scale-105"
-                          />
-                        </div>
-
-                        <span
-                          className={cn(
-                            'truncate text-sm',
-                            isHome ? 'text-[#E9DDD4]' : 'text-[#392A22]',
-                          )}
+                    {dynamicProducts.map((product: any) => {
+                      return (
+                        <Link
+                          key={product.id || product.title}
+                          href={product.href || '#'}
+                          title={product.title || product.name}
+                          className="group/product flex flex-col gap-2"
                         >
-                          {product.title}
-                        </span>
-                      </Link>
-                    ))}
+                          <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
+                            <Image
+                              src={product.image || '/placeholder.jpg'}
+                              alt={product.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+
+                          <span>{product.title || product.name}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>

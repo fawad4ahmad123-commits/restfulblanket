@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { WooProduct } from '@/src/lib/types';
 import SearchLoadingBar from './search-loading-bar';
 import { CATEGORIES, NO_RESULT_SUGGESTIONS } from './constants';
-import { useCategories } from '@/src/core/context/category-provider';
 
 function useProductSearch(query: string) {
   const [products, setProducts] = useState<WooProduct[]>([]);
@@ -45,6 +44,40 @@ function useProductSearch(query: string) {
   return { products, loading };
 }
 
+// Replaces the old `useCategories()` context hook — categories are now
+// fetched directly via API instead of coming from CategoryProvider.
+function useCategoriesApi() {
+  const [categories, setCategories] = useState<any[]>([]);
+  const [parentCategories, setParentCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        const res = await fetch('/api/categories', {
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        const all = data.categories ?? [];
+
+        setCategories(all);
+        setParentCategories(
+          all.filter((cat: any) => cat.parent === 0 || !cat.parent),
+        );
+      } catch {
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, []);
+
+  return { categories, parentCategories, loading };
+}
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return <p className="px-6 pt-5 pb-2 text-sm text-[#392A22]/40">{children}</p>;
 }
@@ -72,7 +105,7 @@ function SearchStart({
 }: {
   onSelectTerm: (term: string) => void;
 }) {
-  const { categories, parentCategories } = useCategories();
+  const { categories, parentCategories } = useCategoriesApi();
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[#392A22]/10 bg-white">

@@ -31,7 +31,12 @@ const getInitials = (name?: string) =>
         .toUpperCase()
     : '';
 
-const SiteHeader = () => {
+interface SiteHeaderProps {
+  categories: any[];
+  products: any[];
+}
+
+const SiteHeader = ({ categories, products }: SiteHeaderProps) => {
   const pathname = usePathname();
   const isHome = pathname === '/' || pathname.startsWith('/shop');
   const router = useRouter();
@@ -84,7 +89,11 @@ const SiteHeader = () => {
               </h3>
             </Link>
 
-            <Navigation isHome={isHome} />
+            <Navigation
+              isHome={isHome}
+              categories={categories}
+              products={products}
+            />
 
             <div className="hidden items-center gap-1 lg:flex">
               <SearchProducts isHome={isHome} />
@@ -216,7 +225,11 @@ const SiteHeader = () => {
                 cartCount={cartCount}
                 onClick={() => setCartOpen(true)}
               />
-              <MobileViewMenuToggle wishlistCount={wishlistCount} />
+              <MobileViewMenuToggle
+                wishlistCount={wishlistCount}
+                categories={categories}
+                products={products}
+              />
             </div>
           </div>
         </nav>
