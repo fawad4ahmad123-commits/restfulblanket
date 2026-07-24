@@ -1,22 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link2, Mail, Share2 } from 'lucide-react';
 
 export default function ShareButtons() {
   const [shareUrl, setShareUrl] = useState('');
 
-  useState(() => {
-    if (typeof window !== 'undefined') {
-      setShareUrl(window.location.href);
-    }
-  });
+  useEffect(() => {
+    setShareUrl(window.location.href);
+  }, []);
 
   const copyLink = async () => {
     if (!shareUrl) return;
 
-    await navigator.clipboard.writeText(shareUrl);
-    alert('Link copied');
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert('Link copied');
+    } catch (error) {
+      console.error('Failed to copy link:', error);
+    }
   };
 
   const sendEmail = () => {
@@ -30,7 +32,11 @@ export default function ShareButtons() {
     const text = encodeURIComponent(document.title);
     const url = encodeURIComponent(shareUrl);
 
-    window.open(`https://x.com/intent/post?text=${text}&url=${url}`, '_blank');
+    window.open(
+      `https://x.com/intent/post?text=${text}&url=${url}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
   };
 
   return (
@@ -39,24 +45,33 @@ export default function ShareButtons() {
 
       <div className="flex gap-3">
         <button
+          type="button"
+          aria-label="Copy article link"
+          title="Copy article link"
           onClick={copyLink}
-          className="rounded-full border p-2 cursor-pointer"
+          className="cursor-pointer rounded-full border border-[#D8CEC6] p-2 transition-colors hover:bg-[#F8F5F2]"
         >
-          <Link2 size={14} />
+          <Link2 size={14} aria-hidden="true" />
         </button>
 
         <button
+          type="button"
+          aria-label="Share by email"
+          title="Share by email"
           onClick={sendEmail}
-          className="rounded-full border p-2 cursor-pointer"
+          className="cursor-pointer rounded-full border border-[#D8CEC6] p-2 transition-colors hover:bg-[#F8F5F2]"
         >
-          <Mail size={14} />
+          <Mail size={14} aria-hidden="true" />
         </button>
 
         <button
+          type="button"
+          aria-label="Share on X"
+          title="Share on X"
           onClick={shareX}
-          className="rounded-full border p-2 cursor-pointer"
+          className="cursor-pointer rounded-full border border-[#D8CEC6] p-2 transition-colors hover:bg-[#F8F5F2]"
         >
-          <Share2 size={14} />
+          <Share2 size={14} aria-hidden="true" />
         </button>
       </div>
     </div>

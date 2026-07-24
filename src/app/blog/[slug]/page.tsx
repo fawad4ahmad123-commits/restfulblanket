@@ -51,6 +51,5 @@ export default async function ArticlePage({ params }: PageProps) {
     .filter((b: any) => b.slug !== slug)
     .slice(0, 4);
 
-  console.log('t1 blog  format 2', { formattedArticle });
   return <Article article={formattedArticle} relatedBlogs={relatedBlogs} />;
 }

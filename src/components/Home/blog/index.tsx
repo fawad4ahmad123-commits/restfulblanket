@@ -34,14 +34,14 @@ const BlogCard = ({
           {title}
         </h3>
 
-        <p className="mt-3 line-clamp-2 min-h-[56px] text-sm leading-7 text-[#85776d]">
+        <p className="mt-3 line-clamp-2 min-h-[56px] text-sm leading-7 text-[#3b281f]">
           {excerpt}
         </p>
 
         <div className="mt-5 border-t border-[#d9cec5] pt-4">
           <div className="flex items-center justify-between">
             <div
-              className="flex items-center gap-2 text-sm text-[#85776d]"
+              className="flex items-center gap-2 text-sm text-[#3b281f]"
               aria-label={`Published on ${date}`}
             >
               <CalendarDays size={16} />
@@ -72,7 +72,7 @@ const BlogCard = ({
           aria-label={`Read more about ${title}`}
           title={`Read more about ${title}`}
           onClick={() => router.push(`/blog/${slug}`)}
-          className="mt-6 w-full cursor-pointer rounded-full bg-[#E9DDD4] py-4 text-sm font-medium text-[#35281E] transition hover:bg-[#2a1c15] hover:text-white"
+          className="mt-6 w-full cursor-pointer rounded-full bg-[#E9DDD4] py-4 text-sm font-medium text-[#3b281f] transition hover:bg-[#2a1c15] hover:text-white"
         >
           Læs mere
         </button>
