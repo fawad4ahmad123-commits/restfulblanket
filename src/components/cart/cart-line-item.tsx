@@ -6,6 +6,8 @@ import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { CartItem } from './types';
 import { getProductById } from '@/src/lib/products';
 import getColorHex from '@/src/helper/color-hexa';
+import { Loader } from '../loader';
+import { useCart } from '@/src/core/context/card-Provider';
 
 export default function CartLineItem({
   item,
@@ -17,33 +19,120 @@ export default function CartLineItem({
   onChangeQty: (id: string, delta: number) => void;
 }) {
   const { toggleWishlist, isWishlisted } = useWishlist();
-
+  const { updateCartItem } = useCart();
   const [showStockWarning, setShowStockWarning] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
+  const [currentProduct, setCurrentProduct] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const wished = isWishlisted(item.id || '');
 
+  const [selectedColor, setSelectedColor] = useState(item.color || '');
+  const [selectedSize, setSelectedSize] = useState(item.variant || '');
+  const [selectedWeight, setSelectedWeight] = useState(item.weight || '');
+
+  const loadProduct = async (productId: number | string) => {
+    setIsLoading(true);
+    try {
+      const product = await getProductById(productId);
+      setCurrentProduct(product);
+      setAttributes(product?.attribute_links || []);
+
+      const activeColor = product?.attribute_links?.find(
+        (a: any) => a.name === 'color' && a.related_product === 0,
+      );
+      const activeSize = product?.attribute_links?.find(
+        (a: any) => a.name === 'size' && a.related_product === 0,
+      );
+      const activeWeight = product?.attribute_links?.find(
+        (a: any) => a.name === 'weight' && a.related_product === 0,
+      );
+
+      if (activeColor) setSelectedColor(activeColor.value);
+      if (activeSize) setSelectedSize(activeSize.value);
+      if (activeWeight) setSelectedWeight(activeWeight.value);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!item.id) return;
-
-      try {
-        const product = await getProductById(item.id);
-        setAttributes(product?.attribute_links || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    loadProduct();
+    if (item.id) {
+      loadProduct(item.id);
+    }
   }, [item.id]);
+
+  const handleAttributeChange = async (
+    type: 'color' | 'size' | 'weight',
+    value: string,
+  ) => {
+    const match = attributes.find(
+      (attr) => attr.name?.toLowerCase() === type && attr.value === value,
+    );
+
+    if (!match) return;
+
+    let nextColor = selectedColor;
+    let nextSize = selectedSize;
+    let nextWeight = selectedWeight;
+
+    if (type === 'color') {
+      nextColor = value;
+      setSelectedColor(value);
+    }
+
+    if (type === 'size') {
+      nextSize = value;
+      setSelectedSize(value);
+    }
+
+    if (type === 'weight') {
+      nextWeight = value;
+      setSelectedWeight(value);
+    }
+
+    const cartItemId = item.id;
+
+    if (!cartItemId) return;
+
+    updateCartItem(cartItemId, {
+      color: nextColor,
+      variant: nextSize,
+      weight: nextWeight,
+    });
+
+    if (match.related_product && match.related_product !== 0) {
+      try {
+        const product = await getProductById(match.related_product);
+
+        if (!product) return;
+
+        setCurrentProduct(product);
+        setAttributes(product.attribute_links || []);
+
+        updateCartItem(cartItemId, {
+          productId: product.id,
+          name: product.name,
+          image: product.image || product.images?.[0]?.src || '',
+          price: Number(product.price) || 0,
+          color: nextColor,
+          variant: nextSize,
+          weight: nextWeight,
+        });
+      } catch (error) {
+        console.error('Failed to load related product', error);
+      }
+    }
+  };
+
+  const displayProduct = currentProduct || item;
 
   const stockQuantity =
     item.stockQuantity !== undefined && item.stockQuantity !== null
       ? Number(item.stockQuantity)
       : null;
-
-  const isOutOfStock = stockQuantity === 0;
 
   const colors = useMemo(
     () =>
@@ -87,28 +176,6 @@ export default function CartLineItem({
     [attributes],
   );
 
-  const [selectedColor, setSelectedColor] = useState(item.color || '');
-  const [selectedSize, setSelectedSize] = useState(item.variant || '');
-  const [selectedWeight, setSelectedWeight] = useState(item.weight || '');
-
-  useEffect(() => {
-    if (!selectedColor && colors.length) {
-      setSelectedColor(colors[0]);
-    }
-  }, [colors, selectedColor]);
-
-  useEffect(() => {
-    if (!selectedSize && sizes.length) {
-      setSelectedSize(sizes[0]);
-    }
-  }, [sizes, selectedSize]);
-
-  useEffect(() => {
-    if (!selectedWeight && weights.length) {
-      setSelectedWeight(weights[0]);
-    }
-  }, [weights, selectedWeight]);
-
   const handleIncreaseQuantity = () => {
     if (stockQuantity !== null && item.quantity >= stockQuantity) {
       setShowStockWarning(true);
@@ -116,20 +183,31 @@ export default function CartLineItem({
       return;
     }
 
-    onChangeQty(item.id || '', 1);
+    onChangeQty(item.cartItemId || item.id || '', 1);
   };
 
   const handleDecreaseQuantity = () => {
     setShowStockWarning(false);
-    onChangeQty(item.id || '', -1);
+    onChangeQty(item.cartItemId || item.id || '', -1);
   };
+
+  const displayImage =
+    currentProduct?.image || currentProduct?.images?.[0]?.src || item.image;
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[120px] items-center justify-center border-b border-stone-200 px-4 py-3 md:px-6 md:py-4">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-2 border-b border-stone-200 px-4 py-3 md:gap-3 md:px-6 md:py-4">
-      {item.image ? (
+      {displayImage ? (
         <img
-          src={item.image}
-          alt={item.name}
+          src={displayImage}
+          alt={displayProduct.name}
           className="h-14 w-14 shrink-0 rounded-md object-cover md:h-16 md:w-16"
         />
       ) : (
@@ -139,7 +217,7 @@ export default function CartLineItem({
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-sm font-medium text-stone-900">
-              {item.name}
+              {displayProduct.name}
             </p>
 
             <div className="mt-2 space-y-1.5">
@@ -151,7 +229,7 @@ export default function CartLineItem({
                       <button
                         key={color}
                         type="button"
-                        onClick={() => setSelectedColor(color)}
+                        onClick={() => handleAttributeChange('color', color)}
                         className={`h-5 w-5 rounded-full border ${
                           selectedColor === color
                             ? 'border-[#35281E] ring-1 ring-[#E7D6C7]'
@@ -174,7 +252,7 @@ export default function CartLineItem({
                       <button
                         key={size}
                         type="button"
-                        onClick={() => setSelectedSize(size)}
+                        onClick={() => handleAttributeChange('size', size)}
                         className={`rounded px-2 py-0.5 text-xs ${
                           selectedSize === size
                             ? 'border border-[#35281E] bg-[#E7D6C7]'
@@ -200,7 +278,9 @@ export default function CartLineItem({
                         <button
                           key={weight}
                           type="button"
-                          onClick={() => setSelectedWeight(weight)}
+                          onClick={() =>
+                            handleAttributeChange('weight', weight)
+                          }
                           className={`rounded px-2 py-0.5 text-xs ${
                             selectedWeight === weight
                               ? 'border border-[#35281E] bg-[#E7D6C7]'
@@ -223,12 +303,12 @@ export default function CartLineItem({
               onClick={() =>
                 toggleWishlist({
                   id: item.id ?? '',
-                  name: item.name,
-                  price: item.price,
-                  image: item.image,
-                  weight: item.weight,
-                  color: item.color,
-                  size: item.variant,
+                  name: displayProduct.name,
+                  price: displayProduct.price,
+                  image: displayProduct.image,
+                  weight: selectedWeight,
+                  color: selectedColor,
+                  size: selectedSize,
                 })
               }
             >
@@ -240,7 +320,7 @@ export default function CartLineItem({
               />
             </button>
 
-            <button onClick={() => onRemove(item.id || '')}>
+            <button onClick={() => onRemove(item.cartItemId || item.id || '')}>
               <Trash2 className="h-4 w-4 text-stone-500" />
             </button>
           </div>
@@ -248,7 +328,7 @@ export default function CartLineItem({
 
         <div className="mt-3 flex items-center justify-between gap-3 md:mt-4">
           <span className="text-base font-semibold text-black md:text-lg">
-            {(Number(item.price) || 0).toLocaleString('da-DK')} kr.
+            {(Number(displayProduct.price) || 0).toLocaleString('da-DK')} kr.
           </span>
 
           <div className="flex items-center gap-3 rounded-full border border-stone-300 px-3 py-1.5">

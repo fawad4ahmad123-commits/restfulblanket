@@ -38,15 +38,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (product: Omit<CartItem, 'quantity'>) => {
     setItems((prev) => {
-      // Generate a consistent ID for the product
       const itemId = product.id || generateCartItemId(product);
-
-      // Find existing item by checking all attributes
       const existing = prev.find((i) => {
-        // Check if IDs match
         if (i.id !== itemId) return false;
-
-        // If attributes exist, check them
         if (product.attributes && i.attributes) {
           return (
             i.attributes.color === product.attributes.color &&
@@ -54,8 +48,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
             i.attributes.weight === product.attributes.weight
           );
         }
-
-        // Fallback to old fields if attributes don't exist
         return (
           i.color === product.color &&
           i.variant === product.variant &&
@@ -74,19 +66,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
           return isMatch ? { ...i, quantity: i.quantity + 1 } : i;
         });
       }
-
-      // Create new item with proper structure
       const newItem: CartItem = {
         ...product,
         id: itemId,
         quantity: 1,
-        // Ensure attributes are properly structured
         attributes: product.attributes || {
           color: product.color || '',
           size: product.variant || '',
           weight: product.weight || '',
         },
-        // Keep old fields for backward compatibility
         color: product.color || product.attributes?.color || '',
         variant: product.variant || product.attributes?.size || '',
         weight: product.weight || product.attributes?.weight || '',
@@ -161,6 +149,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsOpen(true);
   };
 
+  const updateCartItem = (id: string, updates: Partial<CartItem>) => {
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+
+        const updatedItem = {
+          ...item,
+          ...updates,
+        };
+
+        updatedItem.attributes = {
+          ...item.attributes,
+          color:
+            updates.color ??
+            updates.attributes?.color ??
+            item.attributes?.color ??
+            '',
+          size:
+            updates.variant ??
+            updates.attributes?.size ??
+            item.attributes?.size ??
+            '',
+          weight:
+            updates.weight ??
+            updates.attributes?.weight ??
+            item.attributes?.weight ??
+            '',
+        };
+
+        return updatedItem;
+      }),
+    );
+  };
+
   const clearCart = () => {
     setItems([]);
     localStorage.removeItem('cart');
@@ -184,6 +206,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeFromCart,
       updateQuantity,
       addUpsellToCart,
+      updateCartItem,
       setUpsellItems,
       clearCart,
       getTotalItems,

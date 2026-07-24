@@ -41,4 +41,5 @@ export interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  updateCartItem: (id: string, updates: Partial<CartItem>) => void;
 }
