@@ -98,15 +98,22 @@ const ProductGallery = ({
           size="icon"
           variant="ghost"
           aria-label={isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
+          title={isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={() => setIsFavorited((v) => !v)}
-          className="absolute right-4 top-4 h-9 w-9 rounded-full bg-white/90 hover:bg-white"
+          className="absolute right-4 top-4 z-20 h-10 w-10 rounded-full bg-white/90 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F3A36] focus-visible:ring-offset-2"
         >
           <Heart
+            aria-hidden="true"
+            focusable="false"
             className={cn(
               'h-4 w-4 transition-colors',
               isFavorited ? 'fill-[#3F3A36] text-[#3F3A36]' : 'text-[#3F3A36]',
             )}
           />
+
+          <span className="sr-only">
+            {isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
+          </span>
         </Button>
         {safeImages.length > 1 && (
           <Button
@@ -133,19 +140,25 @@ const ProductGallery = ({
           </Button>
         )}
         {safeImages.length > 1 && (
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
             {safeImages.map((_, i) => (
               <button
                 key={i}
+                type="button"
                 aria-label={`Go to image ${i + 1}`}
+                aria-current={i === activeIndex}
                 onClick={() => setActiveIndex(i)}
-                className={cn(
-                  'h-1.5 rounded-full transition-all',
-                  i === activeIndex
-                    ? 'w-6 bg-[#3F3A36]'
-                    : 'w-1.5 bg-[#3F3A36]/30',
-                )}
-              />
+                className="flex h-12 w-12 items-center justify-center"
+              >
+                <span
+                  className={cn(
+                    'rounded-full transition-all',
+                    i === activeIndex
+                      ? 'h-2 w-6 bg-[#3F3A36]'
+                      : 'h-2 w-2 bg-[#3F3A36]/30',
+                  )}
+                />
+              </button>
             ))}
           </div>
         )}
