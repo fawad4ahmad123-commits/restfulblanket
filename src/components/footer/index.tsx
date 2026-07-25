@@ -1,27 +1,30 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Courgette } from 'next/font/google';
 import { Mail, MapPin, Phone, Clock3 } from 'lucide-react';
 import FooterLinks from './footer-links';
 import { shopLinks, socialLinks, supportLinks } from '../constant';
+import { useRouter } from 'next/navigation';
+
+const courgette = Courgette({
+  subsets: ['latin'],
+  weight: '400',
+});
 
 const Footer = () => {
+  const router = useRouter();
+
   return (
     <footer className="bg-[#3a251c] text-white">
       <div className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 md:py-16">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr]">
           <div className="text-left">
-            <Link
-              href="/"
-              aria-label="RestfulBlanket Home"
-              title="RestfulBlanket Home"
+            <h3
+              className={`${courgette.className} bg-[#FFF9F5] pt-3 text-center text-2xl leading-8 text-[#35281E] cursor-pointer`}
+              onClick={() => router.push('/')}
             >
-              <Image
-                src="/home/span.font-heading.png"
-                alt="RestfulBlanket"
-                width={153}
-                height={32}
-              />
-            </Link>
+              RestfulBlanket
+            </h3>
 
             <div className="mt-6 flex min-h-[40px] items-start gap-3">
               <MapPin
