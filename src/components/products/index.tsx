@@ -12,7 +12,7 @@ import RatingStars from './rating-star';
 import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
-import { getAllProducts } from '@/src/lib/products';
+import { getAllProducts, getProductById } from '@/src/lib/products';
 
 const ProductInfoPanel = ({
   product,
@@ -87,13 +87,11 @@ const ProductInfoPanel = ({
     if (!matchedLink?.relatedProduct) return;
     onLoadingChange?.(true);
     try {
-      const allProducts = await getAllProducts({
-        perPage: 100,
-      });
+      const relatedProduct = await getProductById(matchedLink.relatedProduct);
 
-      const relatedProduct = allProducts.find(
-        (p: any) => Number(p.id) === Number(matchedLink.relatedProduct),
-      );
+      // const relatedProduct = allProducts.find(
+      //   (p: any) => Number(p.id) === Number(matchedLink.relatedProduct),
+      // );
 
       if (!relatedProduct) {
         console.error(

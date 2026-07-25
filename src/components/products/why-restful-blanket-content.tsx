@@ -62,11 +62,11 @@ export function WhyRestfulBlanketContent() {
                 </div>
 
                 <div className="min-w-0">
-                  <h3 className="text-sm font-semibold text-[#3F3A36] xl:text-base">
+                  <h3 className="text-sm font-semibold text-[#392A22] xl:text-base">
                     {benefit.title}
                   </h3>
 
-                  <p className="mt-1 text-sm leading-5 text-[#6F6860]">
+                  <p className="mt-1 text-sm leading-5 text-[#392A22]">
                     {benefit.description}
                   </p>
                 </div>
@@ -78,7 +78,7 @@ export function WhyRestfulBlanketContent() {
 
       {certifications.length > 0 && (
         <div className="border-t border-[#E3DCCD] pt-4">
-          <p className="mb-4 text-sm text-[#6F6860]">
+          <p className="mb-4 text-sm text-[#392A22]">
             Anerkendt og verificeret socialøkonomisk virksomhed
           </p>
 

@@ -59,7 +59,6 @@ const ProductInfoAccordion = ({
             "
           >
             <div className="flex items-center gap-3 xl:gap-4">
-              {/* Icon */}
               <div
                 className="
                   flex 
@@ -88,7 +87,6 @@ const ProductInfoAccordion = ({
                 />
               </div>
 
-              {/* Text */}
               <div className="min-w-0">
                 <span
                   className="
@@ -108,7 +106,7 @@ const ProductInfoAccordion = ({
                     sm:text-sm 
                     xl:text-[14px]
                     leading-5 
-                    text-[#8A8377]
+                    text-[#392A22]
                   "
                 >
                   Pålidelig kvalitet. Skabt til dit velvære.

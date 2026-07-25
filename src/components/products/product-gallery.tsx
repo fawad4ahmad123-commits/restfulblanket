@@ -88,7 +88,8 @@ const ProductGallery = ({
           alt={`${productName} – image ${activeIndex + 1}`}
           fill
           priority
-          draggable={false}
+          fetchPriority="high"
+          loading="eager"
           sizes="(max-width: 768px) 100vw, 636px"
           className="object-cover pointer-events-none"
         />

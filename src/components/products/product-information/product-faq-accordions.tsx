@@ -49,7 +49,7 @@ const ProductFaqAccordion = ({
             >
               <div className="min-h-0">
                 {item.body && (
-                  <p className="px-5 pb-4 text-sm leading-relaxed text-[#8A8377]">
+                  <p className="px-5 pb-4 text-sm leading-relaxed text-[#392A22]">
                     {item.body}
                   </p>
                 )}

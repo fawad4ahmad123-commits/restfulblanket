@@ -262,7 +262,7 @@ const SliderCard = ({
           </h3>
 
           {(weight || size) && (
-            <p className="mb-2 text-xs text-[#35281E]/50">
+            <p className="mb-2 text-xs text-[#35281E]">
               {[weight, size].filter(Boolean).join(' · ')}
             </p>
           )}
