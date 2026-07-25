@@ -182,8 +182,11 @@ const SliderCard = ({
 
           <button
             type="button"
+            aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+            title={wished ? 'Remove from wishlist' : 'Add to wishlist'}
             onClick={(e) => {
               e.stopPropagation();
+
               toggleWishlist({
                 id: String(id),
                 name: title,
@@ -203,14 +206,20 @@ const SliderCard = ({
                 badge,
               });
             }}
-            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110"
+            className="absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35281E] focus-visible:ring-offset-2"
           >
             <Heart
               size={16}
+              aria-hidden="true"
+              focusable="false"
               className={
                 wished ? 'fill-[#35281E] text-[#35281E]' : 'text-[#35281E]'
               }
             />
+
+            <span className="sr-only">
+              {wished ? 'Remove from wishlist' : 'Add to wishlist'}
+            </span>
           </button>
           <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-center bg-gradient-to-t from-black/60 to-transparent px-4 pb-6 pt-14 transition-all duration-300 group-hover:translate-y-0">
             <button
