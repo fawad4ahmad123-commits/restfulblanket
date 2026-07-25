@@ -47,6 +47,9 @@ const WishlistCard = ({
               src={image}
               alt={title}
               fill
+              sizes="(max-width: 640px) 100vw,
+             (max-width: 1024px) 50vw,
+             25vw"
               className={`object-cover transition-all duration-500 ${
                 hoverImage ? 'group-hover:opacity-0' : ''
               }`}
@@ -54,11 +57,15 @@ const WishlistCard = ({
           ) : (
             <div className="h-full w-full bg-[#F3EBE4]" />
           )}
+
           {hoverImage && image && (
             <Image
               src={hoverImage}
               alt={`${title} alternate view`}
               fill
+              sizes="(max-width: 640px) 100vw,
+             (max-width: 1024px) 50vw,
+             25vw"
               className="object-cover opacity-0 transition-all duration-500 group-hover:opacity-100"
             />
           )}
