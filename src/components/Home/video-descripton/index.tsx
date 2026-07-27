@@ -28,15 +28,13 @@ const RestfulBlanketVideo = () => {
                   className="h-full w-full"
                   src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
                   title="RestfulBlanket Brand Film"
-                  loading="lazy"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               ) : (
                 <>
-                  {/* Create /public/home/video-thumbnail.webp */}
-                  {/* <Image
+                  <Image
                     src="/home/video-thumbnail.webp"
                     alt="Artisan folding a RestfulBlanket in Småland, Sweden"
                     fill
@@ -44,11 +42,6 @@ const RestfulBlanketVideo = () => {
                     quality={70}
                     sizes="(max-width: 768px) 100vw, (max-width: 1320px) 90vw, 1320px"
                     className="object-cover"
-                  /> */}
-                  <img
-                    src="/home/video-thumbnail.webp"
-                    alt="thumbnail"
-                    className="h-full w-full object-cover"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
