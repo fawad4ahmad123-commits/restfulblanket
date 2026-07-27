@@ -40,12 +40,12 @@ const CraftsmanshipSection = () => {
 
           <div className="flex justify-center lg:justify-end">
             <div className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg">
-              {/* <LiteYouTubeEmbed
+              <LiteYouTubeEmbed
                 id="-Lya47BOKec"
                 title="RestfulBlanket Video"
                 noCookie
                 wrapperClass="yt-lite absolute inset-0 !h-full !w-full !bg-cover !bg-center"
-              /> */}
+              />
             </div>
           </div>
         </div>

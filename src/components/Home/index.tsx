@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-
 import HeroSection from '../hero';
 import BottomBanner from '../hero/bottom-banner';
 import ProductCategories from './product-categories';
@@ -21,20 +20,14 @@ interface LandingProps {
 const Landing = ({ products, response_categories, blogs }: LandingProps) => {
   return (
     <div>
-      {/* Above the fold */}
       <HeroSection />
       <BottomBanner />
-
-      {/* Important content */}
       <ProductCategories response_categories={response_categories} />
-
       <BestSellers isProduct={false} products={products} />
-
-      {/* Below the fold */}
       <CraftsmanshipSection />
       <ExpertsSection />
       <Coments id="" />
-      {/* <RestfulBlanketVideo /> */}
+      <RestfulBlanketVideo />
       <CommonQuestions />
       <BlogsSection blogs={blogs} />
     </div>
