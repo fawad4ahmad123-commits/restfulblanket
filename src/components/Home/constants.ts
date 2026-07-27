@@ -1,4 +1,3 @@
-
 export const EXPERTS = [
   {
     image: '/experts/expert_1.webp',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Play } from 'lucide-react';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
@@ -15,6 +15,18 @@ const RestfulBlanketVideo = () => {
       wrapperRef.current?.querySelector<HTMLButtonElement>('.lty-playbtn');
     trigger?.click();
   };
+
+  useEffect(() => {
+    const facade = wrapperRef.current?.querySelector('.yt-lite');
+    if (!facade) return;
+    if (playing) {
+      facade.removeAttribute('aria-hidden');
+    } else {
+      facade.setAttribute('aria-hidden', 'true');
+      facade.removeAttribute('role');
+      facade.removeAttribute('aria-label');
+    }
+  }, [playing]);
 
   return (
     <section className="w-full overflow-hidden bg-[#FAF4EE] py-16 md:py-20 xl:py-24">

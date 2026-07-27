@@ -13,15 +13,15 @@ const HeroSection = () => {
   const firstSlide = HERO_SLIDES[0];
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
+    const start = setTimeout(() => {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-      }, AUTOPLAY_DELAY);
+      }, 5000);
 
       return () => clearInterval(interval);
-    }, 3000);
+    }, 8000);
 
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(start);
   }, []);
 
   return (
