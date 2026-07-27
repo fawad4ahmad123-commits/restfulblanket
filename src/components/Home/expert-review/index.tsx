@@ -29,9 +29,9 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
             src={image}
             alt={`${name} - ${position}`}
             fill
-            sizes="(max-width: 768px) 100vw,
-         (max-width: 1280px) 50vw,
-         25vw"
+            loading="lazy"
+            quality={65}
+            sizes="(max-width: 768px) 350px, 300px"
             className="object-cover"
           />
 

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import HeroSlider from './slider';
@@ -40,7 +40,6 @@ const HeroSection = () => {
         fill
         priority
         fetchPriority="high"
-        quality={75}
         sizes="100vw"
         className="object-cover object-[center_20%] pt-[9rem] md:object-[center_15%] md:pt-26"
       />

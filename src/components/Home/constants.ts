@@ -90,7 +90,7 @@ export const REVIEWS = [
 
 export const EXPERTS = [
   {
-    image: '/experts/expert_1.jpg',
+    image: '/experts/expert_1.webp',
     role: 'SPECIALLÆGE I ALMEN MEDICIN',
     name: 'Liselotte Rønne',
     position: 'Medicinsk Rådgiver & Faglig Reviewer',
@@ -104,7 +104,7 @@ export const EXPERTS = [
     slug: 'liselotte-roenne',
   },
   {
-    image: '/experts/nina-schioetz-psykoterapeut-tyngdedyne-terapi.jpg',
+    image: '/experts/nina-schioetz-psykoterapeut-tyngdedyne-terapi.webp',
     role: 'AUTORISERET PSYKOTERAPEUT',
     name: 'Nina Schiøtz',
     position: 'Medlem af Ekspertpanelet',
@@ -124,7 +124,7 @@ export const EXPERTS = [
     slug: 'tina-jenny-kjeldsen',
   },
   {
-    image: '/experts/expertavatar.png',
+    image: '/experts/expertavatar.webp',
     role: 'ERGOTERAPEUT, NEUROSPECIALIST & VISO-SPECIALIST',
     name: 'Betina Lassen',
     position: 'Faglig Sparringspartner & Reviewer',
@@ -141,7 +141,7 @@ export const EXPERTS = [
     slug: 'betina-lassen',
   },
   {
-    image: '/experts/Silke-Enar.png',
+    image: '/experts/Silke-Enar.webp',
     role: 'KONSULENT & PEER-KOORDINATOR',
     name: 'Silke Ena',
     position: 'Medlem af Ekspertpanelet',
@@ -173,53 +173,6 @@ export const EXPERTS = [
       'Nervesystemregulering',
     ],
     slug: 'zafir-baek',
-  },
-];
-
-export const BLOGS = [
-  {
-    image: '/blog/1.png',
-    author: 'Ronald Richards',
-    authorImage: 'https://i.pravatar.cc/100?img=1',
-    title: 'How Weighted Blankets Improve Sleep Quality',
-    excerpt:
-      'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
-    date: '6/13/2026',
-    views: '10k Viewers',
-    slug: '',
-  },
-  {
-    image: '/blog/1.png',
-    author: 'Ronald Richards',
-    authorImage: 'https://i.pravatar.cc/100?img=2',
-    title: 'How Weighted Blankets Improve Sleep Quality',
-    excerpt:
-      'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
-    date: '6/13/2026',
-    views: '10k Viewers',
-    slug: '',
-  },
-  {
-    image: '/blog/1.png',
-    author: 'Ronald Richards',
-    authorImage: 'https://i.pravatar.cc/100?img=3',
-    title: 'How Weighted Blankets Improve Sleep Quality',
-    excerpt:
-      'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
-    date: '6/13/2026',
-    views: '10k Viewers',
-    slug: '',
-  },
-  {
-    image: '/blog/1.png',
-    author: 'Ronald Richards',
-    authorImage: 'https://i.pravatar.cc/100?img=4',
-    title: 'How Weighted Blankets Improve Sleep Quality',
-    excerpt:
-      'Discover how gentle, evenly distributed pressure helps calm the nervous system, reduce stress, and improve sleep.',
-    date: '6/13/2026',
-    views: '10k Viewers',
-    slug: '',
   },
 ];
 
