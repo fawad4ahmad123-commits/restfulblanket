@@ -49,7 +49,6 @@ const RestfulBlanketVideo = () => {
                 id={YOUTUBE_ID}
                 title="RestfulBlanket Brand Film"
                 noCookie
-                thumbnail="/home/video-thumbnail.webp"
                 onIframeAdded={() => setPlaying(true)}
                 wrapperClass="yt-lite absolute inset-0 !h-full !w-full !bg-cover !bg-center [&_.lty-playbtn]:hidden"
               />
