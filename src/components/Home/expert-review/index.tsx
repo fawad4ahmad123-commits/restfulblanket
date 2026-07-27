@@ -30,7 +30,7 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
             alt={`${name} - ${position}`}
             fill
             loading="lazy"
-            quality={65}
+            quality={50}
             sizes="(max-width: 768px) 350px, 300px"
             className="object-cover"
           />

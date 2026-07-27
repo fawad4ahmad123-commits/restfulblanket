@@ -40,7 +40,8 @@ const HeroSection = () => {
         fill
         priority
         fetchPriority="high"
-        sizes="100vw"
+        quality={75}
+        sizes="(max-width: 1400px) 100vw, 1400px"
         className="object-cover object-[center_20%] pt-[9rem] md:object-[center_15%] md:pt-26"
       />
       <div className="absolute inset-0 bg-[#2C2828]/50" />
