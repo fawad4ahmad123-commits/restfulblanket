@@ -1,25 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Play } from 'lucide-react';
-import Image from 'next/image';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const RestfulBlanketVideo = () => {
   const [playing, setPlaying] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const YOUTUBE_ID = 'jCupG9MHVZc';
 
-  // Play button hover par YouTube domain warm-up (instant load on click)
-  const handlePreconnect = () => {
-    if (
-      typeof window !== 'undefined' &&
-      !document.getElementById('yt-preconnect')
-    ) {
-      const link = document.createElement('link');
-      link.id = 'yt-preconnect';
-      link.rel = 'preconnect';
-      link.href = 'https://www.youtube-nocookie.com';
-      document.head.appendChild(link);
-    }
+  const handlePlay = () => {
+    const trigger =
+      wrapperRef.current?.querySelector<HTMLButtonElement>('.lty-playbtn');
+    trigger?.click();
   };
 
   return (
@@ -34,36 +28,27 @@ const RestfulBlanketVideo = () => {
             bliver fremstillet.
           </h2>
 
-          <div className="group relative w-full overflow-hidden rounded-2xl shadow-xl">
+          <div
+            ref={wrapperRef}
+            className="group relative w-full overflow-hidden rounded-2xl shadow-xl"
+          >
             <div className="relative aspect-video bg-[#e8ddd4]">
-              {playing ? (
-                <iframe
-                  className="h-full w-full"
-                  src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
-                  title="RestfulBlanket Brand Film"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <>
-                  <Image
-                    src="/home/video-thumbnail.webp"
-                    alt="Artisan folding a RestfulBlanket in Småland, Sweden"
-                    fill
-                    loading="lazy"
-                    quality={70}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1320px) 90vw, 896px"
-                    className="object-cover"
-                  />
+              <LiteYouTubeEmbed
+                id={YOUTUBE_ID}
+                title="RestfulBlanket Brand Film"
+                noCookie
+                thumbnail="/home/video-thumbnail.webp"
+                onIframeAdded={() => setPlaying(true)}
+                wrapperClass="yt-lite absolute inset-0 !h-full !w-full !bg-cover !bg-center [&_.lty-playbtn]:hidden"
+              />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              {!playing && (
+                <>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                   <button
                     type="button"
-                    onClick={() => setPlaying(true)}
-                    onMouseEnter={handlePreconnect}
-                    onTouchStart={handlePreconnect}
+                    onClick={handlePlay}
                     aria-label="Play brand film"
                     className="group/btn absolute inset-0 z-10 flex items-center justify-center"
                   >
@@ -75,7 +60,7 @@ const RestfulBlanketVideo = () => {
                     </span>
                   </button>
 
-                  <div className="absolute bottom-4 left-5 z-10 text-white">
+                  <div className="pointer-events-none absolute bottom-4 left-5 z-10 text-white">
                     <p className="mb-1 font-mono text-[10px] uppercase tracking-widest opacity-70">
                       Brand Film · 02:48
                     </p>
@@ -86,7 +71,7 @@ const RestfulBlanketVideo = () => {
                     </p>
                   </div>
 
-                  <div className="absolute bottom-4 right-5 z-10 flex items-center gap-3 text-white">
+                  <div className="pointer-events-none absolute bottom-4 right-5 z-10 flex items-center gap-3 text-white">
                     <div className="text-center">
                       <p className="font-serif text-xl font-semibold leading-none">
                         12
@@ -110,7 +95,7 @@ const RestfulBlanketVideo = () => {
                     </div>
                   </div>
 
-                  <span className="absolute left-4 top-4 z-10 rounded-full bg-white/20 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white backdrop-blur-sm">
+                  <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-white/20 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-white backdrop-blur-sm">
                     Håndlavet
                   </span>
                 </>
