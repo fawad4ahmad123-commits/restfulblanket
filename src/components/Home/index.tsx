@@ -5,19 +5,11 @@ import BottomBanner from '../hero/bottom-banner';
 import ProductCategories from './product-categories';
 import BestSellers from './best-seller-season';
 
-// Below-the-fold sections
 const CraftsmanshipSection = dynamic(() => import('./about-blanket'));
-
 const ExpertsSection = dynamic(() => import('./expert-review/expert-session'));
-
 const Coments = dynamic(() => import('./comments'));
-
-const RestfulBlanketVideo = dynamic(() => import('./video-descripton'), {
-  ssr: false,
-});
-
+const RestfulBlanketVideo = dynamic(() => import('./video-descripton'));
 const CommonQuestions = dynamic(() => import('./common-question'));
-
 const BlogsSection = dynamic(() => import('./blog/blog-section'));
 
 interface LandingProps {
