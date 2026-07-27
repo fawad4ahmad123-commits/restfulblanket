@@ -144,7 +144,7 @@ export const navigation = [
           },
           {
             title: 'Projekter',
-            href: '/project',
+            href: '/social-projekter',
             children: [
               {
                 title: 'Lærke',
