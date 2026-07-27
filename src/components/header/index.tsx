@@ -38,7 +38,7 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ categories, products }: SiteHeaderProps) => {
   const pathname = usePathname();
-  const isHome = pathname === '/' || pathname.startsWith('/shop');
+  const isHome = pathname === '/' || pathname.startsWith('/butik');
   const router = useRouter();
   const { wishlistIds } = useWishlist();
   const wishlistCount = wishlistIds.length;

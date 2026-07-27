@@ -19,7 +19,7 @@ export function CTASection() {
         </p>
 
         <Link
-          href="/shop"
+          href="/butik"
           className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#3A2A22] px-6 py-3 text-sm text-white"
         >
           {ctaData.buttonText}

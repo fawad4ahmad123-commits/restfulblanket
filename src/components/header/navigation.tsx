@@ -151,11 +151,11 @@ const Navigation = ({
                 isActive ? 'text-[#392A22]' : 'text-[#392A22]/90',
               ),
         );
-        if (item.href === '/shop') {
+        if (item.href === '/butik') {
           return (
             <div key={item.title} className="group static">
               <Link
-                href="/shop"
+                href="/butik"
                 aria-label="All Products"
                 aria-haspopup="menu"
                 title="All Products"
@@ -199,7 +199,7 @@ const Navigation = ({
                         onMouseEnter={() => setHoveredCategoryId(category.id)}
                       >
                         <Link
-                          href={`/shop/${category.slug}`}
+                          href={`/butik/${category.slug}`}
                           title={category.name}
                           className={cn(
                             'mb-2 block truncate text-xs font-medium uppercase tracking-wide',
@@ -215,7 +215,7 @@ const Navigation = ({
                           return (
                             <Link
                               key={child.id}
-                              href={`/shop/${child.slug}`}
+                              href={`/butik/${child.slug}`}
                               role="menuitem"
                               aria-label={`Go to ${child.name}`}
                               title={child.name}

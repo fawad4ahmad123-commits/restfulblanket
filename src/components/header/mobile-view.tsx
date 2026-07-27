@@ -105,7 +105,7 @@ const MobileView = ({
         {navigation.map((item: any) => {
           const isOpen = openItem === item.title;
 
-          if (item.href === '/shop') {
+          if (item.href === '/butik') {
             return (
               <div
                 key={item.title}
@@ -157,7 +157,7 @@ const MobileView = ({
                                   return (
                                     <Link
                                       key={child.id}
-                                      href={`/shop/${child.slug}`}
+                                      href={`/butik/${child.slug}`}
                                       className="flex items-center gap-3 text-sm text-[#35281E]"
                                     >
                                       {childImageSrc && (

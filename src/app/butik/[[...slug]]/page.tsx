@@ -10,7 +10,7 @@ export async function generateMetadata({
 }) {
   const { slug = [] } = await params;
 
-  const path = slug.length ? `/shop/${slug.join('/')}` : '/shop';
+  const path = slug.length ? `/butik/${slug.join('/')}` : '/butik';
 
   const seo = await getRankMathSEO(
     `${process.env.NEXT_PUBLIC_SITE_URL}${path}`,

@@ -15,7 +15,7 @@ export default function OrderActions({ orderId }: OrderActionsProps) {
       </Link>
 
       <Link
-        href="/shop"
+        href="/butik"
         className="flex h-12 w-full items-center justify-center rounded-full border border-[#DAD0C2] bg-white text-sm font-medium text-[#2B2118] transition-colors hover:bg-[#F6EEE2]"
       >
         Fortsæt med at handle

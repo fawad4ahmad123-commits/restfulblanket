@@ -121,7 +121,7 @@ export default function Wishlist({
             </div>
 
             <a
-              href="/shop"
+              href="/butik"
               className="rounded-full bg-[#35281E] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#5a3e2f]"
             >
               Udforsk produkter

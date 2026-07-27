@@ -12,7 +12,7 @@ export const PLACEHOLDER_IMAGE = '/placeholder-image.png';
 export const navigation = [
   {
     title: 'Alle Produkter',
-    href: '/shop',
+    href: '/butik',
   },
   {
     title: 'Tyngdedyner',
@@ -236,7 +236,7 @@ export const navigation = [
 export const shopLinks = [
   {
     title: 'Alle Produkter',
-    href: '/shop',
+    href: '/butik',
   },
   {
     title: 'Tyngdedyner',

@@ -6,7 +6,7 @@ const ShopButtons = () => {
   return (
     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
       <Link
-        href="/shop"
+        href="/butik"
         aria-label="Shop now and browse products"
         title="Shop now"
         className="flex h-[52px] items-center justify-center gap-3 rounded-full bg-[#e6cfbb] px-6 text-sm text-[#392a22] transition hover:bg-[#e6cfbb]/90 md:h-[56px]"

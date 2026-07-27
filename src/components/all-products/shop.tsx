@@ -82,7 +82,7 @@ export default function Shop({
           : '';
 
         setTimeout(() => {
-          router.push(`/shop${categoryPath}`);
+          router.push(`/butik${categoryPath}`);
         }, 0);
       }
 
