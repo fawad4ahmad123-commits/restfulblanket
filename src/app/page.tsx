@@ -1,6 +1,6 @@
 import Landing from '../components/Home';
 import { getBestSellers, getCategories } from '@/src/lib/products';
-import { getBlogs } from '../lib/blog';
+import { getHomeBlogs } from '../lib/blog';
 import { getRankMathSEO } from '@/src/lib/seo';
 import { formatBlogs } from '../utilty/blog-formater';
 
@@ -35,7 +35,7 @@ export default async function Home() {
   const [products, categories, blog] = await Promise.all([
     getBestSellers(),
     getCategories(),
-    getBlogs(),
+    getHomeBlogs(),
   ]);
   const blogs = await formatBlogs(blog);
   return (

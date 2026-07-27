@@ -36,7 +36,7 @@ const RestfulBlanketVideo = () => {
               ) : (
                 <>
                   {/* Create /public/home/video-thumbnail.webp */}
-                  <Image
+                  {/* <Image
                     src="/home/video-thumbnail.webp"
                     alt="Artisan folding a RestfulBlanket in Småland, Sweden"
                     fill
@@ -44,6 +44,11 @@ const RestfulBlanketVideo = () => {
                     quality={70}
                     sizes="(max-width: 768px) 100vw, (max-width: 1320px) 90vw, 1320px"
                     className="object-cover"
+                  /> */}
+                  <img
+                    src="/home/video-thumbnail.webp"
+                    alt="thumbnail"
+                    className="h-full w-full object-cover"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
