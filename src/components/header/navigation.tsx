@@ -264,7 +264,7 @@ const Navigation = ({
                           return (
                             <Link
                               key={product.id}
-                              href={`/product/${product.slug}`}
+                              href={fixProductHref(product.href)}
                               title={product.title}
                               className="flex flex-col gap-2"
                             >
