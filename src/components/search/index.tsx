@@ -44,8 +44,6 @@ function useProductSearch(query: string) {
   return { products, loading };
 }
 
-// Replaces the old `useCategories()` context hook — categories are now
-// fetched directly via API instead of coming from CategoryProvider.
 function useCategoriesApi() {
   const [categories, setCategories] = useState<any[]>([]);
   const [parentCategories, setParentCategories] = useState<any[]>([]);

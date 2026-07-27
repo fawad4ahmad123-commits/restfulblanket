@@ -51,7 +51,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
         <Button
           type="submit"
-          className="h-[47px] rounded-full bg-[#392A22] px-6 sm:px-10"
+          className="h-[47px] rounded-full bg-[#392A22] px-6 sm:px-10 text-white"
           aria-label="Udfør søgning"
         >
           Søg

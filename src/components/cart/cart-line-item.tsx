@@ -35,21 +35,26 @@ export default function CartLineItem({
     setIsLoading(true);
     try {
       const product = await getProductById(productId);
-      console.log('t4 cart', { product });
+      const links = Array.isArray(product?.attribute_links)
+        ? product.attribute_links
+        : [];
+
+      if (product?.attribute_links && !Array.isArray(product.attribute_links)) {
+        console.warn('attribute_links is not an array, got');
+      }
 
       setCurrentProduct(product);
-      setAttributes(product?.attribute_links || []);
+      setAttributes(links);
 
-      const activeColor = product?.attribute_links?.find(
+      const activeColor = links.find(
         (a: any) => a.name === 'color' && a.related_product === 0,
       );
-      const activeSize = product?.attribute_links?.find(
+      const activeSize = links.find(
         (a: any) => a.name === 'size' && a.related_product === 0,
       );
-      const activeWeight = product?.attribute_links?.find(
+      const activeWeight = links.find(
         (a: any) => a.name === 'weight' && a.related_product === 0,
       );
-
       if (activeColor) setSelectedColor(activeColor.value);
       if (activeSize) setSelectedSize(activeSize.value);
       if (activeWeight) setSelectedWeight(activeWeight.value);
@@ -106,7 +111,7 @@ export default function CartLineItem({
         if (!product) return;
 
         addToCart({
-          id: `cart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: product.id,
           productId: product.id,
           name: product.name,
           image: product.image || product.images?.[0]?.src || '',

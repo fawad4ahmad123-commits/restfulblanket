@@ -27,7 +27,7 @@ const ShopButtons = () => {
         className="h-[52px] rounded-full border-[#fff9f5] bg-transparent px-6 text-sm text-[#fff9f5] hover:bg-[#fff9f5] hover:text-black md:h-[56px]"
       >
         <Link
-          href="/categories"
+          href="/collections"
           aria-label="Find your perfect weighted blanket weight"
           title="Find Your Perfect Weight"
         >

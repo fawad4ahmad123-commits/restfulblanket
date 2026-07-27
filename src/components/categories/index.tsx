@@ -18,8 +18,6 @@ import { CategoryTabs } from './category-tabs';
 
 const ITEMS_PER_PAGE = 8;
 
-// A category counts as a "parent" if some other category lists it as parent.
-// e.g. Tyngdedyner is a parent because Børn/Voksne point to it.
 function hasChildren(category: any, categories: any[]) {
   if (!category) return false;
   return categories.some((c: any) => c.parent === category.id);
@@ -32,8 +30,6 @@ function ccfHasData(ccf: any) {
   );
 }
 
-// Leaf sub-categories (Børn, Voksne) often don't have their own CCF filled
-// in yet, so fall back to the parent category's (Tyngdedyner) CCF data.
 function resolveCcf(category: any, categories: any[]) {
   if (!category) return null;
   if (ccfHasData(category.ccf)) return category.ccf;
