@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
@@ -7,14 +7,6 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const CraftsmanshipSection = () => {
   const router = useRouter();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const facade = wrapperRef.current?.querySelector('.yt-lite');
-    if (!facade) return;
-    facade.setAttribute('role', 'button');
-    facade.setAttribute('tabIndex', '0');
-  }, []);
 
   return (
     <section className="bg-[#fdf9f6] py-16 md:py-24">
@@ -49,15 +41,12 @@ const CraftsmanshipSection = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div
-              ref={wrapperRef}
-              className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg"
-            >
+            <div className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg">
               <LiteYouTubeEmbed
                 id="-Lya47BOKec"
                 title="RestfulBlanket Video"
                 noCookie
-                wrapperClass="yt-lite absolute inset-0 !h-full !w-full !bg-cover !bg-center"
+                wrapperClass="absolute inset-0 !h-full !w-full !bg-cover !bg-center"
               />
             </div>
           </div>
