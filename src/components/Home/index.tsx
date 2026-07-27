@@ -34,7 +34,7 @@ const Landing = ({ products, response_categories, blogs }: LandingProps) => {
       <CraftsmanshipSection />
       <ExpertsSection />
       <Coments id="" />
-      <RestfulBlanketVideo />
+      {/* <RestfulBlanketVideo /> */}
       <CommonQuestions />
       <BlogsSection blogs={blogs} />
     </div>
