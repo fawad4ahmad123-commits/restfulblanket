@@ -20,7 +20,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr]">
           <div className="text-left">
             <h3
-              className={`${courgette.className} bg-[#FFF9F5] pt-3 text-center text-2xl leading-8 text-[#35281E] cursor-pointer`}
+              className={`${courgette.className} pt-3 text-start text-2xl leading-8 text-[#FFF9F5] cursor-pointer`}
               onClick={() => router.push('/')}
             >
               RestfulBlanket
