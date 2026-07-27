@@ -1,6 +1,8 @@
 'use client';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const CraftsmanshipSection = () => {
   const router = useRouter();
@@ -38,12 +40,11 @@ const CraftsmanshipSection = () => {
 
           <div className="flex justify-center lg:justify-end">
             <div className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg">
-              <iframe
-                className="h-full w-full"
-                src="https://www.youtube.com/embed/-Lya47BOKec?rel=0"
+              <LiteYouTubeEmbed
+                id="-Lya47BOKec"
                 title="RestfulBlanket Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
+                noCookie
+                wrapperClass="yt-lite absolute inset-0 !h-full !w-full !bg-cover !bg-center"
               />
             </div>
           </div>
