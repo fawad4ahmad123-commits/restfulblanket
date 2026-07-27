@@ -61,7 +61,7 @@ const ProductCard = ({
   const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
   const handleNavigate = () => {
-    router.push(`/product/${slug}`);
+    router.push(`/shop/${slug}`);
   };
 
   return (
@@ -141,7 +141,7 @@ const ProductCard = ({
             className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/product/${slug}`);
+              router.push(`/shop/${slug}`);
             }}
           >
             <Eye aria-hidden="true" size={14} />

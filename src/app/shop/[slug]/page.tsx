@@ -18,7 +18,7 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
 
   const seo = await getRankMathSEO(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/product/${slug}`,
+    `${process.env.NEXT_PUBLIC_SITE_URL}/shop/${slug}`,
   );
 
   const title =

@@ -31,7 +31,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
     setCurrentProduct(newProduct);
 
     if (newProduct?.slug) {
-      router.replace(`/product/${newProduct.slug}`, {
+      router.replace(`/shop/${newProduct.slug}`, {
         scroll: false,
       });
     }

@@ -36,7 +36,9 @@ const slugify = (text?: string) => {
 const fixProductHref = (href?: string) => {
   if (!href) return '#';
 
-  return href.replace(/^\/products\//, '/product/');
+  return href
+    .replace(/^\/products\//, '/shop/')
+    .replace(/^\/product\//, '/shop/');
 };
 
 interface MobileViewProps {

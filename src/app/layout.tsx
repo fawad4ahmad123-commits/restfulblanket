@@ -36,7 +36,7 @@ export default async function RootLayout({
   const formattedProducts = products.map((product: any) => ({
     id: product.id,
     title: product.name,
-    href: `/product/${product.slug}`,
+    href: `/shop/${product.slug}`,
     image: product.images?.[0]?.src || '',
     categories: product.categories,
   }));

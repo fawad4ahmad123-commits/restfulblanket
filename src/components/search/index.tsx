@@ -159,7 +159,7 @@ function SearchResults({ products }: { products: WooProduct[] }) {
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/product/${product.slug}`}
+            href={`/shop/${product.slug}`}
             className="flex items-center justify-between gap-4 border-b border-[#392A22]/10 px-6 py-3 text-left last:border-b-0 hover:bg-[#392A22]/5"
           >
             <span className="flex items-center gap-3 text-[#392A22]">

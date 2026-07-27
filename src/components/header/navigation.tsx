@@ -92,7 +92,9 @@ const Navigation = ({
   function fixProductHref(href?: string): string {
     if (!href) return '#';
 
-    return href.replace(/^\/products\//, '/product/');
+    return href
+      .replace(/^\/products\//, '/shop/')
+      .replace(/^\/product\//, '/shop/');
   }
 
   const slugify = (text?: string) => {

@@ -111,7 +111,7 @@ const SliderCard = ({
     <>
       <div
         className="group flex h-[624px] flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300"
-        onClick={() => router.push(`/product/${slug}`)}
+        onClick={() => router.push(`/shop/${slug}`)}
       >
         <div className="relative overflow-hidden">
           <div
@@ -229,7 +229,7 @@ const SliderCard = ({
               className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white"
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(`/product/${slug}`);
+                router.push(`/shop/${slug}`);
               }}
             >
               <Eye aria-hidden="true" size={14} />
