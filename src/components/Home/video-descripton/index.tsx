@@ -6,11 +6,24 @@ import Image from 'next/image';
 
 const RestfulBlanketVideo = () => {
   const [playing, setPlaying] = useState(false);
-
   const YOUTUBE_ID = 'jCupG9MHVZc';
 
+  // Play button hover par YouTube domain warm-up (instant load on click)
+  const handlePreconnect = () => {
+    if (
+      typeof window !== 'undefined' &&
+      !document.getElementById('yt-preconnect')
+    ) {
+      const link = document.createElement('link');
+      link.id = 'yt-preconnect';
+      link.rel = 'preconnect';
+      link.href = 'https://www.youtube-nocookie.com';
+      document.head.appendChild(link);
+    }
+  };
+
   return (
-    <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#FAF4EE] py-16 md:py-20 xl:py-24">
+    <section className="w-full overflow-hidden bg-[#FAF4EE] py-16 md:py-20 xl:py-24">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8">
         <div className="mx-auto flex max-w-4xl flex-col items-center">
           <h2 className="mb-10 max-w-xl text-center font-serif text-3xl font-semibold leading-snug tracking-tight text-[#2c2318] md:text-4xl">
@@ -26,7 +39,7 @@ const RestfulBlanketVideo = () => {
               {playing ? (
                 <iframe
                   className="h-full w-full"
-                  src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
+                  src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
                   title="RestfulBlanket Brand Film"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -38,9 +51,9 @@ const RestfulBlanketVideo = () => {
                     src="/home/video-thumbnail.webp"
                     alt="Artisan folding a RestfulBlanket in Småland, Sweden"
                     fill
-                    priority={false}
+                    loading="lazy"
                     quality={70}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1320px) 90vw, 1320px"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1320px) 90vw, 896px"
                     className="object-cover"
                   />
 
@@ -49,6 +62,8 @@ const RestfulBlanketVideo = () => {
                   <button
                     type="button"
                     onClick={() => setPlaying(true)}
+                    onMouseEnter={handlePreconnect}
+                    onTouchStart={handlePreconnect}
                     aria-label="Play brand film"
                     className="group/btn absolute inset-0 z-10 flex items-center justify-center"
                   >
