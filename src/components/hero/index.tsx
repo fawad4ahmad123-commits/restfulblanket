@@ -1,5 +1,4 @@
-'use client';
-
+"use client";
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import HeroSlider from './slider';
@@ -11,30 +10,41 @@ import PaymentTrustBadge from './trustpilot-badge';
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const AUTOPLAY_DELAY = 5000;
+  const firstSlide = HERO_SLIDES[0];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, AUTOPLAY_DELAY);
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+      }, AUTOPLAY_DELAY);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <section className="relative bg-gradient-to-r from-[#261D18] via-[#675B4E] to-[#261D18]/60">
       <Image
-        src={HERO_SLIDES[currentSlide].image}
-        alt={HERO_SLIDES[currentSlide].title}
+        src={
+          currentSlide === 0
+            ? firstSlide.image
+            : HERO_SLIDES[currentSlide].image
+        }
+        alt={
+          currentSlide === 0
+            ? firstSlide.title
+            : HERO_SLIDES[currentSlide].title
+        }
         fill
-        priority={currentSlide === 0}
-        fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+        priority
+        fetchPriority="high"
         quality={75}
-        sizes="(max-width: 768px) 100vw, 1400px"
+        sizes="100vw"
         className="object-cover object-[center_20%] pt-[9rem] md:object-[center_15%] md:pt-26"
       />
-
       <div className="absolute inset-0 bg-[#2C2828]/50" />
-
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col px-5 pt-[140px] pb-6 md:px-6 md:pt-[220px] md:pb-8 lg:min-h-[620px] xl:min-h-[680px]">
         <div className="flex flex-1 items-center md:items-start">
           <div className="max-w-[720px] pt-[150px] text-white sm:pt-0">
