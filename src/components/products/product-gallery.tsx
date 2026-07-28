@@ -89,8 +89,8 @@ const ProductGallery = ({
           fill
           priority
           fetchPriority="high"
-          loading="eager"
-          sizes="(max-width: 768px) 100vw, 636px"
+          quality={70}
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
           className="object-cover pointer-events-none"
         />
         <Button

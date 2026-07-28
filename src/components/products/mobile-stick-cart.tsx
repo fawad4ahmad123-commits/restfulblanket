@@ -39,15 +39,15 @@ const MobileStickyCart = ({
           : 'pointer-events-none translate-y-full opacity-0',
       )}
     >
-      <div className="rounded-[28px] bg-[#fdf9f6] p-4 shadow-2xl">
-        <div className="mb-2">
+      <div className="rounded-[28px] bg-[#fdf9f6] px-4 py-3 shadow-2xl">
+        <div>
           <button
             type="button"
             aria-expanded={showInfo}
             aria-label={showInfo ? 'Hide information' : 'Show information'}
             title={showInfo ? 'Hide information' : 'Show information'}
             onClick={() => setShowInfo((prev) => !prev)}
-            className="mb-1 flex min-h-[44px] w-full items-center justify-center text-[#35281E]"
+            className="flex h-5 w-full items-center justify-center text-[#35281E]"
           >
             {showInfo ? (
               <ChevronUp aria-hidden="true" className="h-5 w-5" />
@@ -63,7 +63,7 @@ const MobileStickyCart = ({
           <div
             className={cn(
               'overflow-hidden transition-all duration-300',
-              showInfo ? 'max-h-[250px] opacity-100' : 'max-h-0 opacity-0',
+              showInfo ? 'max-h-[250px] opacity-100 mb-3' : 'max-h-0 opacity-0',
             )}
           >
             <div className="grid min-h-[96px] grid-cols-3 overflow-hidden rounded-[20px] border border-[#E8DDD4] bg-[#F8F2ED]">
@@ -97,7 +97,10 @@ const MobileStickyCart = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div
+          onClick={() => setShowInfo((prev) => !prev)}
+          className="flex cursor-pointer items-center gap-3"
+        >
           <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-white md:h-20 md:w-20">
             {product.image && (
               <Image
@@ -126,7 +129,10 @@ const MobileStickyCart = ({
           <Button
             type="button"
             aria-label="Add product to cart"
-            onClick={onAddToCart}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart();
+            }}
             className="h-11 shrink-0 rounded-full bg-[#35281E] px-5 text-sm text-white hover:bg-[#35281E]/90 md:px-6"
           >
             Tilføj til kurv
