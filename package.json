@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@next/bundle-analyzer": "^16.2.12",
     "@tanstack/react-query": "^5.101.0",
     "@woocommerce/woocommerce-rest-api": "^1.0.2",
     "cheerio": "^1.2.0",

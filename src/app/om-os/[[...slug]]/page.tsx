@@ -15,7 +15,6 @@ import { WpContent } from '@/src/components/about/wp-content';
 import { parseWpPage } from '@/src/lib/parse-wp-about';
 import ExpertSection from '@/src/components/expert';
 import { getRankMathSEO } from '@/src/lib/seo';
-import ExpertDetailPage from '@/src/components/expert-panel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -71,7 +70,10 @@ export async function generateMetadata({ params }: Props) {
   const wpSlug = segments.length ? resolveWpSlug(segments) : 'om-os';
 
   const page = await getWpPageBySlug(wpSlug);
-  if (!page) return {};
+
+  if (!page) {
+    return {};
+  }
 
   return {
     title: stripHtml(page.title.rendered),
@@ -92,11 +94,7 @@ export default async function AboutCatchAllPage({ params }: Props) {
       );
     }
 
-    const expertSlug = segments[1];
-    if (!expertSlug) {
-      notFound();
-    }
-    return <ExpertDetailPage slug={expertSlug} />;
+    notFound();
   }
 
   if (segments.length === 0) {
@@ -132,10 +130,6 @@ export default async function AboutCatchAllPage({ params }: Props) {
   }
 
   const wpSlug = resolveWpSlug(segments);
-
-  if (!wpSlug) {
-    notFound();
-  }
 
   const rawPage = await getWpPageBySlug(wpSlug);
 
