@@ -76,7 +76,7 @@ export const FeaturedArticle = ({ blogs }: any) => {
 
         <Button
           onClick={() => router.push(`/blog/${slug}`)}
-          className="mt-8 h-12 rounded-full bg-[#3A2A22] px-8 hover:bg-[#3A2A22] cursor-pointer"
+          className="mt-8 h-12 rounded-full bg-[#3A2A22] px-8 hover:bg-[#3A2A22] cursor-pointer text-white"
         >
           Læs hele artiklen
           <ArrowRight className="ml-2 h-4 w-4" />
