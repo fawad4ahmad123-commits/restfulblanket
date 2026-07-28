@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -8,20 +9,24 @@ interface ProductFaqAccordionProps {
   items: FaqItem[];
   defaultOpenId?: string;
 }
-const ProductFaqAccordion = ({
-  items,
-  defaultOpenId,
-}: ProductFaqAccordionProps) => {
-  const [openId, setOpenId] = useState<string | null>(defaultOpenId ?? null);
+
+const ProductFaqAccordion = ({ items }: ProductFaqAccordionProps) => {
+  const [openId, setOpenId] = useState<string | null>(null);
 
   if (!items.length) return null;
 
   return (
-    <div className="divide-y divide-[#E9DDD4] overflow-hidden rounded-xl border border-[#E9DDD4] bg-[ #E9DDD4]">
-      {items.map((item) => {
+    <div className="overflow-hidden rounded-xl border border-[#E9DDD4] bg-[#fdf9f6]">
+      {items.map((item, index) => {
         const isOpen = openId === item.id;
+
         return (
-          <div key={item.id}>
+          <div
+            key={item.id}
+            className={cn(
+              index !== items.length - 1 && 'border-b border-[#D8CCC2]',
+            )}
+          >
             <button
               type="button"
               onClick={() => setOpenId(isOpen ? null : item.id)}
@@ -31,7 +36,8 @@ const ProductFaqAccordion = ({
               <span className="text-sm font-medium text-[#3F3A36]">
                 {item.title}
               </span>
-              <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center text-[#3F3A36]">
+
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center text-[#3F3A36]">
                 {isOpen ? (
                   <Minus className="h-3.5 w-3.5" />
                 ) : (
@@ -39,6 +45,7 @@ const ProductFaqAccordion = ({
                 )}
               </span>
             </button>
+
             <div
               className={cn(
                 'grid overflow-hidden transition-all duration-300 ease-in-out',
@@ -61,4 +68,5 @@ const ProductFaqAccordion = ({
     </div>
   );
 };
+
 export default ProductFaqAccordion;

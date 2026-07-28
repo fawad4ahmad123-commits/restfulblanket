@@ -31,7 +31,6 @@ const AddToCartBar = ({
         role="group"
         aria-label="Tilføj til kurv-kontroller"
       >
-        {/* Quantity */}
         <div className="w-full xl:w-auto">
           <QuantitySelector
             quantity={quantity}
@@ -41,7 +40,6 @@ const AddToCartBar = ({
           />
         </div>
 
-        {/* Add button */}
         <Button
           type="button"
           onClick={onAddToCart}
@@ -55,16 +53,16 @@ const AddToCartBar = ({
             h-12
             w-full
             rounded-full
-            bg-[#3F3A36]
+            bg-[#392A22]
             px-4
             text-sm
             font-medium
             text-white
-            hover:bg-[#2E2A27]
+            hover:bg-[#392A22]
 
             xl:flex-1
             xl:text-base
-
+            cursor-pointer
             disabled:cursor-not-allowed
             disabled:opacity-50
           "

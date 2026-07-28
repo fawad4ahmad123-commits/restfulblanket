@@ -45,12 +45,14 @@ interface MobileViewProps {
   wishlistCount: number;
   categories: any[];
   products: any[];
+  onNavigate?: () => void;
 }
 
 const MobileView = ({
   wishlistCount,
   categories,
   products,
+  onNavigate,
 }: MobileViewProps) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [openSubItem, setOpenSubItem] = useState<string | null>(null);
@@ -113,17 +115,26 @@ const MobileView = ({
                 key={item.title}
                 className="border-b border-[#E9DDD4]/60 py-4"
               >
-                <button
-                  onClick={() => setOpenItem(isOpen ? null : item.title)}
-                  className="flex w-full items-center justify-between text-base font-medium text-[#35281E]"
-                >
-                  Alle Produkter
-                  <ChevronDown
-                    className={`size-4 text-[#E9DDD4] transition-transform ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+                <div className="flex items-center justify-between">
+                  <Link
+                    href={item.href}
+                    onClick={onNavigate}
+                    className="flex-1 text-base font-medium text-[#35281E]"
+                  >
+                    Alle Produkter
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => setOpenItem(isOpen ? null : item.title)}
+                  >
+                    <ChevronDown
+                      className={`size-4 text-[#E9DDD4] transition-transform ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 {isOpen && (
                   <div className="mt-4 ml-3 flex flex-col gap-1 border-l border-[#E9DDD4] pl-4">
@@ -160,6 +171,7 @@ const MobileView = ({
                                     <Link
                                       key={child.id}
                                       href={`/butik/${child.slug}`}
+                                      onClick={onNavigate}
                                       className="flex items-center gap-3 text-sm text-[#35281E]"
                                     >
                                       {childImageSrc && (
@@ -204,6 +216,7 @@ const MobileView = ({
               <Link
                 key={item.title}
                 href={item.href}
+                onClick={onNavigate}
                 className="flex border-b border-[#E9DDD4]/60 py-4 text-base font-medium text-[#35281E]"
               >
                 {item.title}
@@ -212,17 +225,26 @@ const MobileView = ({
           }
           return (
             <div key={item.title} className="border-b border-[#E9DDD4]/60 py-4">
-              <button
-                onClick={() => setOpenItem(isOpen ? null : item.title)}
-                className="flex w-full items-center justify-between text-base font-medium text-[#35281E]"
-              >
-                {item.title}
-                <ChevronDown
-                  className={`size-4 text-[#E9DDD4] transition-transform ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
+              <div className="flex items-center justify-between">
+                <Link
+                  href={item.href}
+                  onClick={onNavigate}
+                  className="flex-1 text-base font-medium text-[#35281E]"
+                >
+                  {item.title}
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setOpenItem(isOpen ? null : item.title)}
+                >
+                  <ChevronDown
+                    className={`size-4 text-[#E9DDD4] transition-transform ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+              </div>
               {isOpen && (
                 <div className="mt-4 ml-3 flex flex-col gap-5 border-l border-[#E9DDD4] pl-4">
                   {hasGroups &&
@@ -278,6 +300,7 @@ const MobileView = ({
                                             <Link
                                               key={child.title}
                                               href={child.href || '#'}
+                                              onClick={onNavigate}
                                               className="text-sm text-[#35281E]"
                                             >
                                               {child.title}
@@ -292,6 +315,7 @@ const MobileView = ({
                                         link.href ||
                                         `/collections/${slugify(item.title)}/${slugify(link.title)}`
                                       }
+                                      onClick={onNavigate}
                                       className="flex items-center gap-3 rounded-lg py-2 text-sm text-[#35281E]"
                                     >
                                       {linkImageSrc && (
@@ -323,6 +347,7 @@ const MobileView = ({
                           <Link
                             key={product.id || product.title}
                             href={fixProductHref(product.href)}
+                            onClick={onNavigate}
                             className="flex w-24 shrink-0 flex-col gap-2"
                           >
                             <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#F5F0EB]">
@@ -351,6 +376,7 @@ const MobileView = ({
         {isAuthenticated ? (
           <Link
             href="/profile"
+            onClick={onNavigate}
             className="mb-3 flex items-center gap-3 rounded-full border border-[#E9DDD4] bg-white p-3 text-[#35281E]"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#35281E] text-xs text-[#FFF9F5]">
@@ -359,14 +385,14 @@ const MobileView = ({
             {user?.name}
           </Link>
         ) : (
-          <Link href="/signin">
+          <Link href="/signin" onClick={onNavigate}>
             <Button className="h-12 w-full rounded-full bg-[#35281E] text-[#FFF9F5]">
               <User className="size-4" />
               Sign In
             </Button>
           </Link>
         )}
-        <Link href="/wishlist">
+        <Link href="/wishlist" onClick={onNavigate}>
           <Button className="mt-3 h-12 w-full rounded-full border border-[#E9DDD4] bg-white text-[#35281E]">
             <Heart className="size-4" />
             Wishlist {wishlistCount}

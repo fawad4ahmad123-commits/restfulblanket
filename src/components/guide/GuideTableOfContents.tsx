@@ -10,7 +10,7 @@ interface GuideTableOfContentsProps {
 }
 
 export function GuideTableOfContents({ items }: GuideTableOfContentsProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   if (items.length === 0) return null;
 
@@ -25,7 +25,7 @@ export function GuideTableOfContents({ items }: GuideTableOfContentsProps) {
         className="flex w-full items-center justify-between gap-2 py-1 text-left font-semibold text-neutral-900"
         aria-expanded={open}
       >
-        <span>📖 Indholdsfortegnelse</span>
+        <span>Indholdsfortegnelse</span>
         <ChevronDown
           className={cn(
             'h-4 w-4 shrink-0 transition-transform duration-200',
@@ -40,7 +40,7 @@ export function GuideTableOfContents({ items }: GuideTableOfContentsProps) {
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
-                className="underline-offset-2 hover:text-emerald-700 hover:underline"
+                className="underline-offset-2 hover:text-[#392A22] hover:underline"
               >
                 {item.label}
               </a>

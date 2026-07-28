@@ -1,5 +1,6 @@
 const stripHtml = (html: string) => {
   if (!html) return '';
+
   return html
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/p>/gi, '\n')
@@ -15,9 +16,19 @@ export const formatProductInformation = (product: any) => {
   const getMetaValue = (key: string) =>
     metaData.find((item: any) => item.key === key)?.value;
 
+  const getAttributeValue = (name: string) =>
+    safeProduct?.attributes
+      ?.find(
+        (attr: any) =>
+          attr.name?.toLowerCase() === name.toLowerCase() ||
+          attr.slug?.toLowerCase() === name.toLowerCase(),
+      )
+      ?.options?.join(', ');
+
   const temperature = getMetaValue('_cura_temperature');
 
   let certificates: any[] = [];
+
   try {
     certificates = JSON.parse(getMetaValue('_cura_certificate_images') || '[]');
   } catch {
@@ -25,13 +36,16 @@ export const formatProductInformation = (product: any) => {
   }
 
   let faqItems: any[] = [];
+
   const metaFaqItems = getMetaValue('_cura_faq_items');
+
   if (metaFaqItems) {
     try {
       const parsed =
         typeof metaFaqItems === 'string'
           ? JSON.parse(metaFaqItems)
           : metaFaqItems;
+
       if (Array.isArray(parsed)) {
         faqItems = parsed.map((item: any) => ({
           ...item,
@@ -67,6 +81,7 @@ export const formatProductInformation = (product: any) => {
     .map((match, index) => {
       const title = stripHtml(match[1]);
       const body = stripHtml(match[2]);
+
       return {
         id: title?.toLowerCase()?.replace(/\s+/g, '-') || `section-${index}`,
         title,
@@ -101,33 +116,31 @@ export const formatProductInformation = (product: any) => {
   return {
     heading: 'PRODUKT',
     headingItalic: 'INFORMATION',
+
     faqs: finalFaqs,
+
     detailsTitle: 'DETALJER',
+
     details: [
       {
         id: 'size',
         label: 'Størrelse',
-        value: currentSize?.value || '-',
+        value: currentSize?.value || getAttributeValue('size') || '-',
       },
       {
         id: 'outer-material',
         label: 'Ydermateriale',
-        value:
-          safeProduct?.attributes
-            ?.find((attr: any) => attr.name?.toLowerCase() === 'material')
-            ?.options?.join(', ') || '-',
+        value: getAttributeValue('material') || '-',
       },
       {
         id: 'inner-filling',
         label: 'Fyld',
-        value: properties || '-',
+        value: getAttributeValue('fyld') || properties || '-',
       },
       {
         id: 'wash',
         label: 'Vask',
-        value: safeProduct?.short_description?.includes('60°C')
-          ? 'Maskinvask 60°C'
-          : '-',
+        value: getAttributeValue('vask') || '-',
       },
       {
         id: 'sku',
@@ -135,9 +148,13 @@ export const formatProductInformation = (product: any) => {
         value: safeProduct?.sku || '-',
       },
     ],
+
     attributesTitle: 'EGENSKABER',
+
     certificates,
+
     temperatureLabel: 'Temperatur',
+
     temperatureOptions: [
       {
         id: 'cool',

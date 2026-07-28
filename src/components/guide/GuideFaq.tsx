@@ -50,7 +50,7 @@ const FaqRow = ({ question, answer, isOpen, onToggle }: FaqRowProps) => (
 );
 
 export function GuideFaq({ items }: GuideFaqProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (items.length === 0) return null;
 

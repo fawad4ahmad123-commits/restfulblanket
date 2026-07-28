@@ -17,8 +17,11 @@ const BlogCard = ({
   const router = useRouter();
 
   return (
-    <article className="group flex h-full w-full flex-col">
-      <div className="relative overflow-hidden rounded-[28px]">
+    <article
+      onClick={() => router.push(`/blog/${slug}`)}
+      className="group flex h-full w-full cursor-pointer flex-col rounded-[28px] border border-[#d9cec5] transition-colors hover:border-[#3b281f] pb-4"
+    >
+      <div className="relative overflow-hidden rounded-t-[28px]">
         <div className="relative h-[320px]">
           <Image
             src={image}
@@ -29,7 +32,7 @@ const BlogCard = ({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col px-2 pt-5">
+      <div className="flex flex-1 flex-col px-4 pt-5">
         <h3 className="line-clamp-2 min-h-[68px] font-serif text-[32px] leading-[1.05] text-[#3b281f]">
           {title}
         </h3>
@@ -66,16 +69,6 @@ const BlogCard = ({
             </div>
           </div>
         </div>
-
-        <button
-          type="button"
-          aria-label={`Read more about ${title}`}
-          title={`Read more about ${title}`}
-          onClick={() => router.push(`/blog/${slug}`)}
-          className="mt-6 w-full cursor-pointer rounded-full bg-[#E9DDD4] py-4 text-sm font-medium text-[#3b281f] transition hover:bg-[#2a1c15] hover:text-white"
-        >
-          Læs mere
-        </button>
       </div>
     </article>
   );

@@ -63,7 +63,7 @@ const Coments = ({ id }: { id: string }) => {
   }
 
   return (
-    <section className="bg-[#fdf9f6] px-6 py-16">
+    <section id="reviews" className="bg-[#fdf9f6] px-6 py-16">
       <div className="mx-auto max-w-[1200px]">
         <Info
           showModal={showModal}

@@ -13,7 +13,6 @@ import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
 import { getProductById } from '@/src/lib/products';
-import { BenefitsTicker } from './sale-banner';
 
 const ProductInfoPanel = ({
   product,
@@ -162,20 +161,10 @@ const ProductInfoPanel = ({
   if (!product) {
     return null;
   }
-  const benefits = [
-    product?.metaFields?.promoText,
-    product?.metaFields?.offerText,
-    product?.metaFields?.offerBadge
-      ? `${product.metaFields.offerBadge} OFF`
-      : null,
-  ]
-    .filter(Boolean)
-    .map((item) => String(item));
 
   return (
     <div className="flex flex-col gap-5">
       <Breadcrumbs items={product?.breadcrumbs ?? []} />
-      {benefits.length > 0 && <BenefitsTicker benefits={benefits} />}
       <div className="space-y-2">
         <h1 className="font-serif text-[35px] font-normal leading-[52px] tracking-normal text-[#3F3A36]">
           {product?.name}

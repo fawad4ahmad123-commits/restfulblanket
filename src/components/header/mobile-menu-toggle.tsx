@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,8 +24,15 @@ const MobileViewMenuToggle = ({
   categories,
   products,
 }: Props) => {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
           size="icon"
@@ -35,17 +47,22 @@ const MobileViewMenuToggle = ({
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="fixed top-4 right-4 bottom-4 w-[92vw] max-w-[360px] bg-white p-6 shadow-2xl border-none outline-none flex flex-col text-[#35281E]"
+        className="fixed top-4 right-4 bottom-4 flex w-[92vw] max-w-[360px] flex-col border-none bg-white p-6 text-[#35281E] shadow-2xl outline-none"
       >
-        <div className="flex items-center justify-between pb-4 border-b border-[#E9DDD4]/60 shrink-0">
-          <span className="font-serif italic text-xl font-normal text-[#35281E]">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#E9DDD4]/60 pb-4">
+          <Link
+            href="/"
+            onClick={() => setOpen(false)}
+            className="font-serif text-xl font-normal italic text-[#35281E]"
+          >
             RestfulBlanket
-          </span>
+          </Link>
+
           <SheetClose asChild>
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-[#35281E] hover:bg-stone-100 rounded-full flex items-center justify-center"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-[#35281E] hover:bg-stone-100"
             >
               <X className="h-5 w-5" />
               <span className="sr-only">Close</span>
@@ -53,11 +70,12 @@ const MobileViewMenuToggle = ({
           </SheetClose>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-2 scrollbar-hide flex flex-col">
+        <div className="scrollbar-hide flex flex-1 flex-col overflow-y-auto py-2">
           <MobileView
             wishlistCount={wishlistCount}
             categories={categories}
             products={products}
+            onNavigate={() => setOpen(false)}
           />
         </div>
       </SheetContent>

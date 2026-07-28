@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { FAQS } from '../constants';
@@ -41,7 +42,7 @@ const FAQItem = ({ question, answer, isOpen, onToggle }: FAQItemProps) => (
 );
 
 const CommonQuestions = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -58,7 +59,7 @@ const CommonQuestions = () => {
             }}
           >
             Hvorfor vælge{' '}
-            <em className="font-normal italic"> RestfulBlanket?</em>
+            <em className="font-normal italic">RestfulBlanket?</em>
           </h2>
 
           <div className="flex flex-col gap-3">
