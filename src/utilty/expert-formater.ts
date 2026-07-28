@@ -28,6 +28,29 @@ export interface ProfessionalOverviewItem {
 export interface AdditionalSection {
   title: string;
   html: string;
+  images: ImageItem[];
+}
+
+export interface RawSection {
+  title: string;
+  html: string;
+}
+
+export interface ImageItem {
+  src: string;
+  alt: string;
+}
+
+export interface LinkItem {
+  text: string;
+  url: string;
+}
+
+export interface AuthorData {
+  id: number;
+  name: string;
+  avatarUrl: string;
+  link: string;
 }
 
 export interface FormattedExpert {
@@ -48,6 +71,10 @@ export interface FormattedExpert {
   disclaimerHtml: string;
   faqs: FaqItem[];
   additionalSections: AdditionalSection[];
+  allSections: RawSection[];
+  images: ImageItem[];
+  allLinks: LinkItem[];
+  author: AuthorData | null;
   link: string;
 }
 
@@ -63,17 +90,13 @@ const SECTION = {
 } as const;
 
 const KNOWN_KEYS: string[] = Object.values(SECTION);
+const OLD_DOMAIN = 'https://tapbookme.com/';
+const NEW_DOMAIN = 'https://restfulblanket.vercel.app/';
 
 const normalize = (text: string) => text.trim().toLowerCase();
 
 type Group = { heading: string | null; els: any[] };
 
-/**
- * Picks the best available headshot from the page content itself.
- * Prefers images whose alt/src hints at a portrait/headshot, then falls
- * back to the largest image found (by declared width attribute), so we
- * never accidentally pick a tiny icon/avatar-sized image.
- */
 function pickBestContentImage(
   $: cheerio.CheerioAPI,
   root: cheerio.Cheerio<any>,
@@ -97,19 +120,98 @@ function pickBestContentImage(
   );
   if (portrait) return portrait.src;
 
-  // Fall back to the widest image (avoids picking a small inline icon).
   const widest = candidates.reduce((best, c) =>
     c.width > best.width ? c : best,
   );
   return widest.src || candidates[0].src;
 }
 
-export function formatExpertData(page: any): any {
+function collectAllImages(
+  $: cheerio.CheerioAPI,
+  root: cheerio.Cheerio<any>,
+): ImageItem[] {
+  return root
+    .find('img')
+    .toArray()
+    .map((img) => {
+      const $img = $(img);
+      return {
+        src: $img.attr('src') || '',
+        alt: $img.attr('alt') || '',
+      };
+    })
+    .filter((i) => !!i.src);
+}
+
+function extractImagesFromEls($: cheerio.CheerioAPI, els: any[]): ImageItem[] {
+  const images: ImageItem[] = [];
+  els
+    .filter((el) => el.tagName?.toLowerCase() === 'figure')
+    .forEach((fig) => {
+      $(fig)
+        .find('img')
+        .each((_, img) => {
+          const $img = $(img);
+          const src = $img.attr('src') || '';
+          if (src) images.push({ src, alt: $img.attr('alt') || '' });
+        });
+    });
+  return images;
+}
+
+function collectAllLinks(
+  $: cheerio.CheerioAPI,
+  root: cheerio.Cheerio<any>,
+): LinkItem[] {
+  return root
+    .find('a')
+    .toArray()
+    .map((a) => {
+      const $a = $(a);
+      return {
+        text: $a.text().trim(),
+        url: $a.attr('href') || '',
+      };
+    })
+    .filter((l) => !!l.url);
+}
+
+export async function getAuthorById(
+  authorId: number | undefined | null,
+): Promise<AuthorData | null> {
+  if (!authorId) return null;
+  try {
+    const res = await fetch(
+      `https://tapbookme.com/wp-json/wp/v2/users/${authorId}`,
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const avatarUrls = data?.avatar_urls ?? {};
+    const avatarUrl =
+      avatarUrls['96'] || avatarUrls['48'] || avatarUrls['24'] || '';
+    return {
+      id: data?.id ?? authorId,
+      name: data?.name ?? '',
+      avatarUrl,
+      link: data?.link ?? '',
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function formatExpertData(page: any): Promise<any> {
   const html: string = page?.content?.rendered ?? '';
   const $ = cheerio.load(html);
   const root: cheerio.Cheerio<any> = $('body').length
     ? $('body')
     : ($.root() as any);
+  root.find(`a[href^="${OLD_DOMAIN}"]`).each((_, a) => {
+    const $a = $(a);
+    const href = $a.attr('href') || '';
+    $a.attr('href', href.replace(OLD_DOMAIN, NEW_DOMAIN));
+  });
+
   const nodes = root.children().toArray();
 
   const groups: Group[] = [];
@@ -121,15 +223,12 @@ export function formatExpertData(page: any): any {
       groups.push(current);
       current = { heading: $(el).text(), els: [] };
     } else if (tag === 'hr') {
-      // separators are dropped, don't start a new group on their own
     } else {
       current.els.push(el);
     }
   });
   groups.push(current);
 
-  // "includes" matching so trailing punctuation/whitespace on a heading
-  // (e.g. "Rolle i RestfulBlanket:" ) doesn't silently break detection.
   const findGroup = (key: string) =>
     groups.find((g) => g.heading && normalize(g.heading).includes(key));
 
@@ -144,17 +243,11 @@ export function formatExpertData(page: any): any {
     return els.map((el) => $.html(el)).join('\n');
   };
 
-  // --- TITLE ---
-  // Only take the FIRST element before the first <h2> as the title, not the
-  // whole lead group. Pages without an early <h2> (e.g. long personal bios)
-  // would otherwise dump their entire intro into `title`.
   const leadGroup = groups.find((g) => g.heading === null);
   const leadEls = leadGroup?.els ?? [];
   const titleEl = leadEls.find((el) => !isFigure(el));
   const title = titleEl ? $(titleEl).text().trim() : '';
 
-  // Any leftover lead content becomes a fallback intro when there's no
-  // "Kort profil" section.
   const leadRestHtml = leadEls
     .filter((el) => el !== titleEl && !isFigure(el))
     .map((el) => $.html(el))
@@ -165,7 +258,6 @@ export function formatExpertData(page: any): any {
     ? groupHtml(profileGroup, (el) => !isFigure(el))
     : leadRestHtml;
 
-  // --- ROLE ---
   let role = '';
   const roleSourceEls = profileGroup?.els ?? leadEls;
   roleSourceEls.forEach((el) => {
@@ -180,7 +272,6 @@ export function formatExpertData(page: any): any {
     });
   }
 
-  // --- FOCUS AREAS ---
   const focusGroup = findGroup(SECTION.FOCUS_AREAS);
   const focusAreas: FocusArea[] = [];
   if (focusGroup) {
@@ -261,10 +352,6 @@ export function formatExpertData(page: any): any {
       });
     });
 
-  // --- ADDITIONAL SECTIONS ---
-  // Any <h2> group whose heading doesn't match a known template section is
-  // preserved here instead of being silently dropped (rescues pages like a
-  // founder bio that uses its own heading vocabulary).
   const additionalSections: AdditionalSection[] = groups
     .filter((g) => {
       if (!g.heading) return false;
@@ -274,15 +361,33 @@ export function formatExpertData(page: any): any {
     .map((g) => ({
       title: g.heading!.trim(),
       html: groupHtml(g, (el) => !isFigure(el)),
+      images: extractImagesFromEls($, g.els),
     }));
 
-  // --- IMAGE ---
-  // Prefer the WP featured media (requires the fetch to have used &_embed
-  // and the page to actually have a featured_media set). Fall back to
-  // scanning the content for the best portrait-like image, avoiding small
-  // icons/avatars.
+  const allSections: RawSection[] = groups
+    .filter((g) => g.heading)
+    .map((g) => ({
+      title: g.heading!.trim(),
+      html: groupHtml(g),
+    }));
+
   const embeddedMedia = page?._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-  const image = embeddedMedia || pickBestContentImage($, root) || '';
+  let image = embeddedMedia || pickBestContentImage($, root) || '';
+
+  const images = collectAllImages($, root);
+
+  let author: AuthorData | null = null;
+  if (!image || images.length === 0) {
+    author = await getAuthorById(page?.author);
+    if (author?.avatarUrl) {
+      if (!image) image = author.avatarUrl;
+      if (images.length === 0) {
+        images.push({ src: author.avatarUrl, alt: author.name || 'Author' });
+      }
+    }
+  }
+
+  const allLinks = collectAllLinks($, root);
 
   const tags = focusAreas
     .slice(0, 4)
@@ -306,7 +411,13 @@ export function formatExpertData(page: any): any {
     disclaimerHtml,
     faqs: faqs ?? [],
     additionalSections,
-    link: page?.link ?? '',
+    allSections,
+    images,
+    allLinks,
+    author,
+    link: (page?.link ?? '').startsWith(OLD_DOMAIN)
+      ? page.link.replace(OLD_DOMAIN, NEW_DOMAIN)
+      : (page?.link ?? ''),
   };
 }
 
@@ -320,11 +431,12 @@ export async function getExperts(slug?: string): Promise<any | null> {
   if (!res.ok) return null;
 
   const pages = await res.json();
+  console.log('t12', { pages });
 
   if (slug) {
     const page = pages[0];
-    return page ? formatExpertData(page) : null;
+    return page ? await formatExpertData(page) : null;
   }
 
-  return pages.map(formatExpertData);
+  return Promise.all(pages.map((page: any) => formatExpertData(page)));
 }

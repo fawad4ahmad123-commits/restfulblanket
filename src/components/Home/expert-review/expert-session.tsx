@@ -68,7 +68,7 @@ const ExpertsSection = () => {
 
         <button
           type="button"
-          onClick={() => router.push('/expert')}
+          onClick={() => router.push('/om-os/ekspertpanel')}
           aria-label="Book a free consultation"
           className="flex cursor-pointer items-center justify-center gap-3 text-center text-sm font-medium text-[#3b281f] transition-opacity hover:opacity-80"
         >

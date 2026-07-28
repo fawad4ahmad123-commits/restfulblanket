@@ -19,6 +19,9 @@ import { WpTitle } from '@/src/components/about/wp-title';
 import { WpHeroImage } from '@/src/components/about/wp-hero-image';
 import { WpContent } from '@/src/components/about/wp-content';
 import { parseWpPage } from '@/src/lib/parse-wp-about';
+import ExpertSection from '@/src/components/expert';
+import { getRankMathSEO } from '@/src/lib/seo';
+import ExpertDetailPage from '@/src/components/expert-panel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -42,6 +45,35 @@ function resolveWpSlug(segments: string[]) {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const segments = slug ?? [];
+
+  if (segments[0] === 'ekspertpanel') {
+    if (segments.length === 1) {
+      const seo = await getRankMathSEO(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/om-os/ekspertpanel`,
+      );
+
+      const title =
+        seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
+        'Our Experts | Tap Book Me';
+
+      const description =
+        seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||
+        'Meet our sleep and wellness experts and learn more about their experience and expertise.';
+
+      return {
+        title,
+        description,
+        openGraph: {
+          title,
+          description,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL}/om-os/ekspertpanel`,
+        },
+      };
+    }
+
+    return {};
+  }
+
   const wpSlug = segments.length ? resolveWpSlug(segments) : 'om-os';
 
   const page = await getWpPageBySlug(wpSlug);
@@ -57,6 +89,22 @@ export default async function AboutCatchAllPage({ params }: Props) {
   const { slug } = await params;
   const segments = slug ?? [];
 
+  if (segments[0] === 'ekspertpanel') {
+    if (segments.length === 1) {
+      return (
+        <main className="min-h-screen bg-[#fff9f5] py-12">
+          <ExpertSection />
+        </main>
+      );
+    }
+
+    const expertSlug = segments[1];
+    if (!expertSlug) {
+      notFound();
+    }
+    return <ExpertDetailPage slug={expertSlug} />;
+  }
+
   if (segments.length === 0) {
     const [categories, wpPage] = await Promise.all([
       getCategories(),
@@ -71,20 +119,14 @@ export default async function AboutCatchAllPage({ params }: Props) {
 
     return (
       <AboutProvider data={aboutContextData}>
-        <main className="bg-[#f8f5f2]">
+        <main className="bg-[#fdf9f6]">
           <div className="container mx-auto max-w-7xl px-6 py-16">
             <AboutHero />
             <AttemptsSection />
             <div className="container mx-auto">
               <CompanySection />
             </div>
-            <ImpactSection />
-            <Certifications />
-            <DocumentationSection />
-            <StatsBar />
-            <FounderQuote />
             <FounderSection />
-            <CTASection />
             <ProductCategories
               response_categories={categories}
               isCategory={true}

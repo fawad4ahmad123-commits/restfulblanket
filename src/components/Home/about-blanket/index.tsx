@@ -30,7 +30,7 @@ const CraftsmanshipSection = () => {
             </p>
 
             <button
-              onClick={() => router.push('/about')}
+              onClick={() => router.push('/om-os')}
               className="mt-8 flex items-center gap-3 rounded-full bg-[#e6cfbb] px-5 py-3 text-sm font-medium text-[#3B281F] transition hover:scale-105"
             >
               Læs mere

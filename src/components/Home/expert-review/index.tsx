@@ -10,7 +10,9 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const profileUrl = isExpert ? `/ekspertpanel/${expert.slug}` : '/expert';
+  const profileUrl = isExpert
+    ? `/om-os/ekspertpanel/${expert.slug}`
+    : '/om-os/ekspertpanel';
 
   const isHomePage = pathname === '/';
 
@@ -22,7 +24,7 @@ const ExpertCard = ({ expert, isExpert = false }: any) => {
     >
       <div
         className="flex flex-1 cursor-pointer flex-col"
-        onClick={() => router.push(`/ekspertpanel/${expert.slug}`)}
+        onClick={() => router.push(`/om-os/ekspertpanel/${expert.slug}`)}
       >
         <div className="relative h-[280px]">
           <Image

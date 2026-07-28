@@ -103,82 +103,82 @@ export const navigation = [
   },
   {
     title: 'Om Os',
-    href: '/about',
+    href: '/om-os',
     groups: [
       {
         heading: 'OM OS',
         links: [
           {
             title: 'Om Socialøkonomi (RSV)',
-            href: '/about/restfulblanket-rsv',
+            href: '/om-os/restfulblanket-rsv',
           },
           {
             title: 'Ekspertpanel',
-            href: '/expert',
+            href: '/om-os/ekspertpanel',
             children: [
               {
                 title: 'Zafir Bæk',
-                href: '/ekspertpanel/zafir-baek',
+                href: '/om-os/ekspertpanel/zafir-baek',
               },
               {
                 title: 'Betina Lassen',
-                href: '/ekspertpanel/betina-lassen',
+                href: '/om-os/ekspertpanel/betina-lassen',
               },
               {
                 title: 'Silke Enemark',
-                href: '/ekspertpanel/silke-enemark',
+                href: '/om-os/ekspertpanel/silke-ena',
               },
               {
                 title: 'Liselotte Rønne',
-                href: '/ekspertpanel/liselotte-roenne',
+                href: '/om-os/ekspertpanel/liselotte-roenne',
               },
               {
                 title: 'Nina Schiøtz',
-                href: '/ekspertpanel/nina-schiotz',
+                href: '/om-os/ekspertpanel/nina-schiotz',
               },
               {
                 title: 'Tina Jenny Kjeldsen',
-                href: '/ekspertpanel/tina-jenny-kjeldsen',
+                href: '/om-os/ekspertpanel/tina-jenny-kjeldsen',
               },
             ],
           },
           {
             title: 'Projekter',
-            href: '/social-projekter',
+            href: '/om-os/social-projekter',
             children: [
               {
                 title: 'Lærke',
-                href: '/social-projekter/laerke',
+                href: '/om-os/social-projekter/laerke',
               },
               {
                 title: 'Medusa',
-                href: '/social-projekter/krisecenter',
+                href: '/om-os/social-projekter/krisecenter',
               },
               {
                 title: 'Ro i Indercirklen',
-                href: '/social-projekter/ro-i-innercirklen',
+                href: '/om-os/social-projekter/ro-i-innercirklen',
               },
               {
                 title: 'ESG/CSR-partnere',
-                href: '/social-projekter/csr-partnere',
+                href: '/om-os/social-projekter/csr-partnere',
               },
               {
                 title: 'Tak til fonde, legatgivere og sponsorer',
-                href: '/social-projekter/fonde-og-legatgivere',
+                href: '/om-os/social-projekter/fonde-og-legatgivere',
               },
             ],
           },
           {
             title: 'Anmeldelser',
-            href: '/about/anmeldelser',
+            href: '/om-os/anmeldelser',
           },
           {
             title: 'Presse og mediekit',
-            href: '/about/presse-og-mediekit',
+            href: '/om-os/presse-og-mediekit',
           },
           {
             title: 'Verdensmål og bæredygtighed',
-            href: '/about/verdensmaal-baeredygtighed',
+            href: '/om-os/verdensmaal-baeredygtighed',
           },
         ],
       },
@@ -256,7 +256,7 @@ export const shopLinks = [
   },
   {
     title: 'Ekspertpanel',
-    href: '/ekspertpanel',
+    href: '/om-os/ekspertpanel',
   },
   {
     title: 'FAQs',

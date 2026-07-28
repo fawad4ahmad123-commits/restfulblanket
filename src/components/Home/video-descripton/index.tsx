@@ -113,11 +113,6 @@ const RestfulBlanketVideo = () => {
               )}
             </div>
           </div>
-
-          <p className="mt-6 max-w-sm text-center font-serif text-sm italic text-[#35281E]">
-            Hvert tæppe forlader først vores værksted, når det er helt færdigt –
-            aldrig før.
-          </p>
         </div>
       </div>
     </section>
