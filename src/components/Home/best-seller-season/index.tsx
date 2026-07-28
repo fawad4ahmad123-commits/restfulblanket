@@ -99,7 +99,6 @@ const BestSellers = ({
         : prev - 1,
     );
   };
-  console.log('t2 best seller card', { filteredProducts });
 
   return (
     <section
