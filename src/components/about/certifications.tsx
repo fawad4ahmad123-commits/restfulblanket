@@ -1,38 +1,38 @@
-'use client';
+// 'use client';
 
-import { useAboutContext } from '@/src/core/context/about-context';
-import Image from 'next/image';
+// import { useAboutContext } from '@/src/core/context/about-context';
+// import Image from 'next/image';
 
-export function Certifications() {
-  const { certifications } = useAboutContext();
+// export function Certifications() {
+//   const { certifications } = useAboutContext();
 
-  return (
-    <section className="py-10">
-      <div className="mx-auto max-w-6xl rounded-[28px] bg-[#F5F0EA] px-8 py-12">
-        <p className="mb-10 text-center text-sm text-[#8A817B]">
-          Recognised & verified — reviewed by independent ethical and
-          sustainability bodies
-        </p>
+//   return (
+//     <section className="py-10">
+//       <div className="mx-auto max-w-6xl rounded-[28px] bg-[#F5F0EA] px-8 py-12">
+//         <p className="mb-10 text-center text-sm text-[#8A817B]">
+//           Recognised & verified — reviewed by independent ethical and
+//           sustainability bodies
+//         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-8">
-          {certifications.map((item) => (
-            <a
-              key={item.image}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                src={item.image}
-                alt=""
-                width={90}
-                height={90}
-                unoptimized
-              />
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+//         <div className="flex flex-wrap items-center justify-center gap-8">
+//           {certifications.map((item) => (
+//             <a
+//               key={item.image}
+//               href={item.href}
+//               target="_blank"
+//               rel="noopener noreferrer"
+//             >
+//               <Image
+//                 src={item.image}
+//                 alt=""
+//                 width={90}
+//                 height={90}
+//                 unoptimized
+//               />
+//             </a>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }

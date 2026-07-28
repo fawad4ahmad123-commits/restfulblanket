@@ -45,6 +45,12 @@ export type AboutContextData = {
     href: string;
   }[];
   raw: WpPage | null;
+  ctaData: {
+    title: string;
+    highlight: string;
+    description: string;
+    buttonText: string;
+  };
 };
 
 export type FormattedAboutData = AboutContextData;
@@ -385,12 +391,19 @@ export function formatAboutData(page: WpPage | null): AboutContextData {
       certifications: [],
       documentLinks: [],
       raw: null,
+      ctaData: {
+        title: '',
+        highlight: '',
+        description: '',
+        buttonText: '',
+      },
     };
   }
 
   const html = page.content.rendered;
   const sections = extractSections(html);
   const facts = extractFactsFromHtml(html);
+  const expert = extractExpert(sections, html, facts);
 
   return {
     hero: extractHero(page, sections),
@@ -401,5 +414,11 @@ export function formatAboutData(page: WpPage | null): AboutContextData {
     certifications: extractCertifications(html),
     documentLinks: extractDocumentLinks(sections),
     raw: page,
+    ctaData: {
+      title: expert.name,
+      highlight: expert.title,
+      description: expert.description,
+      buttonText: 'Læs mere',
+    },
   };
 }
