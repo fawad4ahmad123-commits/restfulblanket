@@ -13,8 +13,6 @@ import { WpTitle } from '@/src/components/about/wp-title';
 import { WpHeroImage } from '@/src/components/about/wp-hero-image';
 import { WpContent } from '@/src/components/about/wp-content';
 import { parseWpPage } from '@/src/lib/parse-wp-about';
-import ExpertSection from '@/src/components/expert';
-import { getRankMathSEO } from '@/src/lib/seo';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -23,54 +21,26 @@ interface Props {
   params: Promise<{ slug?: string[] }>;
 }
 
-const SLUG_MAP: Record<string, string> = {
-  'restfulblanket-rsv': 'restfulblanket-rsv',
-  'presse-og-mediekit': 'presse-og-mediekit',
-  'verdensmaal-baeredygtighed': 'verdensmaal-baeredygtighed',
-  anmeldelser: 'anmeldelser',
-};
-
-function resolveWpSlug(segments: string[]) {
-  const routeSlug = segments.join('/');
-  return SLUG_MAP[routeSlug] ?? routeSlug;
-}
-
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const segments = slug ?? [];
 
-  if (segments[0] === 'ekspertpanel') {
-    if (segments.length === 1) {
-      const seo = await getRankMathSEO(
-        `${process.env.NEXT_PUBLIC_SITE_URL}/om-os/ekspertpanel`,
-      );
+  if (!slug || slug.length === 0) {
+    const page = await getWpPageBySlug('om-os');
 
-      const title =
-        seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
-        'Our Experts | Tap Book Me';
-
-      const description =
-        seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||
-        'Meet our sleep and wellness experts and learn more about their experience and expertise.';
-
-      return {
-        title,
-        description,
-        openGraph: {
-          title,
-          description,
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/om-os/ekspertpanel`,
-        },
-      };
+    if (!page) {
+      return {};
     }
 
-    return {};
+    return {
+      title: stripHtml(page.title.rendered),
+      description: stripHtml(page.excerpt?.rendered || '').slice(0, 160),
+    };
   }
 
-  const wpSlug = segments.length ? resolveWpSlug(segments) : 'om-os';
-
-  const page = await getWpPageBySlug(wpSlug);
-
+  if (slug.length > 1) {
+    return {};
+  }
+  const page = await getWpPageBySlug(slug[0]);
   if (!page) {
     return {};
   }
@@ -83,21 +53,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function AboutCatchAllPage({ params }: Props) {
   const { slug } = await params;
-  const segments = slug ?? [];
 
-  if (segments[0] === 'ekspertpanel') {
-    if (segments.length === 1) {
-      return (
-        <main className="min-h-screen bg-[#fff9f5] py-12">
-          <ExpertSection />
-        </main>
-      );
-    }
-
-    notFound();
-  }
-
-  if (segments.length === 0) {
+  if (!slug || slug.length === 0) {
     const [categories, wpPage] = await Promise.all([
       getCategories(),
       getWpPageBySlug('om-os'),
@@ -129,9 +86,10 @@ export default async function AboutCatchAllPage({ params }: Props) {
     );
   }
 
-  const wpSlug = resolveWpSlug(segments);
-
-  const rawPage = await getWpPageBySlug(wpSlug);
+  if (slug.length > 1) {
+    notFound();
+  }
+  const rawPage = await getWpPageBySlug(slug[0]);
 
   if (!rawPage) {
     notFound();

@@ -1,4 +1,3 @@
-import 'server-only';
 import * as cheerio from 'cheerio';
 
 export interface FocusArea {
@@ -93,6 +92,13 @@ const SECTION = {
 const KNOWN_KEYS: string[] = Object.values(SECTION);
 const OLD_DOMAIN = 'https://tapbookme.com/';
 const NEW_DOMAIN = 'https://restfulblanket.vercel.app/';
+
+// Simple in-memory cache so repeated navigations to the same slug (or the
+// listing page re-fetching everyone) don't refire identical network + author
+// requests within a request lifecycle / short window. This is the biggest
+// perf win available without touching the API layer itself.
+const expertCache = new Map<string, { data: any; expiresAt: number }>();
+const CACHE_TTL_MS = 60_000;
 
 const normalize = (text: string) => text.trim().toLowerCase();
 
@@ -224,6 +230,7 @@ export async function formatExpertData(page: any): Promise<any> {
       groups.push(current);
       current = { heading: $(el).text(), els: [] };
     } else if (tag === 'hr') {
+      // separators are dropped intentionally
     } else {
       current.els.push(el);
     }
@@ -423,6 +430,12 @@ export async function formatExpertData(page: any): Promise<any> {
 }
 
 export async function getExperts(slug?: string): Promise<any | null> {
+  const cacheKey = slug ?? '__all__';
+  const cached = expertCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.data;
+  }
+
   const base = 'https://tapbookme.com/wp-json/wp/v2/pages';
   const url = slug
     ? `${base}?slug=${encodeURIComponent(slug)}&_embed`
@@ -432,12 +445,23 @@ export async function getExperts(slug?: string): Promise<any | null> {
   if (!res.ok) return null;
 
   const pages = await res.json();
-  console.log('t12', { pages });
 
+  let result: any;
   if (slug) {
     const page = pages[0];
-    return page ? await formatExpertData(page) : null;
+    result = page ? await formatExpertData(page) : null;
+  } else {
+    result = await Promise.all(
+      pages.map((page: any) => formatExpertData(page)),
+    );
   }
 
-  return Promise.all(pages.map((page: any) => formatExpertData(page)));
+  if (result) {
+    expertCache.set(cacheKey, {
+      data: result,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    });
+  }
+
+  return result;
 }

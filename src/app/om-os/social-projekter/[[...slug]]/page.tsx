@@ -4,8 +4,15 @@ import { parseGuidePage } from '@/src/lib/wp-parser';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await fetchGuidePageBySlug('krisecenter');
+type Props = {
+  params: Promise<{ slug?: string[] }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const slugStr = slug?.join('/') ?? '';
+
+  const page = await fetchGuidePageBySlug(slugStr);
   if (!page) return { robots: { index: false, follow: false } };
   const guide = parseGuidePage(page);
   return {
@@ -17,8 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function KrisecenterPage() {
-  const page = await fetchGuidePageBySlug('krisecenter');
+export default async function GuideSlugPage({ params }: Props) {
+  const { slug } = await params;
+  const slugStr = slug?.join('/') ?? '';
+
+  const page = await fetchGuidePageBySlug(slugStr);
   if (!page) notFound();
   const guide = parseGuidePage(page);
 

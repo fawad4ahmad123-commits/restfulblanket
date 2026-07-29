@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { Fraunces } from 'next/font/google';
 import { EXPERTS } from '../Home/constants';
 import ExpertCard from '../Home/expert-review';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const FILTERS = ['Alle', 'Læge', 'Psykoterapeut', 'Ergoterapeut', 'Konsulent'];
@@ -96,7 +94,7 @@ const ExpertSection = ({ isAllExpert = true }: ExpertSectionProps) => {
             key={index}
             expert={expert}
             isExpert={true}
-            onClick={() => router.push(`/Ekspertprofil/${expert.name}`)}
+            onClick={() => router.push(`/om-os/ekspertpanel/${expert.slug}`)}
           />
         ))}
       </div>
