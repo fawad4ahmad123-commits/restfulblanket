@@ -9,7 +9,9 @@ const RightReviews = ({
 }: RightReviewsProps) => {
   if (!reviews?.length) {
     return (
-      <div className="rounded-xl bg-white p-6 text-center">No reviews yet</div>
+      <div className="rounded-xl bg-white p-6 text-center">
+        Ingen anmeldelser endnu
+      </div>
     );
   }
 

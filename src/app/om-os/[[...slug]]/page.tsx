@@ -99,7 +99,7 @@ export default async function AboutCatchAllPage({ params }: Props) {
 
   return (
     <WpPageProvider page={parsedPage}>
-      <main className="bg-[#f8f5f2]">
+      <main className="bg-[#fdf9f6]">
         <div className="container mx-auto max-w-6xl px-6 py-16">
           <WpTitle className="mb-8 text-4xl leading-tight text-[#3d2f27] md:text-5xl" />
           <WpHeroImage />

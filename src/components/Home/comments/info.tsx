@@ -33,8 +33,8 @@ const Info = ({
     <div>
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="font-serif text-[36px] md:text-[48px] leading-tight text-[#392A22]">
-          {totalReviews} nætter.
-          <span className="italic font-normal">Én konklusion.</span>
+          {totalReviews} Anmeldelser{' '}
+          <span className="italic font-normal">og kommentarer.</span>
         </h2>
 
         <div className="flex items-center gap-3">

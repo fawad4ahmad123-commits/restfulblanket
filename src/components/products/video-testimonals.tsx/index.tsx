@@ -73,14 +73,6 @@ export default function TestimonialVideoSlider({
                 />
 
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-
-                <div className="absolute right-0 bottom-0 left-0 p-5">
-                  <h3 className="text-xl font-medium text-white">
-                    {item.name}
-                  </h3>
-
-                  <p className="mt-1 text-sm text-white/70">{item.role}</p>
-                </div>
               </div>
             </div>
           ))}
