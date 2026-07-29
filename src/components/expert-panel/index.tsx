@@ -14,7 +14,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import ExpertDetail from '@/src/components/expert/expert-detail';
 import { getExperts } from '@/src/utilty/expert-formater';
 import { Loader } from '@/src/components/loader';
 
@@ -515,9 +514,6 @@ const ExpertDetailPage = ({ slug: slugProp }: ExpertDetailPageProps) => {
                 className="object-cover"
                 unoptimized
               />
-            </div>
-            <div className="flex-1">
-              <ExpertDetail professional={expertData.professionalOverview} />
             </div>
           </div>
         </section>
