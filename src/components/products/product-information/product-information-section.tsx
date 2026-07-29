@@ -8,7 +8,6 @@ interface ProductInformationSectionProps {
 }
 
 const ProductInformationSection = ({ info }: any) => {
-  console.log('t12 fyid', { info });
   return (
     <section
       id="product-information"
