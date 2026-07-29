@@ -8,7 +8,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center text-sm text-[#8A8377]"
+      className="flex items-center text-sm text-[#392A22]"
     >
       {items.map((item, i) => (
         <span key={item} className="flex items-center">

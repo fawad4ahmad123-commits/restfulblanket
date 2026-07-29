@@ -151,7 +151,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
 
         <TestimonialVideoSlider />
 
-        <RestfulBlanketVideo />
+        {/* <RestfulBlanketVideo /> */}
 
         <ProductCategories response_categories={categories} />
       </div>

@@ -19,8 +19,8 @@ const ProductDetailsTable = ({ title, rows }: ProductDetailsTableProps) => {
             key={row.id}
             className="flex items-center justify-between gap-4 py-2.5 text-sm"
           >
-            <dt className="text-[#8A8377]">{row.label}</dt>
-            <dd className="text-right text-[#3F3A36]">{row.value}</dd>
+            <dt className="text-[#392A22]">{row.label}</dt>
+            <dd className="text-right text-[#392A22]">{row.value}</dd>
           </div>
         ))}
       </dl>

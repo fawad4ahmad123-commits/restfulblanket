@@ -17,7 +17,7 @@ const ColorSelector = ({
 
   return (
     <div className="space-y-2">
-      <p className="text-xs font-medium uppercase tracking-wide text-[#8A8377]">
+      <p className="text-xs font-medium uppercase tracking-wide text-[#392A22]">
         Vælg farve {selectedColor?.label ? `· ${selectedColor.label}` : ''}
       </p>
 

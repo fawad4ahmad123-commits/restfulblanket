@@ -88,17 +88,16 @@ const ProductInfoAccordion = ({
               </div>
 
               <div className="min-w-0">
-                <span
+                <h2
                   className="
-                    block 
-                    text-base 
-                    xl:text-[18px]
-                    font-medium 
-                    text-[#3F3A36]
-                  "
+    text-base
+    xl:text-[18px]
+    font-medium
+    text-[#3F3A36]
+  "
                 >
                   {section.title}
-                </span>
+                </h2>
 
                 <p
                   className="

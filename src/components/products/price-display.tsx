@@ -20,7 +20,7 @@ const PriceDisplay = ({
         {price}
       </span>
       {compareAtPrice && (
-        <span className="text-base text-[#8A8377] line-through">
+        <span className="text-base text-[#392A22] line-through">
           {currency}
           {compareAtPrice}
         </span>
