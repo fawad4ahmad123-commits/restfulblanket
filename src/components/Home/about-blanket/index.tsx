@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
@@ -7,6 +8,20 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const CraftsmanshipSection = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    const preview = document.querySelector(
+      '[data-title="RestfulBlanket Video"]',
+    );
+
+    if (preview) {
+      preview.removeAttribute('role');
+      preview.setAttribute(
+        'aria-label',
+        'RestfulBlanket Video YouTube preview',
+      );
+    }
+  }, []);
 
   return (
     <section className="bg-[#fdf9f6] py-16 md:py-24">

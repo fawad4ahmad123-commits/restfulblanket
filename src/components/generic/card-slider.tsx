@@ -116,12 +116,14 @@ const SliderCard = ({
         <div className="relative overflow-hidden">
           <div
             className={`
-              relative
-              h-[340px]
-              md:h-[420px]
-              transition-all
-              duration-300
-            `}
+    relative
+    h-[340px]
+    md:h-[420px]
+    flex-shrink-0
+    transition-all
+    duration-300
+  `}
+
             // className={`
             //   relative
             //   h-[340px]
@@ -265,17 +267,14 @@ const SliderCard = ({
               {rating} · {reviewCount.toLocaleString()}
             </span>
           </div>
-
           <h3 className="mb-2 line-clamp-2  text-lg font-medium leading-snug text-[#35281E]">
             {title}
           </h3>
-
           {(weight || size) && (
             <p className="mb-2 text-xs text-[#35281E]">
               {[weight, size].filter(Boolean).join(' · ')}
             </p>
           )}
-
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#3b281f]">
@@ -328,7 +327,6 @@ const SliderCard = ({
               )}
             </button>
           </div>
-
           <button
             type="button"
             disabled={isOutOfStock}
