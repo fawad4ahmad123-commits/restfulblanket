@@ -98,6 +98,21 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
     });
   }, [product?.metaFields, setMetaFields]);
 
+  if (!product) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-[#fdf9f6] px-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold text-[#392A22]">
+            Produkt ikke fundet
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Det produkt, du leder efter, findes ikke eller er blevet fjernet.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#fdf9f6] px-4 py-8 sm:px-6 lg:px-10 2xl:px-20">
       {isChangingProduct && (
