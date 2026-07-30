@@ -26,10 +26,15 @@ export default function CartLineItem({
   const [isLoading, setIsLoading] = useState(false);
 
   const wished = isWishlisted(item.id || '');
-
-  const [selectedColor, setSelectedColor] = useState(item.color || '');
-  const [selectedSize, setSelectedSize] = useState(item.variant || '');
-  const [selectedWeight, setSelectedWeight] = useState(item.weight || '');
+  const [selectedColor, setSelectedColor] = useState(
+    item.color || item.attributes?.color || '',
+  );
+  const [selectedSize, setSelectedSize] = useState(
+    item.variant || item.attributes?.size || '',
+  );
+  const [selectedWeight, setSelectedWeight] = useState(
+    item.weight || item.attributes?.weight || '',
+  );
 
   const loadProduct = async (productId: number | string) => {
     setIsLoading(true);
@@ -39,25 +44,35 @@ export default function CartLineItem({
         ? product.attribute_links
         : [];
 
-      if (product?.attribute_links && !Array.isArray(product.attribute_links)) {
-        console.warn('attribute_links is not an array, got');
-      }
-
       setCurrentProduct(product);
       setAttributes(links);
 
-      const activeColor = links.find(
-        (a: any) => a.name === 'color' && a.related_product === 0,
-      );
-      const activeSize = links.find(
-        (a: any) => a.name === 'size' && a.related_product === 0,
-      );
-      const activeWeight = links.find(
-        (a: any) => a.name === 'weight' && a.related_product === 0,
-      );
-      if (activeColor) setSelectedColor(activeColor.value);
-      if (activeSize) setSelectedSize(activeSize.value);
-      if (activeWeight) setSelectedWeight(activeWeight.value);
+      if (!selectedColor) {
+        const activeColor = links.find(
+          (a: any) => a.name === 'color' && a.related_product === 0,
+        );
+        if (activeColor) {
+          setSelectedColor(activeColor.label || activeColor.value || '');
+        }
+      }
+
+      if (!selectedSize) {
+        const activeSize = links.find(
+          (a: any) => a.name === 'size' && a.related_product === 0,
+        );
+        if (activeSize) {
+          setSelectedSize(activeSize.label || activeSize.value || '');
+        }
+      }
+
+      if (!selectedWeight) {
+        const activeWeight = links.find(
+          (a: any) => a.name === 'weight' && a.related_product === 0,
+        );
+        if (activeWeight) {
+          setSelectedWeight(activeWeight.label || activeWeight.value || '');
+        }
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -71,12 +86,20 @@ export default function CartLineItem({
     }
   }, [item.id]);
 
+  useEffect(() => {
+    if (item.color) setSelectedColor(item.color);
+    if (item.variant) setSelectedSize(item.variant);
+    if (item.weight) setSelectedWeight(item.weight);
+  }, [item.color, item.variant, item.weight]);
+
   const handleAttributeChange = async (
     type: 'color' | 'size' | 'weight',
     value: string,
   ) => {
     const match = attributes.find(
-      (attr) => attr.name?.toLowerCase() === type && attr.value === value,
+      (attr) =>
+        attr.name?.toLowerCase() === type &&
+        (attr.label || attr.value) === value,
     );
 
     if (!match) return;
@@ -100,7 +123,7 @@ export default function CartLineItem({
       setSelectedWeight(value);
     }
 
-    const cartItemId = item.id;
+    const cartItemId = item.cartItemId || item.id;
 
     if (!cartItemId) return;
 
@@ -109,6 +132,11 @@ export default function CartLineItem({
         const product = await getProductById(match.related_product);
 
         if (!product) return;
+
+        const colorAttr = attributes.find(
+          (a) => a.name === 'color' && (a.label || a.value) === nextColor,
+        );
+        const colorHex = colorAttr?.hexvalue || getColorHex(nextColor);
 
         addToCart({
           id: product.id,
@@ -158,14 +186,23 @@ export default function CartLineItem({
   const colors = useMemo(
     () =>
       [
-        ...new Set(
+        ...new Map(
           attributes
             .filter(
-              (attr) => attr?.name?.toLowerCase() === 'color' && attr?.value,
+              (attr) =>
+                attr?.name?.toLowerCase() === 'color' &&
+                (attr?.label || attr?.value),
             )
-            .map((attr) => attr.value),
-        ),
-      ] as string[],
+            .map((attr) => [
+              attr.label || attr.value || '',
+              {
+                label: attr.label || attr.value || '',
+                hexvalue:
+                  attr.hexvalue || getColorHex(attr.label || attr.value || ''),
+              },
+            ]),
+        ).values(),
+      ] as { label: string; hexvalue: string }[],
     [attributes],
   );
 
@@ -175,9 +212,11 @@ export default function CartLineItem({
         ...new Set(
           attributes
             .filter(
-              (attr) => attr?.name?.toLowerCase() === 'size' && attr?.value,
+              (attr) =>
+                attr?.name?.toLowerCase() === 'size' &&
+                (attr?.label || attr?.value),
             )
-            .map((attr) => attr.value),
+            .map((attr) => attr.label || attr.value),
         ),
       ] as string[],
     [attributes],
@@ -189,9 +228,11 @@ export default function CartLineItem({
         ...new Set(
           attributes
             .filter(
-              (attr) => attr?.name?.toLowerCase() === 'weight' && attr?.value,
+              (attr) =>
+                attr?.name?.toLowerCase() === 'weight' &&
+                (attr?.label || attr?.value),
             )
-            .map((attr) => attr.value),
+            .map((attr) => attr.label || attr.value),
         ),
       ] as string[],
     [attributes],
@@ -248,17 +289,20 @@ export default function CartLineItem({
                   <div className="flex gap-1.5">
                     {colors.map((color) => (
                       <button
-                        key={color}
+                        key={color.label}
                         type="button"
-                        onClick={() => handleAttributeChange('color', color)}
+                        onClick={() =>
+                          handleAttributeChange('color', color.label)
+                        }
                         className={`h-5 w-5 rounded-full border ${
-                          selectedColor === color
+                          selectedColor === color.label
                             ? 'border-[#35281E] ring-1 ring-[#E7D6C7]'
                             : 'border-stone-300'
                         }`}
                         style={{
-                          backgroundColor: getColorHex(color),
+                          backgroundColor: color.hexvalue || '#CCCCCC',
                         }}
+                        title={color.label}
                       />
                     ))}
                   </div>

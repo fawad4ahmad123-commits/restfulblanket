@@ -81,7 +81,7 @@ const ProductInfoPanel = ({
     const matchedLink = product?.attributeLinks?.find(
       (item: any) =>
         normalize(item.name) === normalize(type) &&
-        normalize(item.value) === normalize(value),
+        normalize(item.label || item.value) === normalize(value),
     );
 
     if (!matchedLink?.relatedProduct) return;
@@ -138,19 +138,24 @@ const ProductInfoPanel = ({
         Number(item.relatedProduct) === 0,
     );
 
+    const defaultColorValue =
+      defaultColorLink?.label || defaultColorLink?.value || '';
+
     const defaultColor = colors.find(
       (c: any) =>
-        c.label === defaultColorLink?.value ||
-        c.value === defaultColorLink?.value ||
-        c.hex === defaultColorLink?.value,
+        c.label === defaultColorValue ||
+        c.value === defaultColorValue ||
+        c.hex === defaultColorValue,
     );
 
     const defaultWeight = weights.find(
-      (w: any) => w.label === defaultWeightLink?.value,
+      (w: any) =>
+        w.label === (defaultWeightLink?.label || defaultWeightLink?.value),
     );
 
     const defaultSize = sizes.find(
-      (s: any) => s.label === defaultSizeLink?.value,
+      (s: any) =>
+        s.label === (defaultSizeLink?.label || defaultSizeLink?.value),
     );
 
     setSelectedColorId(defaultColor?.id ?? '');

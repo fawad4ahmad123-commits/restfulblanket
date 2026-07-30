@@ -3,46 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import {
-  Heart,
-  ShieldCheck,
-  Lightbulb,
-  Briefcase,
-  Minus,
-  Plus,
-  Check,
-  Sparkles,
-} from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Minus, Plus, Check, Sparkles } from 'lucide-react';
 import { getExperts } from '@/src/utilty/expert-formater';
 import { Loader } from '@/src/components/loader';
 
 const FALLBACK_AVATAR = '/placeholder-avatar.png';
-
-const ICON_TONES = [
-  { bg: 'bg-[#7B6A5E]/10', ring: 'ring-[#7B6A5E]/20', fg: 'text-[#7B6A5E]' },
-  { bg: 'bg-[#8B7E74]/10', ring: 'ring-[#8B7E74]/20', fg: 'text-[#8B7E74]' },
-  { bg: 'bg-[#5F5148]/10', ring: 'ring-[#5F5148]/20', fg: 'text-[#5F5148]' },
-  { bg: 'bg-[#4F433B]/10', ring: 'ring-[#4F433B]/20', fg: 'text-[#4F433B]' },
-];
-
-// Default section order — used ONLY when the backend doesn't send its own
-// `sectionOrder`. If the live site needs a different order (e.g. FAQs at
-// position 4, disclaimer at 6, etc.), the backend can send:
-//   expertData.sectionOrder = ['introduction', 'faqs', 'education', ...]
-// and this page will follow it exactly instead of the hardcoded order below.
-const DEFAULT_SECTION_ORDER = [
-  'introduction',
-  'professionalOverview',
-  'education',
-  'focusAreas',
-  'workPhilosophy',
-  'vulnerableGroups',
-  'roleDescription',
-  'additionalSections',
-  'faqs',
-  'disclaimer',
-];
 
 const resolveAvatar = (expert: any) =>
   expert?.image || expert?.author?.avatarUrl || FALLBACK_AVATAR;
@@ -278,244 +243,287 @@ const ExpertDetailPage = ({ slug: slugProp }: ExpertDetailPageProps) => {
 
   const avatarSrc = resolveAvatar(expertData);
 
-  // All section headings now come from the backend, with a Danish fallback
-  // (no more hardcoded English strings like "Introduction" / "Education & Training").
-  const sectionTitles = {
-    introduction: expertData.introductionTitle || 'Introduktion',
-    professionalOverview:
-      expertData.professionalOverviewTitle || 'Faglig baggrund',
-    education: expertData.educationTitle || 'Uddannelse & efteruddannelse',
-    focusAreas: expertData.focusAreasTitle || 'Faglige fokusområder',
-    workPhilosophy: expertData.workPhilosophyTitle || 'Arbejdsfilosofi',
-    vulnerableGroups:
-      expertData.vulnerableGroupsTitle || 'Erfaring med sårbare grupper',
-    roleDescription:
-      expertData.roleDescriptionTitle || 'Rolle i RestfulBlanket',
-    faqs: expertData.faqsTitle || 'Ofte stillede spørgsmål',
-    disclaimer: expertData.disclaimerTitle || 'Afgrænsning',
+  const stripHtml = (html?: string) =>
+    (html || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const additionalSectionsRaw: any[] = expertData.additionalSections || [];
+
+  const allSectionsRaw: any[] = expertData.allSections || additionalSectionsRaw;
+
+  const structuredMatchers: { key: string; sample: string }[] = [
+    {
+      key: 'professionalOverview',
+      sample: expertData?.professionalOverview?.[0]?.description || '',
+    },
+    { key: 'education', sample: expertData?.education?.[0]?.title || '' },
+    {
+      key: 'focusAreas',
+      sample: stripHtml(expertData?.focusAreas?.[0]?.contentHtml),
+    },
+    { key: 'workPhilosophy', sample: stripHtml(expertData.workPhilosophyHtml) },
+    {
+      key: 'vulnerableGroups',
+      sample: stripHtml(expertData.vulnerableGroupsHtml),
+    },
+    {
+      key: 'roleDescription',
+      sample: stripHtml(expertData.roleDescriptionHtml),
+    },
+    { key: 'faqs', sample: expertData?.faqs?.[0]?.question || '' },
+    { key: 'disclaimer', sample: stripHtml(expertData.disclaimerHtml) },
+  ];
+
+  const matchStructuredKey = (entryHtml?: string): string | null => {
+    const plain = stripHtml(entryHtml);
+    if (!plain) return null;
+    for (const { key, sample } of structuredMatchers) {
+      const trimmed = sample.slice(0, 40);
+      if (trimmed.length > 10 && plain.includes(trimmed)) return key;
+    }
+    return null;
   };
 
-  // Dedupe additionalSections against the dedicated sections above (this is
-  // what was causing the FAQ block to render twice — once as a generic
-  // rich-text section and again as the accordion) and against duplicate
-  // titles inside additionalSections itself. Also drop empty entries.
-  const knownTitles = new Set(
-    Object.values(sectionTitles).map((t) => normalizeTitle(t as string)),
-  );
-  const seenAdditionalTitles = new Set<string>();
-  const cleanedAdditionalSections = (
-    expertData.additionalSections || []
-  ).filter((section: any) => {
-    if (!section?.html && !section?.images?.length) return false;
-    const norm = normalizeTitle(section.title);
-    if (knownTitles.has(norm)) return false;
-    if (seenAdditionalTitles.has(norm)) return false;
-    seenAdditionalTitles.add(norm);
-    return true;
+  const structuredHasData: Record<string, boolean> = {
+    professionalOverview: !!expertData?.professionalOverview?.length,
+    education: !!expertData?.education?.length,
+    focusAreas: !!expertData?.focusAreas?.length,
+    workPhilosophy: !!expertData.workPhilosophyHtml,
+    vulnerableGroups: !!expertData.vulnerableGroupsHtml,
+    roleDescription: !!expertData.roleDescriptionHtml,
+    faqs: !!expertData?.faqs?.length,
+    disclaimer: !!expertData.disclaimerHtml,
+  };
+
+  const renderStructuredSection = (
+    key: string,
+    title: string | undefined,
+    nodeKey: string,
+  ): React.ReactNode => {
+    switch (key) {
+      case 'professionalOverview':
+        return structuredHasData.professionalOverview ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <div className="space-y-4">
+              {expertData.professionalOverview.map(
+                (item: any, index: number) => (
+                  <ExpertRichText
+                    key={index}
+                    html={
+                      item.descriptionHtml || `<p>${item.description || ''}</p>`
+                    }
+                  />
+                ),
+              )}
+            </div>
+          </section>
+        ) : null;
+
+      case 'education':
+        return structuredHasData.education ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <ul className="overflow-hidden rounded-2xl border border-[#e9ddd4] bg-white">
+              {expertData.education.map((item: any, i: number) => (
+                <li
+                  key={`${item.title}-${i}`}
+                  className="flex items-start gap-3 border-b border-[#e9ddd4] px-5 py-4 last:border-b-0"
+                >
+                  <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#7B6A5E]/10">
+                    <Check
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-[#7B6A5E]"
+                    />
+                  </span>
+                  {item.year && item.year !== '—' && (
+                    <span className="text-sm text-[#8B7E74]">{item.year}</span>
+                  )}
+                  <p className="text-sm text-[#4F433B]">{item.title}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null;
+
+      case 'focusAreas':
+        return structuredHasData.focusAreas ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <div className="space-y-8">
+              {expertData.focusAreas.map((area: any) => (
+                <div
+                  key={area.title}
+                  className="rounded-2xl border border-[#e9ddd4] bg-white p-6"
+                >
+                  <h3 className="mb-2 font-serif text-lg text-[#4F433B]">
+                    {area.title}
+                  </h3>
+                  <ExpertRichText html={area.contentHtml} />
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null;
+
+      case 'workPhilosophy':
+        return structuredHasData.workPhilosophy ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <ExpertRichText html={expertData.workPhilosophyHtml} />
+          </section>
+        ) : null;
+
+      case 'vulnerableGroups':
+        return structuredHasData.vulnerableGroups ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <ExpertRichText html={expertData.vulnerableGroupsHtml} />
+          </section>
+        ) : null;
+
+      case 'roleDescription':
+        return structuredHasData.roleDescription ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <ExpertRichText html={expertData.roleDescriptionHtml} />
+
+            {!!expertData?.reviewedArticles?.length && (
+              <ul className="mt-3 space-y-2">
+                {expertData.reviewedArticles.map((article: any) => (
+                  <li key={article.url}>
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-semibold text-[#7B6A5E] underline underline-offset-2 transition-colors hover:text-[#5F5148] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7B6A5E]/40 focus-visible:rounded-sm"
+                    >
+                      {article.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {expertData.furtherReadingHtml && (
+              <ExpertRichText
+                html={expertData.furtherReadingHtml}
+                className="mt-4"
+              />
+            )}
+          </section>
+        ) : null;
+
+      case 'faqs':
+        return structuredHasData.faqs ? (
+          <section key={nodeKey} className="mt-16">
+            <SectionHeading>{title}</SectionHeading>
+            <div className="flex flex-col gap-3">
+              {expertData.faqs.map((faq: any, index: number) => (
+                <FAQItem
+                  key={`${faq.question}-${index}`}
+                  question={faq.question}
+                  answer={faq.answer}
+                  sourceUrl={faq.sourceUrl || faq.url}
+                  isOpen={openFaqIndex === index}
+                  onToggle={() => toggleFaq(index)}
+                  buttonId={`faq-button-${index}`}
+                  panelId={`faq-panel-${index}`}
+                />
+              ))}
+            </div>
+          </section>
+        ) : null;
+
+      case 'disclaimer':
+        return structuredHasData.disclaimer ? (
+          <section
+            key={nodeKey}
+            className="mt-16 border-t border-[#e9ddd4] pt-10"
+          >
+            <SectionHeading>{title}</SectionHeading>
+            <ExpertRichText html={expertData.disclaimerHtml} />
+          </section>
+        ) : null;
+
+      default:
+        return null;
+    }
+  };
+
+  const introSample = (
+    stripHtml(expertData.introductionHtml) ||
+    expertData.introduction ||
+    ''
+  ).slice(0, 40);
+  const introMatch =
+    introSample.length > 10
+      ? allSectionsRaw.find((s) => stripHtml(s?.html).includes(introSample))
+      : undefined;
+  const introductionTitle = expertData.introductionTitle || introMatch?.title;
+
+  const introductionNode =
+    expertData.introductionHtml || expertData.introduction ? (
+      <section key="introduction" className="mt-16">
+        <SectionHeading>{introductionTitle}</SectionHeading>
+        {expertData.introductionHtml ? (
+          <ExpertRichText html={expertData.introductionHtml} />
+        ) : (
+          <p className="text-[15px] leading-7 text-[#6F6258]">
+            {expertData.introduction}
+          </p>
+        )}
+      </section>
+    ) : null;
+
+  const matchedStructuredKeys = new Set<string>();
+  const seenGenericTitles = new Set<string>();
+  const bodyNodes: React.ReactNode[] = [];
+
+  allSectionsRaw.forEach((entry: any, idx: number) => {
+    if (!entry?.html && !entry?.images?.length) return;
+    if (introMatch && entry === introMatch) return;
+    const matchedKey = matchStructuredKey(entry.html);
+    if (
+      matchedKey &&
+      structuredHasData[matchedKey] &&
+      !matchedStructuredKeys.has(matchedKey)
+    ) {
+      matchedStructuredKeys.add(matchedKey);
+      bodyNodes.push(
+        renderStructuredSection(
+          matchedKey,
+          entry.title,
+          `${matchedKey}-${idx}`,
+        ),
+      );
+      return;
+    }
+    if (matchedKey && matchedStructuredKeys.has(matchedKey)) {
+      return;
+    }
+    const norm = normalizeTitle(entry.title);
+    if (seenGenericTitles.has(norm)) return;
+    seenGenericTitles.add(norm);
+    bodyNodes.push(
+      <GenericSection
+        key={`generic-${idx}`}
+        title={entry.title}
+        html={entry.html}
+        images={entry.images}
+      />,
+    );
+  });
+  Object.keys(structuredHasData).forEach((key) => {
+    if (!structuredHasData[key] || matchedStructuredKeys.has(key)) return;
+    const explicitTitle = (expertData as any)[`${key}Title`];
+    bodyNodes.push(
+      renderStructuredSection(key, explicitTitle, `${key}-fallback`),
+    );
   });
 
-  // Order of sections is driven by the backend (expertData.sectionOrder).
-  // IMPORTANT: this only controls ORDER, it never hides a section. If the
-  // backend's custom order is missing a key (e.g. "professionalOverview"),
-  // that section is appended at the end instead of being dropped — so a
-  // section with real data never silently disappears just because it
-  // wasn't listed.
-  const customOrder: string[] = Array.isArray(expertData.sectionOrder)
-    ? expertData.sectionOrder
-    : [];
-  const remainingKeys = DEFAULT_SECTION_ORDER.filter(
-    (key) => !customOrder.includes(key),
-  );
-  const sectionOrder: string[] = [...customOrder, ...remainingKeys];
-
-  const sectionNodes: Record<string, React.ReactNode> = {
-    introduction:
-      expertData.introductionHtml || expertData.introduction ? (
-        <section key="introduction" className="mt-16">
-          <SectionHeading eyebrow="Om eksperten">
-            {sectionTitles.introduction}
-          </SectionHeading>
-          {expertData.introductionHtml ? (
-            <ExpertRichText html={expertData.introductionHtml} />
-          ) : (
-            <p className="text-[15px] leading-7 text-[#6F6258]">
-              {expertData.introduction}
-            </p>
-          )}
-        </section>
-      ) : null,
-
-    professionalOverview: expertData?.professionalOverview?.length ? (
-      <section key="professionalOverview" className="mt-16">
-        <SectionHeading>{sectionTitles.professionalOverview}</SectionHeading>
-        <div className="grid gap-5 sm:grid-cols-2">
-          {expertData.professionalOverview.map((item: any, index: number) => {
-            const icons = [Heart, ShieldCheck, Lightbulb, Briefcase];
-            const Icon = icons[index % icons.length];
-            const tone = ICON_TONES[index % ICON_TONES.length];
-
-            return (
-              <Card
-                key={index}
-                className="group relative overflow-hidden border-[#e9ddd4] bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#7B6A5E] to-[#7B6A5E]/30 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                />
-                <CardContent className="p-6">
-                  <span
-                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl ring-1 ${tone.bg} ${tone.ring}`}
-                  >
-                    <Icon aria-hidden="true" className={`h-6 w-6 ${tone.fg}`} />
-                  </span>
-                  <p className="text-sm leading-6 text-[#7A6E65]">
-                    {item.description}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-    ) : null,
-
-    education: expertData?.education?.length ? (
-      <section key="education" className="mt-16">
-        <SectionHeading>{sectionTitles.education}</SectionHeading>
-        <ul className="overflow-hidden rounded-2xl border border-[#e9ddd4] bg-white">
-          {expertData.education.map((item: any, i: number) => (
-            <li
-              key={`${item.title}-${i}`}
-              className="flex items-start gap-3 border-b border-[#e9ddd4] px-5 py-4 last:border-b-0"
-            >
-              <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#7B6A5E]/10">
-                <Check
-                  aria-hidden="true"
-                  className="h-3.5 w-3.5 text-[#7B6A5E]"
-                />
-              </span>
-              {item.year && item.year !== '—' && (
-                <span className="text-sm text-[#8B7E74]">{item.year}</span>
-              )}
-              <p className="text-sm text-[#4F433B]">{item.title}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ) : null,
-
-    focusAreas: expertData?.focusAreas?.length ? (
-      <section key="focusAreas" className="mt-16">
-        <SectionHeading>{sectionTitles.focusAreas}</SectionHeading>
-        <div className="space-y-8">
-          {expertData.focusAreas.map((area: any) => (
-            <div
-              key={area.title}
-              className="rounded-2xl border border-[#e9ddd4] bg-white p-6"
-            >
-              <h3 className="mb-2 font-serif text-lg text-[#4F433B]">
-                {area.title}
-              </h3>
-              <ExpertRichText html={area.contentHtml} />
-            </div>
-          ))}
-        </div>
-      </section>
-    ) : null,
-
-    workPhilosophy: expertData.workPhilosophyHtml ? (
-      <section key="workPhilosophy" className="mt-16">
-        <SectionHeading>{sectionTitles.workPhilosophy}</SectionHeading>
-        <ExpertRichText html={expertData.workPhilosophyHtml} />
-      </section>
-    ) : null,
-
-    vulnerableGroups: expertData.vulnerableGroupsHtml ? (
-      <section key="vulnerableGroups" className="mt-16">
-        <SectionHeading>{sectionTitles.vulnerableGroups}</SectionHeading>
-        <ExpertRichText html={expertData.vulnerableGroupsHtml} />
-      </section>
-    ) : null,
-
-    roleDescription: expertData.roleDescriptionHtml ? (
-      <section key="roleDescription" className="mt-16">
-        <SectionHeading>{sectionTitles.roleDescription}</SectionHeading>
-        <ExpertRichText html={expertData.roleDescriptionHtml} />
-
-        {!!expertData?.reviewedArticles?.length && (
-          <ul className="mt-3 space-y-2">
-            {expertData.reviewedArticles.map((article: any) => (
-              <li key={article.url}>
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-semibold text-[#7B6A5E] underline underline-offset-2 transition-colors hover:text-[#5F5148] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7B6A5E]/40 focus-visible:rounded-sm"
-                >
-                  {article.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {expertData.furtherReadingHtml && (
-          <ExpertRichText
-            html={expertData.furtherReadingHtml}
-            className="mt-4"
-          />
-        )}
-      </section>
-    ) : null,
-
-    additionalSections: cleanedAdditionalSections.length ? (
-      <div key="additionalSections">
-        {cleanedAdditionalSections.map((section: any) => (
-          <GenericSection
-            key={section.title}
-            title={section.title}
-            html={section.html}
-            images={section.images}
-          />
-        ))}
-      </div>
-    ) : null,
-
-    faqs: expertData?.faqs?.length ? (
-      <section key="faqs" className="mt-16">
-        <SectionHeading>{sectionTitles.faqs}</SectionHeading>
-        <div className="flex flex-col gap-3">
-          {expertData.faqs.map((faq: any, index: number) => (
-            <FAQItem
-              key={`${faq.question}-${index}`}
-              question={faq.question}
-              answer={faq.answer}
-              sourceUrl={faq.sourceUrl || faq.url}
-              isOpen={openFaqIndex === index}
-              onToggle={() => toggleFaq(index)}
-              buttonId={`faq-button-${index}`}
-              panelId={`faq-panel-${index}`}
-            />
-          ))}
-        </div>
-      </section>
-    ) : null,
-
-    disclaimer: expertData.disclaimerHtml ? (
-      <section
-        key="disclaimer"
-        className="mt-16 border-t border-[#e9ddd4] pt-10"
-      >
-        <SectionHeading>{sectionTitles.disclaimer}</SectionHeading>
-        <ExpertRichText html={expertData.disclaimerHtml} />
-      </section>
-    ) : null,
-  };
-
-  // Contact section has a photo plus (optionally) a short CTA/message. If
-  // there's no actual content for it, we hide the whole section instead of
-  // showing a lone image floating in an empty box.
   const hasContactContent = Boolean(
     expertData.contactHtml ||
     expertData.contactHeading ||
@@ -539,7 +547,6 @@ const ExpertDetailPage = ({ slug: slugProp }: ExpertDetailPageProps) => {
       </nav>
 
       <div className="container mx-auto max-w-7xl px-4 pb-16">
-        {/* Hero */}
         <div className="relative overflow-hidden rounded-[2rem] border border-[#e9ddd4] bg-gradient-to-br from-[#faf4ee] via-[#fdf9f6] to-[#f6ece1] px-6 py-10 md:px-14 md:py-14">
           <div
             aria-hidden="true"
@@ -600,10 +607,8 @@ const ExpertDetailPage = ({ slug: slugProp }: ExpertDetailPageProps) => {
             </div>
           </div>
         </div>
-
-        {/* Sections render in whatever order the backend specifies via
-            expertData.sectionOrder, falling back to DEFAULT_SECTION_ORDER. */}
-        {sectionOrder.map((key) => sectionNodes[key] ?? null)}
+        {introductionNode}
+        {bodyNodes}
 
         {hasContactContent && (
           <section

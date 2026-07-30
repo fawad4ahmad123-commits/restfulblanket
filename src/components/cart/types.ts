@@ -12,6 +12,7 @@ export interface CartItem {
   variationId?: number;
   stockQuantity?: number | string | null;
   attribute_links?: { name: string; value: string }[];
+  attributes?: { color: string; size: string; weight: string };
 }
 
 export interface UpsellItem {

@@ -21,7 +21,7 @@ const Coments = ({ id }: { id: string }) => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const isHome = ['/'].includes(pathname);
+  const isHome = pathname === '/' || pathname === '/shop';
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
