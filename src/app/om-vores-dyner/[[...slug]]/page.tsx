@@ -29,11 +29,18 @@ const CUSTOM_GUIDE_SLUGS = new Set<string>(['vaske-tyngdedyne']);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+
   const pageSlug = getPageSlug(slug);
+
   const page = await fetchGuidePageBySlug(getWpSlug(pageSlug));
 
   if (!page) {
-    return { robots: { index: false, follow: false } };
+    return {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
   }
 
   const guide = parseGuidePage(page);
@@ -49,31 +56,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
+
   const pageSlug = getPageSlug(slug);
 
   if (pageSlug === 'om-vores-dyner') {
     const hubPage = await fetchGuidePageBySlug(pageSlug);
-    if (!hubPage) notFound();
+
+    if (!hubPage) {
+      notFound();
+    }
 
     const hub = parseGuidesHubPage(hubPage);
+
     return <GuidesHub hub={hub} />;
   }
 
   const page = await fetchGuidePageBySlug(getWpSlug(pageSlug));
-  if (!page) notFound();
+
+  if (!page) {
+    notFound();
+  }
 
   if (CUSTOM_GUIDE_SLUGS.has(getWpSlug(pageSlug))) {
+    const plainTitle = page.title.rendered.replace(/<[^>]+>/g, '').trim();
+
     return (
-      <article className="mx-auto max-w-3xl px-4 py-10">
-        <h1
-          className="mb-6 text-3xl font-bold"
-          dangerouslySetInnerHTML={{ __html: page.title.rendered }}
-        />
-        <WPContent html={page.content.rendered} />
-      </article>
+      <div style={{ backgroundColor: '#fdf9f6' }} className="min-h-screen">
+        <div className="px-4 py-3 text-center sm:py-16">
+          <h1
+            className="mx-auto max-w-6xl text-3xl font-bold sm:text-4xl"
+            style={{ color: '#392a22' }}
+            dangerouslySetInnerHTML={{ __html: page.title.rendered }}
+          />
+        </div>
+
+        <article className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+          <div>
+            <WPContent html={page.content.rendered} pageTitle={plainTitle} />
+          </div>
+        </article>
+      </div>
     );
   }
 
   const guide = parseGuidePage(page);
+
   return <GuidePage guide={guide} />;
 }

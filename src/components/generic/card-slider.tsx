@@ -37,9 +37,6 @@ const SliderCard = ({
   isProduct,
   stockQuantity = null,
   stockStatus = 'outofstock',
-  // availableColors = [],
-  // availableSizes = [],
-  // availableWeights = [],
 }: ExtendedSliderCardProps) => {
   const { addToCart } = useCart();
   const { compareItems, toggleCompare } = useCompare();
@@ -51,45 +48,6 @@ const SliderCard = ({
   );
   const stars = Math.round(rating);
   const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
-  // const [showConfig, setShowConfig] = useState(false);
-  // const [selectedColor, setSelectedColor] = useState(color || '');
-  // const [selectedSize, setSelectedSize] = useState(size || '');
-  // const [selectedWeight, setSelectedWeight] = useState(weight || '');
-  // const hasOptions =
-  //   availableColors.length > 0 ||
-  //   availableSizes.length > 0 ||
-  //   availableWeights.length > 0;
-
-  // const handleAddToCartClick = (e: React.MouseEvent) => {
-  //   e.stopPropagation();
-  //   if (isOutOfStock) return;
-  //   if (hasOptions) {
-  //     setShowConfig(true);
-  //     return;
-  //   }
-  //   addToCart({
-  //     id: String(id),
-  //     name: title,
-  //     color: color || '',
-  //     variant: size || '',
-  //     weight: weight || '',
-  //     price: Number(price) || 0,
-  //     image,
-  //   });
-  // };
-
-  // const confirmAddToCart = () => {
-  //   addToCart({
-  //     id: String(id),
-  //     name: title,
-  //     color: selectedColor,
-  //     variant: selectedSize,
-  //     weight: selectedWeight,
-  //     price: Number(price) || 0,
-  //     image,
-  //   });
-  //   setShowConfig(false);
-  // };
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,10 +68,10 @@ const SliderCard = ({
   return (
     <>
       <div
-        className="group flex h-[624px] flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300 cursor-pointer"
+        className="group flex h-full min-h-[624px] max-h-[624px] flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300 cursor-pointer"
         onClick={() => router.push(`/shop/${slug}`)}
       >
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden flex-shrink-0">
           <div
             className={`
     relative
@@ -123,15 +81,6 @@ const SliderCard = ({
     transition-all
     duration-300
   `}
-
-            // className={`
-            //   relative
-            //   h-[340px]
-            //   md:h-[420px]
-            //   transition-all
-            //   duration-300
-            //   ${showConfig ? 'blur-sm scale-105' : ''}
-            // `}
           >
             {image ? (
               <Image
@@ -159,22 +108,6 @@ const SliderCard = ({
               />
             )}
           </div>
-
-          {/* {showConfig && (
-            <ProductConfigOverlay
-              availableColors={availableColors}
-              availableSizes={availableSizes}
-              availableWeights={availableWeights}
-              selectedColor={selectedColor}
-              selectedSize={selectedSize}
-              selectedWeight={selectedWeight}
-              setSelectedColor={setSelectedColor}
-              setSelectedSize={setSelectedSize}
-              setSelectedWeight={setSelectedWeight}
-              onClose={() => setShowConfig(false)}
-              onAddToCart={confirmAddToCart}
-            />
-          )} */}
 
           {isProduct === false && (
             <div className="absolute left-4 top-4 z-10 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
@@ -247,8 +180,8 @@ const SliderCard = ({
           )}
         </div>
 
-        <div className="flex flex-1 flex-col px-5 pb-5 pt-5">
-          <div className="mb-3 flex items-center gap-1">
+        <div className="flex flex-1 flex-col px-5 pb-5 pt-5 overflow-hidden min-h-0">
+          <div className="mb-3 flex items-center gap-1 flex-shrink-0">
             {Array.from({ length: 5 }).map((_, i) => (
               <svg
                 key={i}
@@ -263,19 +196,19 @@ const SliderCard = ({
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             ))}
-            <span className="ml-2 text-xs text-[#35281E]">
+            <span className="ml-2 text-xs text-[#35281E] whitespace-nowrap">
               {rating} · {reviewCount.toLocaleString()}
             </span>
           </div>
-          <h3 className="mb-2 line-clamp-2  text-lg font-medium leading-snug text-[#35281E]">
+          <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[#35281E] min-h-[3.5rem]">
             {title}
           </h3>
           {(weight || size) && (
-            <p className="mb-2 text-xs text-[#35281E]">
+            <p className="mb-2 text-xs text-[#35281E] flex-shrink-0">
               {[weight, size].filter(Boolean).join(' · ')}
             </p>
           )}
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#3b281f]">
                 {formatPrice(price)}
@@ -304,6 +237,7 @@ const SliderCard = ({
                   flex
                   h-10
                   w-10
+                  flex-shrink-0
                   items-center
                   justify-center
                   rounded-full
@@ -336,6 +270,7 @@ const SliderCard = ({
                 mt-auto
                 flex
                 w-full
+                flex-shrink-0
                 items-center
                 justify-center
                 gap-2
