@@ -31,7 +31,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         <BreadcrumbNav />
 
         <h1 className="mt-4 font-serif text-4xl text-[#35281E] md:text-5xl">
-          Compare products
+          Sammenlign produkter
         </h1>
 
         <section

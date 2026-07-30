@@ -128,6 +128,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
                 images={product?.images}
                 badge={product?.badge}
                 productName={product?.name}
+                data={product}
               />
             </div>
 

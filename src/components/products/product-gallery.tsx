@@ -5,11 +5,13 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useWishlist } from '@/src/core/context/wishlist-provider';
 
 interface ProductGalleryProps {
   images?: string[];
   badge?: string;
   productName?: string;
+  data: any;
 }
 
 const SWIPE_THRESHOLD = 50;
@@ -18,11 +20,31 @@ const ProductGallery = ({
   images = [],
   badge,
   productName = 'Product',
+  data,
 }: ProductGalleryProps) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isFavorited, setIsFavorited] = React.useState(false);
+  const { toggleWishlist, isWishlisted } = useWishlist();
 
-  const safeImages = Array.isArray(images) ? images : [];
+  const {
+    id,
+    title,
+    price,
+    image,
+    slug,
+    hoverImage,
+    originalPrice,
+    rating,
+    reviewCount,
+    weight,
+    dimensions,
+    color,
+    size,
+  } = data || {};
+
+  const wished = isWishlisted(String(id));
+  const safeImages =
+    Array.isArray(images) && images.length > 0 ? images : [image];
 
   const goPrev = () =>
     setActiveIndex((prev) => (prev === 0 ? safeImages.length - 1 : prev - 1));
@@ -63,7 +85,7 @@ const ProductGallery = ({
     pointerDeltaX.current = 0;
   };
 
-  if (safeImages.length === 0) {
+  if (safeImages.length === 0 || !safeImages[0]) {
     return (
       <div className="relative flex aspect-[636/704] w-full items-center justify-center rounded-2xl bg-[#EFE7DA]">
         <span className="text-sm text-gray-500">
@@ -93,28 +115,45 @@ const ProductGallery = ({
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
           className="object-cover pointer-events-none"
         />
-        <Button
+
+        <button
           type="button"
-          size="icon"
-          variant="ghost"
-          aria-label={isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
-          title={isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
-          onClick={() => setIsFavorited((v) => !v)}
-          className="absolute right-4 top-4 z-20 h-10 w-10 rounded-full bg-white/90 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3F3A36] focus-visible:ring-offset-2"
+          aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+          title={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleWishlist({
+              id: String(id),
+              name: title || productName,
+              price: Number(price) || 0,
+              image: image || safeImages[0],
+              slug: slug || '',
+              hoverImage: hoverImage || '',
+              originalPrice: originalPrice ? Number(originalPrice) : undefined,
+              rating: rating || 0,
+              reviewCount: reviewCount || 0,
+              weight: weight || '',
+              dimensions: dimensions || '',
+              color: color || '',
+              size: size || '',
+              badge: badge || '',
+            });
+          }}
+          className="absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35281E] focus-visible:ring-offset-2"
         >
           <Heart
+            size={16}
             aria-hidden="true"
             focusable="false"
-            className={cn(
-              'h-4 w-4 transition-colors',
-              isFavorited ? 'fill-[#3F3A36] text-[#3F3A36]' : 'text-[#3F3A36]',
-            )}
+            className={
+              wished ? 'fill-[#35281E] text-[#35281E]' : 'text-[#35281E]'
+            }
           />
-
           <span className="sr-only">
-            {isFavorited ? 'Remove from wishlist' : 'Add to wishlist'}
+            {wished ? 'Remove from wishlist' : 'Add to wishlist'}
           </span>
-        </Button>
+        </button>
+
         {safeImages.length > 1 && (
           <Button
             type="button"
@@ -127,6 +166,7 @@ const ProductGallery = ({
             <ChevronLeft className="h-4 w-4 text-[#3F3A36]" />
           </Button>
         )}
+
         {safeImages.length > 1 && (
           <Button
             type="button"
@@ -139,6 +179,7 @@ const ProductGallery = ({
             <ChevronRight className="h-4 w-4 text-[#3F3A36]" />
           </Button>
         )}
+
         {safeImages.length > 1 && (
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
             {safeImages.map((_, i) => (
