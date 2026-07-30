@@ -68,15 +68,15 @@ const SliderCard = ({
   return (
     <>
       <div
-        className="group flex h-full min-h-[624px] max-h-[624px] flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300 cursor-pointer"
+        className="group flex h-full min-h-[580px] max-h-[580px] flex-col overflow-hidden rounded-[24px] border border-[#E9DDD4] bg-[#fdf9f6] transition-all duration-300 cursor-pointer"
         onClick={() => router.push(`/shop/${slug}`)}
       >
         <div className="relative overflow-hidden flex-shrink-0">
           <div
             className={`
     relative
-    h-[340px]
-    md:h-[420px]
+    h-[280px]
+    md:h-[340px]
     flex-shrink-0
     transition-all
     duration-300
@@ -180,8 +180,8 @@ const SliderCard = ({
           )}
         </div>
 
-        <div className="flex flex-1 flex-col px-5 pb-5 pt-5 overflow-hidden min-h-0">
-          <div className="mb-3 flex items-center gap-1 flex-shrink-0">
+        <div className="flex flex-1 flex-col px-5 pb-5 pt-4 overflow-hidden min-h-0">
+          <div className="mb-2 flex items-center gap-1 flex-shrink-0">
             {Array.from({ length: 5 }).map((_, i) => (
               <svg
                 key={i}
@@ -200,21 +200,21 @@ const SliderCard = ({
               {rating} · {reviewCount.toLocaleString()}
             </span>
           </div>
-          <h3 className="mb-2 line-clamp-2 text-lg font-medium leading-snug text-[#35281E] min-h-[3.5rem]">
+          <h3 className="mb-1 line-clamp-2 text-base font-medium leading-snug text-[#35281E] min-h-[2.8rem]">
             {title}
           </h3>
           {(weight || size) && (
-            <p className="mb-2 text-xs text-[#35281E] flex-shrink-0">
+            <p className="mb-1 text-xs text-[#35281E] flex-shrink-0">
               {[weight, size].filter(Boolean).join(' · ')}
             </p>
           )}
           <div className="mb-2 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold text-[#3b281f]">
+              <span className="text-base font-semibold text-[#3b281f]">
                 {formatPrice(price)}
               </span>
               {originalPrice && (
-                <span className="text-sm text-[#35281E] line-through">
+                <span className="text-xs text-[#35281E] line-through">
                   {formatPrice(originalPrice)}
                 </span>
               )}
@@ -235,8 +235,8 @@ const SliderCard = ({
               className={cn(
                 `
                   flex
-                  h-10
-                  w-10
+                  h-9
+                  w-9
                   flex-shrink-0
                   items-center
                   justify-center
@@ -250,13 +250,13 @@ const SliderCard = ({
               )}
             >
               {isCompared ? (
-                <Check className="h-5 w-5" />
+                <Check className="h-4 w-4" />
               ) : (
                 <Image
                   src="/home/card-compare-icon.png"
                   alt="compare"
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                 />
               )}
             </button>
@@ -275,7 +275,7 @@ const SliderCard = ({
                 justify-center
                 gap-2
                 rounded-full
-                py-3
+                py-2.5
                 text-sm
                 font-medium
                 transition
