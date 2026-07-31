@@ -58,7 +58,7 @@ export const navigation = [
   },
   {
     title: 'Søvn og ro',
-    href: '/soevn-og-ro',
+    href: '',
     groups: [
       {
         heading: 'SØVN OG RO',

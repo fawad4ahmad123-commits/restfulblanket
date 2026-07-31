@@ -22,7 +22,6 @@ const Coments = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(true);
 
   const isHome = pathname === '/' || pathname === '/shop';
-
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
 
@@ -36,6 +35,7 @@ const Coments = ({ id }: { id: string }) => {
       setLoading(true);
 
       const data = await getProductReviews(Number(id), isHome);
+      console.log('t12 reviews', { data, isHome });
 
       setReviews(data);
     } catch (error) {

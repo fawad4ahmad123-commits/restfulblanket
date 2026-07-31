@@ -1,256 +1,132 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import QuizIntro from './quiz-intro';
+
 import {
-  ArrowLeft,
-  ArrowRight,
-  User,
-  Baby,
-  Users,
-  Dog,
-  Check,
-} from 'lucide-react';
+  findBestDogMatch,
+  findBestMatch,
+  getRecommendation,
+} from '@/src/lib/quiz/quiz-logic';
+import { getQuestions } from './quiz-question';
+import { useQuizResult } from '@/src/core/context/quiz-result-context';
 
-const QUESTIONS = [
-  {
-    id: 'user',
-    title: 'Hvem skal bruge tyngdeproduktet?',
-    subtitle: 'Vi tilpasser anbefalingen til alder og behov.',
-    answers: [
-      {
-        id: 'adult',
-        title: 'Voksen',
-        subtitle: '15+ år',
-        icon: User,
-      },
-      {
-        id: 'child',
-        title: 'Barn',
-        subtitle: '5–14 år',
-        icon: User,
-      },
-      {
-        id: 'baby',
-        title: 'Baby / Småbørn',
-        subtitle: '0–4 år (kun under opsyn)',
-        icon: Baby,
-      },
-      {
-        id: 'couple',
-        title: 'Par (delt seng)',
-        subtitle: 'To voksne',
-        icon: Users,
-      },
-      {
-        id: 'dog',
-        title: 'Hund',
-        subtitle: 'Til urolige hunde',
-        icon: Dog,
-      },
-    ],
-  },
+const RESULT_ROUTE = '/din-anbefaling/tryghed-til-barn-med-angst';
 
-  {
-    id: 'weight',
-    title: 'Hvad vejer personen?',
-    subtitle: 'Vi bruger vægten til at finde den rette model.',
-    answers: [
-      {
-        id: 'under60',
-        title: 'Under 60 kg',
-        subtitle: 'Let vægt',
-        icon: User,
-      },
-      {
-        id: '60-90',
-        title: '60 - 90 kg',
-        subtitle: 'Mellem vægt',
-        icon: User,
-      },
-      {
-        id: '90plus',
-        title: 'Over 90 kg',
-        subtitle: 'Høj vægt',
-        icon: User,
-      },
-    ],
-  },
+export default function SleepQuiz({
+  products,
+  dogProducts,
+  babyProducts,
+  introVariant = 'page',
+}: {
+  products: any[];
+  dogProducts?: any[];
+  babyProducts?: any[];
+  categories: any[];
+  introVariant?: 'page' | 'card';
+}) {
+  const router = useRouter();
+  const { setResult } = useQuizResult();
 
-  {
-    id: 'sleep',
-    title: 'Hvordan sover personen?',
-    subtitle: 'Fortæl lidt om søvnen.',
-    answers: [
-      {
-        id: 'poor',
-        title: 'Dårligt',
-        subtitle: 'Vågner ofte',
-        icon: User,
-      },
-      {
-        id: 'average',
-        title: 'Nogenlunde',
-        subtitle: 'Varierende søvn',
-        icon: User,
-      },
-      {
-        id: 'good',
-        title: 'Godt',
-        subtitle: 'Sover normalt',
-        icon: User,
-      },
-    ],
-  },
-
-  {
-    id: 'stress',
-    title: 'Oplever personen stress eller uro?',
-    subtitle: 'Dette hjælper os med anbefalingen.',
-    answers: [
-      {
-        id: 'often',
-        title: 'Ofte',
-        subtitle: 'Dagligt',
-        icon: User,
-      },
-      {
-        id: 'sometimes',
-        title: 'Nogle gange',
-        subtitle: 'Indimellem',
-        icon: User,
-      },
-      {
-        id: 'never',
-        title: 'Sjældent',
-        subtitle: 'Næsten aldrig',
-        icon: User,
-      },
-    ],
-  },
-
-  {
-    id: 'goal',
-    title: 'Hvad ønsker du hjælp til?',
-    subtitle: 'Vælg det vigtigste mål.',
-    answers: [
-      {
-        id: 'sleep',
-        title: 'Bedre søvn',
-        subtitle: 'Sov hurtigere',
-        icon: User,
-      },
-      {
-        id: 'stress',
-        title: 'Mindre stress',
-        subtitle: 'Mere ro',
-        icon: User,
-      },
-      {
-        id: 'focus',
-        title: 'Mere fokus',
-        subtitle: 'Bedre koncentration',
-        icon: User,
-      },
-    ],
-  },
-];
-
-export default function SleepQuiz() {
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState('');
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const progress = ((step + 1) / QUESTIONS.length) * 100;
+  const QUESTIONS = useMemo(() => getQuestions(answers), [answers.user]);
 
+  const progress = ((step + 1) / QUESTIONS.length) * 100;
   const question = QUESTIONS[step];
 
   const handleNext = () => {
     if (!selected) return;
 
-    const updatedAnswers = {
-      ...answers,
-      [question.id]: selected,
-    };
-
+    const updatedAnswers = { ...answers, [question.id]: selected };
     setAnswers(updatedAnswers);
 
-    if (step < QUESTIONS.length - 1) {
+    const nextQuestions = getQuestions(updatedAnswers);
+
+    if (step < nextQuestions.length - 1) {
       setStep((prev) => prev + 1);
       setSelected('');
-    } else {
-      setStep(QUESTIONS.length);
+      return;
     }
+
+    const rec = getRecommendation(updatedAnswers);
+
+    const matched = rec.isDog
+      ? findBestDogMatch(dogProducts ?? products, rec.dogSize)
+      : rec.isBaby
+        ? findBestMatch(babyProducts ?? products, rec)
+        : findBestMatch(products, rec);
+
+    const productName =
+      matched?.name ??
+      (rec.isDog
+        ? 'DoggyRo Tyngdetæppe'
+        : rec.isBaby
+          ? 'Natural weighted blanket for baby 70x100 cm'
+          : 'Tyngdedyne');
+
+    const size =
+      matched?.attributes?.find((a: any) =>
+        ['størrelse', 'size'].includes(a?.name?.toLowerCase?.()),
+      )?.options?.[0] ??
+      (rec.isDog
+        ? rec.dogSize === 'large'
+          ? '70x100 cm'
+          : '50x70 cm'
+        : '70x100 cm');
+
+    const weightLabel = rec.isDog
+      ? rec.dogSize === 'large'
+        ? '4-5 kg'
+        : '2-3 kg'
+      : `${rec.idealWeight} kg`;
+
+    const price = matched?.price
+      ? `${matched.price} kr.`
+      : rec.isDog
+        ? '499 kr.'
+        : '599 kr.';
+
+    const ctaLabel = rec.isDog
+      ? 'Se produkt'
+      : `Se produkt – ${rec.idealWeight} kg`;
+
+    setResult({
+      productName,
+      size,
+      weightLabel,
+      price,
+      productSlug: matched?.slug,
+      ctaLabel,
+    });
+
+    router.push(RESULT_ROUTE);
   };
 
   const handleBack = () => {
     if (step === 0) return;
-
     setStep((prev) => prev - 1);
+    setSelected(answers[QUESTIONS[step - 1].id] ?? '');
   };
 
-  const restartQuiz = () => {
-    setAnswers({});
-    setSelected('');
-    setStep(0);
-  };
-
-  const finished = step >= QUESTIONS.length;
-
-  if (finished) {
+  if (!started) {
     return (
-      <section className="mx-auto max-w-3xl px-6 py-20">
-        <div className="rounded-3xl border border-[#E5D9D1] bg-white p-10 text-center shadow-sm">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#392A22]">
-            <Check className="h-10 w-10 text-white" />
-          </div>
-
-          <h2 className="mb-4 text-4xl font-semibold text-[#392A22]">
-            Din anbefaling er klar
-          </h2>
-
-          <p className="mx-auto mb-8 max-w-xl text-[#6D6D6D]">
-            Baseret på dine svar anbefaler vi en tyngdedyne, der passer bedst
-            til dine behov.
-          </p>
-
-          <div className="mb-8 rounded-2xl bg-[#FDF9F6] p-8">
-            <h3 className="text-2xl font-semibold text-[#392A22]">
-              Restful Blanket 7kg
-            </h3>
-
-            <p className="mt-2 text-[#6D6D6D]">
-              Perfekt balance mellem komfort, ro og støtte.
-            </p>
-          </div>
-
-          <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="rounded-xl bg-[#392A22] px-8 py-4 text-white transition hover:opacity-90">
-              Se produkt
-            </button>
-
-            <button
-              onClick={restartQuiz}
-              className="rounded-xl border border-[#392A22] px-8 py-4 text-[#392A22]"
-            >
-              Start igen
-            </button>
-          </div>
-        </div>
-      </section>
+      <QuizIntro variant={introVariant} onStart={() => setStarted(true)} />
     );
   }
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-16 lg:py-24">
-      {/* Progress */}
-
       <div className="mb-16 flex items-center gap-5">
         <div className="h-[4px] flex-1 rounded-full bg-[#E7DDD5]">
           <div
             className="h-full rounded-full bg-[#392A22] transition-all duration-300"
-            style={{
-              width: `${progress}%`,
-            }}
+            style={{ width: `${progress}%` }}
           />
         </div>
 
@@ -259,17 +135,12 @@ export default function SleepQuiz() {
         </span>
       </div>
 
-      {/* Heading */}
-
       <div className="mb-14 text-center">
         <h1 className="text-4xl font-semibold text-[#392A22] md:text-5xl">
           {question.title}
         </h1>
-
         <p className="mt-4 text-lg text-[#7B7B7B]">{question.subtitle}</p>
       </div>
-
-      {/* Answers */}
 
       <div className="grid gap-4 md:grid-cols-2">
         {question.answers.map((answer) => {
@@ -282,7 +153,6 @@ export default function SleepQuiz() {
               onClick={() => setSelected(answer.id)}
               className={`
                 relative flex items-center gap-4 rounded-2xl border p-6 text-left transition-all
-
                 ${
                   active
                     ? 'border-[#392A22] bg-[#FAF4EE] shadow-md'
@@ -298,7 +168,6 @@ export default function SleepQuiz() {
                 <h3 className="text-lg font-medium text-[#392A22]">
                   {answer.title}
                 </h3>
-
                 <p className="text-sm text-[#7B7B7B]">{answer.subtitle}</p>
               </div>
 
@@ -311,8 +180,6 @@ export default function SleepQuiz() {
           );
         })}
       </div>
-
-      {/* Footer */}
 
       <div className="mt-12 flex items-center justify-between">
         <button

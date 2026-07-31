@@ -256,7 +256,10 @@ export default function ForgetPassword() {
 
           <p className="text-center text-sm text-[#70655E]">
             If you need further assistance{' '}
-            <Link href="/contact-us" className="font-semibold text-[#211711]">
+            <Link
+              href="/kontakt-restfulblanket"
+              className="font-semibold text-[#211711]"
+            >
               contact us
             </Link>
           </p>

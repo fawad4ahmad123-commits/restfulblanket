@@ -11,6 +11,7 @@ import { WishlistProvider } from '../core/context/wishlist-provider';
 import { ProductMetaProvider } from '../core/context/product-meta-context';
 import ClientProviders from '../components/client-providers';
 import { getBestSellers, getCategories } from '../lib/products';
+import { QuizResultProvider } from '../core/context/quiz-result-context';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -49,21 +50,23 @@ export default async function RootLayout({
     >
       <body suppressHydrationWarning>
         <AuthProvider>
-          <ProductMetaProvider>
-            <WishlistProvider>
-              <CompareProvider>
-                <CartProvider>
-                  <MainLayout
-                    products={formattedProducts}
-                    categories={categories}
-                  >
-                    {children}
-                    <ClientProviders />
-                  </MainLayout>
-                </CartProvider>
-              </CompareProvider>
-            </WishlistProvider>
-          </ProductMetaProvider>
+          <QuizResultProvider>
+            <ProductMetaProvider>
+              <WishlistProvider>
+                <CompareProvider>
+                  <CartProvider>
+                    <MainLayout
+                      products={formattedProducts}
+                      categories={categories}
+                    >
+                      {children}
+                      <ClientProviders />
+                    </MainLayout>
+                  </CartProvider>
+                </CompareProvider>
+              </WishlistProvider>
+            </ProductMetaProvider>
+          </QuizResultProvider>
         </AuthProvider>
       </body>
     </html>

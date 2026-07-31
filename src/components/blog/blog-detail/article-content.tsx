@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import ArticleQuote from './article-quote';
 import ArticleHighlight from './article-highlight';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Minus, Plus } from 'lucide-react';
+import { ArrowRight, Check, CircleHelp, Minus, Plus } from 'lucide-react';
 
 const BlogFaqAccordion = ({
   question,
@@ -14,6 +15,7 @@ const BlogFaqAccordion = ({
   answerHTML: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="overflow-hidden rounded-xl border border-stone-200 bg-white transition-shadow duration-200 hover:shadow-sm my-6">
       <button
@@ -44,6 +46,56 @@ const BlogFaqAccordion = ({
             className="text-[15px] leading-[25px] text-[#4a4039] prose"
             dangerouslySetInnerHTML={{ __html: answerHTML }}
           />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// the "find your perfect weighted blanket" quiz CTA block
+const QuizCta = () => {
+  return (
+    <div className="not-prose my-6 rounded-2xl border border-stone-200 bg-[#faf6f1] p-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-2 border-stone-300 text-stone-400">
+            <CircleHelp className="h-5 w-5" />
+          </div>
+          <div>
+            <h4 className="font-serif text-[19px] font-bold leading-snug text-[#35281e]">
+              Find din perfekte tyngdedyne
+            </h4>
+            <p className="mt-1 text-[15px] leading-[22px] text-[#6b5d52]">
+              Besvar 5 korte spørgsmål, og vi finder den bedste tyngdedyne til
+              dig.
+            </p>
+          </div>
+        </div>
+
+        <Link
+          href="/guides/produktfinder-quiz"
+          className="inline-flex min-w-[220px] items-center justify-center gap-3 rounded-full bg-[#392a22] px-8 py-4 text-[15px] font-semibold !text-white no-underline whitespace-nowrap transition-opacity hover:opacity-90"
+        >
+          <span className="!text-white whitespace-nowrap">Start quizzen</span>
+          <ArrowRight className="h-4 w-4 flex-shrink-0 !text-white" />
+        </Link>
+      </div>
+
+      <div className="mt-5 border-t border-stone-200 pt-4">
+        <div className="flex flex-wrap gap-x-6 gap-y-2 text-[14px] text-[#6b5d52]">
+          <span className="flex items-center gap-1.5">
+            <Check className="h-4 w-4 text-emerald-600" />5 korte spørgsmål
+          </span>
+
+          <span className="flex items-center gap-1.5">
+            <Check className="h-4 w-4 text-emerald-600" />
+            Under 1 minut
+          </span>
+
+          <span className="flex items-center gap-1.5">
+            <Check className="h-4 w-4 text-emerald-600" />
+            Personlig anbefaling
+          </span>
         </div>
       </div>
     </div>
@@ -113,7 +165,7 @@ const wrapTablesCollapsible = (container: HTMLElement) => {
   });
 };
 
-// NEW: only rewrite <a href> links, never touch img src — fixes broken images
+// only rewrite <a href> links, never touch img src — fixes broken images
 const swapLinkDomains = (container: HTMLElement) => {
   const anchors = container.querySelectorAll(
     'a[href^="https://tapbookme.com/"]',
@@ -130,18 +182,97 @@ const swapLinkDomains = (container: HTMLElement) => {
   });
 };
 
+// find any block-level element whose content is ONLY the [rb_quiz_cta]
+// shortcode (e.g. a <p>[rb_quiz_cta]</p> from the WP editor) and swap
+// the whole element for the rendered quiz CTA widget
+const replaceQuizCtaShortcode = (container: HTMLElement) => {
+  // Only run if container hasn't been processed yet
+  if (container.hasAttribute('data-cta-processed')) {
+    console.log('CTA already processed, skipping');
+    return;
+  }
+
+  console.log('replaceQuizCtaShortcode running - processing CTA');
+
+  // Mark container as processed
+  container.setAttribute('data-cta-processed', 'true');
+
+  const candidates = container.querySelectorAll(
+    'p:not([data-quiz-cta-rendered]), div:not([data-quiz-cta-rendered])',
+  );
+
+  candidates.forEach((el) => {
+    if (el.hasAttribute('data-quiz-cta-rendered')) return;
+    if ((el.textContent || '').trim() !== '[rb_quiz_cta]') return;
+
+    el.setAttribute('data-quiz-cta-rendered', 'true');
+
+    const mountNode = document.createElement('div');
+    el.parentNode?.replaceChild(mountNode, el);
+
+    const root = createRoot(mountNode);
+    root.render(<QuizCta />);
+  });
+
+  // fallback: shortcode sitting inline inside a text node that isn't
+  // its own paragraph (rare, but handle it so it never shows raw text)
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode: (node) =>
+      node.nodeValue?.includes('[rb_quiz_cta]')
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_REJECT,
+  });
+
+  const textNodes: Text[] = [];
+  let current = walker.nextNode();
+  while (current) {
+    textNodes.push(current as Text);
+    current = walker.nextNode();
+  }
+
+  textNodes.forEach((textNode) => {
+    const parent = textNode.parentNode;
+    if (!parent) return;
+
+    const parts = (textNode.nodeValue || '').split('[rb_quiz_cta]');
+    if (parts.length === 1) return;
+
+    const fragment = document.createDocumentFragment();
+    parts.forEach((part, idx) => {
+      if (part) fragment.appendChild(document.createTextNode(part));
+      if (idx < parts.length - 1) {
+        const mountNode = document.createElement('span');
+        fragment.appendChild(mountNode);
+        const root = createRoot(mountNode);
+        root.render(<QuizCta />);
+      }
+    });
+
+    parent.replaceChild(fragment, textNode);
+  });
+};
+
 export default function ArticleContent({ articleData }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paragraphClass = 'text-[15px] leading-[25px] text-[#4A4039]';
   const renderHTML = (html: string) =>
     html ? { __html: html } : { __html: '' };
 
+  // Store processed state to prevent re-processing
+  const processedRef = useRef(false);
+
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const faqItems = containerRef.current.querySelectorAll(
-      '.rank-math-faq-item',
-    );
+    // Reset processed flag when rawHtml changes
+    processedRef.current = false;
+
+    const container = containerRef.current;
+
+    // Remove any existing CTA processing flag
+    container.removeAttribute('data-cta-processed');
+
+    const faqItems = container.querySelectorAll('.rank-math-faq-item');
 
     faqItems.forEach((item) => {
       if (item.hasAttribute('data-faq-rendered')) return;
@@ -164,9 +295,10 @@ export default function ArticleContent({ articleData }: any) {
       }
     });
 
-    wrapConsecutiveImageFigures(containerRef.current);
-    wrapTablesCollapsible(containerRef.current);
-    swapLinkDomains(containerRef.current);
+    wrapConsecutiveImageFigures(container);
+    wrapTablesCollapsible(container);
+    swapLinkDomains(container);
+    replaceQuizCtaShortcode(container);
   }, [articleData?.rawHtml]);
 
   if (articleData?.rawHtml) {
@@ -456,6 +588,21 @@ export default function ArticleContent({ articleData }: any) {
           .article-content .wp-block-button__link:hover {
             opacity: 0.9;
             color: #fdf9f6 !important;
+          }
+          .article-content .wp-block-button__link,
+          .article-content .wp-block-button__link:link,
+          .article-content .wp-block-button__link:visited,
+          .article-content .wp-block-button__link:hover,
+          .article-content .wp-block-button__link:active {
+            background-color: #392a22 !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+          }
+
+          .article-content .wp-block-button__link *,
+          .article-content .wp-block-button__link svg {
+            color: #ffffff !important;
+            fill: #ffffff !important;
           }
         `}</style>
       </article>

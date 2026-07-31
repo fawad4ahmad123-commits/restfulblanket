@@ -230,7 +230,10 @@ export default function ResetPasswordForm() {
 
           <p className="text-center text-sm text-[#70655E]">
             Hvis du har brug for yderligere hjælp{' '}
-            <Link href="/contact-us" className="font-semibold text-[#211711]">
+            <Link
+              href="/kontakt-restfulblanket"
+              className="font-semibold text-[#211711]"
+            >
               kontakt os
             </Link>
           </p>

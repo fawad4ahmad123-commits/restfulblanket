@@ -179,8 +179,13 @@ export async function getProductBySlug(slug: string) {
 
 export async function getProductReviews(productId: number, isHome: boolean) {
   const endpoint = isHome
-    ? wcUrl('products/reviews')
-    : wcUrl('products/reviews', { product: productId });
+    ? wcUrl('products/reviews', {
+        per_page: 100,
+      })
+    : wcUrl('products/reviews', {
+        product: productId,
+        per_page: 100,
+      });
 
   const data = await safeJsonFetch(endpoint, { cache: 'no-store' });
 
