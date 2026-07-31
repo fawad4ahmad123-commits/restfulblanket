@@ -1,5 +1,7 @@
 'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
 import { ShieldCheck, Truck, BadgeCheck, RotateCcw, Award } from 'lucide-react';
 import { useProductMeta } from '@/src/core/context/product-meta-context';
 
@@ -8,38 +10,47 @@ const benefits = [
     icon: ShieldCheck,
     title: '90 nætters tryghed',
     description: 'Får du 90 nætter til at finde ud af, om det føles rigtigt.',
+    url: '/handelsbetingelser#90-naetters-tryghed',
   },
   {
     icon: Truck,
     title: 'Fleksibel levering',
     description: 'Hurtig og nem levering der passer dig',
+    url: '/handelsbetingelser#levering',
   },
   {
     icon: Truck,
     title: 'Gratis levering',
     description: 'Ved levering til pakkeshop.',
+    url: '/handelsbetingelser#levering',
   },
   {
     icon: RotateCcw,
     title: 'Gratis retur',
     description: 'Vi dækker omkostningerne ved returnering.',
+    url: '/handelsbetingelser#returfragtomkostninger',
   },
   {
     icon: BadgeCheck,
     title: '2 års garanti',
     description: 'På produktionsfejl.',
+    url: '/om-vores-dyner/brugervejledning/#garanti',
   },
   {
     icon: Award,
     title: 'CE kl. 1 + OEKO-TEX kl. 1',
     description: 'Certificeret bomuld og medicinsk',
+    url: '/om-vores-dyner/ce-maerkning-og-dokumentation',
   },
 ];
 
 export function WhyRestfulBlanketContent() {
   const { metaFields } = useProductMeta();
 
-  const certifications = metaFields?.certificateImages?.filter(Boolean) ?? [];
+  const certifications = Array.isArray(metaFields?.certificateImage)
+    ? metaFields.certificateImage
+    : [];
+
   return (
     <div className="space-y-6">
       <div
@@ -51,10 +62,11 @@ export function WhyRestfulBlanketContent() {
           const Icon = benefit.icon;
 
           return (
-            <article
+            <Link
               key={benefit.title}
+              href={benefit.url}
               role="listitem"
-              className="rounded-2xl border border-[#E3DCCD] p-1 xl:p-5"
+              className="cursor-pointer rounded-2xl border border-[#E3DCCD] p-1 !no-underline transition-opacity hover:opacity-80 xl:p-5"
             >
               <div className="flex items-start gap-3 xl:gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F7F2EC]">
@@ -71,7 +83,7 @@ export function WhyRestfulBlanketContent() {
                   </p>
                 </div>
               </div>
-            </article>
+            </Link>
           );
         })}
       </div>
@@ -83,20 +95,41 @@ export function WhyRestfulBlanketContent() {
           </p>
 
           <div className="flex flex-wrap items-center gap-1 xl:gap-2">
-            {certifications.map((src, index) => (
-              <div
-                key={`${src}-${index}`}
-                className="relative h-10 w-[65px] shrink-0 sm:h-12 sm:w-[85px] xl:h-14 xl:w-[100px]"
-              >
-                <Image
-                  src={src}
-                  alt={`Certification ${index + 1}`}
-                  fill
-                  sizes="100px"
-                  className="object-contain"
-                />
-              </div>
-            ))}
+            {certifications.map(
+              (
+                item: {
+                  image: string;
+                  url?: string;
+                },
+                index: number,
+              ) => {
+                const imageContent = (
+                  <div className="relative h-10 w-[65px] shrink-0 cursor-pointer sm:h-12 sm:w-[85px] xl:h-14 xl:w-[100px]">
+                    <Image
+                      src={item.image}
+                      alt={`Certification ${index + 1}`}
+                      fill
+                      sizes="100px"
+                      className="object-contain"
+                    />
+                  </div>
+                );
+
+                return item.url ? (
+                  <a
+                    key={index}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer"
+                  >
+                    {imageContent}
+                  </a>
+                ) : (
+                  <div key={index}>{imageContent}</div>
+                );
+              },
+            )}
           </div>
         </div>
       )}

@@ -86,8 +86,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
     const meta = product?.metaFields;
 
     setMetaFields({
-      certificateImage: meta?.certificateImage,
-      certificateImages: meta?.certificateImages,
+      certificateImage: meta?.certificateItems,
       offerBadge: meta?.offerBadge,
       offerText: meta?.offerText,
       promoColor: meta?.promoColor,

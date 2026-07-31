@@ -27,13 +27,13 @@ export const formatProductInformation = (product: any) => {
 
   const temperature = getMetaValue('_cura_temperature');
 
-  let certificates: any[] = [];
+  const certificateMeta = getMetaValue('_cura_certificate_items');
 
-  try {
-    certificates = JSON.parse(getMetaValue('_cura_certificate_images') || '[]');
-  } catch {
-    certificates = [];
-  }
+  const certificates = Array.isArray(certificateMeta)
+    ? certificateMeta
+    : typeof certificateMeta === 'string'
+      ? JSON.parse(certificateMeta || '[]')
+      : [];
 
   let faqItems: any[] = [];
 

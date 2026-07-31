@@ -107,16 +107,11 @@ export const formatProduct = (product: any) => {
   const metaThemeColor = getMetaValue('_cura_theme_color') || '#143f62';
   const metaProperties = getMetaValue('_cura_properties') || '';
 
-  let certificateImages: string[] = [];
-  const metaCertImages = getMetaValue('_cura_certificate_images');
-  if (metaCertImages) {
-    const parsed = safeJsonParse(metaCertImages);
-    if (Array.isArray(parsed)) {
-      certificateImages = parsed;
-    }
-  }
+  const metaCertificateItems = getMetaValue('_cura_certificate_items');
 
-  const metaCertificateImage = getMetaValue('_cura_certificate_image') || '';
+  const certificateItems = Array.isArray(metaCertificateItems)
+    ? metaCertificateItems
+    : safeJsonParse(metaCertificateItems) || [];
 
   let faqItems: any[] = [];
   const metaFaqItems = getMetaValue('_cura_faq_items');
@@ -244,12 +239,7 @@ export const formatProduct = (product: any) => {
         active: metaTemperature === 'warm',
       },
     ],
-    certificates:
-      certificateImages.length > 0
-        ? certificateImages
-        : metaCertificateImage
-          ? [metaCertificateImage]
-          : [],
+    certificates: certificateItems,
   };
 
   return {
@@ -361,8 +351,7 @@ export const formatProduct = (product: any) => {
       temperature: metaTemperature,
       themeColor: metaThemeColor,
       properties: metaProperties,
-      certificateImages: certificateImages,
-      certificateImage: metaCertificateImage,
+      certificateItems,
       faqItems: faqItems,
     },
   };
