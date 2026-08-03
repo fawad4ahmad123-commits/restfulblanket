@@ -78,7 +78,7 @@ export function formatProducts(products: any[] | null | undefined) {
 
         price: Number(product.sale_price || 0),
 
-        originalPrice: Number(product.price || 0),
+        originalPrice: Number(product.price || product.regular_price || 0),
 
         currency: 'kr',
 

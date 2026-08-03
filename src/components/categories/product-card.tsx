@@ -196,12 +196,12 @@ const ProductCard = ({
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#35281E]">
-                {formatPrice(price)}
+                {originalPrice}
               </span>
 
-              {originalPrice && (
+              {price !== 0 && (
                 <span className="text-sm text-[#8A8377] line-through">
-                  {formatPrice(originalPrice)}
+                  {formatPrice(price)}
                 </span>
               )}
             </div>
@@ -271,7 +271,7 @@ const ProductCard = ({
               });
             }}
             disabled={isOutOfStock}
-            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#35281E] ${
+            className={`flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#35281E] cursor-pointer ${
               isOutOfStock
                 ? 'cursor-not-allowed bg-gray-200 text-gray-500'
                 : 'bg-[#FAF4EE] text-[#35281E] hover:bg-[#35281E] hover:text-white'
