@@ -222,7 +222,7 @@ export async function getAllProducts(params?: {
 }) {
   const query: Record<string, string | number> = {
     status: 'publish',
-    per_page: params?.perPage ?? 20,
+    per_page: params?.perPage ?? 100,
   };
 
   if (params?.search) query.search = params.search;
