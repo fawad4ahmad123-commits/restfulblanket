@@ -76,9 +76,9 @@ export function formatProducts(products: any[] | null | undefined) {
         sizes:
           linkedSizes.length > 0 ? linkedSizes : sizeAttribute?.options || [],
 
-        price: Number(product.price || 0),
+        price: Number(product.sale_price || 0),
 
-        originalPrice: Number(product.regular_price || product.price || 0),
+        originalPrice: Number(product.price || 0),
 
         currency: 'kr',
 

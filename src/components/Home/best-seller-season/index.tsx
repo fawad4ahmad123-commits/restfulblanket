@@ -188,7 +188,6 @@ const BestSellers = ({
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
                   ?.value || '';
-
               return (
                 <div
                   key={item.id}
@@ -200,8 +199,10 @@ const BestSellers = ({
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}
-                    price={item.sale_price || item.price}
-                    originalPrice={item.regular_price}
+                    price={item.sale_price || item.regular_price}
+                    originalPrice={
+                      item.sale_price ? item.regular_price : undefined
+                    }
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
                     dimensions={item.dimensions || ''}
@@ -268,7 +269,7 @@ const BestSellers = ({
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
                   ?.value || '';
-
+              console.log('t12 slider home', { item });
               return (
                 <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
                   <SliderCard
@@ -277,8 +278,10 @@ const BestSellers = ({
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}
-                    price={item.sale_price || item.price}
-                    originalPrice={item.regular_price}
+                    price={item.sale_price}
+                    originalPrice={
+                      item.sale_price ? item.regular_price : undefined
+                    }
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
                     badge={badge}

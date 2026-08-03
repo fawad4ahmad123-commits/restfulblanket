@@ -104,7 +104,6 @@ export function ProductCard({ product }: ProductCardProps) {
   //     image,
   //   });
   // };
-
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
 
@@ -115,7 +114,7 @@ export function ProductCard({ product }: ProductCardProps) {
       color: color || '',
       variant: size || '',
       weight: weight || '',
-      price: parsePrice(price),
+      price: parsePrice(originalPrice || price) || 0,
       image,
     });
   };
@@ -149,11 +148,6 @@ export function ProductCard({ product }: ProductCardProps) {
             onAddToCart={confirmAddToCart}
           />
         )} */}
-        {isNew && (
-          <div className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#3b281f]">
-            New
-          </div>
-        )}
 
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50">
@@ -179,7 +173,7 @@ export function ProductCard({ product }: ProductCardProps) {
             toggleWishlist({
               id: String(id),
               name: title,
-              price: Number(price) || 0,
+              price: Number(originalPrice || price) || 0,
               image,
               slug,
               weight,
@@ -271,12 +265,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="mb-5 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="text-lg font-semibold text-[#3b281f]">
-                {price}
+                {originalPrice}
               </span>
 
-              {originalPrice && (
+              {price !== 'kr0' && (
                 <span className="text-sm text-[#35281E] line-through">
-                  {originalPrice}
+                  {price}
                 </span>
               )}
             </div>
