@@ -121,7 +121,7 @@ export const getBestSellers = cache(async () => {
   const data = await safeJsonFetch(
     wcUrl('products', {
       status: 'publish',
-      per_page: 20,
+      per_page: 100,
       orderby: 'popularity',
       order: 'desc',
     }),
