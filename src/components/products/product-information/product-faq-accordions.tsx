@@ -10,9 +10,56 @@ interface ProductFaqAccordionProps {
   defaultOpenId?: string;
 }
 
+const formatBodyToHtml = (body: string) => {
+  if (!body) return '';
+  if (/<[a-z][\s\S]*>/i.test(body)) {
+    return body;
+  }
+  const lines = body.split(/\r?\n/);
+  let html = '';
+  let inList = false;
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      return;
+    }
+    const isBullet =
+      trimmed.startsWith('•') ||
+      trimmed.startsWith('-') ||
+      trimmed.startsWith('*') ||
+      trimmed.startsWith('✅');
+
+    if (isBullet) {
+      if (!inList) {
+        html += '<ul class="list-disc pl-5 space-y-1 mb-3">';
+        inList = true;
+      }
+      let content = trimmed.replace(/^[•\-*✅]\s*/, '');
+      const prefix = trimmed.startsWith('✅') ? '✅ ' : '';
+      html += `<li>${prefix}${content}</li>`;
+    } else {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<p class="mb-2">${trimmed}</p>`;
+    }
+  });
+
+  if (inList) {
+    html += '</ul>';
+  }
+
+  return html;
+};
+
 const ProductFaqAccordion = ({ items }: ProductFaqAccordionProps) => {
   const [openId, setOpenId] = useState<string | null>(null);
-
   if (!items.length) return null;
 
   return (
@@ -56,9 +103,12 @@ const ProductFaqAccordion = ({ items }: ProductFaqAccordionProps) => {
             >
               <div className="min-h-0">
                 {item.body && (
-                  <p className="px-5 pb-4 text-sm leading-relaxed text-[#392A22]">
-                    {item.body}
-                  </p>
+                  <div
+                    className="px-5 pb-4 text-sm leading-relaxed text-[#392A22] space-y-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_p]:mb-2 [&_strong]:font-semibold"
+                    dangerouslySetInnerHTML={{
+                      __html: formatBodyToHtml(item.body),
+                    }}
+                  />
                 )}
               </div>
             </div>

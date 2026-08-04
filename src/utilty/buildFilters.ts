@@ -1,18 +1,25 @@
 import { SelectedFilters } from '../components/all-products/types';
 
 export function buildFilters(products: any[]) {
+  console.log('t12 colors', { products });
   return {
     categories: [
       ...new Set(products.flatMap((product) => product.categories || [])),
     ],
     colors: [
-      ...new Set(products.map((product) => product.color).filter(Boolean)),
+      ...new Set(
+        products.flatMap((product) => product.colors || []).filter(Boolean),
+      ),
     ],
     weights: [
-      ...new Set(products.map((product) => product.weight).filter(Boolean)),
+      ...new Set(
+        products.flatMap((product) => product.weights || []).filter(Boolean),
+      ),
     ],
     sizes: [
-      ...new Set(products.map((product) => product.dimensions).filter(Boolean)),
+      ...new Set(
+        products.flatMap((product) => product.sizes || []).filter(Boolean),
+      ),
     ],
     minPrice:
       products.length > 0

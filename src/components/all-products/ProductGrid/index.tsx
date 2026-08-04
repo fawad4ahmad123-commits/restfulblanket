@@ -11,7 +11,7 @@ import { Pagination } from '../Pagination';
 import { SelectedFilters } from '../types';
 import CompareBar from '../../compare/compare-bar';
 
-const PRODUCTS_PER_PAGE = 6;
+const PRODUCTS_PER_PAGE = 24;
 
 interface Props {
   products: any[];

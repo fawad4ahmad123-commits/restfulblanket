@@ -50,7 +50,7 @@ export const formatProductInformation = (product: any) => {
         faqItems = parsed.map((item: any) => ({
           ...item,
           question: stripHtml(item.question || ''),
-          answer: stripHtml(item.answer || ''),
+          answer: item.answer || '',
         }));
       }
     } catch {
@@ -60,7 +60,6 @@ export const formatProductInformation = (product: any) => {
 
   const properties = getMetaValue('_cura_properties');
   const description = safeProduct?.description || '';
-  const descriptionText = description ? stripHtml(description) : '';
 
   const attributeLinksRaw = Array.isArray(safeProduct.attribute_links)
     ? safeProduct.attribute_links
@@ -80,7 +79,7 @@ export const formatProductInformation = (product: any) => {
   const extractedFaqs = matches
     .map((match, index) => {
       const title = stripHtml(match[1]);
-      const body = stripHtml(match[2]);
+      const body = match[2];
 
       return {
         id: title?.toLowerCase()?.replace(/\s+/g, '-') || `section-${index}`,
@@ -94,7 +93,7 @@ export const formatProductInformation = (product: any) => {
     {
       id: 'description',
       title: 'Beskrivelse',
-      body: descriptionText,
+      body: description,
     },
     ...(faqItems.length > 0
       ? faqItems.map((item: any, index: number) => ({
@@ -108,7 +107,7 @@ export const formatProductInformation = (product: any) => {
             {
               id: 'product-info',
               title: safeProduct?.name || 'Produktinformation',
-              body: descriptionText || 'Ingen produktinformation tilgængelig.',
+              body: description || 'Ingen produktinformation tilgængelig.',
             },
           ]),
   ];

@@ -16,25 +16,59 @@ export function filterProducts(
       filters.categories.some((category) =>
         productCategories.includes(category.toLowerCase().trim()),
       );
-    const productColor =
-      typeof product.color === 'string'
-        ? product.color
-        : product.color?.name || '';
+    const productColors = (
+      Array.isArray(product.colors)
+        ? product.colors
+        : [
+            typeof product.color === 'string'
+              ? product.color
+              : product.color?.name || '',
+          ]
+    )
+      .filter(Boolean)
+      .map((c: any) => String(c).toLowerCase().trim());
 
     const colorMatch =
-      filters.colors.length === 0 || filters.colors.includes(productColor);
-    const productWeight =
-      typeof product.weight === 'string'
-        ? product.weight
-        : String(product.weight || '');
+      filters.colors.length === 0 ||
+      filters.colors.some((color) =>
+        productColors.includes(String(color).toLowerCase().trim()),
+      );
+
+    const productWeights = (
+      Array.isArray(product.weights)
+        ? product.weights
+        : [
+            typeof product.weight === 'string'
+              ? product.weight
+              : String(product.weight || ''),
+          ]
+    )
+      .filter(Boolean)
+      .map((w: any) => String(w).toLowerCase().trim());
+
     const weightMatch =
-      filters.weights.length === 0 || filters.weights.includes(productWeight);
-    const productSize =
-      typeof product.dimensions === 'string'
-        ? product.dimensions
-        : product.dimensions?.name || '';
+      filters.weights.length === 0 ||
+      filters.weights.some((weight) =>
+        productWeights.includes(String(weight).toLowerCase().trim()),
+      );
+
+    const productSizes = (
+      Array.isArray(product.sizes)
+        ? product.sizes
+        : [
+            typeof product.dimensions === 'string'
+              ? product.dimensions
+              : product.dimensions?.name || '',
+          ]
+    )
+      .filter(Boolean)
+      .map((s: any) => String(s).toLowerCase().trim());
+
     const sizeMatch =
-      filters.sizes.length === 0 || filters.sizes.includes(productSize);
+      filters.sizes.length === 0 ||
+      filters.sizes.some((size) =>
+        productSizes.includes(String(size).toLowerCase().trim()),
+      );
     const price = Number(product.price) || 0;
     const priceMatch = price >= filters.minPrice && price <= filters.maxPrice;
 

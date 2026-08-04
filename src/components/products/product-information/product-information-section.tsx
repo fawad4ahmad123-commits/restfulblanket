@@ -17,7 +17,7 @@ const ProductInformationSection = ({ info }: any) => {
         {info.heading} <span className="italic">{info.headingItalic}</span>
       </h2>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-[1.25fr_0.75fr] items-start">
         {info.faqs.length > 0 && (
           <ProductFaqAccordion
             items={info.faqs}

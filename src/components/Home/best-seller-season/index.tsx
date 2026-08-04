@@ -199,9 +199,13 @@ const BestSellers = ({
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}
-                    price={item.sale_price || item.regular_price}
+                    price={
+                      item.on_sale
+                        ? item.sale_price
+                        : item.price || item.regular_price
+                    }
                     originalPrice={
-                      item.sale_price ? item.regular_price : undefined
+                      item.on_sale ? item.regular_price : undefined
                     }
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}
@@ -278,9 +282,13 @@ const BestSellers = ({
                     image={mainImage}
                     hoverImage={hoverImage}
                     title={item.name}
-                    price={item.sale_price}
+                    price={
+                      item.on_sale
+                        ? item.sale_price
+                        : item.price || item.regular_price
+                    }
                     originalPrice={
-                      item.sale_price ? item.regular_price : undefined
+                      item.on_sale ? item.regular_price : undefined
                     }
                     rating={Number(item.average_rating)}
                     reviewCount={item.rating_count}

@@ -52,6 +52,7 @@ const ProductCategories = dynamic(() => import('../Home/product-categories'), {
 const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
   const router = useRouter();
   const { setMetaFields } = useProductMeta();
+  console.log('t12 selected product ', { a: productResponse });
 
   const [currentProduct, setCurrentProduct] = useState(productResponse);
   const [isChangingProduct, setIsChangingProduct] = useState(false);

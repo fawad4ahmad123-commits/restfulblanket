@@ -25,15 +25,15 @@ export function formatProducts(products: any[] | null | undefined) {
 
       const linkedColors = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'color')
-        .map((item: any) => item.value);
+        .map((item: any) => item.label || item.value);
 
       const linkedSizes = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'size')
-        .map((item: any) => item.value);
+        .map((item: any) => item.value || item.label);
 
       const linkedWeights = attributeLinks
         .filter((item: any) => item.name?.toLowerCase() === 'weight')
-        .map((item: any) => item.value);
+        .map((item: any) => item.value || item.label);
 
       const offerBadge = product.meta_data?.find(
         (item: any) => item.key === '_cura_offer_badge',
