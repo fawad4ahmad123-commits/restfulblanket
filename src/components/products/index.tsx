@@ -39,15 +39,35 @@ const ProductInfoPanel = ({
   const sizes = product?.sizes ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
 
-  const featuresFromDescription = (html: string) =>
-    html
+  // FIX: preserve inline HTML tags (<a>, <em>, <strong>) instead of stripping
+  // everything. Split on paragraph boundaries (</p>) so each <p> becomes one
+  // feature line, but keep the inner markup intact.
+  const featuresFromDescription = (html: string) => {
+    if (!html) return [];
+
+    const cleaned = html
+      // drop images (e.g. flag icons) that shouldn't show as bullet text
+      .replace(/<img[^>]*>/gi, '')
+      .trim();
+
+    // If there are <p> tags, split by them so each paragraph is one feature.
+    if (/<p[\s\S]*?>/i.test(cleaned)) {
+      return cleaned
+        .split(/<\/p>/i)
+        .map((chunk) => chunk.replace(/<p[^>]*>/i, '').trim())
+        .filter(Boolean)
+        .map((text, index) => ({ id: `sd-${index}`, text }));
+    }
+
+    // Fallback: no <p> tags, split on <br> / newlines like before, but
+    // WITHOUT stripping other tags (like <a>) — only convert <br> to \n.
+    return cleaned
       .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<[^>]+>/g, '')
-      .replace(/•/g, '')
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
       .map((text, index) => ({ id: `sd-${index}`, text }));
+  };
 
   const features =
     product?.features?.length > 0
@@ -88,10 +108,6 @@ const ProductInfoPanel = ({
     onLoadingChange?.(true);
     try {
       const relatedProduct = await getProductById(matchedLink.relatedProduct);
-
-      // const relatedProduct = allProducts.find(
-      //   (p: any) => Number(p.id) === Number(matchedLink.relatedProduct),
-      // );
 
       if (!relatedProduct) {
         console.error(

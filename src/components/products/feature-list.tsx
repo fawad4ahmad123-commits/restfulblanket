@@ -1,4 +1,5 @@
 import { ProductFeature } from './types';
+import { sanitizeHtmlLinks } from '@/src/utilty/sanitize-html-links';
 
 interface FeatureListProps {
   features: ProductFeature[];
@@ -29,7 +30,12 @@ const FeatureList = ({ features }: FeatureListProps) => {
             className="flex items-start gap-2 text-sm text-[#5B5650]"
           >
             <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-[#8A8377]" />
-            {decodeHtml(feature.text)}
+            <span
+              className="[&_a]:underline [&_a]:text-[#3F3A36] [&_a]:font-medium [&_em]:italic [&_strong]:font-semibold"
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtmlLinks(decodeHtml(feature.text)),
+              }}
+            />
           </li>
         ))}
       </ul>

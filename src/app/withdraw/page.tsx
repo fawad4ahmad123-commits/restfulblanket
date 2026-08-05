@@ -1,13 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import WithdrawForm from '@/src/components/withdrawal';
-import {
-  AlertTriangle,
-  CreditCard,
-  Mail,
-  Package,
-  ShieldCheck,
-  User,
-} from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface WithdrawPageProps {
   searchParams: Promise<{
@@ -55,10 +48,10 @@ export default async function WithdrawPage({
           <CardContent className="py-12 text-center">
             <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-red-500" />
             <h1 className="mb-2 text-2xl font-semibold text-[#35281E]">
-              Invalid Withdrawal Link
+              Ugyldigt Fortrydelseslink
             </h1>
             <p className="text-[#35281E]/70">
-              The withdrawal request is missing required information.
+              Fortrydelsesanmodningen mangler påkrævede oplysninger.
             </p>
           </CardContent>
         </Card>
@@ -75,11 +68,9 @@ export default async function WithdrawPage({
           <CardContent className="py-12 text-center">
             <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-red-500" />
             <h1 className="mb-2 text-2xl font-semibold text-[#35281E]">
-              Invalid Withdrawal Link
+              Ugyldigt Fortrydelseslink
             </h1>
-            <p className="text-[#35281E]/70">
-              The order could not be verified.
-            </p>
+            <p className="text-[#35281E]/70">Ordren kunne ikke bekræftes.</p>
           </CardContent>
         </Card>
       </div>
@@ -92,7 +83,7 @@ export default async function WithdrawPage({
         <Card className="overflow-hidden border-[#E9DDD4] shadow-xl">
           <CardHeader className="border-b border-[#E9DDD4] bg-white">
             <CardTitle className="text-center text-3xl font-bold text-[#35281E]">
-              Order Withdrawal Request
+              Anmodning om Ordrefortrydelse
             </CardTitle>
 
             <div className="mt-4 flex justify-center">
@@ -103,69 +94,28 @@ export default async function WithdrawPage({
           </CardHeader>
 
           <CardContent className="space-y-6 p-6">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-[#E9DDD4] bg-white p-5">
-                <div className="flex items-center gap-2 text-[#35281E]">
-                  <Package className="h-5 w-5" />
-                  <span className="font-medium">Order ID</span>
-                </div>
-                <p className="mt-3 text-xl font-semibold text-[#35281E]">
-                  #{order.id}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E9DDD4] bg-white p-5">
-                <div className="flex items-center gap-2 text-[#35281E]">
-                  <User className="h-5 w-5" />
-                  <span className="font-medium">Customer</span>
-                </div>
-                <p className="mt-3 text-xl font-semibold text-[#35281E]">
-                  {order.billing?.first_name} {order.billing?.last_name}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E9DDD4] bg-white p-5">
-                <div className="flex items-center gap-2 text-[#35281E]">
-                  <Mail className="h-5 w-5" />
-                  <span className="font-medium">Email</span>
-                </div>
-                <p className="mt-3 break-all text-sm text-[#35281E]/80">
-                  {order.billing?.email}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-[#E9DDD4] bg-white p-5">
-                <div className="flex items-center gap-2 text-[#35281E]">
-                  <CreditCard className="h-5 w-5" />
-                  <span className="font-medium">Order Total</span>
-                </div>
-                <p className="mt-3 text-xl font-semibold text-[#35281E]">
-                  {order.total} {order.currency}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-              <div className="flex items-start gap-3">
-                <ShieldCheck className="mt-0.5 h-5 w-5 text-amber-600" />
-
-                <div>
-                  <h3 className="font-semibold text-amber-900">
-                    EU Consumer Withdrawal Request
-                  </h3>
-
-                  <p className="mt-1 text-sm text-amber-800">
-                    You are requesting withdrawal from this purchase under EU
-                    consumer protection regulations. Please provide any
-                    additional information below.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <WithdrawForm
               orderId={String(order.id)}
               orderKey={order.order_key}
+              orderNumber={order.number || order.id}
+              orderDate={new Date(order.date_created).toLocaleDateString(
+                'da-DK',
+                {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                },
+              )}
+              orderStatus={order.status}
+              currency={order.currency_symbol || order.currency}
+              products={(order.line_items || []).map((item: any) => ({
+                id: item.id,
+                productId: item.product_id,
+                name: item.name,
+                quantity: item.quantity,
+                total: item.total,
+                sku: item.sku,
+              }))}
             />
           </CardContent>
         </Card>

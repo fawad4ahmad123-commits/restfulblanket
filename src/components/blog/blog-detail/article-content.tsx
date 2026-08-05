@@ -52,7 +52,6 @@ const BlogFaqAccordion = ({
   );
 };
 
-// the "find your perfect weighted blanket" quiz CTA block
 const QuizCta = () => {
   return (
     <div className="not-prose my-6 rounded-2xl border border-stone-200 bg-[#faf6f1] p-6">

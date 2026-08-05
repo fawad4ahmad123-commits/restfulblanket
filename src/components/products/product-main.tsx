@@ -81,7 +81,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
 
     setIsChangingProduct(false);
   };
-
+  console.log('t123 product single', { product });
   useEffect(() => {
     const meta = product?.metaFields;
 
