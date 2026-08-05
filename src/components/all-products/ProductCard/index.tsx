@@ -256,11 +256,12 @@ export function ProductCard({ product }: ProductCardProps) {
           {title}
         </h3>
 
-        {(weight || dimensions) && (
+        {(weight || dimensions || color) && (
           <p className="mb-4 text-xs text-[#35281E]/50">
-            {[weight, dimensions].filter(Boolean).join(' · ')}
+            {[weight, dimensions, color].filter(Boolean).join(' · ')}
           </p>
         )}
+
         <div className="mt-auto">
           <div className="mb-5 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">

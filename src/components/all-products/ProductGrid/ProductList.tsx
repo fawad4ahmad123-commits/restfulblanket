@@ -15,45 +15,43 @@ export default function ProductList({ products }: Props) {
 
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((product, index) => (
-        <ProductCard
-          key={`${product.id}-${product.slug || index}`}
-          product={{
-            id: product.id,
-            image: product.image || '',
-            title: product.name,
-            slug: product.slug || String(product.id),
-            price: `${product.currency}${product.price}`,
-            originalPrice: product.originalPrice
-              ? `${product.currency}${product.originalPrice}`
-              : undefined,
-
-            color:
-              product.attributeLinks?.find(
-                (attr: any) =>
-                  attr.name === 'color' && attr.related_product === 0,
-              )?.value || '',
-
-            size:
-              product.attributeLinks?.find(
-                (attr: any) =>
-                  attr.name === 'size' && attr.related_product === 0,
-              )?.value || '',
-
-            weight:
-              product.attributeLinks?.find(
-                (attr: any) =>
-                  attr.name === 'weight' && attr.related_product === 0,
-              )?.value || '',
-            dimensions: product.dimensions,
-            rating: product.rating,
-            reviewCount: product.reviewCount,
-            isNew: product.isNewArrival,
-            stockQuantity: product.stockQuantity,
-            stockStatus: product.stockStatus,
-          }}
-        />
-      ))}
+      {products.map((product, index) => {
+        const colorAttribute = product.attributeLinks?.find(
+          (attr: any) => attr.name === 'color' && attr.related_product === 0,
+        );
+        return (
+          <ProductCard
+            key={`${product.id}-${product.slug || index}`}
+            product={{
+              id: product.id,
+              image: product.image || '',
+              title: product.name,
+              slug: product.slug || String(product.id),
+              price: `${product.currency}${product.price}`,
+              originalPrice: product.originalPrice
+                ? `${product.currency}${product.originalPrice}`
+                : undefined,
+              color: colorAttribute?.label || '',
+              size:
+                product.attributeLinks?.find(
+                  (attr: any) =>
+                    attr.name === 'size' && attr.related_product === 0,
+                )?.value || '',
+              weight:
+                product.attributeLinks?.find(
+                  (attr: any) =>
+                    attr.name === 'weight' && attr.related_product === 0,
+                )?.value || '',
+              dimensions: product.dimensions,
+              rating: product.rating,
+              reviewCount: product.reviewCount,
+              isNew: product.isNewArrival,
+              stockQuantity: product.stockQuantity,
+              stockStatus: product.stockStatus,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -80,9 +80,7 @@ const ProductFaqAccordion = ({ items }: ProductFaqAccordionProps) => {
               aria-expanded={isOpen}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
             >
-              <span className="text-sm font-medium text-[#3F3A36]">
-                {item.title}
-              </span>
+              <h3 className=" font-medium text-[#3F3A36]">{item.title}</h3>
 
               <span className="flex h-5 w-5 shrink-0 items-center justify-center text-[#3F3A36]">
                 {isOpen ? (

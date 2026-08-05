@@ -12,6 +12,7 @@ export interface ProductMetaFields {
   properties?: string;
   temperature?: string;
   themeColor?: string;
+  productVideoUrl?: string;
 }
 
 interface ProductMetaContextType {

@@ -121,13 +121,12 @@ export const getBestSellers = cache(async () => {
   const data = await safeJsonFetch(
     wcUrl('products', {
       status: 'publish',
-      per_page: 100,
       orderby: 'popularity',
       order: 'desc',
     }),
     {
       next: {
-        revalidate: 300,
+        // revalidate: 300,
         tags: ['best-sellers'],
       },
     },

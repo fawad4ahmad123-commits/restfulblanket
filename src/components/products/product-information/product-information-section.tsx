@@ -11,7 +11,7 @@ const ProductInformationSection = ({ info }: any) => {
   return (
     <section
       id="product-information"
-      className="mx-auto max-w-5xl scroll-mt-40 px-6 py-16 md:px-12"
+      className="mx-auto max-w-8xl scroll-mt-40 px-6 py-16 md:px-12"
     >
       <h2 className="mb-10 text-center font-serif text-3xl tracking-wide text-[#3F3A36] md:text-4xl">
         {info.heading} <span className="italic">{info.headingItalic}</span>

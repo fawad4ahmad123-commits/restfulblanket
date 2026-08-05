@@ -106,7 +106,7 @@ export const formatProduct = (product: any) => {
   const metaTemperature = getMetaValue('_cura_temperature') || '';
   const metaThemeColor = getMetaValue('_cura_theme_color') || '#143f62';
   const metaProperties = getMetaValue('_cura_properties') || '';
-
+  const metaProductVideoUrl = getMetaValue('_cura_product_video_url') || '';
   const metaCertificateItems = getMetaValue('_cura_certificate_items');
 
   const certificateItems = Array.isArray(metaCertificateItems)
@@ -301,6 +301,7 @@ export const formatProduct = (product: any) => {
       }),
     ),
     images: images.filter((img: any) => img?.src).map((img: any) => img.src),
+    video: metaProductVideoUrl,
     shortDescription: product.short_description || '',
     description: product.description || '',
     sku: product.sku || '',
@@ -351,6 +352,7 @@ export const formatProduct = (product: any) => {
       temperature: metaTemperature,
       themeColor: metaThemeColor,
       properties: metaProperties,
+      productVideoUrl: metaProductVideoUrl,
       certificateItems,
       faqItems: faqItems,
     },

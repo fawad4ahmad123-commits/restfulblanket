@@ -156,8 +156,18 @@ const BestSellers = ({
               const attributeLinks = item.attribute_links || [];
 
               const colorOptions = attributeLinks
-                .filter((attr: any) => attr.name === 'color')
-                .map((attr: any) => attr.value);
+                .filter(
+                  (attr: any) =>
+                    attr.name === 'color' && Number(attr.related_product) === 0,
+                )
+                .map((attr: any) => attr.label);
+
+              const colorHexValues = attributeLinks
+                .filter(
+                  (attr: any) =>
+                    attr.name === 'color' && Number(attr.related_product) === 0,
+                )
+                .map((attr: any) => attr.hexvalue);
 
               const size =
                 attributeLinks.find(
@@ -184,7 +194,7 @@ const BestSellers = ({
                 )?.value ||
                 '';
 
-              const color = colorOptions[0] || '';
+              const color = colorOptions.length > 0 ? colorOptions[0] : '';
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
                   ?.value || '';
@@ -218,9 +228,8 @@ const BestSellers = ({
                     stockQuantity={item.stock_quantity}
                     isProduct={isProduct}
                     type="product"
-                    // availableColors={colorOptions}
-                    // availableSizes={sizeOptions}
-                    // availableWeights={weightOptions}
+                    availableColors={colorOptions}
+                    availableHexColors={colorHexValues}
                   />
                 </div>
               );
@@ -239,11 +248,19 @@ const BestSellers = ({
               const hoverImage = item.images?.[1]?.src || mainImage;
               const attributeLinks = item.attribute_links || [];
 
-              const color =
-                attributeLinks.find(
+              const colorOptions = attributeLinks
+                .filter(
                   (attr: any) =>
                     attr.name === 'color' && Number(attr.related_product) === 0,
-                )?.value || '';
+                )
+                .map((attr: any) => attr.label);
+
+              const colorHexValues = attributeLinks
+                .filter(
+                  (attr: any) =>
+                    attr.name === 'color' && Number(attr.related_product) === 0,
+                )
+                .map((attr: any) => attr.hexvalue);
 
               const size =
                 attributeLinks.find(
@@ -270,10 +287,11 @@ const BestSellers = ({
                 )?.value ||
                 '';
 
+              const color = colorOptions.length > 0 ? colorOptions[0] : '';
               const badge =
                 item.meta_data?.find((meta: any) => meta.key === '_card_label')
                   ?.value || '';
-              console.log('t12 slider home', { item });
+
               return (
                 <div key={item.id} className="w-[calc(25%-12px)] flex-shrink-0">
                   <SliderCard
@@ -300,6 +318,8 @@ const BestSellers = ({
                     weight={weight}
                     isProduct={isProduct}
                     type="product"
+                    availableColors={colorOptions}
+                    availableHexColors={colorHexValues}
                   />
                 </div>
               );

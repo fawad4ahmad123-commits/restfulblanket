@@ -20,7 +20,6 @@ export function buildSidebarFilters(filterOptions: {
         label: category,
       })),
     },
-
     {
       id: 'colors',
       label: 'Colors',

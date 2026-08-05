@@ -52,7 +52,6 @@ const ProductCategories = dynamic(() => import('../Home/product-categories'), {
 const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
   const router = useRouter();
   const { setMetaFields } = useProductMeta();
-  console.log('t12 selected product ', { a: productResponse });
 
   const [currentProduct, setCurrentProduct] = useState(productResponse);
   const [isChangingProduct, setIsChangingProduct] = useState(false);
@@ -95,6 +94,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
       properties: meta?.properties,
       temperature: meta?.temperature,
       themeColor: meta?.themeColor,
+      productVideoUrl: meta?.productVideoUrl,
     });
   }, [product?.metaFields, setMetaFields]);
 
@@ -144,6 +144,7 @@ const ProductContent = ({ likeProducts, productResponse, categories }: any) => {
                 badge={product?.badge}
                 productName={product?.name}
                 data={product}
+                videoUrl={product?.video}
               />
             </div>
 

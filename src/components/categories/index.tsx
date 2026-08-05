@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { BlanketHeader } from '@/src/components/categories/blanket-header';
 import { ProductGrid } from '@/src/components/categories/product-grid';
 import ProductCategories from '@/src/components/Home/product-categories';
 import TestimonialVideoSlider from '@/src/components/products/video-testimonals.tsx';
 import { Pagination } from '../all-products/Pagination';
 import ActiveFilters from '../all-products/ProductGrid/ActiveFilters';
+import ProductSidebar from '../all-products/Sidebar';
 import { FAQS } from './faqs';
 import CategoryCcfSection from './category-ccf-section';
 import BenefitSection from './benefit-section';
@@ -15,8 +17,11 @@ import CategoryFeatureCards from './category-feature-cards';
 import CategoryLearnMoreCards from './category-learn-more-cards';
 import { featureCards, guideCards } from './constants';
 import { CategoryTabs } from './category-tabs';
+import { buildFilters, getInitialFilters } from '@/src/utilty/buildFilters';
+import { filterProducts } from '@/src/utilty/filterProducts';
+import { SelectedFilters } from '../all-products/types';
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 24;
 
 function hasChildren(category: any, categories: any[]) {
   if (!category) return false;
@@ -53,18 +58,23 @@ export default function Categories({ products, categories, initialSlug }: any) {
 
   const [activeCategories, setActiveCategories] = useState<string[]>(urlSlugs);
   const [currentPage, setCurrentPage] = useState(1);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const filterOptions = useMemo(() => buildFilters(products), [products]);
+  const [filters, setFilters] = useState<SelectedFilters>(() => ({
+    ...getInitialFilters(filterOptions.minPrice, filterOptions.maxPrice),
+    categories: [],
+  }));
 
-  if (isCollectionsPage) {
-    return (
-      <main className="mx-auto max-w-7xl px-6 py-12">
-        <ProductCategories response_categories={categories} isCategory={true} />
-      </main>
-    );
-  }
+  const updateFilters = (updater: React.SetStateAction<SelectedFilters>) => {
+    setFilters((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      return { ...next, categories: [] };
+    });
+    setCurrentPage(1);
+  };
 
   const handleCategoryChange = (cats: string[]) => {
     const normalized = cats.map((c) => c.toLowerCase());
-
     setActiveCategories(normalized);
     setCurrentPage(1);
 
@@ -76,28 +86,31 @@ export default function Categories({ products, categories, initialSlug }: any) {
   };
 
   const filteredProducts = useMemo(() => {
-    if (activeCategories.length === 0) return products;
+    const catFiltered =
+      activeCategories.length === 0
+        ? products
+        : products.filter((product: any) =>
+            product.categories?.some((catName: string) => {
+              const match = categories.find(
+                (c: any) => c.name.toLowerCase() === catName.toLowerCase(),
+              );
+              return (
+                match && activeCategories.includes(match.slug.toLowerCase())
+              );
+            }),
+          );
 
-    return products.filter((product: any) =>
-      product.categories?.some((catName: string) => {
-        const match = categories.find(
-          (c: any) => c.name.toLowerCase() === catName.toLowerCase(),
-        );
-
-        return match && activeCategories.includes(match.slug.toLowerCase());
-      }),
-    );
-  }, [activeCategories, products, categories]);
+    return filterProducts(catFiltered, filters, '');
+  }, [activeCategories, products, filters, categories]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-
     return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredProducts, currentPage]);
 
-  const filters = useMemo(() => {
+  const activeFilterTags = useMemo(() => {
     return activeCategories.map((slug) => {
       const cat = categories.find(
         (c: any) => c.slug.toLowerCase() === slug.toLowerCase(),
@@ -112,24 +125,14 @@ export default function Categories({ products, categories, initialSlug }: any) {
   }, [activeCategories, categories]);
 
   const overallRating = useMemo(() => {
-    if (!products?.length) {
-      return {
-        rating: 0,
-        reviewCount: 0,
-      };
-    }
+    if (!products?.length) return { rating: 0, reviewCount: 0 };
 
     const totalReviews = products.reduce(
       (sum: number, p: any) => sum + (p.reviewCount || 0),
       0,
     );
 
-    if (!totalReviews) {
-      return {
-        rating: 0,
-        reviewCount: 0,
-      };
-    }
+    if (!totalReviews) return { rating: 0, reviewCount: 0 };
 
     const weightedSum = products.reduce(
       (sum: number, p: any) => sum + (p.rating || 0) * (p.reviewCount || 0),
@@ -174,6 +177,20 @@ export default function Categories({ products, categories, initialSlug }: any) {
   const hasAnyCcfData =
     hasBenefitsData || hasFaqsData || hasCardsData || hasExpertData;
 
+  const activeFiltersCount =
+    filters.colors.length +
+    filters.weights.length +
+    filters.sizes.length +
+    activeCategories.length;
+
+  if (isCollectionsPage) {
+    return (
+      <main className="mx-auto max-w-7xl px-6 py-12">
+        <ProductCategories response_categories={categories} isCategory={true} />
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
       <BlanketHeader
@@ -189,24 +206,73 @@ export default function Categories({ products, categories, initialSlug }: any) {
           onSelect={handleCategoryChange}
         />
       </div>
-      <div className="mt-10">
-        <ActiveFilters filters={filters} />
-
-        <div className="pl-[6px]">
-          <ProductGrid products={paginatedProducts} />
-        </div>
-
-        {totalPages > 1 && (
-          <div className="mt-8 flex justify-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
+      <div className="mt-6 lg:hidden">
+        <button
+          onClick={() => setMobileFiltersOpen(true)}
+          className="flex items-center gap-2 rounded-full border border-[#35281E] px-4 py-2 text-sm font-medium text-[#fdf9f6] bg-[#392A22]"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          Filtre
+          {activeFiltersCount > 0 && (
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#35281E] text-xs text-white">
+              {activeFiltersCount}
+            </span>
+          )}
+        </button>
+      </div>
+      {mobileFiltersOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/40"
+            onClick={() => setMobileFiltersOpen(false)}
+          />
+          <div className="fixed left-0 top-0 z-50 h-full w-[90%] max-w-sm overflow-y-auto bg-[#fdf9f6] p-5 shadow-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-[#35281E]">Filtre</h2>
+              <button
+                onClick={() => setMobileFiltersOpen(false)}
+                className="rounded-full p-2 hover:bg-gray-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <ProductSidebar
+              filters={filters}
+              setFilters={updateFilters}
+              filterOptions={filterOptions}
             />
           </div>
-        )}
+        </>
+      )}
+      <div className="mt-10 flex flex-col gap-10 lg:flex-row lg:gap-16">
+        <div className="hidden lg:block">
+          <ProductSidebar
+            filters={filters}
+            setFilters={updateFilters}
+            filterOptions={filterOptions}
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <ActiveFilters filters={activeFilterTags} />
+
+          <div className="pl-[6px]">
+            <ProductGrid products={paginatedProducts} />
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-8 flex justify-center">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+          )}
+        </div>
       </div>
+
       <TestimonialVideoSlider isCategory={true} />
+
       {hasAnyCcfData && (
         <>
           <BenefitSection

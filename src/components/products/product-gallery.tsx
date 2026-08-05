@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
@@ -12,6 +12,7 @@ interface ProductGalleryProps {
   badge?: string;
   productName?: string;
   data: any;
+  videoUrl?: string;
 }
 
 const SWIPE_THRESHOLD = 50;
@@ -21,9 +22,10 @@ const ProductGallery = ({
   badge,
   productName = 'Product',
   data,
+  videoUrl,
 }: ProductGalleryProps) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const [isFavorited, setIsFavorited] = React.useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
   const { toggleWishlist, isWishlisted } = useWishlist();
 
   const {
@@ -46,18 +48,36 @@ const ProductGallery = ({
   const safeImages =
     Array.isArray(images) && images.length > 0 ? images : [image];
 
+  // Total slides = images + optional video at the end
+  const hasVideo = Boolean(videoUrl);
+  const totalSlides = safeImages.length + (hasVideo ? 1 : 0);
+  const videoSlideIndex = hasVideo ? safeImages.length : -1;
+  const isVideoSlide = activeIndex === videoSlideIndex;
+
+  // Auto-play / pause video when slide changes
+  React.useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isVideoSlide) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }, [isVideoSlide]);
+
   const goPrev = () =>
-    setActiveIndex((prev) => (prev === 0 ? safeImages.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
 
   const goNext = () =>
-    setActiveIndex((prev) => (prev === safeImages.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
 
   const pointerStartX = React.useRef<number | null>(null);
   const pointerDeltaX = React.useRef(0);
   const isDragging = React.useRef(false);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    if (safeImages.length <= 1) return;
+    if (totalSlides <= 1) return;
     pointerStartX.current = e.clientX;
     pointerDeltaX.current = 0;
     isDragging.current = true;
@@ -105,17 +125,64 @@ const ProductGallery = ({
         onPointerLeave={endDrag}
         onPointerCancel={endDrag}
       >
-        <Image
-          src={safeImages[activeIndex]}
-          alt={`${productName} – image ${activeIndex + 1}`}
-          fill
-          priority
-          fetchPriority="high"
-          quality={70}
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
-          className="object-cover pointer-events-none"
-        />
+        {/* ── Image slides ── */}
+        {safeImages.map((src, i) => (
+          <div
+            key={src + i}
+            className={cn(
+              'absolute inset-0 transition-opacity duration-300',
+              i === activeIndex
+                ? 'opacity-100 z-10'
+                : 'opacity-0 z-0 pointer-events-none',
+            )}
+          >
+            <Image
+              src={src}
+              alt={`${productName} – image ${i + 1}`}
+              fill
+              priority={i === 0}
+              fetchPriority={i === 0 ? 'high' : 'auto'}
+              quality={70}
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 900px"
+              className="object-cover pointer-events-none"
+            />
+          </div>
+        ))}
 
+        {/* ── Video slide ── */}
+        {hasVideo && (
+          <div
+            className={cn(
+              'absolute inset-0 transition-opacity duration-300 flex items-center justify-center bg-black',
+              isVideoSlide
+                ? 'opacity-100 z-10'
+                : 'opacity-0 z-0 pointer-events-none',
+            )}
+          >
+            <video
+              ref={videoRef}
+              src={videoUrl}
+              muted
+              loop
+              playsInline
+              controls
+              preload="metadata"
+              className="h-full w-full object-contain"
+              style={{ maxHeight: '100%' }}
+            />
+
+            {/* Play overlay shown before interaction */}
+            {!isVideoSlide && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-lg">
+                  <Play className="h-7 w-7 fill-[#35281E] text-[#35281E] translate-x-0.5" />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Wishlist button ── */}
         <button
           type="button"
           aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -154,34 +221,36 @@ const ProductGallery = ({
           </span>
         </button>
 
-        {safeImages.length > 1 && (
+        {/* ── Prev / Next arrows ── */}
+        {totalSlides > 1 && (
           <Button
             type="button"
             size="icon"
             variant="ghost"
             aria-label="Previous image"
             onClick={goPrev}
-            className="absolute left-4 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-white/90 hover:bg-white"
+            className="absolute left-4 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-white/90 hover:bg-white z-20"
           >
             <ChevronLeft className="h-4 w-4 text-[#3F3A36]" />
           </Button>
         )}
 
-        {safeImages.length > 1 && (
+        {totalSlides > 1 && (
           <Button
             type="button"
             size="icon"
             variant="ghost"
             aria-label="Next image"
             onClick={goNext}
-            className="absolute right-4 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-white/90 hover:bg-white"
+            className="absolute right-4 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-white/90 hover:bg-white z-20"
           >
             <ChevronRight className="h-4 w-4 text-[#3F3A36]" />
           </Button>
         )}
 
-        {safeImages.length > 1 && (
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
+        {/* ── Dot navigation ── */}
+        {totalSlides > 1 && (
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1 z-20">
             {safeImages.map((_, i) => (
               <button
                 key={i}
@@ -201,6 +270,35 @@ const ProductGallery = ({
                 />
               </button>
             ))}
+
+            {/* Video dot */}
+            {hasVideo && (
+              <button
+                type="button"
+                aria-label="Go to video"
+                aria-current={isVideoSlide}
+                onClick={() => setActiveIndex(videoSlideIndex)}
+                className="flex h-12 w-12 items-center justify-center"
+              >
+                <span
+                  className={cn(
+                    'flex items-center justify-center rounded-full transition-all',
+                    isVideoSlide
+                      ? 'h-6 w-6 bg-[#3F3A36]'
+                      : 'h-5 w-5 bg-[#3F3A36]/30',
+                  )}
+                >
+                  <Play
+                    className={cn(
+                      'translate-x-px transition-all',
+                      isVideoSlide
+                        ? 'h-2.5 w-2.5 fill-white text-white'
+                        : 'h-2 w-2 fill-[#3F3A36]/60 text-[#3F3A36]/60',
+                    )}
+                  />
+                </span>
+              </button>
+            )}
           </div>
         )}
       </div>
