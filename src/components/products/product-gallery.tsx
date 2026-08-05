@@ -47,14 +47,27 @@ const ProductGallery = ({
   const wished = isWishlisted(String(id));
   const safeImages =
     Array.isArray(images) && images.length > 0 ? images : [image];
-
-  // Total slides = images + optional video at the end
   const hasVideo = Boolean(videoUrl);
   const totalSlides = safeImages.length + (hasVideo ? 1 : 0);
   const videoSlideIndex = hasVideo ? safeImages.length : -1;
   const isVideoSlide = activeIndex === videoSlideIndex;
 
-  // Auto-play / pause video when slide changes
+  const getYoutubeEmbedUrl = (url?: string) => {
+    if (!url) return null;
+
+    const regExp =
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/;
+
+    const match = url.match(regExp);
+
+    return match?.[1]
+      ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&loop=1&playlist=${match[1]}`
+      : null;
+  };
+
+  const youtubeEmbedUrl = getYoutubeEmbedUrl(videoUrl);
+  const isYoutubeVideo = Boolean(youtubeEmbedUrl);
+
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -125,7 +138,6 @@ const ProductGallery = ({
         onPointerLeave={endDrag}
         onPointerCancel={endDrag}
       >
-        {/* ── Image slides ── */}
         {safeImages.map((src, i) => (
           <div
             key={src + i}
@@ -149,7 +161,6 @@ const ProductGallery = ({
           </div>
         ))}
 
-        {/* ── Video slide ── */}
         {hasVideo && (
           <div
             className={cn(
@@ -159,25 +170,25 @@ const ProductGallery = ({
                 : 'opacity-0 z-0 pointer-events-none',
             )}
           >
-            <video
-              ref={videoRef}
-              src={videoUrl}
-              muted
-              loop
-              playsInline
-              controls
-              preload="metadata"
-              className="h-full w-full object-contain"
-              style={{ maxHeight: '100%' }}
-            />
-
-            {/* Play overlay shown before interaction */}
-            {!isVideoSlide && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-lg">
-                  <Play className="h-7 w-7 fill-[#35281E] text-[#35281E] translate-x-0.5" />
-                </div>
-              </div>
+            {isYoutubeVideo ? (
+              <iframe
+                src={isVideoSlide ? youtubeEmbedUrl! : undefined}
+                title={`${productName} video`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="h-full w-full"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={videoUrl}
+                muted
+                loop
+                playsInline
+                controls
+                preload="metadata"
+                className="h-full w-full object-contain"
+              />
             )}
           </div>
         )}

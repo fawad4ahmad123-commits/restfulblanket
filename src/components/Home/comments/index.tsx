@@ -35,7 +35,6 @@ const Coments = ({ id }: { id: string }) => {
       setLoading(true);
 
       const data = await getProductReviews(Number(id), isHome);
-      console.log('t12 reviews', { data, isHome });
 
       setReviews(data);
     } catch (error) {
