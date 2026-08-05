@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
@@ -9,20 +8,6 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 const CraftsmanshipSection = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    const preview = document.querySelector(
-      '[data-title="RestfulBlanket Video"]',
-    );
-
-    if (preview) {
-      preview.removeAttribute('role');
-      preview.setAttribute(
-        'aria-label',
-        'RestfulBlanket Video YouTube preview',
-      );
-    }
-  }, []);
-
   return (
     <section className="bg-[#fdf9f6] py-16 md:py-24">
       <div className="mx-auto max-w-[1320px] px-5 md:px-8">
@@ -30,7 +15,6 @@ const CraftsmanshipSection = () => {
           <div>
             <h2 className="font-serif text-[32px] font-bold leading-[0.95] tracking-[-0.03em] text-[#3B281F] md:text-[46px] lg:text-[68px]">
               Om <span className="font-normal italic">RestfulBlanket</span>
-              <div className="mt-[10px]" />
             </h2>
 
             <p className="mt-8 max-w-[470px] text-[15px] leading-8 text-[#7D7068]">
@@ -56,12 +40,15 @@ const CraftsmanshipSection = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div className="relative aspect-video w-full max-w-[720px] overflow-hidden rounded-[28px] shadow-lg">
+            <div className="overflow-hidden rounded-[28px] shadow-xl w-full max-w-[720px]">
               <LiteYouTubeEmbed
                 id="-Lya47BOKec"
                 title="RestfulBlanket Video"
                 noCookie
-                wrapperClass="absolute inset-0 !h-full !w-full !bg-cover !bg-center"
+                poster="maxresdefault"
+                webp
+                activatedClass="lyt-activated"
+                iframeClass="w-full h-full"
               />
             </div>
           </div>

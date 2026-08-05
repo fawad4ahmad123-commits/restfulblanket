@@ -10,6 +10,7 @@ const stripHtml = (html: string) => {
 };
 
 export const formatProductInformation = (product: any) => {
+  console.log('t123', { product });
   const safeProduct = product || {};
   const metaData = safeProduct?.meta_data || [];
 
@@ -165,9 +166,7 @@ export const formatProductInformation = (product: any) => {
         id: 'medium',
         label: 'Mellem',
         icon: 'medium',
-        active:
-          temperature === 'medium' ||
-          !['cool', 'medium', 'warm'].includes(temperature),
+        active: temperature === 'medium',
       },
       {
         id: 'warm',
