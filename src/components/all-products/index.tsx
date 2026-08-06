@@ -23,19 +23,14 @@ export default function ShopPageClient({
 
     async function fetchData() {
       setLoading(true);
-
       try {
-        const allProductData = await getAllProducts({
-          search: searchQuery,
-        });
-
+        const allProductData = await getAllProducts({ search: searchQuery });
         const response = formatProducts(allProductData);
-
         if (active) {
           setData(response);
         }
-      } catch (err) {
-        console.error('search fetch failed', err);
+      } catch (error) {
+        console.error('Error fetching products:', error);
       } finally {
         if (active) {
           setLoading(false);

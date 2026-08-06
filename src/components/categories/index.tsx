@@ -17,7 +17,7 @@ import CategoryFeatureCards from './category-feature-cards';
 import CategoryLearnMoreCards from './category-learn-more-cards';
 import { featureCards, guideCards } from './constants';
 import { CategoryTabs } from './category-tabs';
-import { buildFilters, getInitialFilters } from '@/src/utilty/buildFilters';
+import { BuildFilters, getInitialFilters } from '@/src/utilty/buildFilters';
 import { filterProducts } from '@/src/utilty/filterProducts';
 import { SelectedFilters } from '../all-products/types';
 
@@ -59,17 +59,15 @@ export default function Categories({ products, categories, initialSlug }: any) {
   const [activeCategories, setActiveCategories] = useState<string[]>(urlSlugs);
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const filterOptions = useMemo(() => buildFilters(products), [products]);
-  const [filters, setFilters] = useState<SelectedFilters>(() => ({
-    ...getInitialFilters(filterOptions.minPrice, filterOptions.maxPrice),
-    categories: [],
-  }));
+  const filterOptions = useMemo(() => BuildFilters(products), [products]);
+  const [filters, setFilters] = useState<SelectedFilters>(() =>
+    getInitialFilters(filterOptions.minPrice, filterOptions.maxPrice),
+  );
 
   const updateFilters = (updater: React.SetStateAction<SelectedFilters>) => {
-    setFilters((prev) => {
-      const next = typeof updater === 'function' ? updater(prev) : updater;
-      return { ...next, categories: [] };
-    });
+    setFilters((prev) =>
+      typeof updater === 'function' ? updater(prev) : updater,
+    );
     setCurrentPage(1);
   };
 

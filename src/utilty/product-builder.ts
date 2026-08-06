@@ -1,8 +1,7 @@
 import { SelectedFilters } from '../components/all-products/types';
-import { resolvePriceRaw } from './resolveProductPrice';
 import { parsePrice } from './use-parse-price';
 
-export function BuildFilters(products: any[]) {
+export function ProdctBuilder(products: any[]) {
   const extractColorLabel = (c: any): string => {
     if (typeof c === 'string') return c.trim();
     return (c?.label || c?.value || c?.name || '').trim();
@@ -35,10 +34,9 @@ export function BuildFilters(products: any[]) {
   };
 
   const allColors = products.flatMap(getProductColors).filter(Boolean);
+  const prices = products.map((p) => parsePrice(p.price)).filter((p) => p > 0);
 
-  const prices = products
-    .map((p) => parsePrice(resolvePriceRaw(p)))
-    .filter((p) => p > 0);
+  const hasValidPrices = prices.length > products.length * 0.5;
 
   return {
     categories: [
@@ -55,8 +53,8 @@ export function BuildFilters(products: any[]) {
         products.flatMap((product) => product.sizes || []).filter(Boolean),
       ),
     ],
-    minPrice: prices.length ? Math.min(...prices) : 0,
-    maxPrice: prices.length ? Math.max(...prices) : 0,
+    minPrice: hasValidPrices && prices.length ? Math.min(...prices) : 0,
+    maxPrice: hasValidPrices && prices.length ? Math.max(...prices) : 999999,
   };
 }
 

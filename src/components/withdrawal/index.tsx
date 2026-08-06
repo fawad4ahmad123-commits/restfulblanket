@@ -45,6 +45,7 @@ export default function WithdrawForm({
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const unitPrice = (item: LineItem) =>
     item.quantity > 0 ? parseFloat(item.total) / item.quantity : 0;
@@ -108,13 +109,22 @@ export default function WithdrawForm({
       }
 
       setStatus('success');
-      setMessage(data?.message || 'Din fortrydelsesanmodning er blevet sendt.');
+      setMessage(
+        data?.message ||
+          'Din fortrydelsesanmodning er blevet sendt. Du vil modtage en bekræftelsesmail hurtigst muligt.',
+      );
+      setShowSuccessModal(true);
     } catch {
       setStatus('error');
       setMessage('Noget gik galt. Prøv venligst igen.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+    router.push('/');
   };
 
   return (
@@ -229,17 +239,40 @@ export default function WithdrawForm({
         </div>
       )}
 
-      {!loading && status === 'success' && (
-        <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          {message}
-        </div>
-      )}
-
       {!loading && status === 'error' && (
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {message}
+        </div>
+      )}
+
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="relative w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-2xl">
+            <button
+              onClick={closeSuccessModal}
+              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-lg border border-pink-200 text-pink-500 hover:bg-pink-50"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            <div className="mx-auto mt-2 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 className="h-9 w-9 text-green-600" />
+            </div>
+
+            <h2 className="mt-5 text-xl font-bold text-green-700">
+              Fortrydelsesanmodning sendt
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-500">{message}</p>
+
+            <button
+              onClick={closeSuccessModal}
+              className="mt-6 h-11 w-full rounded-lg border border-pink-300 font-medium text-pink-600 hover:bg-pink-50"
+            >
+              Luk
+            </button>
+          </div>
         </div>
       )}
     </div>

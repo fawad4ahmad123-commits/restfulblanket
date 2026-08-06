@@ -3,13 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-import { buildFilters, getInitialFilters } from '@/src/utilty/buildFilters';
-import { filterProducts } from '@/src/utilty/filterProducts';
-
+import { getInitialFilters } from '@/src/utilty/buildFilters';
 import ProductGrid from './ProductGrid';
 import ProductSidebar from './Sidebar';
 import { SelectedFilters } from './types';
+import { ProdctBuilder } from '@/src/utilty/product-builder';
+import { ProductFilters } from '@/src/utilty/product-filters';
 
 function normalizeCategory(value: string) {
   return value
@@ -46,27 +45,23 @@ export default function Shop({
   categorySlug?: string[];
 }) {
   const router = useRouter();
+  console.log('t12 ccccc product', { data });
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const filterOptions = useMemo(() => buildFilters(data), [data]);
+  const filterOptions = useMemo(() => ProdctBuilder(data), [data]);
 
   const [filters, setFilters] = useState<SelectedFilters>(() =>
     getInitialFilters(filterOptions.minPrice, filterOptions.maxPrice),
   );
 
   useEffect(() => {
-    if (!categorySlug?.length) return;
-
-    const urlCategories = categorySlug.map((item) =>
-      normalizeCategory(item.replaceAll('-', ' ')),
-    );
-
     setFilters((prev) => ({
       ...prev,
-      categories: urlCategories,
+      minPrice: filterOptions.minPrice,
+      maxPrice: filterOptions.maxPrice,
     }));
-  }, [categorySlug]);
+  }, [filterOptions.minPrice, filterOptions.maxPrice]);
 
   const updateFilters = (updater: React.SetStateAction<SelectedFilters>) => {
     setFilters((prev) => {
@@ -91,7 +86,7 @@ export default function Shop({
   };
 
   const filteredProducts = useMemo(
-    () => filterProducts(data, filters, searchQuery),
+    () => ProductFilters(data, filters, searchQuery),
     [data, filters, searchQuery],
   );
 

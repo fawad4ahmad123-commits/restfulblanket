@@ -1,7 +1,7 @@
 import { getProductsColorHex } from '../helper/color-hexa';
 
 export function buildSidebarFilters(filterOptions: {
-  categories: string[];
+  categories?: string[];
   colors: string[];
   weights: string[];
   sizes: string[];

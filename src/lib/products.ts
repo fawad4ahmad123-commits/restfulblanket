@@ -117,21 +117,43 @@ export const getCategories = cache(async () => {
   return data ?? [];
 });
 
+// export const getBestSellers = cache(async () => {
+//   const data = await safeJsonFetch(
+//     wcUrl('products', {
+//       status: 'publish',
+//       orderby: 'popularity',
+//       order: 'desc',
+//     }),
+//     {
+//       next: {
+//         // revalidate: 300,
+//         tags: ['best-sellers'],
+//       },
+//     },
+//   );
+//   return data ?? [];
+// });
+
 export const getBestSellers = cache(async () => {
-  const data = await safeJsonFetch(
+  const page1 = await safeJsonFetch(
     wcUrl('products', {
       status: 'publish',
-      orderby: 'popularity',
-      order: 'desc',
+      per_page: 100,
+      page: 1,
     }),
-    {
-      next: {
-        // revalidate: 300,
-        tags: ['best-sellers'],
-      },
-    },
   );
-  return data ?? [];
+
+  const page2 = await safeJsonFetch(
+    wcUrl('products', {
+      status: 'publish',
+      per_page: 100,
+      page: 2,
+    }),
+  );
+
+  const all = [...(page1 || []), ...(page2 || [])];
+
+  return all;
 });
 
 export async function getProductById(id: any) {
@@ -217,23 +239,44 @@ export async function getAllProducts(params?: {
   category?: string;
   minPrice?: number;
   maxPrice?: number;
-  perPage?: number;
 }) {
-  const query: Record<string, string | number> = {
-    status: 'publish',
-    per_page: params?.perPage ?? 100,
-  };
+  let page = 1;
+  const allProducts: any[] = [];
 
-  if (params?.search) query.search = params.search;
-  if (params?.category) query.category = params.category;
-  if (params?.minPrice !== undefined) query.min_price = params.minPrice;
-  if (params?.maxPrice !== undefined) query.max_price = params.maxPrice;
+  while (true) {
+    const query: Record<string, string | number> = {
+      status: 'publish',
+      per_page: 100,
+      page,
+    };
 
-  const data = await safeJsonFetch(wcUrl('products', query), {
-    cache: 'no-store',
-  });
+    if (params?.search) query.search = params.search;
+    if (params?.category) query.category = params.category;
+    if (params?.minPrice !== undefined) {
+      query.min_price = params.minPrice;
+    }
+    if (params?.maxPrice !== undefined) {
+      query.max_price = params.maxPrice;
+    }
 
-  return data ?? [];
+    const products = await safeJsonFetch(wcUrl('products', query), {
+      cache: 'no-store',
+    });
+
+    if (!Array.isArray(products) || products.length === 0) {
+      break;
+    }
+
+    allProducts.push(...products);
+
+    if (products.length < 100) {
+      break;
+    }
+
+    page++;
+  }
+  console.log('t12 all product', { allProducts });
+  return allProducts;
 }
 
 export async function getPages() {
@@ -274,4 +317,39 @@ export async function getProductWithVariations(productId: number) {
   }
 
   return product;
+}
+
+export async function getProductsByCategorySlug(
+  slugInput: string | string[] | undefined,
+) {
+  const rawSlug = Array.isArray(slugInput)
+    ? slugInput[slugInput.length - 1]
+    : slugInput;
+
+  const slug = typeof rawSlug === 'string' ? rawSlug.toLowerCase().trim() : '';
+
+  if (!slug) {
+    console.error('getProductsByCategorySlug: invalid slug input:', slugInput);
+    return [];
+  }
+
+  const categories = await getCategories();
+
+  const matchedCategory = Array.isArray(categories)
+    ? categories.find(
+        (c: any) =>
+          typeof c?.slug === 'string' && c.slug.toLowerCase() === slug,
+      )
+    : null;
+
+  if (!matchedCategory) {
+    console.error('No category found for slug:', slug);
+    return [];
+  }
+
+  const products = await getAllProducts({
+    category: String(matchedCategory.id),
+  });
+
+  return products ?? [];
 }

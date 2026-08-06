@@ -1,8 +1,7 @@
 import { SelectedFilters } from '../components/all-products/types';
-import { resolvePriceRaw } from './resolveProductPrice';
 import { parsePrice } from './use-parse-price';
 
-export function filterProducts(
+export function ProductFilters(
   products: any[],
   filters: SelectedFilters,
   searchQuery: string,
@@ -106,9 +105,8 @@ export function filterProducts(
         productSizes.includes(String(size).toLowerCase().trim()),
       );
 
-    const price = parsePrice(resolvePriceRaw(product));
-    const priceMatch =
-      price === 0 || (price >= filters.minPrice && price <= filters.maxPrice);
+    const price = parsePrice(product.price);
+    const priceMatch = price >= filters.minPrice && price <= filters.maxPrice;
 
     const searchMatch =
       searchQuery.trim() === '' ||
