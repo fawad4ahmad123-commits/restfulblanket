@@ -69,9 +69,6 @@ const SliderCard = ({
     });
   };
 
-  const displayColorSwatches =
-    availableHexColors.length > 0 && availableHexColors.length <= 4;
-
   return (
     <>
       <div
@@ -212,28 +209,8 @@ const SliderCard = ({
           </h3>
           {(weight || size) && (
             <p className="mb-1 text-xs text-[#35281E] flex-shrink-0">
-              {[weight, size].filter(Boolean).join(' · ')}
+              {[weight, size, availableColors].filter(Boolean).join(' · ')}
             </p>
-          )}
-          {availableColors.length > 0 && (
-            <div className="mb-1 flex-shrink-0">
-              {displayColorSwatches ? (
-                <div className="flex gap-1.5">
-                  {availableHexColors.slice(0, 4).map((hex, index) => (
-                    <div
-                      key={index}
-                      className="h-4 w-4 rounded-full border border-[#E9DDD4]"
-                      style={{ backgroundColor: hex }}
-                      title={availableColors[index]}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-[#35281E]">
-                  {availableColors.slice(0, 3).join(', ')}
-                </p>
-              )}
-            </div>
           )}
           <div className="mb-2 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">

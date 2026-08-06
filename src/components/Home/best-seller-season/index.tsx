@@ -51,23 +51,32 @@ const BestSellers = ({
     return () => window.removeEventListener('resize', updateVisibleCount);
   }, []);
 
-  const bestsellerProducts = productData.filter((product: any) =>
-    product.meta_data?.some(
-      (meta: any) =>
-        meta.key === '_card_label' &&
-        String(meta.value).toUpperCase() === 'BESTSELLER',
-    ),
-  );
-  const baseProducts = isProduct ? productData : bestsellerProducts;
+  const getAlleProducts = () => {
+    const highRated = productData.filter(
+      (product: any) => Number(product.average_rating) > 4,
+    );
 
-  const filteredProducts =
-    activeCategory === 'Alle'
-      ? baseProducts
-      : baseProducts.filter((product: any) =>
-          product.categories?.some(
-            (category: any) =>
-              CATEGORY_MAPPING[category.slug] === activeCategory,
-          ),
+    if (highRated.length > 0) {
+      return highRated.slice(0, 4);
+    }
+
+    return [...productData]
+      .sort(
+        (a: any, b: any) => Number(b.average_rating) - Number(a.average_rating),
+      )
+      .slice(0, 4);
+  };
+
+  const filteredProducts = isProduct
+    ? productData
+    : activeCategory === 'Alle'
+      ? getAlleProducts()
+      : productData.filter((product: any) =>
+          product.categories?.some((category: any) => {
+            const mappedCategory =
+              CATEGORY_MAPPING[category.slug] || category.name;
+            return mappedCategory === activeCategory;
+          }),
         );
 
   const next = () => {

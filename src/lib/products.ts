@@ -275,7 +275,6 @@ export async function getAllProducts(params?: {
 
     page++;
   }
-  console.log('t12 all product', { allProducts });
   return allProducts;
 }
 

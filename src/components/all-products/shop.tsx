@@ -45,8 +45,6 @@ export default function Shop({
   categorySlug?: string[];
 }) {
   const router = useRouter();
-  console.log('t12 ccccc product', { data });
-
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const filterOptions = useMemo(() => ProdctBuilder(data), [data]);

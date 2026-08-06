@@ -45,7 +45,6 @@ export async function getBlogBySlug(slug: string) {
   }
 
   const data = await res.json();
-  console.log('t1 blog format', { data });
   return data[0];
 }
 

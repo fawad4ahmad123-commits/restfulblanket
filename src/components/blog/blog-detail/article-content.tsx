@@ -164,7 +164,6 @@ const wrapTablesCollapsible = (container: HTMLElement) => {
   });
 };
 
-// only rewrite <a href> links, never touch img src — fixes broken images
 const swapLinkDomains = (container: HTMLElement) => {
   const anchors = container.querySelectorAll(
     'a[href^="https://tapbookme.com/"]',
@@ -180,12 +179,7 @@ const swapLinkDomains = (container: HTMLElement) => {
     );
   });
 };
-
-// find any block-level element whose content is ONLY the [rb_quiz_cta]
-// shortcode (e.g. a <p>[rb_quiz_cta]</p> from the WP editor) and swap
-// the whole element for the rendered quiz CTA widget
 const replaceQuizCtaShortcode = (container: HTMLElement) => {
-  // Only run if container hasn't been processed yet
   if (container.hasAttribute('data-cta-processed')) {
     console.log('CTA already processed, skipping');
     return;
@@ -193,7 +187,6 @@ const replaceQuizCtaShortcode = (container: HTMLElement) => {
 
   console.log('replaceQuizCtaShortcode running - processing CTA');
 
-  // Mark container as processed
   container.setAttribute('data-cta-processed', 'true');
 
   const candidates = container.querySelectorAll(
@@ -213,8 +206,6 @@ const replaceQuizCtaShortcode = (container: HTMLElement) => {
     root.render(<QuizCta />);
   });
 
-  // fallback: shortcode sitting inline inside a text node that isn't
-  // its own paragraph (rare, but handle it so it never shows raw text)
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
     acceptNode: (node) =>
       node.nodeValue?.includes('[rb_quiz_cta]')
@@ -257,18 +248,15 @@ export default function ArticleContent({ articleData }: any) {
   const renderHTML = (html: string) =>
     html ? { __html: html } : { __html: '' };
 
-  // Store processed state to prevent re-processing
   const processedRef = useRef(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Reset processed flag when rawHtml changes
     processedRef.current = false;
 
     const container = containerRef.current;
 
-    // Remove any existing CTA processing flag
     container.removeAttribute('data-cta-processed');
 
     const faqItems = container.querySelectorAll('.rank-math-faq-item');
@@ -608,7 +596,6 @@ export default function ArticleContent({ articleData }: any) {
     );
   }
 
-  // fallback structured content...
   const author = articleData?.intro?.[0]?.startsWith('Forfatter:')
     ? articleData.intro[0]
     : null;
