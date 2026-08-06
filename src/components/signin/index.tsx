@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,8 @@ import { useAuth } from '@/src/core/context/auth-context';
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const router = useRouter();
   const { login } = useAuth();
 
@@ -38,8 +41,14 @@ export default function SignInForm() {
 
   const onSubmit = async (values: SignInFormValues) => {
     setApiError(null);
+
+    if (!captchaToken) {
+      setApiError('Bekræft venligst, at du ikke er en robot.');
+      return;
+    }
+
     try {
-      await login(values.username, values.password);
+      await login(values.username, values.password, captchaToken);
       router.push('/');
     } catch (err) {
       setApiError(
@@ -47,6 +56,8 @@ export default function SignInForm() {
           ? err.message
           : 'Login mislykkedes. Kontroller venligst dine loginoplysninger.',
       );
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     }
   };
 
@@ -164,10 +175,20 @@ export default function SignInForm() {
               </div>
             </div>
 
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
+                onChange={(token) => setCaptchaToken(token)}
+                onExpired={() => setCaptchaToken(null)}
+                onErrored={() => setCaptchaToken(null)}
+              />
+            </div>
+
             <Button
               type="submit"
-              disabled={isSubmitting}
-              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21]"
+              disabled={isSubmitting || !captchaToken}
+              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Indlæser...' : 'Log ind'}
             </Button>

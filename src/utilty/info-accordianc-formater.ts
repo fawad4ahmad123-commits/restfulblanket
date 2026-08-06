@@ -97,10 +97,10 @@ export const formatProductInformation = (product: any) => {
     },
     ...(faqItems.length > 0
       ? faqItems.map((item: any, index: number) => ({
-        id: `faq-${index + 1}`,
-        title: item.question || `Spørgsmål ${index + 1}`,
-        body: item.answer || '',
-      }))
+          id: `faq-${index + 1}`,
+          title: item.question || `Spørgsmål ${index + 1}`,
+          body: item.answer || '',
+        }))
       : extractedFaqs.length > 0
         ? extractedFaqs
         : []),

@@ -10,7 +10,7 @@ import {
 import { useRouter, usePathname } from 'next/navigation';
 
 const TOKEN_KEY = 'auth_token';
-const USER_KEY = 'auth_user'; // Backup key specifically to fix persistent hard refresh data loss
+const USER_KEY = 'auth_user';
 const JWT_ENDPOINT = 'https://tapbookme.com/wp-json/jwt-auth/v1/token';
 const WP_API_URL =
   process.env.NEXT_PUBLIC_WP_API_URL ?? 'https://tapbookme.com';
@@ -35,7 +35,11 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
-  login: (username: string, password: string) => Promise<User>;
+  login: (
+    username: string,
+    password: string,
+    captchaToken: string,
+  ) => Promise<User>;
   signup: (payload: SignupPayload) => Promise<void>;
   logout: () => void;
 }
@@ -46,6 +50,23 @@ interface JwtResponse {
   user_email: string;
   user_nicename: string;
 }
+
+const verifyCaptcha = async (captchaToken: string): Promise<void> => {
+  const response = await fetch('/api/verify-captcha', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: captchaToken }),
+  });
+
+  if (!response.ok) {
+    let message = 'Captcha verification failed. Please try again.';
+    try {
+      const err = await response.json();
+      if (err?.message) message = err.message;
+    } catch {}
+    throw new Error(message);
+  }
+};
 
 const fetchJwtToken = async (
   username: string,
@@ -82,7 +103,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // Must remain true initially to prevent layout pops
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -99,7 +120,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           localStorage.removeItem(USER_KEY);
         }
       } else {
-        // Fallback strategy: Attempt structural JWT breakdown if the raw object string layout isn't present
         try {
           const base64Url = storedToken.split('.')[1];
           const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -133,11 +153,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
-  const login = async (username: string, password: string): Promise<User> => {
+  const login = async (
+    username: string,
+    password: string,
+    captchaToken: string,
+  ): Promise<User> => {
     setLoading(true);
     setError(null);
 
     try {
+      await verifyCaptcha(captchaToken);
+
       const { token: newToken, user: loggedInUser } = await fetchJwtToken(
         username,
         password,
@@ -177,9 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       let data: { success?: boolean; message?: string } | undefined;
       try {
         data = await response.json();
-      } catch {
-        // ignore — handled by the !response.ok check below
-      }
+      } catch {}
 
       if (!response.ok || data?.success === false) {
         throw new Error(
@@ -187,15 +211,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             'Registration failed. Please check your information.',
         );
       }
-
-      // Do NOT auto-login here — the account isn't verified yet.
-      // WordPress will block login until the user clicks the verification
-      // email link and hits /verify-email. Show a "check your email" state
-      // instead, e.g.:
-      //
-      //   setShowCheckEmail(true);
-      //
-      // in your component, rather than calling login(...) at this point.
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Registration failed';
@@ -234,10 +249,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => useContext(AuthContext);
 
-/**
- * Robust Protected Route Component
- * Wraps your views and blocks renders cleanly until authentication maps properly.
- */
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
@@ -254,7 +265,6 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
     }
   }, [isAuthenticated, loading, mounted, router, pathname]);
 
-  // Block rendering until mounting & verification is secure
   if (!mounted || loading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-white">
