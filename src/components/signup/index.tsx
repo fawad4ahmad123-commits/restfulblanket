@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { signUpSchema, type SignUpFormValues } from './schema';
 import { useAuth } from '@/src/core/context/auth-context';
@@ -18,6 +19,8 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const router = useRouter();
   const { signup } = useAuth();
 
@@ -44,14 +47,23 @@ export default function SignUpForm() {
 
   const onSubmit = async (values: SignUpFormValues) => {
     setApiError(null);
+
+    if (!captchaToken) {
+      setApiError('Bekræft venligst, at du ikke er en robot.');
+      return;
+    }
+
     try {
-      await signup({
-        firstname: values.firstname,
-        lastname: values.lastname,
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      });
+      await signup(
+        {
+          firstname: values.firstname,
+          lastname: values.lastname,
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        },
+        captchaToken,
+      );
       setShowSuccess(true);
     } catch (err) {
       setApiError(
@@ -59,6 +71,8 @@ export default function SignUpForm() {
           ? err.message
           : 'Registrering mislykkedes. Prøv venligst igen.',
       );
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     }
   };
 
@@ -203,10 +217,21 @@ export default function SignUpForm() {
                 </p>
               )}
             </div>
+
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
+                onChange={(token) => setCaptchaToken(token)}
+                onExpired={() => setCaptchaToken(null)}
+                onErrored={() => setCaptchaToken(null)}
+              />
+            </div>
+
             <Button
               type="submit"
-              disabled={isSubmitting}
-              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21] mt-[10px]"
+              disabled={isSubmitting || !captchaToken}
+              className="h-12 w-full rounded-full bg-[#2D2119] text-white hover:bg-[#3A2A21] mt-[10px] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Indlæser...' : 'Opret konto'}
             </Button>

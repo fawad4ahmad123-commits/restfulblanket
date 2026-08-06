@@ -40,7 +40,7 @@ interface AuthContextType {
     password: string,
     captchaToken: string,
   ) => Promise<User>;
-  signup: (payload: SignupPayload) => Promise<void>;
+  signup: (payload: SignupPayload, captchaToken: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -185,11 +185,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signup = async (payload: SignupPayload): Promise<void> => {
+  const signup = async (
+    payload: SignupPayload,
+    captchaToken: string,
+  ): Promise<void> => {
     setLoading(true);
     setError(null);
 
     try {
+      await verifyCaptcha(captchaToken);
+
       const response = await fetch(`${WP_API_URL}/wp-json/custom/v1/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
