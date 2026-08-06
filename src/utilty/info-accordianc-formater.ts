@@ -10,7 +10,6 @@ const stripHtml = (html: string) => {
 };
 
 export const formatProductInformation = (product: any) => {
-  console.log('t123', { product });
   const safeProduct = product || {};
   const metaData = safeProduct?.meta_data || [];
 
@@ -98,19 +97,13 @@ export const formatProductInformation = (product: any) => {
     },
     ...(faqItems.length > 0
       ? faqItems.map((item: any, index: number) => ({
-          id: `faq-${index + 1}`,
-          title: item.question || `Spørgsmål ${index + 1}`,
-          body: item.answer || '',
-        }))
+        id: `faq-${index + 1}`,
+        title: item.question || `Spørgsmål ${index + 1}`,
+        body: item.answer || '',
+      }))
       : extractedFaqs.length > 0
         ? extractedFaqs
-        : [
-            {
-              id: 'product-info',
-              title: safeProduct?.name || 'Produktinformation',
-              body: description || 'Ingen produktinformation tilgængelig.',
-            },
-          ]),
+        : []),
   ];
 
   return {
