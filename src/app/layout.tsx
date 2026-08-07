@@ -17,6 +17,8 @@ import ClientProviders from '../components/client-providers';
 import GoogleAnalytics from '../components/GoogleAnalytics';
 
 import { getBestSellers, getCategories } from '../lib/products';
+import CookieBanner from '../components/cookie/cookie-banner';
+import { CookieProvider } from '../core/context/cookie-consent';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -58,26 +60,28 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <GoogleAnalytics />
         </Suspense>
-
-        <AuthProvider>
-          <QuizResultProvider>
-            <ProductMetaProvider>
-              <WishlistProvider>
-                <CompareProvider>
-                  <CartProvider>
-                    <MainLayout
-                      products={formattedProducts}
-                      categories={categories}
-                    >
-                      {children}
-                      <ClientProviders />
-                    </MainLayout>
-                  </CartProvider>
-                </CompareProvider>
-              </WishlistProvider>
-            </ProductMetaProvider>
-          </QuizResultProvider>
-        </AuthProvider>
+        <CookieProvider>
+          <CookieBanner />
+          <AuthProvider>
+            <QuizResultProvider>
+              <ProductMetaProvider>
+                <WishlistProvider>
+                  <CompareProvider>
+                    <CartProvider>
+                      <MainLayout
+                        products={formattedProducts}
+                        categories={categories}
+                      >
+                        {children}
+                        <ClientProviders />
+                      </MainLayout>
+                    </CartProvider>
+                  </CompareProvider>
+                </WishlistProvider>
+              </ProductMetaProvider>
+            </QuizResultProvider>
+          </AuthProvider>
+        </CookieProvider>
       </body>
     </html>
   );

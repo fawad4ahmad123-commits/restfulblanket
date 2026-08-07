@@ -1,7 +1,7 @@
 declare global {
-    interface Window {
-        dataLayer: Record<string, any>[];
-    }
+  interface Window {
+    dataLayer: Record<string, any>[];
+  }
 }
 
-export { };
+export {};
