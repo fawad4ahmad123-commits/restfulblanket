@@ -8,7 +8,7 @@ import SliderControls from '../../generic/slider-control';
 import { PLACEHOLDER_IMAGE } from '../../constant';
 import CompareBar from '../../compare/compare-bar';
 
-const CATEGORIES = ['Alle', 'Voksne', 'Børn', 'Dyner', 'Tilbehør'];
+const CATEGORIES = ['Alle', 'Voksne', 'Børn', 'Tilbehør'];
 
 const CATEGORY_MAPPING: Record<string, string> = {
   tyngdetaeppe: 'Voksne',
