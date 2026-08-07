@@ -33,7 +33,7 @@ export default function CookieBanner() {
         <div className="relative p-6 md:p-8">
           <button
             onClick={() => setMinimized(true)}
-            className="absolute left-4 top-2 rounded-lg p-2 text-[#35281E]/70 transition cursor-pointer"
+            className="absolute right-4 top-2 rounded-lg p-2 text-[#35281E]/70 transition cursor-pointer hover:bg-[#F5EBDD]"
           >
             <Minimize2 className="h-5 w-5" />
           </button>
