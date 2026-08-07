@@ -1,19 +1,22 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
+import { Suspense } from 'react';
 
 import { cn } from '@/lib/utils';
 import './globals.css';
+
 import MainLayout from '../core/Mainlayouts';
 import { CartProvider } from '../core/context/cart-context';
 import { CompareProvider } from '../core/context/compare-provider';
 import { AuthProvider } from '../core/context/auth-context';
 import { WishlistProvider } from '../core/context/wishlist-provider';
 import { ProductMetaProvider } from '../core/context/product-meta-context';
-import ClientProviders from '../components/client-providers';
-import { getBestSellers, getCategories } from '../lib/products';
 import { QuizResultProvider } from '../core/context/quiz-result-context';
-import { CookieProvider } from '../core/context/cookie-consent';
-import CookieBanner from '../components/cookie/cookie-banner';
+
+import ClientProviders from '../components/client-providers';
+import GoogleAnalytics from '../components/GoogleAnalytics';
+
+import { getBestSellers, getCategories } from '../lib/products';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -36,6 +39,7 @@ export default async function RootLayout({
     getBestSellers(),
     getCategories(),
   ]);
+
   const formattedProducts = products.map((product: any) => ({
     id: product.id,
     title: product.name,
@@ -50,29 +54,30 @@ export default async function RootLayout({
       className={cn('font-sans', geist.variable)}
       suppressHydrationWarning
     >
-      <body suppressHydrationWarning>
-        <CookieProvider>
-          <CookieBanner />
-          <AuthProvider>
-            <QuizResultProvider>
-              <ProductMetaProvider>
-                <WishlistProvider>
-                  <CompareProvider>
-                    <CartProvider>
-                      <MainLayout
-                        products={formattedProducts}
-                        categories={categories}
-                      >
-                        {children}
-                        <ClientProviders />
-                      </MainLayout>
-                    </CartProvider>
-                  </CompareProvider>
-                </WishlistProvider>
-              </ProductMetaProvider>
-            </QuizResultProvider>
-          </AuthProvider>
-        </CookieProvider>
+      <body>
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
+
+        <AuthProvider>
+          <QuizResultProvider>
+            <ProductMetaProvider>
+              <WishlistProvider>
+                <CompareProvider>
+                  <CartProvider>
+                    <MainLayout
+                      products={formattedProducts}
+                      categories={categories}
+                    >
+                      {children}
+                      <ClientProviders />
+                    </MainLayout>
+                  </CartProvider>
+                </CompareProvider>
+              </WishlistProvider>
+            </ProductMetaProvider>
+          </QuizResultProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Heart, ShoppingBag, Star, Check, Eye } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import { trackAddToCart, trackViewItem } from '@/src/lib/analytics/ecommerce';
 import { formatPrice } from '@/src/helper/product-feature';
 import { useCart } from '@/src/core/context/card-Provider';
 import { useCompare } from '@/src/core/context/compare-provider';
@@ -48,10 +48,10 @@ const ProductCard = ({
   stockStatus = 'outofstock',
 }: ProductCardProps) => {
   const [wished, setWished] = useState(false);
-
   const router = useRouter();
   const { addToCart } = useCart();
   const { compareItems, toggleCompare } = useCompare();
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const isCompared = compareItems.some(
     (item) => String(item.id) === String(id),
@@ -60,12 +60,40 @@ const ProductCard = ({
   const stars = Math.round(rating);
   const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
+  useEffect(() => {
+    if (!cardRef.current || isOutOfStock) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            trackViewItem({
+              item_id: String(id),
+              item_name: name,
+              price: price,
+              weight: weight,
+              size: size,
+              quantity: 1,
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(cardRef.current);
+
+    return () => observer.disconnect();
+  }, [id, name, price, weight, size, isOutOfStock]);
+
   const handleNavigate = () => {
     router.push(`/shop/${slug}`);
   };
 
   return (
     <div
+      ref={cardRef}
       role="link"
       tabIndex={0}
       aria-label={`View product ${name}`}
@@ -220,7 +248,6 @@ const ProductCard = ({
               }
               onClick={(e) => {
                 e.stopPropagation();
-
                 toggleCompare({
                   id: String(id),
                   title: name,
@@ -259,7 +286,13 @@ const ProductCard = ({
             onClick={(e) => {
               e.stopPropagation();
               if (isOutOfStock) return;
-
+              trackAddToCart({
+                item_id: String(id),
+                item_name: name,
+                price,
+                weight,
+                size,
+              });
               addToCart({
                 id: String(id),
                 name,

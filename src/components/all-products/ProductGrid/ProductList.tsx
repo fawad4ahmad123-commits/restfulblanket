@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { ProductCard } from '../ProductCard';
+import { trackViewItemList } from '@/src/lib/analytics/ecommerce';
 
 interface Props {
   products: any[];
@@ -12,6 +14,26 @@ export default function ProductList({ products }: Props) {
       </p>
     );
   }
+
+  useEffect(() => {
+    if (!products?.length) return;
+
+    trackViewItemList(
+      products.map((product) => ({
+        item_id: String(product.id),
+        item_name: product.name,
+        price: Number(product.price),
+        weight:
+          product.attributeLinks?.find((attr: any) => attr.name === 'weight')
+            ?.value || '',
+
+        size:
+          product.attributeLinks?.find((attr: any) => attr.name === 'size')
+            ?.value || '',
+      })),
+      'Shop Products',
+    );
+  }, [products]);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
