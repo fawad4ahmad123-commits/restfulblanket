@@ -17,7 +17,6 @@ import { useEffect } from 'react';
 
 interface AccountInformationSectionProps {
   user?: any;
-  /** Front-end URL RankMath should generate SEO meta for. Defaults to the current page. */
   pageUrl?: string;
 }
 

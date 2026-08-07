@@ -9,6 +9,7 @@ import { useCart } from '@/src/core/context/card-Provider';
 import { useCompare } from '@/src/core/context/compare-provider';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
+import { trackAddToCart } from '@/src/lib/analytics/ecommerce';
 
 interface ExtendedSliderCardProps extends SliderCardProps {
   hoverImage?: string;
@@ -52,10 +53,44 @@ const SliderCard = ({
   const stars = Math.round(rating);
   const isOutOfStock = stockStatus === 'outofstock' || stockQuantity === 0;
 
+  // const handleAddToCartClick = (e: React.MouseEvent) => {
+  //   e.stopPropagation();
+
+  //   if (isOutOfStock) return;
+
+  //   addToCart({
+  //     id: String(id),
+  //     name: title,
+  //     color: color || '',
+  //     variant: size || '',
+  //     weight: weight || '',
+  //     price: Number(price) || 0,
+  //     image,
+  //     stockQuantity,
+  //   });
+  // };
+
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (isOutOfStock) return;
+
+    trackAddToCart(
+      {
+        item_id: String(id),
+        item_name: title,
+        price: Number(price) || 0,
+
+        item_variant: size || '',
+
+        weight: weight || '',
+
+        size: size || '',
+
+        item_category: 'Weighted Blanket',
+      },
+      1,
+    );
 
     addToCart({
       id: String(id),
