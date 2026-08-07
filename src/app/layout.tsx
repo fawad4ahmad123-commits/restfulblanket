@@ -12,6 +12,8 @@ import { ProductMetaProvider } from '../core/context/product-meta-context';
 import ClientProviders from '../components/client-providers';
 import { getBestSellers, getCategories } from '../lib/products';
 import { QuizResultProvider } from '../core/context/quiz-result-context';
+import { CookieProvider } from '../core/context/cookie-consent';
+import CookieBanner from '../components/cookie/cookie-banner';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -49,25 +51,28 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        <AuthProvider>
-          <QuizResultProvider>
-            <ProductMetaProvider>
-              <WishlistProvider>
-                <CompareProvider>
-                  <CartProvider>
-                    <MainLayout
-                      products={formattedProducts}
-                      categories={categories}
-                    >
-                      {children}
-                      <ClientProviders />
-                    </MainLayout>
-                  </CartProvider>
-                </CompareProvider>
-              </WishlistProvider>
-            </ProductMetaProvider>
-          </QuizResultProvider>
-        </AuthProvider>
+        <CookieProvider>
+          <CookieBanner />
+          <AuthProvider>
+            <QuizResultProvider>
+              <ProductMetaProvider>
+                <WishlistProvider>
+                  <CompareProvider>
+                    <CartProvider>
+                      <MainLayout
+                        products={formattedProducts}
+                        categories={categories}
+                      >
+                        {children}
+                        <ClientProviders />
+                      </MainLayout>
+                    </CartProvider>
+                  </CompareProvider>
+                </WishlistProvider>
+              </ProductMetaProvider>
+            </QuizResultProvider>
+          </AuthProvider>
+        </CookieProvider>
       </body>
     </html>
   );
