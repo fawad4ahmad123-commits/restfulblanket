@@ -6,8 +6,8 @@ import { formatBlogs } from '../utilty/blog-formater';
 
 export async function generateMetadata() {
   const seo = await getRankMathSEO(`${process.env.NEXT_PUBLIC_SITE_URL}/`);
-
-  const title = seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] || 'Tap Book Me';
+  console.log('t12 SEO', { seo });
+  const title = seo?.head?.match(/<title>(.*?)<\/title>/)?.[1];
 
   const description =
     seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||

@@ -10,15 +10,6 @@ import { SelectedFilters } from './types';
 import { ProdctBuilder } from '@/src/utilty/product-builder';
 import { ProductFilters } from '@/src/utilty/product-filters';
 
-function normalizeCategory(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/ae/g, 'æ')
-    .replace(/oe/g, 'ø')
-    .replace(/aa/g, 'å');
-}
-
 function slugify(value: string) {
   return value
     .toLowerCase()

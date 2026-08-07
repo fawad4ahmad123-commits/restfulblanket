@@ -13,6 +13,24 @@ export interface AnalyticsProduct {
   size?: string;
 }
 
+export function trackSelectItem(product: AnalyticsProduct) {
+  trackEvent('select_item', {
+    items: [
+      {
+        ...product,
+        quantity: 1,
+      },
+    ],
+  });
+}
+
+export function trackFilterUsage(filterType: string, filterValue: string) {
+  trackEvent('filter_products', {
+    filter_type: filterType,
+    filter_value: filterValue,
+  });
+}
+
 export function trackViewItem(product: AnalyticsProduct) {
   trackEvent('view_item', {
     currency: 'EUR',
@@ -127,7 +145,7 @@ export function trackPurchase({
   trackEvent('purchase', {
     transaction_id: transactionId,
 
-    currency: 'EUR',
+    currency: 'DKK',
 
     value,
 
@@ -137,4 +155,42 @@ export function trackPurchase({
 
     items: products,
   });
+}
+
+export function trackSearch(searchTerm: string) {
+  trackEvent('search', {
+    search_term: searchTerm,
+  });
+}
+
+export function trackSort(sortType: string) {
+  trackEvent('sort_products', {
+    sort_type: sortType,
+  });
+}
+
+export function trackPagination(page: number) {
+  trackEvent('pagination_click', {
+    page_number: page,
+  });
+}
+
+export function trackSignUp(method = 'email') {
+  trackEvent('sign_up', {
+    method,
+  });
+}
+
+export function trackRegistrationStart() {
+  trackEvent('registration_start');
+}
+
+export function trackLogin(method = 'email') {
+  trackEvent('login', {
+    method,
+  });
+}
+
+export function trackLoginStart() {
+  trackEvent('login_start');
 }

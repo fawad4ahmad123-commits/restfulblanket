@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Heart, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useWishlist } from '@/src/core/context/wishlist-provider';
+import { trackEvent } from '@/src/lib/analytics/gtag';
 
 interface ProductGalleryProps {
   images?: string[];
@@ -192,8 +193,6 @@ const ProductGallery = ({
             )}
           </div>
         )}
-
-        {/* ── Wishlist button ── */}
         <button
           type="button"
           aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
@@ -215,6 +214,17 @@ const ProductGallery = ({
               color: color || '',
               size: size || '',
               badge: badge || '',
+            });
+            trackEvent('add_to_wishlist', {
+              currency: 'DKK',
+              value: Number(price || 0),
+              items: [
+                {
+                  item_id: String(id),
+                  item_name: title || productName,
+                  price: Number(price || 0),
+                },
+              ],
             });
           }}
           className="absolute right-4 top-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#35281E] focus-visible:ring-offset-2"

@@ -12,27 +12,44 @@ export interface RankMathMeta {
 export async function fetchRankMathMeta(
   pageUrl: string,
 ): Promise<RankMathMeta> {
-  const endpoint = `${API_ENDPOINTS.rankMathHead}?url=${encodeURIComponent(pageUrl)}`;
+  const endpoint = `${API_ENDPOINTS.rankMathHead}?url=${encodeURIComponent(
+    pageUrl,
+  )}`;
+
+  console.log('RankMath URL:', pageUrl);
+  console.log('RankMath Endpoint:', endpoint);
+
   const response = await fetch(endpoint);
+
+  console.log('RankMath Status:', response.status);
+  console.log('RankMath OK:', response.ok);
 
   if (!response.ok) {
     throw new Error('Could not load RankMath SEO data.');
   }
 
-  const { head } = await response.json();
-  return parseRankMathHead(head || '');
+  const data = await response.json();
+
+  console.log('RankMath Response:', data);
+  console.log('RankMath Head:', data?.head);
+
+  return parseRankMathHead(data?.head || '');
 }
 
 function parseRankMathHead(headHtml: string): RankMathMeta {
+  console.log('RankMath Raw HTML:', headHtml);
+
   if (typeof window === 'undefined' || !headHtml) {
+    console.log('RankMath Empty HTML or SSR');
     return emptyMeta();
   }
 
   const doc = new DOMParser().parseFromString(headHtml, 'text/html');
+
   const getMetaContent = (selector: string) =>
     doc.querySelector(selector)?.getAttribute('content') || null;
 
-  return {
+  const meta = {
     title: doc.querySelector('title')?.textContent || null,
     description: getMetaContent('meta[name="description"]'),
     canonical:
@@ -40,8 +57,11 @@ function parseRankMathHead(headHtml: string): RankMathMeta {
     ogTitle: getMetaContent('meta[property="og:title"]'),
     ogDescription: getMetaContent('meta[property="og:description"]'),
     ogImage: getMetaContent('meta[property="og:image"]'),
-    // meta[name="robots"] is intentionally skipped — no index/noindex data.
   };
+
+  console.log('RankMath Parsed Meta:', meta);
+
+  return meta;
 }
 
 function emptyMeta(): RankMathMeta {

@@ -24,7 +24,7 @@ export async function generateMetadata({
   const title =
     seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
     product?.name ||
-    'Product | Tap Book Me';
+    'Product';
 
   const description =
     seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||

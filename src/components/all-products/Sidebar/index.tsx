@@ -13,6 +13,7 @@ import { toggleFilter } from '@/src/utilty/toggleFilter';
 import { isLight } from '@/src/utilty/isLight';
 import DualRangeSlider from '../DualRangeSlider';
 import { ProductSideCategory } from './types';
+import { trackFilterUsage } from '@/src/lib/analytics/ecommerce';
 
 export default function ProductSidebar({
   filters,
@@ -73,15 +74,17 @@ export default function ProductSidebar({
                         <input
                           type="checkbox"
                           checked={isChecked}
-                          onChange={() =>
+                          onChange={() => {
+                            trackFilterUsage('category', categoryId);
+
                             setFilters((f) => ({
                               ...f,
                               categories: toggleFilter(
                                 f.categories,
                                 categoryId,
                               ),
-                            }))
-                          }
+                            }));
+                          }}
                           className="h-4 w-4 rounded border-[#D9CCC3] text-[#35281E] accent-[#35281E]"
                         />
 
@@ -101,12 +104,14 @@ export default function ProductSidebar({
                       <button
                         key={color.id}
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
+                          trackFilterUsage('color', color.id);
+
                           setFilters((f) => ({
                             ...f,
                             colors: toggleFilter(f.colors, color.id),
-                          }))
-                        }
+                          }));
+                        }}
                         className={`relative flex h-8 w-8 items-center justify-center rounded-full transition-all ${
                           isSelected
                             ? 'ring-2 ring-[#35281E] ring-inset'
@@ -137,12 +142,14 @@ export default function ProductSidebar({
                       <button
                         key={option}
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
+                          trackFilterUsage('weight', option);
+
                           setFilters((f) => ({
                             ...f,
                             weights: toggleFilter(f.weights, option),
-                          }))
-                        }
+                          }));
+                        }}
                         className={`rounded-full border px-3 py-1 text-xs ${
                           isSelected
                             ? 'border-[#35281E] bg-[#35281E] text-white'
@@ -165,12 +172,14 @@ export default function ProductSidebar({
                       <button
                         key={option}
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
+                          trackFilterUsage('size', option);
+
                           setFilters((f) => ({
                             ...f,
                             sizes: toggleFilter(f.sizes, option),
-                          }))
-                        }
+                          }));
+                        }}
                         className={`rounded-full border px-3 py-1 text-xs ${
                           isSelected
                             ? 'border-[#35281E] bg-[#35281E] text-white'

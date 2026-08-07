@@ -10,6 +10,7 @@ import ProductSort from './ProductSort';
 import { Pagination } from '../Pagination';
 import { SelectedFilters } from '../types';
 import CompareBar from '../../compare/compare-bar';
+import { trackPagination, trackSort } from '@/src/lib/analytics/ecommerce';
 
 const PRODUCTS_PER_PAGE = 24;
 
@@ -45,6 +46,8 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
   };
 
   const handleSortChange = (value: string) => {
+    trackSort(value);
+
     updateQuery({
       sort: value,
       page: '1',
@@ -97,6 +100,8 @@ export default function ProductGrid({ products, filters, setFilters }: Props) {
   );
 
   const handlePageChange = (page: number) => {
+    trackPagination(page);
+
     updateQuery({
       page: page.toString(),
     });

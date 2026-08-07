@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +12,10 @@ import { useAuth } from '@/src/core/context/auth-context';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+  trackRegistrationStart,
+  trackSignUp,
+} from '@/src/lib/analytics/ecommerce';
 import { SuccessDialog } from '../thank-you-popup';
 
 export default function SignUpForm() {
@@ -42,7 +45,6 @@ export default function SignUpForm() {
     },
   });
 
-  const keepLoggedIn = watch('keepLoggedIn');
   const userEmail = watch('email');
 
   const onSubmit = async (values: SignUpFormValues) => {
@@ -64,6 +66,9 @@ export default function SignUpForm() {
         },
         captchaToken,
       );
+
+      trackSignUp('email');
+
       setShowSuccess(true);
     } catch (err) {
       setApiError(
@@ -75,6 +80,10 @@ export default function SignUpForm() {
       setCaptchaToken(null);
     }
   };
+
+  useEffect(() => {
+    trackRegistrationStart();
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#FAF8F6] p-4">

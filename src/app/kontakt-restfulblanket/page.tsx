@@ -6,9 +6,7 @@ export async function generateMetadata() {
     `${process.env.NEXT_PUBLIC_SITE_URL}/contact`,
   );
 
-  const title =
-    seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
-    'Contact Us | Tap Book Me';
+  const title = seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] || 'Contact Us';
 
   const description =
     seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||

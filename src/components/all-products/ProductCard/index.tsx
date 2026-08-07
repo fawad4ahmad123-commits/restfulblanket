@@ -8,6 +8,7 @@ import { useWishlist } from '@/src/core/context/wishlist-provider';
 import { useCompare } from '@/src/core/context/compare-provider';
 import { cn } from '@/lib/utils';
 import { parsePrice } from '@/src/utilty/use-parse-price';
+import { trackAddToCart, trackSelectItem } from '@/src/lib/analytics/ecommerce';
 
 interface Product {
   id: string | number;
@@ -108,6 +109,7 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
 
     if (isOutOfStock) return;
+
     addToCart({
       id: String(id),
       name: title,
@@ -117,8 +119,29 @@ export function ProductCard({ product }: ProductCardProps) {
       price: parsePrice(originalPrice || price) || 0,
       image,
     });
+
+    trackAddToCart({
+      item_id: String(id),
+      item_name: title,
+      price: parsePrice(originalPrice || price) || 0,
+      item_variant: weight || '',
+      weight,
+      size,
+    });
   };
 
+  const handleProductClick = () => {
+    trackSelectItem({
+      item_id: String(id),
+      item_name: title,
+      price: parsePrice(originalPrice || price),
+      item_variant: weight || '',
+      weight,
+      size,
+    });
+
+    router.push(`/shop/${slug}`);
+  };
   return (
     <div
       onClick={() => router.push(`/shop/${slug}`)}
@@ -196,10 +219,7 @@ export function ProductCard({ product }: ProductCardProps) {
             aria-label={`Quick view ${title}`}
             title={`Quick view ${title}`}
             className="flex h-[44px] w-full max-w-[282px] items-center justify-center gap-[6px] rounded-full bg-[#FAF4EE] px-5 py-3 text-xs font-medium text-[#35281E] transition hover:bg-[#35281E] hover:text-white cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/shop/${slug}`);
-            }}
+            onClick={handleProductClick}
           >
             <Eye aria-hidden="true" size={14} />
             Hurtig visning

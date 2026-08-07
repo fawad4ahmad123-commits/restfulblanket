@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { submitContactForm } from '@/src/lib/contactus';
 import { SuccessDialog } from '../thank-you-popup';
+import { trackEvent } from '@/src/lib/analytics/gtag';
 
 interface FormState {
   name: string;
@@ -42,6 +43,11 @@ export function ContactSection() {
     setIsSubmitting(true);
     try {
       await submitContactForm(form);
+
+      trackEvent('contact_form_submit', {
+        form_name: 'contact_us',
+      });
+
       setForm(initialState);
       setShowSuccess(true);
     } catch (err) {

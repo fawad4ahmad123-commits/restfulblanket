@@ -6,8 +6,7 @@ import { getRankMathSEO } from '@/src/lib/seo';
 export async function generateMetadata() {
   const seo = await getRankMathSEO(`${process.env.NEXT_PUBLIC_SITE_URL}/blog`);
 
-  const title =
-    seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] || 'Blog | Tap Book Me';
+  const title = seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] || 'Blog';
 
   const description =
     seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||

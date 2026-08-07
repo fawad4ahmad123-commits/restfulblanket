@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ReCAPTCHA from 'react-google-recaptcha';
-
+import { trackLogin, trackLoginStart } from '@/src/lib/analytics/ecommerce';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +49,8 @@ export default function SignInForm() {
 
     try {
       await login(values.username, values.password, captchaToken);
+
+      trackLogin('email');
       router.push('/');
     } catch (err) {
       setApiError(
@@ -60,6 +62,9 @@ export default function SignInForm() {
       setCaptchaToken(null);
     }
   };
+  useEffect(() => {
+    trackLoginStart();
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fff9f5] p-4">

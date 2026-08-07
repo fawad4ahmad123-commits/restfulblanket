@@ -23,6 +23,10 @@ export default function ProductList({ products }: Props) {
         item_id: String(product.id),
         item_name: product.name,
         price: Number(product.price),
+        item_variant:
+          product.attributeLinks?.find((attr: any) => attr.name === 'weight')
+            ?.value || '',
+
         weight:
           product.attributeLinks?.find((attr: any) => attr.name === 'weight')
             ?.value || '',

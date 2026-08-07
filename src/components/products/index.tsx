@@ -13,6 +13,8 @@ import PriceDisplay from './price-display';
 import MobileStickyCart from './mobile-stick-cart';
 import { CartContext } from '@/src/core/context/cart-context';
 import { getProductById } from '@/src/lib/products';
+import { trackEvent } from '@/src/lib/analytics/gtag';
+import { trackAddToCart } from '@/src/lib/analytics/ecommerce';
 
 const ProductInfoPanel = ({
   product,
@@ -39,18 +41,11 @@ const ProductInfoPanel = ({
   const sizes = product?.sizes ?? [];
   const stockQuantity = product?.stockQuantity ?? 0;
 
-  // FIX: preserve inline HTML tags (<a>, <em>, <strong>) instead of stripping
-  // everything. Split on paragraph boundaries (</p>) so each <p> becomes one
-  // feature line, but keep the inner markup intact.
   const featuresFromDescription = (html: string) => {
     if (!html) return [];
 
-    const cleaned = html
-      // drop images (e.g. flag icons) that shouldn't show as bullet text
-      .replace(/<img[^>]*>/gi, '')
-      .trim();
+    const cleaned = html.replace(/<img[^>]*>/gi, '').trim();
 
-    // If there are <p> tags, split by them so each paragraph is one feature.
     if (/<p[\s\S]*?>/i.test(cleaned)) {
       return cleaned
         .split(/<\/p>/i)
@@ -59,8 +54,6 @@ const ProductInfoPanel = ({
         .map((text, index) => ({ id: `sd-${index}`, text }));
     }
 
-    // Fallback: no <p> tags, split on <br> / newlines like before, but
-    // WITHOUT stripping other tags (like <a>) — only convert <br> to \n.
     return cleaned
       .replace(/<br\s*\/?>/gi, '\n')
       .split('\n')
@@ -77,8 +70,10 @@ const ProductInfoPanel = ({
   const handleAddToCart = () => {
     const selectedColor =
       colors.find((c: any) => c.id === selectedColorId)?.label || '';
+
     const selectedWeight =
       weights.find((w: any) => w.id === selectedWeightId)?.label || '';
+
     const selectedSize =
       sizes.find((s: any) => s.id === selectedSizeId)?.label || '';
 
@@ -93,6 +88,18 @@ const ProductInfoPanel = ({
         image: product.images?.[0] ?? '',
       });
     }
+
+    trackAddToCart(
+      {
+        item_id: String(product.id),
+        item_name: product.name,
+        price: Number(product.price || 0),
+        item_variant: selectedColor,
+        weight: selectedWeight,
+        size: selectedSize,
+      },
+      quantity,
+    );
   };
 
   const handleAttributeChange = async (type: string, value: string) => {
@@ -217,6 +224,16 @@ const ProductInfoPanel = ({
             const selected = colors.find((c: any) => c.id === id);
             if (selected) {
               handleAttributeChange('color', selected.label);
+              trackEvent('select_item', {
+                item_list_name: 'Color',
+                items: [
+                  {
+                    item_id: String(product.id),
+                    item_name: product.name,
+                    item_variant: selected.label,
+                  },
+                ],
+              });
             }
           }}
         />
@@ -233,6 +250,16 @@ const ProductInfoPanel = ({
             const selected = weights.find((w: any) => w.id === id);
             if (selected) {
               handleAttributeChange('weight', selected.label);
+              trackEvent('select_item', {
+                item_list_name: 'Weight',
+                items: [
+                  {
+                    item_id: String(product.id),
+                    item_name: product.name,
+                    weight: selected.label,
+                  },
+                ],
+              });
             }
           }}
         />
@@ -249,6 +276,16 @@ const ProductInfoPanel = ({
             const selected = sizes.find((s: any) => s.id === id);
             if (selected) {
               handleAttributeChange('size', selected.label);
+              trackEvent('select_item', {
+                item_list_name: 'Size',
+                items: [
+                  {
+                    item_id: String(product.id),
+                    item_name: product.name,
+                    size: selected.label,
+                  },
+                ],
+              });
             }
           }}
         />

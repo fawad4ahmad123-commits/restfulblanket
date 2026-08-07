@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { trackSearch } from '@/src/lib/analytics/ecommerce';
 
 interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -14,6 +15,8 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!value.trim()) return;
+    trackSearch(value);
     onSearch(value);
   };
 

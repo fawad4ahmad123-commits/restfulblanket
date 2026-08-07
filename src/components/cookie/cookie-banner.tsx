@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { Cookie, Minimize2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-
 import { Checkbox } from '@/components/ui/checkbox';
 import { useCookieConsent } from '@/src/core/context/cookie-consent';
 
@@ -11,22 +11,40 @@ export default function CookieBanner() {
   const { loaded, hasConsent, consent, updateConsent } = useCookieConsent();
 
   const [showSettings, setShowSettings] = useState(false);
-
+  const [minimized, setMinimized] = useState(false);
   const [localConsent, setLocalConsent] = useState(consent);
 
   if (!loaded || hasConsent) return null;
 
+  if (minimized) {
+    return (
+      <button
+        onClick={() => setMinimized(false)}
+        className="fixed bottom-5 left-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#35281E] text-white shadow-xl transition hover:scale-105"
+      >
+        <Cookie className="h-6 w-6" />
+      </button>
+    );
+  }
+
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[9999] p-4 md:p-6">
-      <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-[#E6CFBB] bg-[#FFF9F5]/95 shadow-[0_20px_60px_rgba(53,40,30,0.18)] backdrop-blur-xl">
-        <div className="p-6 md:p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            <div className="max-w-2xl">
-              <span className="mb-3 inline-flex rounded-full border border-[#E6CFBB] bg-white px-3 py-1 text-xs font-medium text-[#35281E]">
+    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-7xl">
+      <div className="rounded-3xl border border-[#E9DDD4] bg-[#FFF9F5] shadow-2xl">
+        <div className="relative p-6 md:p-8">
+          <button
+            onClick={() => setMinimized(true)}
+            className="absolute left-4 top-2 rounded-lg p-2 text-[#35281E]/70 transition cursor-pointer"
+          >
+            <Minimize2 className="h-5 w-5" />
+          </button>
+
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between py-2">
+            <div className="max-w-4xl">
+              <span className="inline-flex rounded-full bg-[#F5EBDD] px-3 py-1 text-xs font-medium text-[#35281E]">
                 Privacy & Experience
               </span>
 
-              <h3 className="text-xl font-semibold text-[#35281E] md:text-2xl">
+              <h3 className="mt-4 text-xl font-semibold text-[#35281E] md:text-2xl">
                 We use cookies to improve your experience
               </h3>
 
@@ -38,7 +56,7 @@ export default function CookieBanner() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 md:min-w-[220px]">
+            <div className="flex flex-col gap-3 md:min-w-[240px]">
               <Button
                 className="h-12 rounded-xl bg-[#35281E] text-white hover:bg-[#2B211A]"
                 onClick={() =>
