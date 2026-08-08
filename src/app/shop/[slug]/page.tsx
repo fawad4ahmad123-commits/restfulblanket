@@ -15,40 +15,85 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const product = await getProductBySlug(slug);
+  const [product, data] = await Promise.all([
+    getProductBySlug(slug),
+    getRankMathSEO(),
+  ]);
 
-  const seo = await getRankMathSEO(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/shop/${slug}`,
-  );
-
+  const seo = data?.seo;
+  console.log("t12 single product seo", { seo })
   const title =
-    seo?.head?.match(/<title>(.*?)<\/title>/)?.[1] ||
+    seo?.title ||
     product?.name ||
-    'Product';
+    "Product";
 
   const description =
-    seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||
-    product?.description?.replace(/<[^>]+>/g, '').slice(0, 160) ||
-    'Premium sleep products';
+    seo?.description ||
+    product?.description
+      ?.replace(/<[^>]+>/g, "")
+      .slice(0, 160) ||
+    "Premium sleep products";
 
   return {
     title,
+
     description,
 
+    alternates: {
+      canonical:
+        seo?.canonical ||
+        `${process.env.NEXT_PUBLIC_SITE_URL}/shop/${slug}`,
+    },
+
     openGraph: {
-      title,
-      description,
-      images: product?.images?.[0]?.src
-        ? [
+      title:
+        seo?.openGraph?.title ||
+        title,
+
+      description:
+        seo?.openGraph?.description ||
+        description,
+
+      url:
+        seo?.openGraph?.url ||
+        `${process.env.NEXT_PUBLIC_SITE_URL}/shop/${slug}`,
+
+      images:
+        seo?.openGraph?.image
+          ? [
             {
-              url: product.images[0].src,
+              url: seo.openGraph.image,
             },
           ]
-        : [],
+          : product?.images?.[0]?.src
+            ? [
+              {
+                url: product.images[0].src,
+              },
+            ]
+            : [],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+
+      title:
+        seo?.twitter?.title ||
+        title,
+
+      description:
+        seo?.twitter?.description ||
+        description,
+
+      images:
+        seo?.twitter?.image
+          ? [seo.twitter.image]
+          : product?.images?.[0]?.src
+            ? [product.images[0].src]
+            : [],
     },
   };
 }
-
 export default async function ProductPage({
   params,
 }: {

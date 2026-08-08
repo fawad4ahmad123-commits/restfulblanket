@@ -5,32 +5,62 @@ import { getRankMathSEO } from '@/src/lib/seo';
 import { formatBlogs } from '../utilty/blog-formater';
 
 export async function generateMetadata() {
-  const seo = await getRankMathSEO(`${process.env.NEXT_PUBLIC_SITE_URL}/`);
-  console.log('t12 SEO', { seo });
-  const title = seo?.head?.match(/<title>(.*?)<\/title>/)?.[1];
+  const data = await getRankMathSEO();
 
-  const description =
-    seo?.head?.match(/<meta name="description" content="(.*?)"/)?.[1] ||
-    'Premium sleep products for better rest.';
+  const seo = data?.seo;
+  console.log(" t12 SEO", seo);
+  if (!seo) {
+    return {};
+  }
 
   return {
-    title,
-    description,
+    title: seo.title,
+
+    description: seo.description,
+
+    alternates: {
+      canonical: seo.canonical,
+    },
 
     openGraph: {
-      title,
-      description,
-      url: process.env.NEXT_PUBLIC_SITE_URL,
+      title:
+        seo.openGraph?.title ||
+        seo.title,
+
+      description:
+        seo.openGraph?.description ||
+        seo.description,
+
+      url:
+        seo.openGraph?.url ||
+        process.env.NEXT_PUBLIC_SITE_URL,
+
+      images: seo.openGraph?.image
+        ? [
+          {
+            url: seo.openGraph.image,
+          },
+        ]
+        : [],
     },
 
     twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
+      card: "summary_large_image",
+
+      title:
+        seo.twitter?.title ||
+        seo.title,
+
+      description:
+        seo.twitter?.description ||
+        seo.description,
+
+      images: seo.twitter?.image
+        ? [seo.twitter.image]
+        : [],
     },
   };
 }
-
 export default async function Home() {
   const [products, categories, blog] = await Promise.all([
     getBestSellers(),

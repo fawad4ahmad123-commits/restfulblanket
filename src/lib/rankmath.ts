@@ -12,28 +12,25 @@ export interface RankMathMeta {
 export async function fetchRankMathMeta(
   pageUrl: string,
 ): Promise<RankMathMeta> {
-  const endpoint = `${API_ENDPOINTS.rankMathHead}?url=${encodeURIComponent(
-    pageUrl,
-  )}`;
 
-  console.log('RankMath URL:', pageUrl);
-  console.log('RankMath Endpoint:', endpoint);
+  const endpoint =
+    `${API_ENDPOINTS.rankMathHead}?url=${encodeURIComponent(pageUrl)}`;
 
-  const response = await fetch(endpoint);
-
-  console.log('RankMath Status:', response.status);
-  console.log('RankMath OK:', response.ok);
+  const response = await fetch(endpoint, {
+    cache: 'no-store',
+  });
 
   if (!response.ok) {
-    throw new Error('Could not load RankMath SEO data.');
+    throw new Error(
+      `RankMath Error: ${response.status}`
+    );
   }
 
   const data = await response.json();
 
-  console.log('RankMath Response:', data);
-  console.log('RankMath Head:', data?.head);
-
-  return parseRankMathHead(data?.head || '');
+  return parseRankMathHead(
+    data?.head || ''
+  );
 }
 
 function parseRankMathHead(headHtml: string): RankMathMeta {

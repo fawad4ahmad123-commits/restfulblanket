@@ -6,7 +6,8 @@ export const API_ENDPOINTS = {
   changePassword: `${WORDPRESS_URL}/wp-json/custom/v1/change-password`,
   deleteProfile: `${WORDPRESS_URL}/wp-json/custom/v1/delete-profile`,
   getUser: `${WORDPRESS_URL}/wp-json/wp/v2/users/me`,
-  rankMathHead: `${WORDPRESS_URL}/wp-json/rankmath/v1`,
+  rankMathHead:
+    `${WORDPRESS_URL}/wp-json/nextjs/v1/seo-by-slug/home`,
 } as const;
 
 export class AuthRequiredError extends Error {
